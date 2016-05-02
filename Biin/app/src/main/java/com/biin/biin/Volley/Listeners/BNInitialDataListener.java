@@ -1,8 +1,8 @@
 package com.biin.biin.Volley.Listeners;
 
 import com.android.volley.Response;
-import com.biin.biin.AppManager;
 import com.biin.biin.Entities.BNSite;
+import com.biin.biin.Managers.BNDataManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +13,13 @@ import java.util.HashMap;
 /**
  * Created by ramirezallan on 5/2/16.
  */
-public class InitialDataListener implements Response.Listener<JSONObject> {
+public class BNInitialDataListener implements Response.Listener<JSONObject> {
+
+    private IBNInitialDataListener listener;
+
+    public void setListener(IBNInitialDataListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public void onResponse(JSONObject response) {
@@ -50,6 +56,12 @@ public class InitialDataListener implements Response.Listener<JSONObject> {
         }catch (NumberFormatException e){
 
         }
-        AppManager.getInstance().setSites(result);
+        BNDataManager.getInstance().setSites(result);
+
+        this.listener.onInitialDataLoaded();
+    }
+
+    public interface IBNInitialDataListener {
+        void onInitialDataLoaded();
     }
 }

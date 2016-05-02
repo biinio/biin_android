@@ -1,4 +1,4 @@
-package com.biin.biin;
+package com.biin.biin.Managers;
 
 import com.biin.biin.Entities.BNSite;
 
@@ -7,17 +7,17 @@ import java.util.HashMap;
 /**
  * Created by ramirezallan on 5/2/16.
  */
-public class AppManager {
+public class BNDataManager {
 
-    private static AppManager ourInstance = new AppManager();
+    private static BNDataManager ourInstance = new BNDataManager();
 
-    private HashMap<String, BNSite> sites = new HashMap<String, BNSite>();
+    private HashMap<String, BNSite> sites = new HashMap<>();
 
-    public static AppManager getInstance() {
+    public static BNDataManager getInstance() {
         return ourInstance;
     }
 
-    private AppManager() {
+    private BNDataManager() {
     }
 
     public void setSites(HashMap<String, BNSite> sites) {
@@ -34,7 +34,7 @@ public class AppManager {
 
     public boolean addSite(BNSite site) {
         // TODO agregar un site a la coleccion
-        this.sites.put("", site);
+        this.sites.put(site.getIdentifier(), site);
         // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
         return true;
     }

@@ -3,19 +3,22 @@ package com.biin.biin;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
-import com.biin.biin.Volley.Links;
-import com.biin.biin.Volley.Listeners.InitialDataListener;
+import com.biin.biin.Managers.BNDataManager;
+import com.biin.biin.Managers.BNNetworkManager;
+import com.biin.biin.Volley.Listeners.BNInitialDataListener;
 
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BNInitialDataListener.IBNInitialDataListener {
+
+    private BNInitialDataListener initialDataListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,24 +26,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getInitialData();
-
-        new Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        HashMap<String,BNSite> gets = AppManager.getInstance().getSites();
-                        int count = gets.size();
-                    }
-                }, 12000
-        );
     }
 
     private void getInitialData(){
+        initialDataListener = new BNInitialDataListener();
+        initialDataListener.setListener(this);
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                Links.URL_GET_INIT_TEST,
+                BNNetworkManager.getInstance().getUrlGetInitTest(),
                 null,
-                new InitialDataListener(),
+                initialDataListener,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -48,5 +44,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "InitialData");
+    }
+
+    @Override
+    public void onInitialDataLoaded() {
+        Log.d("Biin", "Initial data loaded");
+        HashMap<String,BNSite> gets = BNDataManager.getInstance().getSites();
+        int count = gets.size();
     }
 }
