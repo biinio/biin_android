@@ -3,7 +3,9 @@ package com.biin.biin.Volley.BNJSONParsers;
 import android.util.Log;
 
 import com.android.volley.Response;
+import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
+import com.biin.biin.Entities.BNHighlight;
 import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNDataManager;
@@ -38,7 +40,7 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
             // parsear elements
             parseElements(data.getJSONArray("elements"));
             // parsear highlights
-//            parseHighlights(data.getJSONArray("highlights"));
+            parseHighlights(data.getJSONArray("highlights"));
             // parsear categories
             parseCategories(data.getJSONArray("categories"));
         }catch (JSONException e){
@@ -74,17 +76,17 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
     }
 
     private void parseHighlights(JSONArray arrayHighlights){
-        BNSiteParser siteParser = new BNSiteParser();
-        HashMap<String, BNSite> result = siteParser.parseSites(arrayHighlights);
-        // guardar el resultado de highlights en el data manager
-        BNDataManager.getInstance().setBNSites(result);
+        BNHighlightParser highlightParser = new BNHighlightParser();
+        HashMap<String, BNHighlight> result = highlightParser.parseHighlights(arrayHighlights);
+        // TODO guardar el resultado de highlights en el data manager
+        BNDataManager.getInstance().setBNHighlightss(result);
     }
 
     private void parseCategories(JSONArray arrayCategories){
-        BNSiteParser siteParser = new BNSiteParser();
-        HashMap<String, BNSite> result = siteParser.parseSites(arrayCategories);
+        BNCategoryParser categoryParser = new BNCategoryParser();
+        HashMap<String, BNCategory> result = categoryParser.parseCategories(arrayCategories);
         // guardar el resultado de categories en el data manager
-        BNDataManager.getInstance().setBNSites(result);
+        BNDataManager.getInstance().setBNCategories(result);
     }
 
     public interface IBNInitialDataListener {

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
     @Override
     public void onInitialDataLoaded() {
         Log.d("Biin", "Initial data loaded");
-        HashMap<String,BNSite> gets = BNDataManager.getInstance().getSites();
+        HashMap<String,BNSite> gets = BNDataManager.getInstance().getBNSites();
         int count = gets.size();
         Log.d("Biin", "Initial data: " + count + " sites");
     }

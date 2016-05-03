@@ -2,6 +2,7 @@ package com.biin.biin.Entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by ramirezallan on 5/2/16.
@@ -437,5 +438,56 @@ public class BNElement {
 
     public void setRemovedFromShowcase(boolean removedFromShowcase) {
         isRemovedFromShowcase = removedFromShowcase;
+    }
+
+    public class BNElementLite {
+        private String _id;
+        private String identifier;
+        private boolean isReady;
+        private boolean isHighlight;
+        private HashMap<String,BNCategory.BNCategoryLite> categories;
+
+        public BNElementLite() {
+        }
+
+        public String get_id() {
+            return _id;
+        }
+
+        public void set_id(String _id) {
+            this._id = _id;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        public void setIdentifier(String identifier) {
+            this.identifier = identifier;
+        }
+
+        public boolean isReady() {
+            return isReady;
+        }
+
+        public void setReady(boolean ready) {
+            isReady = ready;
+        }
+
+        public boolean isHighlight() {
+            return isHighlight;
+        }
+
+        public void setHighlight(boolean highlight) {
+            isHighlight = highlight;
+        }
+
+        public HashMap<String, BNCategory.BNCategoryLite> getCategories() {
+            return categories;
+        }
+
+        public void setCategories(HashMap<String, BNCategory.BNCategoryLite> categories) {
+            this.categories = categories;
+        }
     }
 }

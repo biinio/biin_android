@@ -27,6 +27,9 @@ public class BNCategory {
     private int priority = 1;
     private Color backgroundColor;
 
+    public BNCategory() {
+    }
+
     public BNCategory(String identifier) {
         this.identifier = identifier;
     }
@@ -134,5 +137,56 @@ public class BNCategory {
         technology,
         entertaiment,
         travel
+    }
+
+    public class BNCategoryLite {
+        private String _id;
+        private String identifier;
+        private String url;
+        private String displayName;
+        private String name;
+
+        public BNCategoryLite() {
+        }
+
+        public String get_id() {
+            return _id;
+        }
+
+        public void set_id(String _id) {
+            this._id = _id;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        public void setIdentifier(String identifier) {
+            this.identifier = identifier;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public void setDisplayName(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }

@@ -22,13 +22,16 @@ public class BNOrganizationParser {
         BNOrganization organization = new BNOrganization();
         try{
             organization.setIdentifier(objectOrganization.getString("identifier"));
-            organization.setName(objectOrganization.getString("name"));
-            organization.setDescription(objectOrganization.getString("description"));
-            organization.setLoyaltyEnabled(Boolean.parseBoolean(objectOrganization.getString("isLoyaltyEnabled")));
-            organization.setUsingBrandColors(Boolean.parseBoolean(objectOrganization.getString("isUsingBrandColors")));
-            organization.setHasNPS(Boolean.parseBoolean(objectOrganization.getString("hasNPS")));
-            organization.setBrand(objectOrganization.getString("brand"));
+            // TODO _id
+            // TODO media array
             organization.setExtraInfo(objectOrganization.getString("extraInfo"));
+            organization.setDescription(objectOrganization.getString("description"));
+            organization.setBrand(objectOrganization.getString("brand"));
+            organization.setName(objectOrganization.getString("name"));
+            organization.setLoyaltyEnabled(Boolean.parseBoolean(objectOrganization.getString("isLoyaltyEnabled")));
+            // TODO loyalty
+            organization.setHasNPS(Boolean.parseBoolean(objectOrganization.getString("hasNPS")));
+            organization.setUsingBrandColors(Boolean.parseBoolean(objectOrganization.getString("isUsingBrandColors")));
             organization.setPrimaryColor(BNUtils.getColorFromString(objectOrganization.getString("primaryColor")));
             organization.setSecondaryColor(BNUtils.getColorFromString(objectOrganization.getString("secondaryColor")));
         }catch (JSONException e){
