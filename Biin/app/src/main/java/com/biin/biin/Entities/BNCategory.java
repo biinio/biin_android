@@ -36,6 +36,86 @@ public class BNCategory {
         this.name = name;
     }
 
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
+    }
+
+    public ArrayList<BNCategorySiteDetails> getSitesDetails() {
+        return sitesDetails;
+    }
+
+    public void setSitesDetails(ArrayList<BNCategorySiteDetails> sitesDetails) {
+        this.sitesDetails = sitesDetails;
+    }
+
+    public boolean isDownloaded() {
+        return isDownloaded;
+    }
+
+    public void setDownloaded(boolean downloaded) {
+        isDownloaded = downloaded;
+    }
+
+    public boolean isUserCategory() {
+        return isUserCategory;
+    }
+
+    public void setUserCategory(boolean userCategory) {
+        isUserCategory = userCategory;
+    }
+
+    public boolean isHasSites() {
+        return hasSites;
+    }
+
+    public void setHasSites(boolean hasSites) {
+        this.hasSites = hasSites;
+    }
+
+    public HashMap<String, BNElement> getElements() {
+        return elements;
+    }
+
+    public void setElements(HashMap<String, BNElement> elements) {
+        this.elements = elements;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
     enum BNCategoryType {
         none,
         general,

@@ -1,6 +1,5 @@
 package com.biin.biin;
 
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +11,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Managers.BNNetworkManager;
-import com.biin.biin.Volley.Listeners.BNInitialDataListener;
+import com.biin.biin.Volley.BNJSONParsers.BNInitialDataListener;
 
 import java.util.HashMap;
 
