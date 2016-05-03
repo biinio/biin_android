@@ -3,6 +3,7 @@ package com.biin.biin.Volley.BNJSONParsers;
 import android.util.Log;
 
 import com.android.volley.Response;
+import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNDataManager;
@@ -33,9 +34,13 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
             // parsear sites
             parseSites(data.getJSONArray("sites"));
             // parsear organizations
+            parseOrganizations(data.getJSONArray("organizations"));
             // parsear elements
+            parseElements(data.getJSONArray("elements"));
             // parsear highlights
+//            parseHighlights(data.getJSONArray("highlights"));
             // parsear categories
+            parseCategories(data.getJSONArray("categories"));
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }
@@ -55,17 +60,17 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
     }
 
     private void parseOrganizations(JSONArray arrayOrganizations){
-        BNSiteParser siteParser = new BNSiteParser();
-        HashMap<String, BNSite> result = siteParser.parseSites(arrayOrganizations);
+        BNOrganizationParser organizationParser = new BNOrganizationParser();
+        HashMap<String, BNOrganization> result = organizationParser.parseOrganizations(arrayOrganizations);
         // guardar el resultado de organizations en el data manager
-        BNDataManager.getInstance().setBNSites(result);
+        BNDataManager.getInstance().setBNOrganizations(result);
     }
 
     private void parseElements(JSONArray arrayElements){
-        BNSiteParser siteParser = new BNSiteParser();
-        HashMap<String, BNSite> result = siteParser.parseSites(arrayElements);
+        BNElementParser elementParser = new BNElementParser();
+        HashMap<String, BNElement> result = elementParser.parseElements(arrayElements);
         // guardar el resultado de elements en el data manager
-        BNDataManager.getInstance().setBNSites(result);
+        BNDataManager.getInstance().setBNElements(result);
     }
 
     private void parseHighlights(JSONArray arrayHighlights){

@@ -1,7 +1,5 @@
 package com.biin.biin.Entities;
 
-import android.graphics.Color;
-
 /**
  * Created by ramirezallan on 5/2/16.
  */
@@ -15,10 +13,11 @@ public class BNOrganization {
 
     private String name;
     private String brand;
-    private String organizationDescription;
+    private String description;
     private String extraInfo;
 
     private boolean isLoyaltyEnabled;
+    private boolean isUsingBrandColors;
     //private BNLoyalty loyalty;
 
     private int primaryColor;
@@ -75,12 +74,12 @@ public class BNOrganization {
         this.brand = brand;
     }
 
-    public String getOrganizationDescription() {
-        return organizationDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setOrganizationDescription(String organizationDescription) {
-        this.organizationDescription = organizationDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getExtraInfo() {
@@ -97,6 +96,14 @@ public class BNOrganization {
 
     public void setLoyaltyEnabled(boolean loyaltyEnabled) {
         isLoyaltyEnabled = loyaltyEnabled;
+    }
+
+    public boolean isUsingBrandColors() {
+        return isUsingBrandColors;
+    }
+
+    public void setUsingBrandColors(boolean usingBrandColors) {
+        isUsingBrandColors = usingBrandColors;
     }
 
     public int getPrimaryColor() {
