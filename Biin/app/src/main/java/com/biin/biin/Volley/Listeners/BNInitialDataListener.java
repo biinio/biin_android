@@ -1,5 +1,7 @@
 package com.biin.biin.Volley.Listeners;
 
+import android.util.Log;
+
 import com.android.volley.Response;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNDataManager;
@@ -58,7 +60,11 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
         }
         BNDataManager.getInstance().setSites(result);
 
-        this.listener.onInitialDataLoaded();
+        if(this.listener != null) {
+            this.listener.onInitialDataLoaded();
+        }else{
+            Log.e("BiinError", "El listener es nulo o no ha sido seteado");
+        }
     }
 
     public interface IBNInitialDataListener {
