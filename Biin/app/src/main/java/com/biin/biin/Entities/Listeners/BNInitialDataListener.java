@@ -1,4 +1,4 @@
-package com.biin.biin.Volley.BNJSONParsers;
+package com.biin.biin.Entities.Listeners;
 
 import android.util.Log;
 
@@ -6,8 +6,14 @@ import com.android.volley.Response;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
+import com.biin.biin.Entities.BNJSONParsers.BNCategoryParser;
+import com.biin.biin.Entities.BNJSONParsers.BNElementParser;
+import com.biin.biin.Entities.BNJSONParsers.BNHighlightParser;
+import com.biin.biin.Entities.BNJSONParsers.BNOrganizationParser;
+import com.biin.biin.Entities.BNJSONParsers.BNSiteParser;
 import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNSite;
+import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 
 import org.json.JSONArray;
@@ -24,6 +30,8 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
     private static final String TAG = "BNInitialDataListener";
 
     private IBNInitialDataListener listener;
+
+    private BNDataManager dataManager = BNAppManager.getDataManagerInstance();
 
     public void setListener(IBNInitialDataListener listener) {
         this.listener = listener;
@@ -56,40 +64,41 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
 
     private void parseSites(JSONArray arraySites){
         BNSiteParser siteParser = new BNSiteParser();
-        HashMap<String, BNSite> result = siteParser.parseSites(arraySites);
+        HashMap<String, BNSite> result = siteParser.parseBNSites(arraySites);
         // guardar el resultado de sites en el data manager
-        BNDataManager.getInstance().setBNSites(result);
+        dataManager.setBNSites(result);
     }
 
     private void parseOrganizations(JSONArray arrayOrganizations){
         BNOrganizationParser organizationParser = new BNOrganizationParser();
-        HashMap<String, BNOrganization> result = organizationParser.parseOrganizations(arrayOrganizations);
+        HashMap<String, BNOrganization> result = organizationParser.parseBNOrganizations(arrayOrganizations);
         // guardar el resultado de organizations en el data manager
-        BNDataManager.getInstance().setBNOrganizations(result);
+        dataManager.setBNOrganizations(result);
     }
 
     private void parseElements(JSONArray arrayElements){
         BNElementParser elementParser = new BNElementParser();
-        HashMap<String, BNElement> result = elementParser.parseElements(arrayElements);
+        HashMap<String, BNElement> result = elementParser.parseBNElements(arrayElements);
         // guardar el resultado de elements en el data manager
-        BNDataManager.getInstance().setBNElements(result);
+        dataManager.setBNElements(result);
     }
 
     private void parseHighlights(JSONArray arrayHighlights){
         BNHighlightParser highlightParser = new BNHighlightParser();
-        HashMap<String, BNHighlight> result = highlightParser.parseHighlights(arrayHighlights);
-        // TODO guardar el resultado de highlights en el data manager
-        BNDataManager.getInstance().setBNHighlightss(result);
+        HashMap<String, BNHighlight> result = highlightParser.parseBNHighlights(arrayHighlights);
+        // guardar el resultado de highlights en el data manager
+        dataManager.setBNHighlightss(result);
     }
 
     private void parseCategories(JSONArray arrayCategories){
         BNCategoryParser categoryParser = new BNCategoryParser();
-        HashMap<String, BNCategory> result = categoryParser.parseCategories(arrayCategories);
+        HashMap<String, BNCategory> result = categoryParser.parseBNCategories(arrayCategories);
         // guardar el resultado de categories en el data manager
-        BNDataManager.getInstance().setBNCategories(result);
+        dataManager.setBNCategories(result);
     }
 
     public interface IBNInitialDataListener {
         void onInitialDataLoaded();
     }
+
 }

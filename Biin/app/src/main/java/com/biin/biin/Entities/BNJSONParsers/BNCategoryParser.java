@@ -1,10 +1,8 @@
-package com.biin.biin.Volley.BNJSONParsers;
+package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
-import com.biin.biin.BNUtils;
 import com.biin.biin.Entities.BNCategory;
-import com.biin.biin.Entities.BNElement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,7 +17,7 @@ public class BNCategoryParser {
 
     private static final String TAG = "BNCategoryParser";
 
-    public BNCategory parseCategory(JSONObject objectElement){
+    public BNCategory parseBNCategory(JSONObject objectElement){
         BNCategory category = new BNCategory();
         try{
             category.setIdentifier(objectElement.getString("identifier"));
@@ -29,12 +27,12 @@ public class BNCategoryParser {
         return category;
     }
 
-    public HashMap<String, BNCategory> parseCategories(JSONArray arrayCategory){
+    public HashMap<String, BNCategory> parseBNCategories(JSONArray arrayCategory){
         HashMap<String, BNCategory> result = new HashMap<>();
         try{
             for(int i = 0; i < arrayCategory.length(); i++){
                 JSONObject objectCategory = (JSONObject) arrayCategory.get(i);
-                BNCategory category = parseCategory(objectCategory);
+                BNCategory category = parseBNCategory(objectCategory);
 
                 result.put(category.getIdentifier(), category);
             }

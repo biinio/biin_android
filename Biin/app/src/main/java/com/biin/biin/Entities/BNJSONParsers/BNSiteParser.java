@@ -1,4 +1,4 @@
-package com.biin.biin.Volley.BNJSONParsers;
+package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
@@ -17,7 +17,7 @@ public class BNSiteParser {
 
     private static final String TAG = "BNSiteParser";
 
-    public BNSite parseSite(JSONObject objectSite){
+    public BNSite parseBNSite(JSONObject objectSite){
         BNSite site = new BNSite();
         try{
             site.setIdentifier(objectSite.getString("identifier"));
@@ -56,12 +56,12 @@ public class BNSiteParser {
         return site;
     }
 
-    public HashMap<String, BNSite> parseSites(JSONArray arraySites){
+    public HashMap<String, BNSite> parseBNSites(JSONArray arraySites){
         HashMap<String, BNSite> result = new HashMap<>();
         try{
             for(int i = 0; i < arraySites.length(); i++){
                 JSONObject objectSite = (JSONObject) arraySites.get(i);
-                BNSite site = parseSite(objectSite);
+                BNSite site = parseBNSite(objectSite);
 
                 result.put(site.getIdentifier(), site);
             }

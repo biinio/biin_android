@@ -55,6 +55,9 @@ public class Biinie {
         this.gender = gender;
     }
 
+    public Biinie() {
+    }
+
     public String getFacebook_id() {
         return facebook_id;
     }

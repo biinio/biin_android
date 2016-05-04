@@ -1,4 +1,4 @@
-package com.biin.biin.Volley.BNJSONParsers;
+package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
@@ -18,7 +18,7 @@ public class BNOrganizationParser {
 
     private static final String TAG = "BNOrganizationParser";
 
-    public BNOrganization parseOrganization(JSONObject objectOrganization){
+    public BNOrganization parseBNOrganization(JSONObject objectOrganization){
         BNOrganization organization = new BNOrganization();
         try{
             organization.setIdentifier(objectOrganization.getString("identifier"));
@@ -42,12 +42,12 @@ public class BNOrganizationParser {
         return organization;
     }
 
-    public HashMap<String, BNOrganization> parseOrganizations(JSONArray arrayOrganizations){
+    public HashMap<String, BNOrganization> parseBNOrganizations(JSONArray arrayOrganizations){
         HashMap<String, BNOrganization> result = new HashMap<>();
         try{
             for(int i = 0; i < arrayOrganizations.length(); i++){
                 JSONObject objectOrganization = (JSONObject) arrayOrganizations.get(i);
-                BNOrganization organization = parseOrganization(objectOrganization);
+                BNOrganization organization = parseBNOrganization(objectOrganization);
 
                 result.put(organization.getIdentifier(), organization);
             }

@@ -6,13 +6,31 @@ package com.biin.biin.Managers;
 public class BNAppManager {
 
     private static BNAppManager ourInstance = new BNAppManager();
+    private static BNDataManager dataManager;
+    private static BNNetworkManager networkManager;
+    private static BNPositionManager positionManager;
 
     public static BNAppManager getInstance() {
         return ourInstance;
     }
 
+    public static BNDataManager getDataManagerInstance() {
+        return dataManager;
+    }
+
+    public static BNNetworkManager getNetworkManagerInstance() {
+        return networkManager;
+    }
+
+    public static BNPositionManager getPositionManagerInstance() {
+        return positionManager;
+    }
+
     private BNAppManager() {
-        // TODO instanciar los otros managers
+        // instanciar los otros managers
+        dataManager = BNDataManager.getInstance();
+        networkManager = BNNetworkManager.getInstance();
+        positionManager = BNPositionManager.getInstance();
     }
 
 }

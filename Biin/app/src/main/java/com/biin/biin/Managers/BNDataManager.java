@@ -5,6 +5,7 @@ import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
 import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNSite;
+import com.biin.biin.Entities.Biinie;
 
 import java.util.HashMap;
 
@@ -14,6 +15,8 @@ import java.util.HashMap;
 public class BNDataManager {
 
     private static BNDataManager ourInstance = new BNDataManager();
+
+    private Biinie biinie = new Biinie();
 
     private HashMap<String, BNSite> sites = new HashMap<>();
     private HashMap<String, BNOrganization> organizations = new HashMap<>();
@@ -27,6 +30,21 @@ public class BNDataManager {
 
     private BNDataManager() {
     }
+
+    /****************** Biinie start ******************/
+
+    public void setBiinie(Biinie biinie) {
+        // reemplazar el biinie
+        this.biinie = biinie;
+    }
+
+    public Biinie getBiinie() {
+        // obtener el biinie
+        return this.biinie;
+    }
+
+    /****************** Biinie end ******************/
+
 
     /****************** Sites start ******************/
 

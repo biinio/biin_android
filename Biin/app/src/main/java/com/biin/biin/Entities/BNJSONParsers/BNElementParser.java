@@ -1,4 +1,4 @@
-package com.biin.biin.Volley.BNJSONParsers;
+package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
@@ -18,7 +18,7 @@ public class BNElementParser {
 
     private static final String TAG = "BNElementParser";
 
-    public BNElement parseElement(JSONObject objectElement){
+    public BNElement parseBNElement(JSONObject objectElement){
         BNElement element = new BNElement();
         try{
             element.set_id(objectElement.getString("_id"));
@@ -66,12 +66,12 @@ public class BNElementParser {
         return element;
     }
 
-    public HashMap<String, BNElement> parseElements(JSONArray arrayElements){
+    public HashMap<String, BNElement> parseBNElements(JSONArray arrayElements){
         HashMap<String, BNElement> result = new HashMap<>();
         try{
             for(int i = 0; i < arrayElements.length(); i++){
                 JSONObject objectElement = (JSONObject) arrayElements.get(i);
-                BNElement element = parseElement(objectElement);
+                BNElement element = parseBNElement(objectElement);
 
                 result.put(element.getIdentifier(), element);
             }

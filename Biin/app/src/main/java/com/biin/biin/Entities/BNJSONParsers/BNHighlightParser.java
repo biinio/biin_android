@@ -1,8 +1,7 @@
-package com.biin.biin.Volley.BNJSONParsers;
+package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
-import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNHighlight;
 
 import org.json.JSONArray;
@@ -18,7 +17,7 @@ public class BNHighlightParser {
 
     private static final String TAG = "BNHighlightParser";
 
-    public BNHighlight parseHighlight(JSONObject objectElement){
+    public BNHighlight parseBNHighlight(JSONObject objectElement){
         BNHighlight highlight = new BNHighlight();
         try{
             highlight.set_id(objectElement.getString("_id"));
@@ -29,12 +28,12 @@ public class BNHighlightParser {
         return highlight;
     }
 
-    public HashMap<String, BNHighlight> parseHighlights(JSONArray arrayHighlight){
+    public HashMap<String, BNHighlight> parseBNHighlights(JSONArray arrayHighlight){
         HashMap<String, BNHighlight> result = new HashMap<>();
         try{
             for(int i = 0; i < arrayHighlight.length(); i++){
                 JSONObject objectHighlight = (JSONObject) arrayHighlight.get(i);
-                BNHighlight highlight = parseHighlight(objectHighlight);
+                BNHighlight highlight = parseBNHighlight(objectHighlight);
 
                 result.put(highlight.getIdentifier(), highlight);
             }
