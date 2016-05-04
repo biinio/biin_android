@@ -21,7 +21,7 @@ public class BiinieParser {
     public Biinie parseBiinie(JSONObject objectBiinie){
         Biinie biinie = new Biinie();
         try{
-            //TODO _id
+            //_id (no se utiliza)
 //            biinie.set_id(objectBiinie.getString("_id"));
             biinie.setIdentifier(objectBiinie.getString("identifier"));
             biinie.setFirstName(objectBiinie.getString("firstName"));
@@ -34,7 +34,7 @@ public class BiinieParser {
             //TODO friends array
             biinie.setFollowers(Integer.parseInt(objectBiinie.getString("followers")));
             biinie.setFollowing(Integer.parseInt(objectBiinie.getString("following")));
-            //TODO url
+            //url (no se utiliza)
 //            biinie.setUrl(objectBiinie.getString("url"));
             biinie.setEmail(objectBiinie.getString("email"));
             biinie.setBirthDate(BNUtils.getDateFromString(objectBiinie.getString("birthDate")));

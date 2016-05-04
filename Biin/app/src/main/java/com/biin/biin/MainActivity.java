@@ -3,6 +3,7 @@ package com.biin.biin;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,10 +26,16 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
     private BNBiiniesListener biiniesListener;
     private BNInitialDataListener initialDataListener;
 
+    private TextView tvBiinies;
+    private TextView tvInitialData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tvBiinies = (TextView)findViewById(R.id.textViewBiinie);
+        tvInitialData = (TextView)findViewById(R.id.textViewInitialData);
 
         getBiinie();
         getInitialData();
@@ -81,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         str.append("Gender: " + biinie.getGender() + "\n");
         str.append("Email: " + biinie.getEmail());
         Log.d("Biin",  str.toString());
+        tvBiinies.setText(str.toString());
     }
 
     @Override
@@ -99,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         str.append("Highlights: " + highlights.size() + "\n");
         str.append("Categories: " + categories.size());
         Log.d("Biin",  str.toString());
+        tvInitialData.setText(str.toString());
     }
 
 }
