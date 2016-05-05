@@ -7,7 +7,9 @@ import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ramirezallan on 5/2/16.
@@ -21,7 +23,7 @@ public class BNDataManager {
     private HashMap<String, BNSite> sites = new HashMap<>();
     private HashMap<String, BNOrganization> organizations = new HashMap<>();
     private HashMap<String, BNElement> elements = new HashMap<>();
-    private HashMap<String, BNHighlight> highlights = new HashMap<>();
+    private List<BNHighlight> highlights = new ArrayList<>();
     private HashMap<String, BNCategory> categories = new HashMap<>();
 
     public static BNDataManager getInstance() {
@@ -168,24 +170,24 @@ public class BNDataManager {
 
     /****************** Highlights start ******************/
 
-    public void setBNHighlightss(HashMap<String, BNHighlight> highlights) {
+    public void setBNHighlightss(List<BNHighlight> highlights) {
         // reemplazar la coleccion completa de highlights
         this.highlights = highlights;
     }
 
-    public int addBNHighlightss(HashMap<String, BNHighlight> highlights) {
-        // TODO agregar highlights a la coleccion (solo los que no existian previamente)
-        this.highlights = highlights;
-        // TODO retornar el numero de highlights agregados a la coleccion
-        return 0;
-    }
+//    public int addBNHighlightss(HashMap<String, BNHighlight> highlights) {
+//        // TODO agregar highlights a la coleccion (solo los que no existian previamente)
+//        this.highlights = highlights;
+//        // TODO retornar el numero de highlights agregados a la coleccion
+//        return 0;
+//    }
 
-    public boolean addBNHighlights(BNHighlight highlight) {
-        // TODO agregar un highlight a la coleccion
-        this.highlights.put(highlight.getIdentifier(), highlight);
-        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
-        return true;
-    }
+//    public boolean addBNHighlights(BNHighlight highlight) {
+//        // TODO agregar un highlight a la coleccion
+//        this.highlights.put(highlight.getIdentifier(), highlight);
+//        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+//        return true;
+//    }
 
     public BNHighlight getBNHighlight(String identifier) {
         // TODO obtener un element por su identificador
@@ -198,7 +200,7 @@ public class BNDataManager {
         return true;
     }
 
-    public HashMap<String,BNHighlight> getBNHighlights(){
+    public List<BNHighlight> getBNHighlights(){
         // retornar la lista de highlights
         return this.highlights;
     }

@@ -1,7 +1,10 @@
 package com.biin.biin;
 
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -9,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.biin.biin.CardView.BNElementAdapter;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
@@ -19,23 +23,41 @@ import com.biin.biin.Entities.Listeners.BNBiiniesListener;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Entities.Listeners.BNInitialDataListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements BNInitialDataListener.IBNInitialDataListener, BNBiiniesListener.IBNBiiniesListener {
 
     private BNBiiniesListener biiniesListener;
     private BNInitialDataListener initialDataListener;
 
-    private TextView tvBiinies;
-    private TextView tvInitialData;
+    private TextView tvBiinies,tvInitialData,tvTitle,tvSubtitle,tvPrice,tvDiscount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvBiinies = (TextView)findViewById(R.id.textViewBiinie);
-        tvInitialData = (TextView)findViewById(R.id.textViewInitialData);
+        tvBiinies = (TextView)findViewById(R.id.tvBiinie);
+        tvInitialData = (TextView)findViewById(R.id.tvInitialData);
+
+
+        /* probando la interface de element y la tipografia */
+        tvTitle = (TextView)findViewById(R.id.tvTitle);
+        tvSubtitle = (TextView)findViewById(R.id.tvSubtitle);
+        tvPrice = (TextView)findViewById(R.id.tvPrice);
+        tvDiscount = (TextView)findViewById(R.id.tvDiscount);
+
+        Typeface lato_rg = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
+        Typeface lato_li = Typeface.createFromAsset(getAssets(),"Lato-Light.ttf");
+
+        tvTitle.setTypeface(lato_rg);
+        tvSubtitle.setTypeface(lato_li);
+        tvPrice.setTypeface(lato_li);
+        tvDiscount.setTypeface(lato_rg);
+        /*****************************************************/
+
 
         getBiinie();
         getInitialData();
@@ -97,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         HashMap<String,BNSite> sites = BNAppManager.getDataManagerInstance().getBNSites();
         HashMap<String,BNOrganization> organizations = BNAppManager.getDataManagerInstance().getBNOrganizations();
         HashMap<String,BNElement> elements = BNAppManager.getDataManagerInstance().getBNElements();
-        HashMap<String,BNHighlight> highlights = BNAppManager.getDataManagerInstance().getBNHighlights();
+        List<BNHighlight> highlights = BNAppManager.getDataManagerInstance().getBNHighlights();
         HashMap<String,BNCategory> categories = BNAppManager.getDataManagerInstance().getBNCategories();
         StringBuilder str = new StringBuilder();
         str.append("Initial data:\n");
@@ -108,6 +130,19 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         str.append("Categories: " + categories.size());
         Log.d("Biin",  str.toString());
         tvInitialData.setText(str.toString());
+
+//        RecyclerView rvHighlights = (RecyclerView)findViewById(R.id.rvHighlights);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+//        ArrayList<BNElement> highlightElements = new ArrayList<>();
+//
+//        for (BNHighlight hl : highlights) {
+//            highlightElements.add(elements.get(hl.getIdentifier()));
+//        }
+//
+//        BNElementAdapter adapter = new BNElementAdapter(this, highlightElements);
+//        rvHighlights.setLayoutManager(layoutManager);
+//        rvHighlights.setHasFixedSize(true);
+//        rvHighlights.setAdapter(adapter);
     }
 
 }

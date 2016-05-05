@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ramirezallan on 5/2/16.
@@ -85,7 +86,7 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
 
     private void parseHighlights(JSONArray arrayHighlights){
         BNHighlightParser highlightParser = new BNHighlightParser();
-        HashMap<String, BNHighlight> result = highlightParser.parseBNHighlights(arrayHighlights);
+        List<BNHighlight> result = highlightParser.parseBNHighlights(arrayHighlights);
         // guardar el resultado de highlights en el data manager
         dataManager.setBNHighlightss(result);
     }
