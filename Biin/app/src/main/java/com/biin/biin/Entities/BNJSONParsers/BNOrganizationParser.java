@@ -18,12 +18,14 @@ public class BNOrganizationParser {
 
     private static final String TAG = "BNOrganizationParser";
 
+    private BNMediaParser mediaParser = new BNMediaParser();
+
     public BNOrganization parseBNOrganization(JSONObject objectOrganization){
         BNOrganization organization = new BNOrganization();
         try{
             organization.setIdentifier(objectOrganization.getString("identifier"));
             // TODO _id
-            // TODO media array
+            organization.setMedia(mediaParser.parseBNMedia(objectOrganization.getJSONArray("media")));
             organization.setExtraInfo(objectOrganization.getString("extraInfo"));
             organization.setDescription(objectOrganization.getString("description"));
             organization.setBrand(objectOrganization.getString("brand"));

@@ -22,7 +22,9 @@ public class BNDataManager {
 
     private HashMap<String, BNSite> sites = new HashMap<>();
     private HashMap<String, BNOrganization> organizations = new HashMap<>();
-    private HashMap<String, BNElement> elements = new HashMap<>();
+    private HashMap<String, BNElement> elements_by_identifier = new HashMap<>();
+    private HashMap<String, BNElement> elements_by_id = new HashMap<>();
+
     private List<BNHighlight> highlights = new ArrayList<>();
     private HashMap<String, BNCategory> categories = new HashMap<>();
 
@@ -132,26 +134,26 @@ public class BNDataManager {
 
     public void setBNElements(HashMap<String, BNElement> elements) {
         // reemplazar la coleccion completa de elements
-        this.elements = elements;
+        this.elements_by_identifier = elements;
     }
 
     public int addBNElements(HashMap<String, BNElement> elements) {
         // TODO agregar elements a la coleccion (solo los que no existian previamente)
-        this.elements = elements;
+        this.elements_by_identifier = elements;
         // TODO retornar el numero de elements agregados a la coleccion
         return 0;
     }
 
     public boolean addBNElement(BNElement element) {
         // TODO agregar un element a la coleccion
-        this.elements.put(element.getIdentifier(), element);
+        this.elements_by_identifier.put(element.getIdentifier(), element);
         // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
         return true;
     }
 
     public BNElement getBNElement(String identifier) {
-        // TODO obtener un element por su identificador
-        return null;
+        // obtener un element por su identificador
+        return this.elements_by_identifier.get(identifier);
     }
 
     public boolean removeBNElement(String identifier) {
@@ -162,7 +164,47 @@ public class BNDataManager {
 
     public HashMap<String,BNElement> getBNElements(){
         // retornar la lista de elements
-        return this.elements;
+        return this.elements_by_identifier;
+    }
+
+    /****************** Elements end ******************/
+
+
+    /****************** Elements start ******************/
+
+    public void setBNElementsId(HashMap<String, BNElement> elements) {
+        // reemplazar la coleccion completa de elements
+        this.elements_by_id = elements;
+    }
+
+    public int addBNElementsId(HashMap<String, BNElement> elements) {
+        // TODO agregar elements a la coleccion (solo los que no existian previamente)
+        this.elements_by_id = elements;
+        // TODO retornar el numero de elements agregados a la coleccion
+        return 0;
+    }
+
+    public boolean addBNElementId(BNElement element) {
+        // TODO agregar un element a la coleccion
+        this.elements_by_id.put(element.get_id(), element);
+        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        return true;
+    }
+
+    public BNElement getBNElementId(String id) {
+        // obtener un element por su identificador
+        return this.elements_by_id.get(id);
+    }
+
+    public boolean removeBNElementId(String id) {
+        // TODO remover un element de la coleccion
+        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        return true;
+    }
+
+    public HashMap<String,BNElement> getBNElementsId(){
+        // retornar la lista de elements
+        return this.elements_by_id;
     }
 
     /****************** Elements end ******************/

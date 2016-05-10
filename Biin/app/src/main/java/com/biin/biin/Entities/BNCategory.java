@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ramirezallan on 5/2/16.
@@ -14,12 +15,14 @@ public class BNCategory {
         private String identifier;
         private String json;
         private float biinieProximity;
+
+        public BNCategorySiteDetails() { }
     }
 
     private String identifier;
     private String name;
     private String json;
-    private ArrayList<BNCategorySiteDetails> sitesDetails = new ArrayList<>();
+    private List<BNCategorySiteDetails> sitesDetails = new ArrayList<>();
     private boolean isDownloaded;
     private boolean isUserCategory;
     private boolean hasSites;
@@ -63,11 +66,11 @@ public class BNCategory {
         this.json = json;
     }
 
-    public ArrayList<BNCategorySiteDetails> getSitesDetails() {
+    public List<BNCategorySiteDetails> getSitesDetails() {
         return sitesDetails;
     }
 
-    public void setSitesDetails(ArrayList<BNCategorySiteDetails> sitesDetails) {
+    public void setSitesDetails(List<BNCategorySiteDetails> sitesDetails) {
         this.sitesDetails = sitesDetails;
     }
 

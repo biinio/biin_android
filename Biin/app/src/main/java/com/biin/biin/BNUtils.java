@@ -13,6 +13,8 @@ public class BNUtils {
 
     private static final String TAG = "BNUtils";
 
+    private static int width = 0;
+
     public static int getColorFromString(String values){
         // TODO obtener el color a partir del string en formato RGB ej.: "228, 27, 37"
         int color = Color.rgb(0,0,0);
@@ -30,6 +32,14 @@ public class BNUtils {
             Log.e(TAG, "Error convirtiendo el string (" + value + ") a fecha en formato '" + dateFotmat + "'");
         }
         return fecha;
+    }
+
+    public static void setWidth(int pwidth){
+        width = pwidth;
+    }
+
+    public static int getWidth(){
+        return width;
     }
 
 }

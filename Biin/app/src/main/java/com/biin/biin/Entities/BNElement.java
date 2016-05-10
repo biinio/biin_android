@@ -3,11 +3,12 @@ package com.biin.biin.Entities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ramirezallan on 5/2/16.
  */
-public class BNElement {
+public class BNElement implements Cloneable {
 
     private String _id;
     private String identifier;
@@ -42,7 +43,7 @@ public class BNElement {
     private float stars;
     private boolean useWhiteText;
 
-    //private ArrayList<BNMedia> media = new ArrayList<>();
+    private List<BNMedia> media = new ArrayList<>();
     //private ArrayList<UIImageView> gallery = new ArrayList<>();
 
     private boolean activateNotification;
@@ -59,7 +60,7 @@ public class BNElement {
 
     private boolean isDownloadCompleted;
     private boolean isHighlight;
-    private ArrayList<String> categoriesIdentifiers;
+    private List<String> categoriesIdentifiers;
     private BNShowcase showcase;
 
     private String detailsHtml;
@@ -304,6 +305,14 @@ public class BNElement {
         this.useWhiteText = useWhiteText;
     }
 
+    public List<BNMedia> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<BNMedia> media) {
+        this.media = media;
+    }
+
     public boolean isActivateNotification() {
         return activateNotification;
     }
@@ -384,11 +393,11 @@ public class BNElement {
         isHighlight = highlight;
     }
 
-    public ArrayList<String> getCategoriesIdentifiers() {
+    public List<String> getCategoriesIdentifiers() {
         return categoriesIdentifiers;
     }
 
-    public void setCategoriesIdentifiers(ArrayList<String> categoriesIdentifiers) {
+    public void setCategoriesIdentifiers(List<String> categoriesIdentifiers) {
         this.categoriesIdentifiers = categoriesIdentifiers;
     }
 
@@ -489,5 +498,9 @@ public class BNElement {
         public void setCategories(HashMap<String, BNCategory.BNCategoryLite> categories) {
             this.categories = categories;
         }
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

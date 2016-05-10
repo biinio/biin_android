@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -16,6 +17,9 @@ import java.util.HashMap;
 public class BNSiteParser {
 
     private static final String TAG = "BNSiteParser";
+
+    private BNMediaParser mediaParser = new BNMediaParser();
+    private BNShowcaseParser showcaseParser = new BNShowcaseParser();
 
     public BNSite parseBNSite(JSONObject objectSite){
         BNSite site = new BNSite();
@@ -40,9 +44,9 @@ public class BNSiteParser {
             site.setEmail(objectSite.getString("email"));
             site.setNutshell(objectSite.getString("nutshell"));
             site.setPhoneNumber(objectSite.getString("phoneNumber"));
-            // TODO media array
+            site.setMedia(mediaParser.parseBNMedia(objectSite.getJSONArray("media")));
             // TODO neighbors array
-            // TODO showcases array
+            site.setShowcases(new ArrayList<>(showcaseParser.parseBNShowcases(objectSite.getJSONArray("showcases")).values()));
             // TODO biins array
             // TODO userShared
             // TODO userFollowed

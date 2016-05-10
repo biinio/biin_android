@@ -3,6 +3,7 @@ package com.biin.biin.Entities;
 import android.graphics.Color;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ramirezallan on 5/2/16.
@@ -35,7 +36,7 @@ public class BNSite {
     private String email;
     private String nutshell;
     //Gallery
-    //private ArrayList<BNMedia> media = new ArrayList<>();
+    private List<BNMedia> media = new ArrayList<>();
 //    private String images:Array<UIImageView> = Array<UIImageView>()
 
     //Biins
@@ -64,10 +65,10 @@ public class BNSite {
     private boolean isUserInside;
 
     //Neighbors are set by geo distance on backend.
-    private ArrayList<String> neighbors;
+    private List<String> neighbors;
 
     //    private String showcases:Array<String>?
-    private ArrayList<BNShowcase> showcases;
+    private List<BNShowcase> showcases;
 
     private boolean showInView = true;
 
@@ -216,6 +217,14 @@ public class BNSite {
         this.nutshell = nutshell;
     }
 
+    public List<BNMedia> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<BNMedia> media) {
+        this.media = media;
+    }
+
     public boolean isUseWhiteText() {
         return useWhiteText;
     }
@@ -312,19 +321,19 @@ public class BNSite {
         isUserInside = userInside;
     }
 
-    public ArrayList<String> getNeighbors() {
+    public List<String> getNeighbors() {
         return neighbors;
     }
 
-    public void setNeighbors(ArrayList<String> neighbors) {
+    public void setNeighbors(List<String> neighbors) {
         this.neighbors = neighbors;
     }
 
-    public ArrayList<BNShowcase> getShowcases() {
+    public List<BNShowcase> getShowcases() {
         return showcases;
     }
 
-    public void setShowcases(ArrayList<BNShowcase> showcases) {
+    public void setShowcases(List<BNShowcase> showcases) {
         this.showcases = showcases;
     }
 

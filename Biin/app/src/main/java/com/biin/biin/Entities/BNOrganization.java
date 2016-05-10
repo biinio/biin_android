@@ -1,5 +1,8 @@
 package com.biin.biin.Entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ramirezallan on 5/2/16.
  */
@@ -23,7 +26,7 @@ public class BNOrganization {
     private int primaryColor;
     private int secondaryColor;
 
-    //private ArrayList<BNMedia> media = new ArrayList<>();
+    private List<BNMedia> media = new ArrayList<>();
 
     private boolean hasNPS;
 
@@ -120,6 +123,14 @@ public class BNOrganization {
 
     public void setSecondaryColor(int secondaryColor) {
         this.secondaryColor = secondaryColor;
+    }
+
+    public List<BNMedia> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<BNMedia> media) {
+        this.media = media;
     }
 
     public boolean isHasNPS() {
