@@ -8,45 +8,22 @@
     tools:context="com.biin.biin.MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/tvBiinie"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_vertical|center|center_horizontal"
-        android:layout_marginTop="30dp"
+        android:id="@+id/textView"
+        android:text="C A T E G O R Y"
+        style="@style/MainViewLabel"
         android:visibility="gone" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/tvInitialData"
-        android:layout_below="@+id/tvBiinie"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_vertical|center|center_horizontal"
-        android:visibility="gone" />
-
-    <!--<include-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--layout="@layout/bnelement_item"-->
-        <!--android:layout_below="@+id/tvBiinie"-->
-        <!--android:layout_centerHorizontal="true" />-->
-
-
-    <android.support.v7.widget.RecyclerView
+    <com.biin.biin.CardView.SnappingRecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/rvHighlights"
         android:orientation="horizontal"
         tools:listitem="@layout/bnelement_item"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true">
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
 
-    </android.support.v7.widget.RecyclerView>
+    </com.biin.biin.CardView.SnappingRecyclerView>
 
 </RelativeLayout>

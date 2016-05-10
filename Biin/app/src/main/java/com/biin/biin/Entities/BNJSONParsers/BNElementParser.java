@@ -200,7 +200,9 @@ public class BNElementParser {
                 JSONObject objectElement = (JSONObject) arrayElements.get(i);
                 BNElement element = cloneBNElement(objectElement);
 
-                result.put(element.get_id(), element);
+                if(element != null) {
+                    result.put(element.get_id(), element);
+                }
             }
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);

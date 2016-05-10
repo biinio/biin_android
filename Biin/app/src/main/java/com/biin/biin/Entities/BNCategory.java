@@ -26,7 +26,7 @@ public class BNCategory {
     private boolean isDownloaded;
     private boolean isUserCategory;
     private boolean hasSites;
-    private HashMap<String,BNElement> elements;
+    private List<BNElement> elements;
     private int priority = 1;
     private Color backgroundColor;
 
@@ -98,11 +98,11 @@ public class BNCategory {
         this.hasSites = hasSites;
     }
 
-    public HashMap<String, BNElement> getElements() {
+    public List<BNElement> getElements() {
         return elements;
     }
 
-    public void setElements(HashMap<String, BNElement> elements) {
+    public void setElements(List<BNElement> elements) {
         this.elements = elements;
     }
 
@@ -142,54 +142,4 @@ public class BNCategory {
         travel
     }
 
-    public class BNCategoryLite {
-        private String _id;
-        private String identifier;
-        private String url;
-        private String displayName;
-        private String name;
-
-        public BNCategoryLite() {
-        }
-
-        public String get_id() {
-            return _id;
-        }
-
-        public void set_id(String _id) {
-            this._id = _id;
-        }
-
-        public String getIdentifier() {
-            return identifier;
-        }
-
-        public void setIdentifier(String identifier) {
-            this.identifier = identifier;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getDisplayName() {
-            return displayName;
-        }
-
-        public void setDisplayName(String displayName) {
-            this.displayName = displayName;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
 }

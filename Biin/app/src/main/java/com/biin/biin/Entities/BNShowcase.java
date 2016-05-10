@@ -137,4 +137,10 @@ public class BNShowcase {
     public void setSite(BNSite site) {
         this.site = site;
     }
+
+    public void setElementsShowcase(){
+        for (BNElement element : this.elements) {
+            element.setShowcase(this);
+        }
+    }
 }

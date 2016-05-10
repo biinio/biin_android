@@ -29,6 +29,7 @@ public class BNShowcaseParser {
             showcase.setTitle(objectShowcase.getString("title"));
             showcase.setElements_quantity(Integer.parseInt(objectShowcase.getString("elements_quantity")));
             showcase.setElements(new ArrayList<>(elementParser.cloneBNElements(objectShowcase.getJSONArray("elements")).values()));
+            showcase.setElementsShowcase();
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }catch (NumberFormatException e){

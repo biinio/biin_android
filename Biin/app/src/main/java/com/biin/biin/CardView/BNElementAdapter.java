@@ -52,13 +52,13 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
         TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), BNUtils.getWidth() + 306);
 
         holder.tvTitle.setText(item.getTitle());
-        holder.tvSubtitle.setText(item.getSubTitle());
+//        holder.tvSubtitle.setText(item.getShowcase().getSite().getTitle() + " | " + item.getShowcase().getSite().getSubTitle());
         holder.tvPrice.setText(item.getListPrice());
         holder.tvDiscount.setText(item.getPrice());
         holder.cvElement.setLayoutParams(params);
 
-        loadElementImage("https://biinapp.blob.core.windows.net/biinmedia/97ed75ef-ce99-46eb-9b31-3f2d55f3005d/11a265c45931-42ed-b61a-fb1a0a1c2bad.jpeg", holder); //element.media.url
-        loadOrganizationImage("https://biinapp.blob.core.windows.net/biinmedia/a6188431-5f5d-44e7-b654-126ae0e64bf9/media/a6188431-5f5d-44e7-b654-126ae0e64bf9/97ed75ef-ce99-46eb-9b31-3f2d55f3005d/media/ee1d96a1-855f-4d72-85ed-7977cc391515.png", holder);
+        loadElementImage(item.getMedia().get(0).getUrl(), holder); //element.media.url
+//        loadOrganizationImage(item.getShowcase().getSite().getMedia().get(0).getUrl(), holder);
     }
 
     @Override
@@ -112,13 +112,15 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 
             cvElement = (CardView)itemView.findViewById(R.id.cvElement);
 
-            Typeface lato_rg = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");
-            Typeface lato_li = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
+            Typeface lato_light = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
+            Typeface lato_regular = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");
+            Typeface lato_bold = Typeface.createFromAsset(context.getAssets(),"Lato-Bold.ttf");
+            Typeface lato_black = Typeface.createFromAsset(context.getAssets(),"Lato-Black.ttf");
 
-            tvTitle.setTypeface(lato_rg);
-            tvSubtitle.setTypeface(lato_li);
-            tvPrice.setTypeface(lato_li);
-            tvDiscount.setTypeface(lato_rg);
+            tvTitle.setTypeface(lato_regular);
+            tvSubtitle.setTypeface(lato_light);
+            tvPrice.setTypeface(lato_light);
+            tvDiscount.setTypeface(lato_regular);
         }
     }
 

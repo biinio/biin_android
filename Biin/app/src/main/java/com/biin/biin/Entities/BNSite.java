@@ -352,4 +352,10 @@ public class BNSite {
     public void setSiteSchedule(String siteSchedule) {
         this.siteSchedule = siteSchedule;
     }
+
+    public void setShowcasesSite(){
+        for (BNShowcase showcase : this.showcases) {
+            showcase.setSite(this);
+        }
+    }
 }

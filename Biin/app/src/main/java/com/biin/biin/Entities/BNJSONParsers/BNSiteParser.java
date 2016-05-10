@@ -47,6 +47,7 @@ public class BNSiteParser {
             site.setMedia(mediaParser.parseBNMedia(objectSite.getJSONArray("media")));
             // TODO neighbors array
             site.setShowcases(new ArrayList<>(showcaseParser.parseBNShowcases(objectSite.getJSONArray("showcases")).values()));
+            site.setShowcasesSite();
             // TODO biins array
             // TODO userShared
             // TODO userFollowed

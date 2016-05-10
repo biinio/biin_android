@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -17,10 +18,13 @@ public class BNCategoryParser {
 
     private static final String TAG = "BNCategoryParser";
 
-    public BNCategory parseBNCategory(JSONObject objectElement){
+    private BNElementParser elementParser = new BNElementParser();
+
+    public BNCategory parseBNCategory(JSONObject objectCategory){
         BNCategory category = new BNCategory();
         try{
-            category.setIdentifier(objectElement.getString("identifier"));
+            category.setIdentifier(objectCategory.getString("identifier"));
+            category.setElements(new ArrayList<>(elementParser.cloneBNElements(objectCategory.getJSONArray("elements")).values()));
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }

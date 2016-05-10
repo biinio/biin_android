@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.CardView.BNElementAdapter;
+import com.biin.biin.CardView.SnappingRecyclerView;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
@@ -41,8 +42,8 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvBiinies = (TextView)findViewById(R.id.tvBiinie);
-        tvInitialData = (TextView)findViewById(R.id.tvInitialData);
+//        tvBiinies = (TextView)findViewById(R.id.tvBiinie);
+//        tvInitialData = (TextView)findViewById(R.id.tvInitialData);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         str.append("Gender: " + biinie.getGender() + "\n");
         str.append("Email: " + biinie.getEmail());
         Log.d("Biin",  str.toString());
-        tvBiinies.setText(str.toString());
+//        tvBiinies.setText(str.toString());
     }
 
     @Override
@@ -136,7 +137,8 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
 //        Log.d("Biin",  str.toString());
 //        tvInitialData.setText(str.toString());
 
-        RecyclerView rvHighlights = (RecyclerView)findViewById(R.id.rvHighlights);
+        SnappingRecyclerView rvHighlights = (SnappingRecyclerView)findViewById(R.id.rvHighlights);
+        rvHighlights.setSnapEnabled(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         ArrayList<BNElement> highlightElements = new ArrayList<>();
 

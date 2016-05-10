@@ -42,16 +42,16 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
     public void onResponse(JSONObject response) {
         try{
             JSONObject data = response.getJSONObject("data");
-            // parsear sites
-            parseSites(data.getJSONArray("sites"));
-            // parsear organizations
-            parseOrganizations(data.getJSONArray("organizations"));
             // parsear elements_by_identifier
             parseElements(data.getJSONArray("elements"));
             // parsear elements_by_id
             parseElementsId(data.getJSONArray("elements"));
             // parsear highlights
             parseHighlights(data.getJSONArray("highlights"));
+            // parsear sites
+            parseSites(data.getJSONArray("sites"));
+            // parsear organizations
+            parseOrganizations(data.getJSONArray("organizations"));
             // parsear categories
             parseCategories(data.getJSONArray("categories"));
         }catch (JSONException e){
