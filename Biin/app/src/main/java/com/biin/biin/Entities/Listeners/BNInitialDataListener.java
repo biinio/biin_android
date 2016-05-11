@@ -46,14 +46,14 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
             parseElements(data.getJSONArray("elements"));
             // parsear elements_by_id
             parseElementsId(data.getJSONArray("elements"));
-            // parsear highlights
-            parseHighlights(data.getJSONArray("highlights"));
-            // parsear sites
-            parseSites(data.getJSONArray("sites"));
             // parsear organizations
             parseOrganizations(data.getJSONArray("organizations"));
+            // parsear sites
+            parseSites(data.getJSONArray("sites"));
             // parsear categories
             parseCategories(data.getJSONArray("categories"));
+            // parsear highlights
+            parseHighlights(data.getJSONArray("highlights"));
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }
@@ -96,6 +96,9 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
     private void parseHighlights(JSONArray arrayHighlights){
         BNHighlightParser highlightParser = new BNHighlightParser();
         List<BNHighlight> result = highlightParser.parseBNHighlights(arrayHighlights);
+        for (BNHighlight highlight : result) {
+
+        }
         // guardar el resultado de highlights en el data manager
         dataManager.setBNHighlightss(result);
     }

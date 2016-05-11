@@ -6,7 +6,7 @@ package com.biin.biin.Managers;
 public class BNPositionManager {
     private static BNPositionManager ourInstance = new BNPositionManager();
 
-    public static BNPositionManager getInstance() {
+    protected static BNPositionManager getInstance() {
         return ourInstance;
     }
 

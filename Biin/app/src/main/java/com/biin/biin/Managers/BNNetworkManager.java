@@ -17,7 +17,7 @@ public class BNNetworkManager {
     private static String URL_GET_BIINIES_TEST = URL_GET_BIINIES + "/25e854b6-b5ee-483b-80fd-7aa4c85eb386";
     private static String URL_GET_INITIALDATA_TEST = URL_GET_INITIALDATA + "/25e854b6-b5ee-483b-80fd-7aa4c85eb386/9.73854872449546/-83.9987999326416";
 
-    public static BNNetworkManager getInstance() {
+    protected static BNNetworkManager getInstance() {
         return ourInstance;
     }
 

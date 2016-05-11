@@ -3,8 +3,12 @@ package com.biin.biin;
 import android.graphics.Color;
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ramirezallan on 5/3/16.
@@ -16,8 +20,14 @@ public class BNUtils {
     private static int width = 0;
 
     public static int getColorFromString(String values){
-        // TODO obtener el color a partir del string en formato RGB ej.: "228, 27, 37"
+        // obtener el color a partir del string en formato RGB ej.: "228, 27, 37"
         int color = Color.rgb(0,0,0);
+        if(StringUtils.countMatches(values, ",") == 2) {
+            List<String> colorValues = Arrays.asList(values.split(","));
+            color = Color.rgb(Integer.parseInt(colorValues.get(0).trim()),
+                    Integer.parseInt(colorValues.get(1).trim()),
+                    Integer.parseInt(colorValues.get(2).trim()));
+        }
         return color;
     }
 

@@ -25,19 +25,21 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
         android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimary" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="#a1887f"
+        android:background="@color/colorGreen"
         android:layout_below="@+id/ivElement"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/rlElementLabel">
 
         <ImageView
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:id="@+id/ivOrganization"
             android:src="@drawable/spoon"
             android:scaleType="fitXY"
@@ -58,46 +60,65 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Desayunos Spoon"
                 android:id="@+id/tvTitle"
                 android:layout_alignTop="@+id/ivOrganization"
                 android:layout_toEndOf="@+id/ivOrganization"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:textColor="#ffffff" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Spoon | Paseo Metropoli."
-                android:id="@+id/tvSubtitle"
-                android:layout_below="@+id/tvTitle"
-                android:layout_alignStart="@+id/tvTitle"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:textSize="16dp" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:id="@+id/rlSubTitle"
                 android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="PRICE"
-                    android:id="@+id/tvPrice"
+                    android:text="Spoon"
+                    android:id="@+id/tvSubtitle"
                     android:gravity="center_vertical"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"
+                    android:textSize="12dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="San Pedro"
+                    android:id="@+id/tvSubtitleLocation"
+                    android:gravity="center_vertical"
+                    android:textColor="#ffffff"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="false"
+                    android:layout_toEndOf="@id/tvSubtitle"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="12dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/rlPrice"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PRICE"
+                    android:id="@+id/tvPrice"
+                    android:gravity="center_vertical"
+                    android:textColor="#ffffff"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Ȼ1500 i.i."
                     android:id="@+id/tvDiscount"
                     android:gravity="center_vertical"
@@ -105,7 +126,9 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="false"
                     android:layout_toEndOf="@id/tvPrice"
-                    android:layout_marginLeft="10dp" />
+                    android:layout_marginLeft="10dp"
+                    android:textSize="12dp" />
+
             </RelativeLayout>
 
         </LinearLayout>

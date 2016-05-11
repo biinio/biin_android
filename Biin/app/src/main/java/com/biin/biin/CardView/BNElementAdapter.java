@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -51,14 +52,22 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
         BNElement item = elements.get(position);
         TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), BNUtils.getWidth() + 306);
 
-        holder.tvTitle.setText(item.getTitle());
-//        holder.tvSubtitle.setText(item.getShowcase().getSite().getTitle() + " | " + item.getShowcase().getSite().getSubTitle());
-        holder.tvPrice.setText(item.getListPrice());
-        holder.tvDiscount.setText(item.getPrice());
-        holder.cvElement.setLayoutParams(params);
-
         loadElementImage(item.getMedia().get(0).getUrl(), holder); //element.media.url
-//        loadOrganizationImage(item.getShowcase().getSite().getMedia().get(0).getUrl(), holder);
+        loadOrganizationImage(item.getShowcase().getSite().getMedia().get(0).getUrl(), holder);
+
+        holder.rlElementLabel.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
+        holder.tvTitle.setText(item.getTitle());
+        holder.tvTitle.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+        holder.tvSubtitle.setText(item.getShowcase().getSite().getTitle());
+        holder.tvSubtitle.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+        holder.tvSubtitleLocation.setText(item.getShowcase().getSite().getSubTitle());
+        holder.tvSubtitleLocation.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+//        holder.tvPrice.setText(item.getListPrice());
+        holder.tvPrice.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+        holder.tvDiscount.setText("Ȼ" + item.getPrice());
+        holder.tvDiscount.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+
+        holder.cvElement.setLayoutParams(params);
     }
 
     @Override
@@ -96,17 +105,22 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 
     public static class BNElementViewHolder extends RecyclerView.ViewHolder{
 
+        protected RelativeLayout rlElementLabel;
         protected ImageView ivElement, ivOrganization;
-        protected TextView tvTitle, tvSubtitle, tvPrice, tvDiscount;
+        protected TextView tvTitle, tvSubtitle, tvSubtitleLocation, tvPrice, tvDiscount;
         protected CardView cvElement;
 
         public BNElementViewHolder(View itemView) {
             super(itemView);
+
+            rlElementLabel = (RelativeLayout)itemView.findViewById(R.id.rlElementLabel);
+
             ivElement = (ImageView)itemView.findViewById(R.id.ivElement);
             ivOrganization = (ImageView)itemView.findViewById(R.id.ivOrganization);
 
             tvTitle = (TextView)itemView.findViewById(R.id.tvTitle);
             tvSubtitle = (TextView)itemView.findViewById(R.id.tvSubtitle);
+            tvSubtitleLocation = (TextView)itemView.findViewById(R.id.tvSubtitleLocation);
             tvPrice = (TextView)itemView.findViewById(R.id.tvPrice);
             tvDiscount = (TextView)itemView.findViewById(R.id.tvDiscount);
 
@@ -114,12 +128,12 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 
             Typeface lato_light = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
             Typeface lato_regular = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");
-            Typeface lato_bold = Typeface.createFromAsset(context.getAssets(),"Lato-Bold.ttf");
             Typeface lato_black = Typeface.createFromAsset(context.getAssets(),"Lato-Black.ttf");
 
             tvTitle.setTypeface(lato_regular);
-            tvSubtitle.setTypeface(lato_light);
-            tvPrice.setTypeface(lato_light);
+            tvSubtitle.setTypeface(lato_black);
+            tvSubtitleLocation.setTypeface(lato_regular);
+            tvPrice.setTypeface(lato_regular);
             tvDiscount.setTypeface(lato_regular);
         }
     }

@@ -28,7 +28,7 @@ public class BNDataManager {
     private List<BNHighlight> highlights = new ArrayList<>();
     private HashMap<String, BNCategory> categories = new HashMap<>();
 
-    public static BNDataManager getInstance() {
+    protected static BNDataManager getInstance() {
         return ourInstance;
     }
 
@@ -112,8 +112,8 @@ public class BNDataManager {
     }
 
     public BNOrganization getBNOrganization(String identifier) {
-        // TODO obtener una organization por su identificador
-        return null;
+        // obtener una organization por su identificador
+        return this.organizations.get(identifier);
     }
 
     public boolean removeBNOrganization(String identifier) {

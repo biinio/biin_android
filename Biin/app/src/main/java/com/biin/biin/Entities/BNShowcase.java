@@ -1,5 +1,7 @@
 package com.biin.biin.Entities;
 
+import com.biin.biin.Managers.BNAppManager;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -141,6 +143,14 @@ public class BNShowcase {
     public void setElementsShowcase(){
         for (BNElement element : this.elements) {
             element.setShowcase(this);
+            BNElement elementByIdentifier = BNAppManager.getDataManagerInstance().getBNElement(element.getIdentifier());
+            if(elementByIdentifier != null){
+                elementByIdentifier.setShowcase(this);
+            }
+            BNElement elementById = BNAppManager.getDataManagerInstance().getBNElementId(element.get_id());
+            if(elementById != null){
+                elementById.setShowcase(this);
+            }
         }
     }
 }

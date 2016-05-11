@@ -35,15 +35,14 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
     private BNBiiniesListener biiniesListener;
     private BNInitialDataListener initialDataListener;
 
-    private TextView tvBiinies,tvInitialData,tvTitle,tvSubtitle,tvPrice,tvDiscount;
+    private TextView tvRecomended;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        tvBiinies = (TextView)findViewById(R.id.tvBiinie);
-//        tvInitialData = (TextView)findViewById(R.id.tvInitialData);
+        setTextViewsStyles();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -55,10 +54,6 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         tvPrice = (TextView)findViewById(R.id.tvPrice);
         tvDiscount = (TextView)findViewById(R.id.tvDiscount);
 
-        Typeface lato_rg = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
-        Typeface lato_li = Typeface.createFromAsset(getAssets(),"Lato-Light.ttf");
-
-        tvTitle.setTypeface(lato_rg);
         tvSubtitle.setTypeface(lato_li);
         tvPrice.setTypeface(lato_li);
         tvDiscount.setTypeface(lato_rg);
@@ -67,6 +62,15 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
 
         getBiinie();
         getInitialData();
+    }
+
+    private void setTextViewsStyles(){
+        Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
+        Typeface lato_light = Typeface.createFromAsset(getAssets(),"Lato-Light.ttf");
+
+        tvRecomended = (TextView)findViewById(R.id.tvRecomended);
+        tvRecomended.setTypeface(lato_regular);
+        tvRecomended.setLetterSpacing(0.3f);
     }
 
     private void getBiinie(){
@@ -140,10 +144,12 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         SnappingRecyclerView rvHighlights = (SnappingRecyclerView)findViewById(R.id.rvHighlights);
         rvHighlights.setSnapEnabled(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        ArrayList<BNElement> highlightElements = new ArrayList<>();
 
-        for (BNHighlight hl : highlights) {
-            highlightElements.add(elements.get(hl.getIdentifier()));
+        ArrayList<BNElement> highlightElements = new ArrayList<>();
+        for (BNHighlight highlight : highlights) {
+            BNElement element = elements.get(highlight.getIdentifier());
+            element.set_id(highlight.get_id());
+            highlightElements.add(element);
         }
 
         BNElementAdapter adapter = new BNElementAdapter(this, highlightElements);

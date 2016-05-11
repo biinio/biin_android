@@ -3,6 +3,7 @@ package com.biin.biin.Entities.BNJSONParsers;
 import android.util.Log;
 
 import com.biin.biin.Entities.BNSite;
+import com.biin.biin.Managers.BNAppManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,7 @@ public class BNSiteParser {
         try{
             site.setIdentifier(objectSite.getString("identifier"));
             site.setOrganizationIdentifier(objectSite.getString("organizationIdentifier"));
+            site.setOrganization(BNAppManager.getDataManagerInstance().getBNOrganization(site.getOrganizationIdentifier()));
             // TODO proximityUUID
 //            site.setBiinieProximity(Float.parseFloat(objectSite.getString("proximityUUID")));
             site.setMajor(Integer.parseInt(objectSite.getString("major")));
