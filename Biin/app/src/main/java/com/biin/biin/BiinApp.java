@@ -2,6 +2,7 @@ package com.biin.biin;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;

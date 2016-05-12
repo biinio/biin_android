@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNElementViewHolder> {
 
-    private static final String TAG = "BNElementsList";
+    private static final String TAG = "BNElementAdapter";
     private static Context context;
 
     private List<BNElement> elements;
@@ -42,7 +42,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
     @Override
     public BNElementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bnelement_item, parent, false);
-        v.setLayoutParams(new RecyclerView.LayoutParams(BNUtils.getWidth(), BNUtils.getWidth() + 306));
+        v.setLayoutParams(new RecyclerView.LayoutParams(BNUtils.getWidth(), BNUtils.getWidth() + (int)(68 * BNUtils.getDensity())));
         BNElementViewHolder holder = new BNElementViewHolder(v);
         return holder;
     }
@@ -50,7 +50,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
     @Override
     public void onBindViewHolder(BNElementViewHolder holder, int position) {
         BNElement item = elements.get(position);
-        TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), BNUtils.getWidth() + 306);
+        TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), BNUtils.getWidth() + (int)(68 * BNUtils.getDensity()));
 
         loadElementImage(item.getMedia().get(0).getUrl(), holder); //element.media.url
         loadOrganizationImage(item.getShowcase().getSite().getMedia().get(0).getUrl(), holder);
@@ -113,6 +113,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
         public BNElementViewHolder(View itemView) {
             super(itemView);
 
+            cvElement = (CardView)itemView.findViewById(R.id.cvElement);
             rlElementLabel = (RelativeLayout)itemView.findViewById(R.id.rlElementLabel);
 
             ivElement = (ImageView)itemView.findViewById(R.id.ivElement);
@@ -123,8 +124,6 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
             tvSubtitleLocation = (TextView)itemView.findViewById(R.id.tvSubtitleLocation);
             tvPrice = (TextView)itemView.findViewById(R.id.tvPrice);
             tvDiscount = (TextView)itemView.findViewById(R.id.tvDiscount);
-
-            cvElement = (CardView)itemView.findViewById(R.id.cvElement);
 
             Typeface lato_light = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
             Typeface lato_regular = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");

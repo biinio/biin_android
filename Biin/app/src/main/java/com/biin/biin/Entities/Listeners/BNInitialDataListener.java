@@ -96,9 +96,6 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
     private void parseHighlights(JSONArray arrayHighlights){
         BNHighlightParser highlightParser = new BNHighlightParser();
         List<BNHighlight> result = highlightParser.parseBNHighlights(arrayHighlights);
-        for (BNHighlight highlight : result) {
-
-        }
         // guardar el resultado de highlights en el data manager
         dataManager.setBNHighlightss(result);
     }

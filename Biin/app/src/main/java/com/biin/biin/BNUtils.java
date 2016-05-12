@@ -18,6 +18,7 @@ public class BNUtils {
     private static final String TAG = "BNUtils";
 
     private static int width = 0;
+    private static float density = 1;
 
     public static int getColorFromString(String values){
         // obtener el color a partir del string en formato RGB ej.: "228, 27, 37"
@@ -50,6 +51,14 @@ public class BNUtils {
 
     public static int getWidth(){
         return width;
+    }
+
+    public static float getDensity() {
+        return density;
+    }
+
+    public static void setDensity(float density) {
+        BNUtils.density = density;
     }
 
 }
