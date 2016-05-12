@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
                 TextView tvCategoryName = (TextView) view.findViewById(R.id.tvCategoryName);
                 tvCategoryName.setTypeface(lato_regular);
                 tvCategoryName.setLetterSpacing(0.3f);
-                tvCategoryName.setText(category.getIdentifier());
+                tvCategoryName.setText(getResources().getIdentifier(category.getIdentifier(),"string",getPackageName()));
 
                 if (categoryElements.size() > 1) {
                     //TODO llenar el recyclerview
