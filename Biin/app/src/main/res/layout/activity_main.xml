@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.biin.biin.MainActivity">
+    tools:context="com.biin.biin.MainActivity"
+    android:overScrollMode="never">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,7 +35,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignLeft="@+id/tvRecomended"
             android:layout_alignRight="@+id/tvRecomended"
-            android:layout_below="@+id/tvRecomended">
+            android:layout_below="@+id/tvRecomended"
+            android:overScrollMode="never">
 
         </com.biin.biin.CardView.SnappingRecyclerView>
 
@@ -63,7 +65,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_alignRight="@+id/tvRecomended"
-            android:layout_alignLeft="@+id/tvRecomended">
+            android:layout_alignLeft="@+id/tvRecomended"
+            android:overScrollMode="never">
 
         </com.biin.biin.CardView.CardRecyclerView>
 

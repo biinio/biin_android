@@ -1,6 +1,7 @@
 package com.biin.biin;
 
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import com.biin.biin.CardView.BNCategoryAdapter;
 import com.biin.biin.CardView.BNElementAdapter;
 import com.biin.biin.CardView.BNSiteAdapter;
 import com.biin.biin.CardView.CardRecyclerView;
+import com.biin.biin.CardView.LinearLayoutManagerSmooth;
 import com.biin.biin.CardView.SnappingRecyclerView;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
@@ -155,11 +157,11 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         HashMap<String,BNElement> elements = BNAppManager.getDataManagerInstance().getBNElements();
         List<BNHighlight> highlights = BNAppManager.getDataManagerInstance().getBNHighlights();
 
-        SnappingRecyclerView rvHighlights = (SnappingRecyclerView)findViewById(R.id.rvRecomended);
+        final SnappingRecyclerView rvHighlights = (SnappingRecyclerView)findViewById(R.id.rvRecomended);
         rvHighlights.setSnapEnabled(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManagerSmooth layoutManager = new LinearLayoutManagerSmooth(this, LinearLayoutManager.HORIZONTAL, false);
 
-        List<BNElement> highlightElements = new ArrayList<>();
+        final List<BNElement> highlightElements = new ArrayList<>();
         for (BNHighlight highlight : highlights) {
             BNElement element = elements.get(highlight.getIdentifier());
             element.set_id(highlight.get_id());
@@ -170,6 +172,23 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         rvHighlights.setLayoutManager(layoutManager);
         rvHighlights.setHasFixedSize(true);
         rvHighlights.setAdapter(adapter);
+        rvHighlights.getLayoutManager().scrollToPosition(highlightElements.size() * 100);
+
+        final Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int next = ((LinearLayoutManager) rvHighlights.getLayoutManager()).findFirstVisibleItemPosition() + 1;
+                if(next < rvHighlights.getLayoutManager().getItemCount() - 1) {
+                    rvHighlights.smoothScrollToPosition(next);
+                }else{
+                    int current = (highlightElements.size() * 100) - 1;
+                    ((LinearLayoutManager) rvHighlights.getLayoutManager()).scrollToPositionWithOffset(current, 0);
+                }
+                handler.postDelayed(this, 3500);
+            }
+        }, 3500);
     }
 
     private void loadNearPlaces(){

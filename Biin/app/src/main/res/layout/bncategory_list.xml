@@ -30,7 +30,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignLeft="@+id/tvCategoryName"
-        android:layout_alignRight="@+id/tvCategoryName">
+        android:layout_alignRight="@+id/tvCategoryName"
+        android:overScrollMode="never">
 
     </com.biin.biin.CardView.CardRecyclerView>
 

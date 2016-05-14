@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ivCategoryElement"
-            android:src="@drawable/parfait"
+            android:src="@drawable/biin"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:layout_alignParentLeft="true"
@@ -26,7 +26,7 @@
             android:layout_marginTop="0dp"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/biin"
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true" />
 
@@ -58,7 +58,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Desayunos Spoon"
+                    android:text="Title"
                     android:id="@+id/tvCategoryElement"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
@@ -75,7 +75,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Spoon"
+                        android:text="Subtitle"
                         android:id="@+id/tvCategorySubtitle"
                         android:gravity="center_vertical"
                         android:textColor="#ffffff"
@@ -84,7 +84,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="San Pedro"
+                        android:text="Location"
                         android:id="@+id/tvCategoryLocation"
                         android:gravity="center_vertical"
                         android:textColor="#ffffff"
@@ -115,7 +115,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ȼ1500 i.i."
+                        android:text="Discount"
                         android:id="@+id/tvCategoryDiscount"
                         android:gravity="center_vertical"
                         android:textColor="#ffffff"

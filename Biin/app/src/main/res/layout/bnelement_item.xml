@@ -17,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ivElement"
-        android:src="@drawable/parfait"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:layout_alignParentLeft="true"
@@ -26,9 +25,10 @@
         android:layout_marginTop="0dp"
         android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/biin"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:src="@drawable/biin" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,11 +46,11 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:id="@+id/ivOrganization"
-            android:src="@drawable/spoon"
             android:scaleType="fitXY"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_margin="6dp" />
+            android:layout_margin="6dp"
+            android:background="@drawable/biin" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -65,7 +65,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Desayunos Spoon"
+                android:text="Title"
                 android:id="@+id/tvTitle"
                 android:layout_alignTop="@+id/ivOrganization"
                 android:layout_toEndOf="@+id/ivOrganization"
@@ -84,7 +84,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Spoon"
+                    android:text="Subtitle"
                     android:id="@+id/tvSubtitle"
                     android:gravity="center_vertical"
                     android:textColor="#ffffff"
@@ -93,7 +93,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="San Pedro"
+                    android:text="Location"
                     android:id="@+id/tvSubtitleLocation"
                     android:gravity="center_vertical"
                     android:textColor="#ffffff"
@@ -124,7 +124,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ȼ1500 i.i."
+                    android:text="Discount"
                     android:id="@+id/tvDiscount"
                     android:gravity="center_vertical"
                     android:textColor="#ffffff"

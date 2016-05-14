@@ -49,6 +49,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 
     @Override
     public void onBindViewHolder(BNElementViewHolder holder, int position) {
+        position = position % elements.size(); //hacer parecer la lista como infinita, se obtiene el index real
         BNElement item = elements.get(position);
         TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), BNUtils.getWidth() + (int)(68 * BNUtils.getDensity()));
 
@@ -72,10 +73,12 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 
     @Override
     public int getItemCount() {
-        return elements.size();
+//        return elements.size();
+        return elements.size() * 1000; //hacer parecer la lista como infinita, se "repite" 1000 veces
     }
 
     public BNElement getElement(int position){
+        position = position % elements.size(); //hacer parecer la lista como infinita, se obtiene el index real
         return elements.get(position);
     }
 
