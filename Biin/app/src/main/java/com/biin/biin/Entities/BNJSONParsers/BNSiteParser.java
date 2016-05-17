@@ -2,8 +2,11 @@ package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
+import com.biin.biin.BNUtils;
+import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Managers.BNDataManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,6 +14,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ramirezallan on 5/3/16.
@@ -21,6 +25,8 @@ public class BNSiteParser {
 
     private BNMediaParser mediaParser = new BNMediaParser();
     private BNShowcaseParser showcaseParser = new BNShowcaseParser();
+
+    private BNDataManager dataManager = BNAppManager.getDataManagerInstance();
 
     public BNSite parseBNSite(JSONObject objectSite){
         BNSite site = new BNSite();
@@ -54,6 +60,7 @@ public class BNSiteParser {
             // TODO userShared
             // TODO userFollowed
             // TODO userLiked
+            site.setUserLiked(BNUtils.getBooleanFromString(objectSite.getString("userLiked")));
             // TODO siteSchedule
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
@@ -71,6 +78,46 @@ public class BNSiteParser {
                 BNSite site = parseBNSite(objectSite);
 
                 result.put(site.getIdentifier(), site);
+            }
+        }catch (JSONException e){
+            Log.e(TAG, "Error parseando el JSON.", e);
+        }
+        return result;
+    }
+
+    public HashMap<String, BNSite> parseNearByBNSites(JSONArray arraySites){
+        HashMap<String, BNSite> result = new HashMap<>();
+        ArrayList<String> organizations = new ArrayList<>();
+        try{
+            for(int i = 0; i < arraySites.length(); i++){
+                JSONObject objectSite = (JSONObject) arraySites.get(i);
+                BNSite site = dataManager.getBNSite(objectSite.getString("identifier"));
+
+                if(site != null && site.getOrganization() != null
+                        && site.getOrganization().getIdentifier() != null
+                        && !organizations.contains(site.getOrganization().getIdentifier())) {
+                    result.put(site.getIdentifier(), site);
+                    organizations.add(site.getOrganization().getIdentifier());
+                }
+            }
+        }catch (JSONException e){
+            Log.e(TAG, "Error parseando el JSON.", e);
+        }
+        return result;
+    }
+
+    public HashMap<String, BNSite> parseFavouriteBNSites(JSONArray arraySites){
+        HashMap<String, BNSite> result = new HashMap<>();
+        try{
+            for(int i = 0; i < arraySites.length(); i++){
+                JSONObject objectSite = (JSONObject) arraySites.get(i);
+                BNSite site = dataManager.getBNSite(objectSite.getString("identifier"));
+
+                if(site != null) {
+                    site.set_id(objectSite.getString("_id"));
+                    site.setLikeDate(BNUtils.getDateFromString(objectSite.getString("likeDate")));
+                    result.put(site.getIdentifier(), site);
+                }
             }
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);

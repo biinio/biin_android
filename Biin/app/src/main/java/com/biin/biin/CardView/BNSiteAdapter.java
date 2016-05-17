@@ -1,7 +1,9 @@
 package com.biin.biin.CardView;
 
 import android.content.Context;
+import android.graphics.ColorMatrix;
 import android.graphics.Typeface;
+import android.graphics.drawable.VectorDrawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,6 +62,16 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
         holder.tvSiteSubtitle.setText(item.getSubTitle());
         holder.tvSiteSubtitle.setTextColor(item.getOrganization().getSecondaryColor());
 
+        if(item.isUserLiked()) {
+            holder.ivLike.setVisibility(View.GONE);
+            holder.ivLiked.setVisibility(View.VISIBLE);
+            holder.ivLiked.setColorFilter(item.getOrganization().getSecondaryColor());
+        }else {
+            holder.ivLiked.setVisibility(View.GONE);
+            holder.ivLike.setVisibility(View.VISIBLE);
+            holder.ivLike.setColorFilter(item.getOrganization().getSecondaryColor());
+        }
+
         holder.cvSite.setLayoutParams(params);
     }
 
@@ -86,10 +98,10 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
 
     public static class BNSiteViewHolder extends RecyclerView.ViewHolder{
 
-        protected RelativeLayout rlSiteLabel;
-        protected ImageView ivSite;
-        protected TextView tvSiteTitle, tvSiteSubtitle;
         protected CardView cvSite;
+        protected RelativeLayout rlSiteLabel;
+        protected ImageView ivSite, ivLike, ivLiked;
+        protected TextView tvSiteTitle, tvSiteSubtitle;
 
         public BNSiteViewHolder(View itemView) {
             super(itemView);
@@ -98,6 +110,8 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
             rlSiteLabel = (RelativeLayout)itemView.findViewById(R.id.rlSiteLabel);
 
             ivSite = (ImageView)itemView.findViewById(R.id.ivSite);
+            ivLike = (ImageView)itemView.findViewById(R.id.ivLike);
+            ivLiked = (ImageView)itemView.findViewById(R.id.ivLiked);
 
             tvSiteTitle = (TextView)itemView.findViewById(R.id.tvSiteTitle);
             tvSiteSubtitle = (TextView)itemView.findViewById(R.id.tvSiteSubtitle);

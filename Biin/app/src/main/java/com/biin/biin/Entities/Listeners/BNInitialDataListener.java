@@ -50,10 +50,16 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
             parseOrganizations(data.getJSONArray("organizations"));
             // parsear sites
             parseSites(data.getJSONArray("sites"));
+            // parsear nearby_sites
+            parseNearBySites(data.getJSONArray("nearbySites"));
+            // parsear favourite sites
+            parseFavouriteSites(data.getJSONObject("favorites").getJSONArray("sites"));
             // parsear categories
             parseCategories(data.getJSONArray("categories"));
             // parsear highlights
             parseHighlights(data.getJSONArray("highlights"));
+            //TODO parsear favourite elements
+//            parseFavouriteElements(data.getJSONObject("favorites").getJSONArray("elements"));
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }
@@ -70,6 +76,20 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
         HashMap<String, BNSite> result = siteParser.parseBNSites(arraySites);
         // guardar el resultado de sites en el data manager
         dataManager.setBNSites(result);
+    }
+
+    private void parseNearBySites(JSONArray arraySites){
+        BNSiteParser siteParser = new BNSiteParser();
+        HashMap<String, BNSite> result = siteParser.parseNearByBNSites(arraySites);
+        // guardar el resultado de sites cercanos en el data manager
+        dataManager.setNearByBNSites(result);
+    }
+
+    private void parseFavouriteSites(JSONArray arraySites){
+        BNSiteParser siteParser = new BNSiteParser();
+        HashMap<String, BNSite> result = siteParser.parseFavouriteBNSites(arraySites);
+        // guardar el resultado de sites favoritos en el data manager
+        dataManager.setFavouriteBNSites(result);
     }
 
     private void parseOrganizations(JSONArray arrayOrganizations){
@@ -91,6 +111,13 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
         HashMap<String, BNElement> result = elementParser.parseBNElementsId(arrayElements);
         // guardar el resultado de elements en el data manager
         dataManager.setBNElementsId(result);
+    }
+
+    private void parseFavouriteElements(JSONArray arrayElements){ //TODO parsear los favoritos de la lista del json
+        BNElementParser elementParser = new BNElementParser();
+        HashMap<String, BNElement> result = elementParser.parseBNElements(arrayElements);
+        // guardar el resultado de elements en el data manager
+        dataManager.setBNElements(result);
     }
 
     private void parseHighlights(JSONArray arrayHighlights){

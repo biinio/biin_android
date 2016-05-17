@@ -1,6 +1,7 @@
 package com.biin.biin;
 
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +34,7 @@ public class BNUtils {
     }
 
     public static Date getDateFromString(String value){
-        // TODO obtener la fecha a partir del string recibido ej.: "2016-04-29 22:45:26"
+        // obtener la fecha a partir del string recibido ej.: "2016-04-29 22:45:26"
         Date fecha = new Date();
         String dateFotmat = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat format = new SimpleDateFormat(dateFotmat);
@@ -43,6 +44,21 @@ public class BNUtils {
             Log.e(TAG, "Error convirtiendo el string (" + value + ") a fecha en formato '" + dateFotmat + "'");
         }
         return fecha;
+    }
+
+    public static Boolean getBooleanFromString(String value){
+        // obtener un valor booleano a partir del string recibido ej.: "1" / "0"
+        return "1".equals(value);
+    }
+
+    public static ColorMatrix getColorMatrixFromColor(int color){
+        ColorMatrix matrix = new ColorMatrix(new float[] {
+                Color.red(color), 0, 0, 0, 0,
+                0, Color.green(color), 0, 0, 0,
+                0, 0, Color.blue(color), 0, 0,
+                0, 0, 0, 1, 0,
+        });
+        return matrix;
     }
 
     public static void setWidth(int pwidth){

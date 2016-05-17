@@ -40,6 +40,8 @@
     <string name="NearYou">Places near you</string>
     <string name="MoreFrom">More from</string>
     <string name="Recomended">Our picks</string>
+    <string name="FavoritePlaces">Your favourite Places</string>
+    <string name="AddFavoritePlaces">Add some places to your favorites</string>
 
     <string name="LikeTxt">Thanks for liking us!</string>
     <string name="NotLikeTxt">Thanks, see you later!</string>

@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:background="@color/colorGreen">
 
-    <ImageView
+        <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ivElement"
@@ -25,12 +25,32 @@
         android:layout_marginTop="0dp"
         android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/biin"
-        android:layout_alignParentEnd="true"
+            android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/biin" />
+            android:background="@color/colorWhite" />
 
-    <RelativeLayout
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/ivElement"
+            android:layout_alignBottom="@+id/ivElement">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pbElement"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:indeterminate="true"
+                android:indeterminateOnly="false"
+                android:progressTint="@color/colorGreen" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -50,9 +70,19 @@
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:layout_margin="6dp"
-            android:background="@drawable/biin" />
+            android:background="@color/colorWhite" />
 
-        <LinearLayout
+            <ProgressBar
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:id="@+id/pbOrganization"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_margin="6dp"
+                android:indeterminate="true"
+                android:progressTint="@color/colorGreen" />
+
+            <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -138,7 +168,7 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+        </RelativeLayout>
 
     </RelativeLayout>
 

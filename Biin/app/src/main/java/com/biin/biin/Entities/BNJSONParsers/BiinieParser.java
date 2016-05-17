@@ -38,7 +38,7 @@ public class BiinieParser {
 //            biinie.setUrl(objectBiinie.getString("url"));
             biinie.setEmail(objectBiinie.getString("email"));
             biinie.setBirthDate(BNUtils.getDateFromString(objectBiinie.getString("birthDate")));
-            biinie.setEmailVerified(Boolean.parseBoolean(objectBiinie.getString("isEmailVerified")));
+            biinie.setEmailVerified(BNUtils.getBooleanFromString(objectBiinie.getString("isEmailVerified")));
             biinie.setFacebook_id(objectBiinie.getString("facebook_id"));
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);

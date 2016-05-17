@@ -30,10 +30,10 @@ public class BNOrganizationParser {
             organization.setDescription(objectOrganization.getString("description"));
             organization.setBrand(objectOrganization.getString("brand"));
             organization.setName(objectOrganization.getString("name"));
-            organization.setLoyaltyEnabled(Boolean.parseBoolean(objectOrganization.getString("isLoyaltyEnabled")));
+            organization.setLoyaltyEnabled(BNUtils.getBooleanFromString(objectOrganization.getString("isLoyaltyEnabled")));
             // TODO loyalty
-            organization.setHasNPS(Boolean.parseBoolean(objectOrganization.getString("hasNPS")));
-            organization.setUsingBrandColors(Boolean.parseBoolean(objectOrganization.getString("isUsingBrandColors")));
+            organization.setHasNPS(BNUtils.getBooleanFromString(objectOrganization.getString("hasNPS")));
+            organization.setUsingBrandColors(BNUtils.getBooleanFromString(objectOrganization.getString("isUsingBrandColors")));
             organization.setPrimaryColor(BNUtils.getColorFromString(objectOrganization.getString("primaryColor")));
             organization.setSecondaryColor(BNUtils.getColorFromString(objectOrganization.getString("secondaryColor")));
         }catch (JSONException e){

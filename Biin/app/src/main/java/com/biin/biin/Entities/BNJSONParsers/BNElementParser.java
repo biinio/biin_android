@@ -39,7 +39,7 @@ public class BNElementParser {
                 element.setQuantity(objectElement.getString("quantity"));
             }
             if (objectElement.has("hasQuantity")) {
-                element.setHasQuantity(Boolean.parseBoolean(objectElement.getString("hasQuantity")));
+                element.setHasQuantity(BNUtils.getBooleanFromString(objectElement.getString("hasQuantity")));
             }
             if (objectElement.has("expirationDate")) {
                 element.setExpirationDate(BNUtils.getDateFromString(objectElement.getString("expirationDate")));
@@ -48,38 +48,38 @@ public class BNElementParser {
                 element.setInitialDate(BNUtils.getDateFromString(objectElement.getString("initialDate")));
             }
             if (objectElement.has("hasTimming")) {
-                element.setHasTimming(Boolean.parseBoolean(objectElement.getString("hasTimming")));
+                element.setHasTimming(BNUtils.getBooleanFromString(objectElement.getString("hasTimming")));
             }
             if (objectElement.has("savings")) {
                 element.setSavings(objectElement.getString("savings"));
             }
             if (objectElement.has("hasSaving")) {
-                element.setHasSaving(Boolean.parseBoolean(objectElement.getString("hasSaving")));
+                element.setHasSaving(BNUtils.getBooleanFromString(objectElement.getString("hasSaving")));
             }
             if (objectElement.has("discount")) {
                 element.setDiscount(objectElement.getString("discount"));
             }
             if (objectElement.has("hasDiscount")) {
-                element.setHasDiscount(Boolean.parseBoolean(objectElement.getString("hasDiscount")));
+                element.setHasDiscount(BNUtils.getBooleanFromString(objectElement.getString("hasDiscount")));
             }
             //TODO isHighlight
             if (objectElement.has("price")) {
                 element.setPrice(objectElement.getString("price"));
             }
             if (objectElement.has("hasPrice")) {
-                element.setHasDiscount(Boolean.parseBoolean(objectElement.getString("hasPrice")));
+                element.setHasDiscount(BNUtils.getBooleanFromString(objectElement.getString("hasPrice")));
             }
             if (objectElement.has("listPrice")) {
                 element.setListPrice(objectElement.getString("listPrice"));
             }
             if (objectElement.has("hasListPrice")) {
-                element.setHasListPrice(Boolean.parseBoolean(objectElement.getString("hasListPrice")));
+                element.setHasListPrice(BNUtils.getBooleanFromString(objectElement.getString("hasListPrice")));
             }
             if (objectElement.has("hasFromPrice")) {
-                element.setHasFromPrice(Boolean.parseBoolean(objectElement.getString("hasFromPrice")));
+                element.setHasFromPrice(BNUtils.getBooleanFromString(objectElement.getString("hasFromPrice")));
             }
             if (objectElement.has("isTaxIncludedInPrice")) {
-                element.setTaxIncludedInPrice(Boolean.parseBoolean(objectElement.getString("isTaxIncludedInPrice")));
+                element.setTaxIncludedInPrice(BNUtils.getBooleanFromString(objectElement.getString("isTaxIncludedInPrice")));
             }
 //            element.setCurrency(Integer.parseInt(objectElement.getString("currencyType")));
             // TODO searchTags array
@@ -108,19 +108,19 @@ public class BNElementParser {
                 element.setMedia(mediaParser.parseBNMedia(objectElement.getJSONArray("media")));
             }
             if (objectElement.has("userShared")) {
-                element.setUserShared(Boolean.parseBoolean(objectElement.getString("userShared")));
+                element.setUserShared(BNUtils.getBooleanFromString(objectElement.getString("userShared")));
             }
             if (objectElement.has("userLiked")) {
-                element.setUserLiked(Boolean.parseBoolean(objectElement.getString("userLiked")));
+                element.setUserLiked(BNUtils.getBooleanFromString(objectElement.getString("userLiked")));
             }
             if (objectElement.has("userCollected")) {
-                element.setUserCollected(Boolean.parseBoolean(objectElement.getString("userCollected")));
+                element.setUserCollected(BNUtils.getBooleanFromString(objectElement.getString("userCollected")));
             }
             if (objectElement.has("userViewed")) {
-                element.setUserViewed(Boolean.parseBoolean(objectElement.getString("userViewed")));
+                element.setUserViewed(BNUtils.getBooleanFromString(objectElement.getString("userViewed")));
             }
             if (objectElement.has("hasCallToAction")) {
-                element.setHasCallToAction(Boolean.parseBoolean(objectElement.getString("hasCallToAction")));
+                element.setHasCallToAction(BNUtils.getBooleanFromString(objectElement.getString("hasCallToAction")));
             }
             if (objectElement.has("callToActionURL")) {
                 element.setCallToActionURL(objectElement.getString("callToActionURL"));

@@ -75,6 +75,26 @@
                     android:layout_toEndOf="@id/tvSubtitle"
                     android:textSize="12sp" />
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ivLike"
+                    android:tint="@color/colorWhite"
+                    android:src="@drawable/like_small"
+                    android:visibility="visible"
+                    android:layout_marginTop="-4dp"
+                    android:layout_marginBottom="-4dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ivLiked"
+                    android:tint="@color/colorWhite"
+                    android:src="@drawable/liked_small"
+                    android:visibility="gone"
+                    android:layout_marginTop="-4dp"
+                    android:layout_marginBottom="-4dp" />
+
             </LinearLayout>
 
         </RelativeLayout>

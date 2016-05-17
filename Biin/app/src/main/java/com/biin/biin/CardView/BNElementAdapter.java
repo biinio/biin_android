@@ -1,6 +1,7 @@
 package com.biin.biin.CardView;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -68,6 +70,8 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
         holder.tvDiscount.setText("Ȼ" + item.getPrice());
         holder.tvDiscount.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
 
+//        holder.pbElement.getProgressDrawable().setColorFilter(item.getShowcase().getSite().getOrganization().getSecondaryColor(), PorterDuff.Mode.SRC_ATOP);
+
         holder.cvElement.setLayoutParams(params);
     }
 
@@ -87,6 +91,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 holder.ivElement.setImageBitmap(response.getBitmap());
+                holder.pbElement.setVisibility(View.GONE);
             }
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -99,6 +104,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 holder.ivOrganization.setImageBitmap(response.getBitmap());
+                holder.pbOrganization.setVisibility(View.GONE);
             }
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -108,10 +114,11 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 
     public static class BNElementViewHolder extends RecyclerView.ViewHolder{
 
+        protected CardView cvElement;
         protected RelativeLayout rlElementLabel;
         protected ImageView ivElement, ivOrganization;
         protected TextView tvTitle, tvSubtitle, tvSubtitleLocation, tvPrice, tvDiscount;
-        protected CardView cvElement;
+        protected ProgressBar pbElement, pbOrganization;
 
         public BNElementViewHolder(View itemView) {
             super(itemView);
@@ -127,6 +134,9 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
             tvSubtitleLocation = (TextView)itemView.findViewById(R.id.tvSubtitleLocation);
             tvPrice = (TextView)itemView.findViewById(R.id.tvPrice);
             tvDiscount = (TextView)itemView.findViewById(R.id.tvDiscount);
+
+            pbElement = (ProgressBar)itemView.findViewById(R.id.pbElement);
+            pbOrganization = (ProgressBar)itemView.findViewById(R.id.pbOrganization);
 
             Typeface lato_light = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
             Typeface lato_regular = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");

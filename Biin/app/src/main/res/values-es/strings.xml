@@ -19,7 +19,7 @@
     <string name="LetsGetStarted">Empecemos!</string>
     <string name="DontForget">No olvides de revisar tu buzón y verificar tu dirección de correo.</string>
     <string name="HardwareError">Este dispositivo no soporta Biin, porfavor cierra esta applicación.</string>
-    <string name="DevideNotSupported">Your devide is not supported.</string>
+    <string name="DevideNotSupported">Your device is not supported.</string>
     <string name="BiinIsNotAbleToRun">Biin is not able to run on this device</string>
     <string name="PleaseWait">Espera un momento!</string>
     <string name="Yes">si</string>
@@ -42,6 +42,8 @@
     <string name="NearYou">Lugares cercanos a vos</string>
     <string name="MoreFrom">Más de</string>
     <string name="Recomended">Recomendaciones</string>
+    <string name="FavoritePlaces">Tus lugares Favoritos</string>
+    <string name="AddFavoritePlaces">Agrega algunos lugares a tus favoritos</string>
 
     <string name="LikeTxt">Muchas gracias!</string>
     <string name="NotLikeTxt">Gracias, nos vemos luego!</string>

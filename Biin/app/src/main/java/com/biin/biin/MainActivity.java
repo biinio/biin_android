@@ -43,8 +43,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
     private BNBiiniesListener biiniesListener;
     private BNInitialDataListener initialDataListener;
 
-    private TextView tvRecomended, tvNearYou;
-    private RecyclerView rvRecomended, rvNearYou;
+    private TextView tvRecomended, tvNearYou, tvFavouritePlaces;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +73,9 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         tvNearYou.setTypeface(lato_regular);
         tvNearYou.setLetterSpacing(0.3f);
 
-        rvRecomended = (RecyclerView)findViewById(R.id.rvRecomended);
-        rvNearYou = (RecyclerView)findViewById(R.id.rvNearYou);
-
-//        rvRecomended.setLayoutParams(new RelativeLayout.LayoutParams(BNUtils.getWidth(), BNUtils.getWidth() + (68 * (int)BNUtils.getDensity())));
-//        rvNearYou.setLayoutParams(new RelativeLayout.LayoutParams(BNUtils.getWidth() / 2, (BNUtils.getWidth() + (56 * (int)BNUtils.getDensity())) / 2));
+        tvFavouritePlaces = (TextView)findViewById(R.id.tvFavouritePlaces);
+        tvFavouritePlaces.setTypeface(lato_regular);
+        tvFavouritePlaces.setLetterSpacing(0.3f);
     }
 
     private void getBiinie(){
@@ -150,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
 
         loadRecomendations();
         loadNearPlaces();
+        loadFavourites();
         loadCategories();
     }
 
@@ -192,9 +190,22 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
     }
 
     private void loadNearPlaces(){
-        List<BNSite> sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getBNSites().values());
+        List<BNSite> sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites().values());
 
         CardRecyclerView rvSites = (CardRecyclerView)findViewById(R.id.rvNearYou);
+//        rvSites.setSnapEnabled(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+        BNSiteAdapter adapter = new BNSiteAdapter(this, sites);
+        rvSites.setLayoutManager(layoutManager);
+        rvSites.setHasFixedSize(true);
+        rvSites.setAdapter(adapter);
+    }
+
+    private void loadFavourites(){
+        List<BNSite> sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNSites().values());
+
+        CardRecyclerView rvSites = (CardRecyclerView)findViewById(R.id.rvFavouritePlaces);
 //        rvSites.setSnapEnabled(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
@@ -224,19 +235,15 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
                 tvCategoryName.setLetterSpacing(0.3f);
                 tvCategoryName.setText(getResources().getIdentifier(category.getIdentifier(),"string",getPackageName()));
 
-                if (categoryElements.size() > 1) {
-                    //TODO llenar el recyclerview
-                    CardRecyclerView rvCategoryList = (CardRecyclerView)view.findViewById(R.id.rvCategoryList);
+                // llenar el recyclerview
+                CardRecyclerView rvCategoryList = (CardRecyclerView)view.findViewById(R.id.rvCategoryList);
 //                    rvCategoryList.setSnapEnabled(true);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
-                    BNCategoryAdapter adapter = new BNCategoryAdapter(this, categoryElements);
-                    rvCategoryList.setLayoutManager(layoutManager);
-                    rvCategoryList.setHasFixedSize(true);
-                    rvCategoryList.setAdapter(adapter);
-                } else {
-                    //TODO poner el unico element
-                }
+                BNCategoryAdapter adapter = new BNCategoryAdapter(this, categoryElements);
+                rvCategoryList.setLayoutManager(layoutManager);
+                rvCategoryList.setHasFixedSize(true);
+                rvCategoryList.setAdapter(adapter);
 
                 //TODO attach del view en la pantalla principal
                 layout.addView(view);

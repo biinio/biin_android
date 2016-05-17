@@ -3,6 +3,7 @@ package com.biin.biin.Entities;
 import android.graphics.Color;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,6 +11,7 @@ import java.util.List;
  */
 public class BNSite {
 
+    private String _id;
     private String identifier;
     private String organizationIdentifier;
     private BNOrganization organization;
@@ -58,6 +60,8 @@ public class BNSite {
     private boolean userCollected;
     private boolean userLiked;
 
+    private Date likeDate;
+
     private float latitude;
     private float longitude;
     private float biinieProximity;
@@ -75,6 +79,22 @@ public class BNSite {
     private String siteSchedule;
 
     public BNSite() {
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public Date getLikeDate() {
+        return likeDate;
+    }
+
+    public void setLikeDate(Date likeDate) {
+        this.likeDate = likeDate;
     }
 
     public BNSite(String identifier) {

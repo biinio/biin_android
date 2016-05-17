@@ -43,7 +43,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
     @Override
     public BNCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bncategory_item, parent, false);
-        v.setLayoutParams(new RecyclerView.LayoutParams(BNUtils.getWidth() / 2, (BNUtils.getWidth() / 2) + (int)(58 * BNUtils.getDensity())));
+        v.setLayoutParams(new RecyclerView.LayoutParams((elements.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int)(58 * BNUtils.getDensity())));
         BNCategoryViewHolder holder = new BNCategoryViewHolder(v);
         return holder;
     }
@@ -51,7 +51,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
     @Override
     public void onBindViewHolder(BNCategoryViewHolder holder, int position) {
         BNElement item = elements.get(position);
-        TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth() / 2, (BNUtils.getWidth() / 2) + (int)(58 * BNUtils.getDensity()));
+        TableRow.LayoutParams params = new TableRow.LayoutParams((elements.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int)(58 * BNUtils.getDensity()));
 
         loadCategoryElementImage(item.getMedia().get(0).getUrl(), holder);
 

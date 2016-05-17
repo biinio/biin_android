@@ -6,10 +6,10 @@ package com.biin.biin.Managers;
 public class BNNetworkManager {
 
     private static BNNetworkManager ourInstance = new BNNetworkManager();
-    private static boolean production = true;
+    private static boolean production = false;
 
-    private static String URL_BASE = "https://dev-biin-backend.herokuapp.com";
-    private static String URL_BASE_DEV = "https://www.biin.io"; // TODO usar el server de pruebas
+    private static String URL_BASE_DEV = "https://dev-biin-backend.herokuapp.com";
+    private static String URL_BASE = "https://www.biin.io";
 
     private static String URL_GET_BIINIES = "/mobile/biinies";
     private static String URL_GET_INITIALDATA = "/mobile/initialData";

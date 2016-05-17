@@ -21,9 +21,15 @@ public class BNDataManager {
     private Biinie biinie = new Biinie();
 
     private HashMap<String, BNSite> sites = new HashMap<>();
+    private HashMap<String, BNSite> nearBySites = new HashMap<>();
+    private HashMap<String, BNSite> favouriteSites = new HashMap<>();
+    
     private HashMap<String, BNOrganization> organizations = new HashMap<>();
     private HashMap<String, BNElement> elements_by_identifier = new HashMap<>();
     private HashMap<String, BNElement> elements_by_id = new HashMap<>();
+
+//    private List<BNSite> favouriteSites = new ArrayList<>();
+//    private List<BNSite> nearBySites = new ArrayList<>();
 
     private List<BNHighlight> highlights = new ArrayList<>();
     private HashMap<String, BNCategory> categories = new HashMap<>();
@@ -72,8 +78,8 @@ public class BNDataManager {
     }
 
     public BNSite getBNSite(String identifier) {
-        // TODO obtener un site por su identificador
-        return null;
+        // obtener un site por su identificador
+        return this.sites.get(identifier);
     }
 
     public boolean removeBNSite(String identifier) {
@@ -88,6 +94,87 @@ public class BNDataManager {
     }
 
     /****************** Sites end ******************/
+
+
+    /****************** Sites near by start ******************/
+
+    public void setNearByBNSites(HashMap<String, BNSite> sites) {
+        // reemplazar la coleccion completa de sites
+        this.nearBySites = sites;
+    }
+
+    public int addNearByBNSites(HashMap<String, BNSite> sites) {
+        // TODO agregar sites a la coleccion (solo los que no existian previamente)
+        this.nearBySites = sites;
+        // TODO retornar el numero de sites agregados a la coleccion
+        return 0;
+    }
+
+    public boolean addNearByBNSite(BNSite site) {
+        // TODO agregar un site a la coleccion
+        this.nearBySites.put(site.getIdentifier(), site);
+        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        return true;
+    }
+
+    public BNSite getNearByBNSite(String identifier) {
+        // TODO obtener un site por su identificador
+        return null;
+    }
+
+    public boolean removeNearByBNSite(String identifier) {
+        // TODO remover un site de la coleccion
+        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        return true;
+    }
+
+    public HashMap<String,BNSite> getNearByBNSites(){
+        // retornar la lista de sites
+        return this.nearBySites;
+    }
+
+    /****************** Sites near by end ******************/
+
+
+    /****************** Sites favourites start ******************/
+
+    public void setFavouriteBNSites(HashMap<String, BNSite> sites) {
+        // reemplazar la coleccion completa de sites
+        this.favouriteSites = sites;
+    }
+
+    public int addFavouriteBNSites(HashMap<String, BNSite> sites) {
+        // agregar sites a la coleccion
+        // TODO solo los que no existian previamente
+        this.favouriteSites = sites;
+        // TODO retornar el numero de sites agregados a la coleccion
+        return 0;
+    }
+
+    public boolean addFavouriteBNSite(BNSite site) {
+        // agregar un site a la coleccion
+        this.favouriteSites.put(site.getIdentifier(), site);
+        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        return true;
+    }
+
+    public BNSite getFavouriteBNSite(String identifier) {
+        // TODO obtener un site por su identificador
+        return null;
+    }
+
+    public boolean removeFavouriteBNSite(String identifier) {
+        // TODO remover un site de la coleccion
+        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        return true;
+    }
+
+    public HashMap<String,BNSite> getFavouriteBNSites(){
+        // retornar la lista de sites
+        return this.favouriteSites;
+    }
+
+    /****************** Sites favourites end ******************/
 
 
     /****************** Organizations start ******************/
