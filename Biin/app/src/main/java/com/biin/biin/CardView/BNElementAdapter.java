@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -70,6 +71,14 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
         holder.tvDiscount.setText("Ȼ" + item.getPrice());
         holder.tvDiscount.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
 
+        if(item.isHasDiscount() && !item.getDiscount().isEmpty()) {
+            holder.tvOffer.setText("-" + item.getDiscount() + "%");
+            holder.tvOffer.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+            holder.ivOffer.setColorFilter(item.getShowcase().getSite().getOrganization().getPrimaryColor());
+            holder.flOffer.setVisibility(View.VISIBLE);
+        }else{
+            holder.flOffer.setVisibility(View.GONE);
+        }
 //        holder.pbElement.getProgressDrawable().setColorFilter(item.getShowcase().getSite().getOrganization().getSecondaryColor(), PorterDuff.Mode.SRC_ATOP);
 
         holder.cvElement.setLayoutParams(params);
@@ -116,8 +125,9 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 
         protected CardView cvElement;
         protected RelativeLayout rlElementLabel;
-        protected ImageView ivElement, ivOrganization;
-        protected TextView tvTitle, tvSubtitle, tvSubtitleLocation, tvPrice, tvDiscount;
+        protected FrameLayout flOffer;
+        protected ImageView ivElement, ivOrganization, ivOffer;
+        protected TextView tvTitle, tvSubtitle, tvSubtitleLocation, tvPrice, tvDiscount, tvOffer;
         protected ProgressBar pbElement, pbOrganization;
 
         public BNElementViewHolder(View itemView) {
@@ -125,15 +135,18 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 
             cvElement = (CardView)itemView.findViewById(R.id.cvElement);
             rlElementLabel = (RelativeLayout)itemView.findViewById(R.id.rlElementLabel);
+            flOffer = (FrameLayout)itemView.findViewById(R.id.flElementOffer);
 
             ivElement = (ImageView)itemView.findViewById(R.id.ivElement);
             ivOrganization = (ImageView)itemView.findViewById(R.id.ivOrganization);
+            ivOffer = (ImageView)itemView.findViewById(R.id.ivElementOffer);
 
             tvTitle = (TextView)itemView.findViewById(R.id.tvTitle);
             tvSubtitle = (TextView)itemView.findViewById(R.id.tvSubtitle);
             tvSubtitleLocation = (TextView)itemView.findViewById(R.id.tvSubtitleLocation);
             tvPrice = (TextView)itemView.findViewById(R.id.tvPrice);
             tvDiscount = (TextView)itemView.findViewById(R.id.tvDiscount);
+            tvOffer = (TextView)itemView.findViewById(R.id.tvElementOffer);
 
             pbElement = (ProgressBar)itemView.findViewById(R.id.pbElement);
             pbOrganization = (ProgressBar)itemView.findViewById(R.id.pbOrganization);
@@ -147,6 +160,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
             tvSubtitleLocation.setTypeface(lato_regular);
             tvPrice.setTypeface(lato_regular);
             tvDiscount.setTypeface(lato_regular);
+            tvOffer.setTypeface(lato_regular);
         }
     }
 

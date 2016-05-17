@@ -19,7 +19,7 @@ public class CardRecyclerView extends SnappingRecyclerView {
     @Override
     public boolean fling(int velocityX, int velocityY)
     {
-        velocityX *= 0.4; // (between 0 for no fling, and 1 for normal fling, or more for faster fling).
+        velocityX *= 1; // (between 0 for no fling, and 1 for normal fling, or more for faster fling).
         return super.fling(velocityX, velocityY);
     }
 }

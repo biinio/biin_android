@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
@@ -67,6 +68,14 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
         holder.tvCategoryDiscount.setText("Ȼ" + item.getPrice());
         holder.tvCategoryDiscount.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
 
+        if(item.isHasDiscount() && !item.getDiscount().isEmpty()) {
+            holder.tvCategoryOffer.setText("-" + item.getDiscount() + "%");
+            holder.tvCategoryOffer.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+            holder.ivCategoryOffer.setColorFilter(item.getShowcase().getSite().getOrganization().getPrimaryColor());
+            holder.flCategoryOffer.setVisibility(View.VISIBLE);
+        }else{
+            holder.flCategoryOffer.setVisibility(View.GONE);
+        }
         holder.cvCategory.setLayoutParams(params);
     }
 
@@ -95,22 +104,26 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
 
         protected CardView cvCategory;
         protected RelativeLayout rlCategoryLabel;
-        protected ImageView ivCategoryElement;
-        protected TextView tvCategoryElement, tvCategorySubtitle, tvCategoryLocation, tvCategoryPrice, tvCategoryDiscount;
+        protected FrameLayout flCategoryOffer;
+        protected ImageView ivCategoryElement, ivCategoryOffer;
+        protected TextView tvCategoryElement, tvCategorySubtitle, tvCategoryLocation, tvCategoryPrice, tvCategoryDiscount, tvCategoryOffer;
 
         public BNCategoryViewHolder(View itemView) {
             super(itemView);
 
             cvCategory = (CardView)itemView.findViewById(R.id.cvCategory);
             rlCategoryLabel = (RelativeLayout)itemView.findViewById(R.id.rlCategoryLabel);
+            flCategoryOffer = (FrameLayout)itemView.findViewById(R.id.flCategoryOffer);
 
             ivCategoryElement = (ImageView)itemView.findViewById(R.id.ivCategoryElement);
+            ivCategoryOffer = (ImageView)itemView.findViewById(R.id.ivCategoryOffer);
 
             tvCategoryElement = (TextView)itemView.findViewById(R.id.tvCategoryElement);
             tvCategorySubtitle = (TextView)itemView.findViewById(R.id.tvCategorySubtitle);
             tvCategoryLocation = (TextView)itemView.findViewById(R.id.tvCategoryLocation);
             tvCategoryPrice = (TextView)itemView.findViewById(R.id.tvCategoryPrice);
             tvCategoryDiscount = (TextView)itemView.findViewById(R.id.tvCategoryDiscount);
+            tvCategoryOffer = (TextView)itemView.findViewById(R.id.tvCategoryOffer);
 
             Typeface lato_light = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
             Typeface lato_regular = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");
@@ -121,6 +134,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
             tvCategoryLocation.setTypeface(lato_regular);
             tvCategoryPrice.setTypeface(lato_regular);
             tvCategoryDiscount.setTypeface(lato_regular);
+            tvCategoryOffer.setTypeface(lato_regular);
         }
     }
 

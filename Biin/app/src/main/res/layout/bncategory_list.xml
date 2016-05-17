@@ -13,7 +13,7 @@
         android:textAllCaps="true"
         style="@style/MainViewLabel"
         android:textColor="@color/colorWhite"
-        android:background="@color/colorDarkGrey"
+        android:background="@color/colorLightGrey"
         android:textSize="12dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"

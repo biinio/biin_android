@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
                 }
                 handler.postDelayed(this, 3500);
             }
-        }, 3500);
+        }, 5000);
     }
 
     private void loadNearPlaces(){
