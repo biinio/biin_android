@@ -336,12 +336,12 @@ public class BNDataManager {
 
     /****************** Highlights start ******************/
 
-    public void setBNHighlightss(List<BNHighlight> highlights) {
+    public void setBNHighlights(List<BNHighlight> highlights) {
         // reemplazar la coleccion completa de highlights
         this.highlights = highlights;
     }
 
-//    public int addBNHighlightss(HashMap<String, BNHighlight> highlights) {
+//    public int addBNHighlights(HashMap<String, BNHighlight> highlights) {
 //        // TODO agregar highlights a la coleccion (solo los que no existian previamente)
 //        this.highlights = highlights;
 //        // TODO retornar el numero de highlights agregados a la coleccion

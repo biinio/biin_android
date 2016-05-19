@@ -67,7 +67,7 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
             parseFavouriteSites(data.getJSONObject("favorites").getJSONArray("sites"));
 
             // parsear categories
-//            parseCategories(data.getJSONArray("categories"));
+            parseCategories(data.getJSONArray("categories"));
 
             // parsear highlights
             parseHighlights(data.getJSONArray("highlights"));
@@ -145,7 +145,7 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
         BNHighlightParser highlightParser = new BNHighlightParser();
         List<BNHighlight> result = highlightParser.parseBNHighlights(arrayHighlights);
         // guardar el resultado de highlights en el data manager
-        dataManager.setBNHighlightss(result);
+        dataManager.setBNHighlights(result);
     }
 
     private void parseCategories(JSONArray arrayCategories){
