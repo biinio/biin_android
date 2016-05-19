@@ -5,8 +5,12 @@ import android.graphics.ColorMatrix;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -75,6 +79,19 @@ public class BNUtils {
 
     public static void setDensity(float density) {
         BNUtils.density = density;
+    }
+
+    public static List<String> getIdentifiers(JSONArray array){
+        List<String> identifiers = new ArrayList<>();
+        try{
+            for(int i = 0; i < array.length(); i++){
+                JSONObject object = (JSONObject) array.get(i);
+                identifiers.add(object.getString("identifier"));
+            }
+        }catch (JSONException e){
+            Log.e(TAG, "Error parseando el JSON.", e);
+        }
+        return identifiers;
     }
 
 }

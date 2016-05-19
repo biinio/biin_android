@@ -54,7 +54,7 @@ public class BNSiteParser {
             site.setPhoneNumber(objectSite.getString("phoneNumber"));
             site.setMedia(mediaParser.parseBNMedia(objectSite.getJSONArray("media")));
             // TODO neighbors array
-            site.setShowcases(new ArrayList<>(showcaseParser.parseBNShowcases(objectSite.getJSONArray("showcases")).values()));
+            site.setShowcases(BNUtils.getIdentifiers(objectSite.getJSONArray("showcases")));
             site.setShowcasesSite();
             // TODO biins array
             // TODO userShared
@@ -114,8 +114,8 @@ public class BNSiteParser {
                 BNSite site = dataManager.getBNSite(objectSite.getString("identifier"));
 
                 if(site != null) {
-                    site.set_id(objectSite.getString("_id"));
-                    site.setLikeDate(BNUtils.getDateFromString(objectSite.getString("likeDate")));
+//                    site.set_id(objectSite.getString("_id"));
+//                    site.setLikeDate(BNUtils.getDateFromString(objectSite.getString("likeDate")));
                     result.put(site.getIdentifier(), site);
                 }
             }

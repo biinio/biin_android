@@ -32,7 +32,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 
     private static final String TAG = "BNElementAdapter";
     private static Context context;
-    private IBNElementAdapterListener listener;
+//    private IBNElementAdapterListener listener;
 
     private List<BNElement> elements;
     private ImageLoader imageLoader;
@@ -44,9 +44,9 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
         imageLoader = BiinApp.getInstance().getImageLoader();
     }
 
-    public void setListener(IBNElementAdapterListener listener) {
-        this.listener = listener;
-    }
+//    public void setListener(IBNElementAdapterListener listener) {
+//        this.listener = listener;
+//    }
 
     @Override
     public BNElementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -176,8 +176,8 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
         }
     }
 
-    public interface IBNElementAdapterListener {
-        void onViewHolderCreated(int position);
-    }
+//    public interface IBNElementAdapterListener {
+//        void onViewHolderCreated(int position);
+//    }
 
 }

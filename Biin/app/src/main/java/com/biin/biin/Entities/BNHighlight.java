@@ -5,18 +5,11 @@ package com.biin.biin.Entities;
  */
 public class BNHighlight {
 
-    private String _id;
     private String identifier;
+    private String showcaseIdentifier;
+    private String siteIdentifier;
 
     public BNHighlight() {
-    }
-
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
     }
 
     public String getIdentifier() {
@@ -25,5 +18,21 @@ public class BNHighlight {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    public String getShowcaseIdentifier() {
+        return showcaseIdentifier;
+    }
+
+    public void setShowcaseIdentifier(String showcaseIdentifier) {
+        this.showcaseIdentifier = showcaseIdentifier;
+    }
+
+    public String getSiteIdentifier() {
+        return siteIdentifier;
+    }
+
+    public void setSiteIdentifier(String siteIdentifier) {
+        this.siteIdentifier = siteIdentifier;
     }
 }

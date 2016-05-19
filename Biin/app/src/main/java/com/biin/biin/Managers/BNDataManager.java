@@ -4,6 +4,7 @@ import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
 import com.biin.biin.Entities.BNOrganization;
+import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
 
@@ -23,16 +24,12 @@ public class BNDataManager {
     private HashMap<String, BNSite> sites = new HashMap<>();
     private HashMap<String, BNSite> nearBySites = new HashMap<>();
     private HashMap<String, BNSite> favouriteSites = new HashMap<>();
-    
+    private HashMap<String, BNShowcase> showcases = new HashMap<>();
     private HashMap<String, BNOrganization> organizations = new HashMap<>();
-    private HashMap<String, BNElement> elements_by_identifier = new HashMap<>();
+    private HashMap<String, BNElement> elements = new HashMap<>();
     private HashMap<String, BNElement> elements_by_id = new HashMap<>();
-
-//    private List<BNSite> favouriteSites = new ArrayList<>();
-//    private List<BNSite> nearBySites = new ArrayList<>();
-
-    private List<BNHighlight> highlights = new ArrayList<>();
     private HashMap<String, BNCategory> categories = new HashMap<>();
+    private List<BNHighlight> highlights = new ArrayList<>();
 
     protected static BNDataManager getInstance() {
         return ourInstance;
@@ -177,6 +174,46 @@ public class BNDataManager {
     /****************** Sites favourites end ******************/
 
 
+    /****************** Showcases start ******************/
+
+    public void setBNShowcases(HashMap<String, BNShowcase> showcases) {
+        // reemplazar la coleccion completa de showcases
+        this.showcases = showcases;
+    }
+
+    public int addBNShowcases(HashMap<String, BNShowcase> showcases) {
+        // TODO agregar showcases a la coleccion (solo los que no existian previamente)
+        this.showcases = showcases;
+        // TODO retornar el numero de showcases agregados a la coleccion
+        return 0;
+    }
+
+    public boolean addBNShowcase(BNShowcase showcase) {
+        // TODO agregar un showcase a la coleccion
+        this.showcases.put(showcase.getIdentifier(), showcase);
+        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        return true;
+    }
+
+    public BNShowcase getBNShowcase(String identifier) {
+        // obtener un showcase por su identificador
+        return this.showcases.get(identifier);
+    }
+
+    public boolean removeBNShowcase(String identifier) {
+        // TODO remover un showcase de la coleccion
+        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        return true;
+    }
+
+    public HashMap<String,BNShowcase> getBNShowcases(){
+        // retornar la lista de showcases
+        return this.showcases;
+    }
+
+    /****************** Showcases end ******************/
+
+
     /****************** Organizations start ******************/
 
     public void setBNOrganizations(HashMap<String, BNOrganization> organizations) {
@@ -221,26 +258,26 @@ public class BNDataManager {
 
     public void setBNElements(HashMap<String, BNElement> elements) {
         // reemplazar la coleccion completa de elements
-        this.elements_by_identifier = elements;
+        this.elements = elements;
     }
 
     public int addBNElements(HashMap<String, BNElement> elements) {
         // TODO agregar elements a la coleccion (solo los que no existian previamente)
-        this.elements_by_identifier = elements;
+        this.elements = elements;
         // TODO retornar el numero de elements agregados a la coleccion
         return 0;
     }
 
     public boolean addBNElement(BNElement element) {
         // TODO agregar un element a la coleccion
-        this.elements_by_identifier.put(element.getIdentifier(), element);
+        this.elements.put(element.getIdentifier(), element);
         // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
         return true;
     }
 
     public BNElement getBNElement(String identifier) {
         // obtener un element por su identificador
-        return this.elements_by_identifier.get(identifier);
+        return this.elements.get(identifier);
     }
 
     public boolean removeBNElement(String identifier) {
@@ -251,7 +288,7 @@ public class BNDataManager {
 
     public HashMap<String,BNElement> getBNElements(){
         // retornar la lista de elements
-        return this.elements_by_identifier;
+        return this.elements;
     }
 
     /****************** Elements end ******************/

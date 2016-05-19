@@ -2,6 +2,8 @@ package com.biin.biin.Entities;
 
 import android.graphics.Color;
 
+import com.biin.biin.Managers.BNAppManager;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +74,7 @@ public class BNSite {
     private List<String> neighbors;
 
     //    private String showcases:Array<String>?
-    private List<BNShowcase> showcases;
+    private List<String> showcases;
 
     private boolean showInView = true;
 
@@ -349,11 +351,11 @@ public class BNSite {
         this.neighbors = neighbors;
     }
 
-    public List<BNShowcase> getShowcases() {
+    public List<String> getShowcases() {
         return showcases;
     }
 
-    public void setShowcases(List<BNShowcase> showcases) {
+    public void setShowcases(List<String> showcases) {
         this.showcases = showcases;
     }
 
@@ -374,8 +376,11 @@ public class BNSite {
     }
 
     public void setShowcasesSite(){
-        for (BNShowcase showcase : this.showcases) {
-            showcase.setSite(this);
+        for (String identifier : this.showcases) {
+            BNShowcase showcase = BNAppManager.getDataManagerInstance().getBNShowcase(identifier);
+            if(showcase != null){
+                showcase.setSite(this);
+            }
         }
     }
 }

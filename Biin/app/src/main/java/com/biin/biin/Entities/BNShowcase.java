@@ -26,7 +26,7 @@ public class BNShowcase {
     private String subTitle;
 
     //Elements
-    private List<BNElement> elements = new ArrayList<>();
+    private List<String> elements = new ArrayList<>();
     private int elements_quantity;
     private int batch = 1;
 
@@ -108,11 +108,11 @@ public class BNShowcase {
         this.subTitle = subTitle;
     }
 
-    public List<BNElement> getElements() {
+    public List<String> getElements() {
         return elements;
     }
 
-    public void setElements(List<BNElement> elements) {
+    public void setElements(List<String> elements) {
         this.elements = elements;
     }
 
@@ -141,15 +141,10 @@ public class BNShowcase {
     }
 
     public void setElementsShowcase(){
-        for (BNElement element : this.elements) {
-            element.setShowcase(this);
-            BNElement elementByIdentifier = BNAppManager.getDataManagerInstance().getBNElement(element.getIdentifier());
-            if(elementByIdentifier != null){
-                elementByIdentifier.setShowcase(this);
-            }
-            BNElement elementById = BNAppManager.getDataManagerInstance().getBNElementId(element.get_id());
-            if(elementById != null){
-                elementById.setShowcase(this);
+        for (String identifier : this.elements) {
+            BNElement element = BNAppManager.getDataManagerInstance().getBNElement(identifier);
+            if(element != null){
+                element.setShowcase(this);
             }
         }
     }

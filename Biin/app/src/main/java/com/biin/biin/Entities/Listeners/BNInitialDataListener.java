@@ -10,8 +10,10 @@ import com.biin.biin.Entities.BNJSONParsers.BNCategoryParser;
 import com.biin.biin.Entities.BNJSONParsers.BNElementParser;
 import com.biin.biin.Entities.BNJSONParsers.BNHighlightParser;
 import com.biin.biin.Entities.BNJSONParsers.BNOrganizationParser;
+import com.biin.biin.Entities.BNJSONParsers.BNShowcaseParser;
 import com.biin.biin.Entities.BNJSONParsers.BNSiteParser;
 import com.biin.biin.Entities.BNOrganization;
+import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
@@ -42,22 +44,34 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
     public void onResponse(JSONObject response) {
         try{
             JSONObject data = response.getJSONObject("data");
+
             // parsear elements_by_identifier
             parseElements(data.getJSONArray("elements"));
+
             // parsear elements_by_id
-            parseElementsId(data.getJSONArray("elements"));
+//            parseElementsId(data.getJSONArray("elements"));
+
             // parsear organizations
             parseOrganizations(data.getJSONArray("organizations"));
+
+            // parsear showcases
+            parseShowcases(data.getJSONArray("showcases"));
+
             // parsear sites
             parseSites(data.getJSONArray("sites"));
+
             // parsear nearby_sites
             parseNearBySites(data.getJSONArray("nearbySites"));
+
             // parsear favourite sites
             parseFavouriteSites(data.getJSONObject("favorites").getJSONArray("sites"));
+
             // parsear categories
-            parseCategories(data.getJSONArray("categories"));
+//            parseCategories(data.getJSONArray("categories"));
+
             // parsear highlights
             parseHighlights(data.getJSONArray("highlights"));
+
             //TODO parsear favourite elements
 //            parseFavouriteElements(data.getJSONObject("favorites").getJSONArray("elements"));
         }catch (JSONException e){
@@ -90,6 +104,13 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
         HashMap<String, BNSite> result = siteParser.parseFavouriteBNSites(arraySites);
         // guardar el resultado de sites favoritos en el data manager
         dataManager.setFavouriteBNSites(result);
+    }
+
+    private void parseShowcases(JSONArray arrayShowcases){
+        BNShowcaseParser showcaseParser = new BNShowcaseParser();
+        HashMap<String, BNShowcase> result = showcaseParser.parseBNShowcases(arrayShowcases);
+        // guardar el resultado de showcases en el data manager
+        dataManager.setBNShowcases(result);
     }
 
     private void parseOrganizations(JSONArray arrayOrganizations){

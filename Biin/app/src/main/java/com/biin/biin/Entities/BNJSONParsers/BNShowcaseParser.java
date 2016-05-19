@@ -2,6 +2,7 @@ package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
+import com.biin.biin.BNUtils;
 import com.biin.biin.Entities.BNShowcase;
 
 import org.json.JSONArray;
@@ -23,12 +24,13 @@ public class BNShowcaseParser {
     public BNShowcase parseBNShowcase(JSONObject objectShowcase){
         BNShowcase showcase = new BNShowcase();
         try{
-            showcase.set_id(objectShowcase.getString("_id"));
+//            showcase.set_id(objectShowcase.getString("_id"));
             showcase.setIdentifier(objectShowcase.getString("identifier"));
-            showcase.setSubTitle(objectShowcase.getString("subTitle"));
+//            showcase.setSubTitle(objectShowcase.getString("subTitle"));
             showcase.setTitle(objectShowcase.getString("title"));
-            showcase.setElements_quantity(Integer.parseInt(objectShowcase.getString("elements_quantity")));
-            showcase.setElements(new ArrayList<>(elementParser.cloneBNElements(objectShowcase.getJSONArray("elements")).values()));
+//            showcase.setElements_quantity(Integer.parseInt(objectShowcase.getString("elements_quantity")));
+            showcase.setElements(BNUtils.getIdentifiers(objectShowcase.getJSONArray("elements")));
+//            showcase.setElements(new ArrayList<>(elementParser.cloneBNElements(objectShowcase.getJSONArray("elements")).values()));
             showcase.setElementsShowcase();
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);

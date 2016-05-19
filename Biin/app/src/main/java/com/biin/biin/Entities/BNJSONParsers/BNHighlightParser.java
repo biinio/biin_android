@@ -22,8 +22,9 @@ public class BNHighlightParser {
     public BNHighlight parseBNHighlight(JSONObject objectElement){
         BNHighlight highlight = new BNHighlight();
         try{
-            highlight.set_id(objectElement.getString("_id"));
             highlight.setIdentifier(objectElement.getString("identifier"));
+            highlight.setShowcaseIdentifier(objectElement.getString("showcaseIdentifier"));
+            highlight.setSiteIdentifier(objectElement.getString("siteIdentifier"));
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }

@@ -24,7 +24,7 @@ public class BNCategoryParser {
         BNCategory category = new BNCategory();
         try{
             category.setIdentifier(objectCategory.getString("identifier"));
-            category.setElements(new ArrayList<>(elementParser.cloneBNElements(objectCategory.getJSONArray("elements")).values()));
+            category.setElements(new ArrayList<>(elementParser.cloneBNElements(objectCategory.getJSONArray("elements")).values())); //TODO revisar
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }

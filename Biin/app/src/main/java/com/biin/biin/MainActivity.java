@@ -39,14 +39,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BNInitialDataListener.IBNInitialDataListener, BNBiiniesListener.IBNBiiniesListener, BNElementAdapter.IBNElementAdapterListener {
+public class MainActivity extends AppCompatActivity implements BNInitialDataListener.IBNInitialDataListener, BNBiiniesListener.IBNBiiniesListener {
 
     private BNBiiniesListener biiniesListener;
     private BNInitialDataListener initialDataListener;
 
     private TextView tvRecomended, tvNearYou, tvFavouritePlaces;
     private LinearLayout hlRecomended;
-    private int currentElement = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
 
         setTextViewsStyles();
 
-        getBiinie();
+//        getBiinie();
         getInitialData();
     }
 
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
 
     @Override
     public void onBiiniesLoaded() {
-        Log.d("Biin", "Biinies loaded");
+        /*Log.d("Biin", "Biinies loaded");
         Biinie biinie = BNAppManager.getDataManagerInstance().getBiinie();
         StringBuilder str = new StringBuilder();
         str.append("Biinie data:\n");
@@ -129,13 +128,13 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         str.append("LastName: " + biinie.getLastName() + "\n");
         str.append("Gender: " + biinie.getGender() + "\n");
         str.append("Email: " + biinie.getEmail());
-        Log.d("Biin",  str.toString());
+        Log.d("Biin",  str.toString());*/
 //        tvBiinies.setText(str.toString());
     }
 
     @Override
     public void onInitialDataLoaded() {
-        Log.d("Biin", "Initial data loaded");
+        /*Log.d("Biin", "Initial data loaded");
         HashMap<String,BNSite> sites = BNAppManager.getDataManagerInstance().getBNSites();
         HashMap<String,BNOrganization> organizations = BNAppManager.getDataManagerInstance().getBNOrganizations();
         HashMap<String,BNElement> elements = BNAppManager.getDataManagerInstance().getBNElements();
@@ -148,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         str.append("Elements: " + elements.size() + "\n");
         str.append("Highlights: " + highlights.size() + "\n");
         str.append("Categories: " + categories.size());
-        Log.d("Biin",  str.toString());
+        Log.d("Biin",  str.toString());*/
 
         loadRecomendations();
         loadNearPlaces();
@@ -184,12 +183,12 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         final List<BNElement> highlightElements = new ArrayList<>();
         for (BNHighlight highlight : highlights) {
             BNElement element = elements.get(highlight.getIdentifier());
-            element.set_id(highlight.get_id());
+            element.setShowcase(BNAppManager.getDataManagerInstance().getBNShowcase(highlight.getShowcaseIdentifier()));
+            element.getShowcase().setSite(BNAppManager.getDataManagerInstance().getBNSite(highlight.getSiteIdentifier()));
             highlightElements.add(element);
         }
 
         BNElementAdapter adapter = new BNElementAdapter(this, highlightElements);
-        adapter.setListener(this);
         rvHighlights.setLayoutManager(layoutManager);
         rvHighlights.setHasFixedSize(true);
         rvHighlights.setAdapter(adapter);
@@ -212,15 +211,6 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
                 handler.postDelayed(this, 4000);
             }
         }, 7000);
-    }
-
-    @Override
-    public void onViewHolderCreated(int position) {
-//        View view = hlRecomended.getChildAt(currentElement);
-//        hlRecomended.removeView(view);
-//        hlRecomended.addView(view, position);
-//        currentElement = position;
-//        Toast.makeText(this, "position " + position, Toast.LENGTH_SHORT).show();
     }
 
     private void loadNearPlaces(){
