@@ -10,9 +10,10 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -38,12 +39,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BNInitialDataListener.IBNInitialDataListener, BNBiiniesListener.IBNBiiniesListener {
+public class MainActivity extends AppCompatActivity implements BNInitialDataListener.IBNInitialDataListener, BNBiiniesListener.IBNBiiniesListener, BNElementAdapter.IBNElementAdapterListener {
 
     private BNBiiniesListener biiniesListener;
     private BNInitialDataListener initialDataListener;
 
     private TextView tvRecomended, tvNearYou, tvFavouritePlaces;
+    private LinearLayout hlRecomended;
+    private int currentElement = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         tvFavouritePlaces = (TextView)findViewById(R.id.tvFavouritePlaces);
         tvFavouritePlaces.setTypeface(lato_regular);
         tvFavouritePlaces.setLetterSpacing(0.3f);
+
+        hlRecomended = (LinearLayout)findViewById(R.id.hlRecomended);
     }
 
     private void getBiinie(){
@@ -151,9 +156,26 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         loadCategories();
     }
 
+    private void setPaggingDots(int total){
+        float density = BNUtils.getDensity();
+        ImageView dotBig = new ImageView(this);
+        dotBig.setImageResource(R.drawable.pagging_dot);
+        dotBig.setColorFilter(getResources().getColor(R.color.colorAccent));
+        dotBig.setLayoutParams(new LinearLayout.LayoutParams((int)(20 * density), (int)(9 * density)));
+        hlRecomended.addView(dotBig);
+        for (int i = 1; i < total; i++) {
+            ImageView dotSmall = new ImageView(this);
+            dotSmall.setImageResource(R.drawable.pagging_dot);
+            dotSmall.setColorFilter(getResources().getColor(R.color.colorPrimary));
+            dotSmall.setLayoutParams(new LinearLayout.LayoutParams((int)(20 * density), (int)(7 * density)));
+            hlRecomended.addView(dotSmall);
+        }
+    }
+
     private void loadRecomendations(){
         HashMap<String,BNElement> elements = BNAppManager.getDataManagerInstance().getBNElements();
         List<BNHighlight> highlights = BNAppManager.getDataManagerInstance().getBNHighlights();
+        setPaggingDots(highlights.size());
 
         final SnappingRecyclerView rvHighlights = (SnappingRecyclerView)findViewById(R.id.rvRecomended);
         rvHighlights.setSnapEnabled(true);
@@ -167,13 +189,13 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         }
 
         BNElementAdapter adapter = new BNElementAdapter(this, highlightElements);
+        adapter.setListener(this);
         rvHighlights.setLayoutManager(layoutManager);
         rvHighlights.setHasFixedSize(true);
         rvHighlights.setAdapter(adapter);
         rvHighlights.getLayoutManager().scrollToPosition(highlightElements.size() * 100);
 
         final Handler handler = new Handler();
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -184,9 +206,21 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
                     int current = (highlightElements.size() * 100) - 1;
                     ((LinearLayoutManager) rvHighlights.getLayoutManager()).scrollToPositionWithOffset(current, 0);
                 }
-                handler.postDelayed(this, 3500);
+                View view = hlRecomended.getChildAt(hlRecomended.getChildCount() - 1);
+                hlRecomended.removeView(view);
+                hlRecomended.addView(view, 0);
+                handler.postDelayed(this, 4000);
             }
-        }, 5000);
+        }, 7000);
+    }
+
+    @Override
+    public void onViewHolderCreated(int position) {
+//        View view = hlRecomended.getChildAt(currentElement);
+//        hlRecomended.removeView(view);
+//        hlRecomended.addView(view, position);
+//        currentElement = position;
+//        Toast.makeText(this, "position " + position, Toast.LENGTH_SHORT).show();
     }
 
     private void loadNearPlaces(){
@@ -250,7 +284,6 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
             }
         }
     }
-
 }
 
 

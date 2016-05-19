@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 
 /**
  * Created by ramirezallan on 5/13/16.
@@ -21,24 +22,24 @@ public class LinearLayoutManagerSmooth extends LinearLayoutManager {
 
     @Override
     public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
-        RecyclerView.SmoothScroller smoothScroller = new TopSnappedSmoothScroller(recyclerView.getContext());
-        smoothScroller.setTargetPosition(position);
-        startSmoothScroll(smoothScroller);
+        final LinearSmoothScroller linearSmoothScroller =
+                new LinearSmoothScroller(recyclerView.getContext()) {
+                    private static final float MILLISECONDS_PER_INCH = 140f;
+
+                    @Override
+                    public PointF computeScrollVectorForPosition(int targetPosition) {
+                        return LinearLayoutManagerSmooth.this
+                                .computeScrollVectorForPosition(targetPosition);
+                    }
+
+                    @Override
+                    protected float calculateSpeedPerPixel
+                            (DisplayMetrics displayMetrics) {
+                        return MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
+                    }
+                };
+        linearSmoothScroller.setTargetPosition(position);
+        startSmoothScroll(linearSmoothScroller);
     }
 
-    private class TopSnappedSmoothScroller extends LinearSmoothScroller {
-        public TopSnappedSmoothScroller(Context context) {
-            super(context);
-        }
-
-        @Override
-        public PointF computeScrollVectorForPosition(int targetPosition) {
-            return LinearLayoutManagerSmooth.this.computeScrollVectorForPosition(targetPosition);
-        }
-
-        @Override
-        protected int getVerticalSnapPreference() {
-            return SNAP_TO_START;
-        }
-    }
 }

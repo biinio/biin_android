@@ -19,6 +19,19 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true" />
 
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivCategoryName"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/tvCategoryName"
+        android:layout_alignBottom="@+id/tvCategoryName"
+        android:layout_alignRight="@+id/tvCategoryName"
+        android:src="@drawable/right_arrow"
+        android:scaleType="fitCenter"
+        android:layout_alignParentRight="true" />
+
     <com.biin.biin.CardView.CardRecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

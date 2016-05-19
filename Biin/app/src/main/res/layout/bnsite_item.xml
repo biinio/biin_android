@@ -45,7 +45,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="56dp"
+                android:layout_height="60dp"
                 android:weightSum="3"
                 android:layout_alignParentTop="false"
                 android:gravity="center"
@@ -61,7 +61,8 @@
                     android:id="@+id/tvSiteTitle"
                     android:gravity="center_vertical"
                     android:textColor="#ffffff"
-                    android:textSize="12sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -73,27 +74,29 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="false"
                     android:layout_toEndOf="@id/tvSubtitle"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:id="@+id/ivLike"
                     android:tint="@color/colorWhite"
                     android:src="@drawable/like_small"
                     android:visibility="visible"
-                    android:layout_marginTop="-4dp"
-                    android:layout_marginBottom="-4dp" />
+                    android:layout_marginTop="-8dp"
+                    android:layout_marginBottom="-8dp"
+                    android:scaleType="fitXY" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:id="@+id/ivLiked"
                     android:tint="@color/colorWhite"
                     android:src="@drawable/liked_small"
                     android:visibility="gone"
-                    android:layout_marginTop="-4dp"
-                    android:layout_marginBottom="-4dp" />
+                    android:layout_marginTop="-8dp"
+                    android:layout_marginBottom="-8dp"
+                    android:scaleType="fitXY" />
 
             </LinearLayout>
 

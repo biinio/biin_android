@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 
     private static final String TAG = "BNElementAdapter";
     private static Context context;
+    private IBNElementAdapterListener listener;
 
     private List<BNElement> elements;
     private ImageLoader imageLoader;
@@ -40,6 +42,10 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
         this.context = context;
         this.elements = elements;
         imageLoader = BiinApp.getInstance().getImageLoader();
+    }
+
+    public void setListener(IBNElementAdapterListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -82,6 +88,12 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 //        holder.pbElement.getProgressDrawable().setColorFilter(item.getShowcase().getSite().getOrganization().getSecondaryColor(), PorterDuff.Mode.SRC_ATOP);
 
         holder.cvElement.setLayoutParams(params);
+
+//        if(this.listener != null) {
+//            this.listener.onViewHolderCreated(position);
+//        }else{
+//            Log.e(TAG, "El listener es nulo o no ha sido seteado.");
+//        }
     }
 
     @Override
@@ -160,8 +172,12 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
             tvSubtitleLocation.setTypeface(lato_regular);
             tvPrice.setTypeface(lato_regular);
             tvDiscount.setTypeface(lato_regular);
-            tvOffer.setTypeface(lato_regular);
+            tvOffer.setTypeface(lato_black);
         }
+    }
+
+    public interface IBNElementAdapterListener {
+        void onViewHolderCreated(int position);
     }
 
 }

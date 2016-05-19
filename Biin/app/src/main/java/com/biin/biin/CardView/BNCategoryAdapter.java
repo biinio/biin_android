@@ -134,7 +134,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
             tvCategoryLocation.setTypeface(lato_regular);
             tvCategoryPrice.setTypeface(lato_regular);
             tvCategoryDiscount.setTypeface(lato_regular);
-            tvCategoryOffer.setTypeface(lato_regular);
+            tvCategoryOffer.setTypeface(lato_black);
         }
     }
 

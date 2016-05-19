@@ -20,9 +20,21 @@
             android:textColor="@color/colorWhite"
             android:background="@color/colorLightGrey"
             android:textSize="12dp"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:id="@+id/hlRecomended"
+            android:gravity="center"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/tvRecomended"
+            android:layout_marginTop="-16dp"
+            android:background="@color/colorLightGrey">
+
+        </LinearLayout>
 
         <com.biin.biin.CardView.SnappingRecyclerView
             android:layout_width="match_parent"
@@ -35,7 +47,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignLeft="@+id/tvRecomended"
             android:layout_alignRight="@+id/tvRecomended"
-            android:layout_below="@+id/tvRecomended"
+            android:layout_below="@+id/hlRecomended"
             android:overScrollMode="never">
 
         </com.biin.biin.CardView.SnappingRecyclerView>
@@ -53,6 +65,19 @@
             android:layout_alignParentEnd="true"
             android:layout_alignLeft="@+id/tvRecomended"
             android:layout_alignRight="@+id/tvRecomended" />
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivNearYou"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/tvNearYou"
+            android:layout_alignBottom="@+id/tvNearYou"
+            android:layout_alignRight="@+id/tvNearYou"
+            android:src="@drawable/right_arrow"
+            android:scaleType="fitCenter"
+            android:layout_alignParentRight="true" />
 
         <com.biin.biin.CardView.CardRecyclerView
             android:layout_width="match_parent"
@@ -83,6 +108,19 @@
             android:layout_alignParentEnd="true"
             android:layout_alignLeft="@+id/tvRecomended"
             android:layout_alignRight="@+id/tvRecomended" />
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivFavouritePlaces"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/tvFavouritePlaces"
+            android:layout_alignBottom="@+id/tvFavouritePlaces"
+            android:layout_alignRight="@+id/tvFavouritePlaces"
+            android:src="@drawable/right_arrow"
+            android:scaleType="fitCenter"
+            android:layout_alignParentRight="true" />
 
         <com.biin.biin.CardView.CardRecyclerView
             android:layout_width="match_parent"
