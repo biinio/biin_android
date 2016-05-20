@@ -7,17 +7,22 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.CardView.BNCategoryAdapter;
 import com.biin.biin.CardView.BNElementAdapter;
@@ -28,12 +33,11 @@ import com.biin.biin.CardView.SnappingRecyclerView;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
-import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNSite;
-import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Entities.Listeners.BNBiiniesListener;
-import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Entities.Listeners.BNInitialDataListener;
+import com.biin.biin.Entities.Listeners.FlipperListener;
+import com.biin.biin.Managers.BNAppManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,9 +47,12 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
 
     private BNBiiniesListener biiniesListener;
     private BNInitialDataListener initialDataListener;
+    private ImageLoader imageLoader;
+    private GestureDetector gestureDetector;
 
     private TextView tvRecomended, tvNearYou, tvFavouritePlaces;
     private LinearLayout hlRecomended;
+    private ViewFlipper vfRecomended;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +64,15 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         BNUtils.setWidth(metrics.widthPixels);
         BNUtils.setDensity(metrics.density);
 
-        setTextViewsStyles();
+        initialize();
 
 //        getBiinie();
         getInitialData();
     }
 
-    private void setTextViewsStyles(){
+    private void initialize(){
         Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
-        Typeface lato_light = Typeface.createFromAsset(getAssets(),"Lato-Light.ttf");
+//        Typeface lato_light = Typeface.createFromAsset(getAssets(),"Lato-Light.ttf");
 
         tvRecomended = (TextView)findViewById(R.id.tvRecomended);
         tvRecomended.setTypeface(lato_regular);
@@ -80,6 +87,12 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         tvFavouritePlaces.setLetterSpacing(0.3f);
 
         hlRecomended = (LinearLayout)findViewById(R.id.hlRecomended);
+        vfRecomended = (ViewFlipper)findViewById(R.id.vfRecomended);
+
+        CustomGestureDetector customGestureDetector = new CustomGestureDetector();
+        gestureDetector = new GestureDetector(this, customGestureDetector);
+
+        imageLoader = BiinApp.getInstance().getImageLoader();
     }
 
     private void getBiinie(){
@@ -176,41 +189,153 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         List<BNHighlight> highlights = BNAppManager.getDataManagerInstance().getBNHighlights();
         setPaggingDots(highlights.size());
 
-        final SnappingRecyclerView rvHighlights = (SnappingRecyclerView)findViewById(R.id.rvRecomended);
-        rvHighlights.setSnapEnabled(true);
-        LinearLayoutManagerSmooth layoutManager = new LinearLayoutManagerSmooth(this, LinearLayoutManager.HORIZONTAL, false);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        final List<BNElement> highlightElements = new ArrayList<>();
         for (BNHighlight highlight : highlights) {
             BNElement element = elements.get(highlight.getIdentifier());
             element.setShowcase(BNAppManager.getDataManagerInstance().getBNShowcase(highlight.getShowcaseIdentifier()));
             element.getShowcase().setSite(BNAppManager.getDataManagerInstance().getBNSite(highlight.getSiteIdentifier()));
-            highlightElements.add(element);
-        }
 
-        BNElementAdapter adapter = new BNElementAdapter(this, highlightElements);
-        rvHighlights.setLayoutManager(layoutManager);
-        rvHighlights.setHasFixedSize(true);
-        rvHighlights.setAdapter(adapter);
-        rvHighlights.getLayoutManager().scrollToPosition(highlightElements.size() * 100);
+            View view = inflater.inflate(R.layout.bnelement_item, null);
+
+            RelativeLayout rlElementLabel;
+            FrameLayout flOffer;
+            TextView tvTitle, tvSubtitle, tvSubtitleLocation, tvPrice, tvDiscount, tvOffer;
+            final ProgressBar pbElement, pbOrganization;
+            final ImageView ivElement, ivOrganization, ivOffer;
+
+            rlElementLabel = (RelativeLayout)view.findViewById(R.id.rlElementLabel);
+            flOffer = (FrameLayout)view.findViewById(R.id.flElementOffer);
+
+            ivElement = (ImageView)view.findViewById(R.id.ivElement);
+            ivOrganization = (ImageView)view.findViewById(R.id.ivOrganization);
+            ivOffer = (ImageView)view.findViewById(R.id.ivElementOffer);
+
+            tvTitle = (TextView)view.findViewById(R.id.tvTitle);
+            tvSubtitle = (TextView)view.findViewById(R.id.tvSubtitle);
+            tvSubtitleLocation = (TextView)view.findViewById(R.id.tvSubtitleLocation);
+            tvPrice = (TextView)view.findViewById(R.id.tvPrice);
+            tvDiscount = (TextView)view.findViewById(R.id.tvDiscount);
+            tvOffer = (TextView)view.findViewById(R.id.tvElementOffer);
+
+            pbElement = (ProgressBar)view.findViewById(R.id.pbElement);
+            pbOrganization = (ProgressBar)view.findViewById(R.id.pbOrganization);
+
+            Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
+            Typeface lato_black = Typeface.createFromAsset(getAssets(),"Lato-Black.ttf");
+
+            tvTitle.setTypeface(lato_regular);
+            tvSubtitle.setTypeface(lato_black);
+            tvSubtitleLocation.setTypeface(lato_regular);
+            tvPrice.setTypeface(lato_regular);
+            tvDiscount.setTypeface(lato_regular);
+            tvOffer.setTypeface(lato_black);
+
+            imageLoader.get(element.getMedia().get(0).getUrl(), new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    ivElement.setImageBitmap(response.getBitmap());
+                    pbElement.setVisibility(View.GONE);
+                }
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+
+            imageLoader.get(element.getShowcase().getSite().getMedia().get(0).getUrl(), new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    ivOrganization.setImageBitmap(response.getBitmap());
+                    pbOrganization.setVisibility(View.GONE);
+                }
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+
+            rlElementLabel.setBackgroundColor(element.getShowcase().getSite().getOrganization().getPrimaryColor());
+            tvTitle.setText(element.getTitle());
+            tvTitle.setTextColor(element.getShowcase().getSite().getOrganization().getSecondaryColor());
+            tvSubtitle.setText(element.getShowcase().getSite().getTitle());
+            tvSubtitle.setTextColor(element.getShowcase().getSite().getOrganization().getSecondaryColor());
+            tvSubtitleLocation.setText(element.getShowcase().getSite().getSubTitle());
+            tvSubtitleLocation.setTextColor(element.getShowcase().getSite().getOrganization().getSecondaryColor());
+//            tvPrice.setText(element.getListPrice());
+            tvPrice.setTextColor(element.getShowcase().getSite().getOrganization().getSecondaryColor());
+            tvDiscount.setText("Ȼ" + element.getPrice());
+            tvDiscount.setTextColor(element.getShowcase().getSite().getOrganization().getSecondaryColor());
+
+            if(element.isHasDiscount() && !element.getDiscount().isEmpty()) {
+                tvOffer.setText("-" + element.getDiscount() + "%");
+                tvOffer.setTextColor(element.getShowcase().getSite().getOrganization().getSecondaryColor());
+                ivOffer.setColorFilter(element.getShowcase().getSite().getOrganization().getPrimaryColor());
+                flOffer.setVisibility(View.VISIBLE);
+            }else{
+                flOffer.setVisibility(View.GONE);
+            }
+
+            FrameLayout flElement = new FrameLayout(this);
+            flElement.addView(view);
+            vfRecomended.addView(flElement);
+        }
+        vfRecomended.setInAnimation(MainActivity.this, R.anim.left_in);
+        vfRecomended.setOutAnimation(MainActivity.this, R.anim.left_out);
+
+        findViewById(R.id.vfRecomended).setOnTouchListener(new FlipperListener(gestureDetector));
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                int next = ((LinearLayoutManager) rvHighlights.getLayoutManager()).findFirstVisibleItemPosition() + 1;
-                if(next < rvHighlights.getLayoutManager().getItemCount() - 1) {
-                    rvHighlights.smoothScrollToPosition(next);
-                }else{
-                    int current = (highlightElements.size() * 100) - 1;
-                    ((LinearLayoutManager) rvHighlights.getLayoutManager()).scrollToPositionWithOffset(current, 0);
-                }
-                View view = hlRecomended.getChildAt(hlRecomended.getChildCount() - 1);
-                hlRecomended.removeView(view);
-                hlRecomended.addView(view, 0);
+                showRecomended(true);
                 handler.postDelayed(this, 4000);
             }
-        }, 7000);
+        }, 8000);
+    }
+
+    class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+            // Swipe left (next)
+            if (e1.getX() > e2.getX()) {
+                vfRecomended.setInAnimation(MainActivity.this, R.anim.left_in);
+                vfRecomended.setOutAnimation(MainActivity.this, R.anim.left_out);
+                showRecomended(true);
+            }
+
+            // Swipe right (previous)
+            if (e1.getX() < e2.getX()) {
+                vfRecomended.setInAnimation(MainActivity.this, R.anim.right_in);
+                vfRecomended.setOutAnimation(MainActivity.this, R.anim.right_out);
+                showRecomended(false);
+
+                vfRecomended.setInAnimation(MainActivity.this, R.anim.left_in);
+                vfRecomended.setOutAnimation(MainActivity.this, R.anim.left_out);
+            }
+
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+    }
+
+    private void showRecomended(boolean forward){
+        if(forward){
+            vfRecomended.showNext();
+            View view = hlRecomended.getChildAt(hlRecomended.getChildCount() - 1);
+            hlRecomended.removeView(view);
+            hlRecomended.addView(view, 0);
+        }else{
+            vfRecomended.showPrevious();
+            View view = hlRecomended.getChildAt(0);
+            hlRecomended.removeView(view);
+            hlRecomended.addView(view, hlRecomended.getChildCount() - 1);
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);
+        return true;
     }
 
     private void loadNearPlaces(){
@@ -246,13 +371,13 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
 
         // obtener la lista de categorias
         List<BNCategory> categories = new ArrayList<>(BNAppManager.getDataManagerInstance().getBNCategories().values());
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
         for (BNCategory category : categories) {
             // obtener la lista de elementos de cada categoria
             List<BNElement> categoryElements = category.getElements();
             if(categoryElements.size() > 0) {
                 // poner el label (titulo) y setear el typeface
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                 View view = inflater.inflate(R.layout.bncategory_list, null);
                 TextView tvCategoryName = (TextView) view.findViewById(R.id.tvCategoryName);
                 tvCategoryName.setTypeface(lato_regular);
