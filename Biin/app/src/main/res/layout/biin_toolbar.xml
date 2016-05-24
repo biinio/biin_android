@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivToolbarBack"
+        android:src="@drawable/left_arrow"
+        android:background="@color/colorGreen"
+        android:scaleType="center" />
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivToolbarLike"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/ivToolbarBack"
+        android:src="@drawable/liked_small"
+        android:scaleType="fitXY"
+        android:tint="@color/colorLightGrey"
+        android:layout_marginLeft="6dp" />
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivToolbarShare"
+        android:src="@drawable/share"
+        android:scaleType="fitXY"
+        android:tint="@color/colorLightGrey"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/ivToolbarLike"
+        android:cropToPadding="false"
+        android:padding="6dp"
+        android:layout_marginLeft="6dp" />
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivToolbarMail"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/send"
+        android:padding="6dp"
+        android:cropToPadding="false"
+        android:tint="@color/colorLightGrey"
+        android:layout_marginRight="6dp" />
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivToolbarCall"
+        android:scaleType="fitXY"
+        android:src="@drawable/call"
+        android:padding="6dp"
+        android:cropToPadding="false"
+        android:tint="@color/colorLightGrey"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/ivToolbarMail"
+        android:layout_marginRight="6dp" />
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivToolbarPosition"
+        android:scaleType="fitXY"
+        android:src="@drawable/gps"
+        android:padding="6dp"
+        android:cropToPadding="false"
+        android:tint="@color/colorLightGrey"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/ivToolbarCall"
+        android:layout_marginRight="6dp" />
+
+</RelativeLayout>

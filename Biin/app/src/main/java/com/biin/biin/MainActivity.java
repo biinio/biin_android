@@ -25,11 +25,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.CardView.BNCategoryAdapter;
-import com.biin.biin.CardView.BNElementAdapter;
 import com.biin.biin.CardView.BNSiteAdapter;
 import com.biin.biin.CardView.CardRecyclerView;
-import com.biin.biin.CardView.LinearLayoutManagerSmooth;
-import com.biin.biin.CardView.SnappingRecyclerView;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
@@ -53,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
     private TextView tvRecomended, tvNearYou, tvFavouritePlaces;
     private LinearLayout hlRecomended;
     private ViewFlipper vfRecomended;
+
+    private boolean fling = true;
+    private long lastFling = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         tvRecomended.setTypeface(lato_regular);
         tvRecomended.setLetterSpacing(0.3f);
 
-        tvNearYou = (TextView)findViewById(R.id.tvNearYou);
+        tvNearYou = (TextView)findViewById(R.id.tvOtherNearYou);
         tvNearYou.setTypeface(lato_regular);
         tvNearYou.setLetterSpacing(0.3f);
 
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
             rlElementLabel = (RelativeLayout)view.findViewById(R.id.rlElementLabel);
             flOffer = (FrameLayout)view.findViewById(R.id.flElementOffer);
 
-            ivElement = (ImageView)view.findViewById(R.id.ivElement);
+            ivElement = (ImageView)view.findViewById(R.id.ivSite);
             ivOrganization = (ImageView)view.findViewById(R.id.ivOrganization);
             ivOffer = (ImageView)view.findViewById(R.id.ivElementOffer);
 
@@ -281,13 +281,16 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         vfRecomended.setInAnimation(MainActivity.this, R.anim.left_in);
         vfRecomended.setOutAnimation(MainActivity.this, R.anim.left_out);
 
+//        findViewById(R.id.nvMain).setOnTouchListener(new FlipperListener(gestureDetector));
         findViewById(R.id.vfRecomended).setOnTouchListener(new FlipperListener(gestureDetector));
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                showRecomended(true);
+                if(fling) {
+                    showRecomended(true, true);
+                }
                 handler.postDelayed(this, 4000);
             }
         }, 8000);
@@ -301,14 +304,14 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
             if (e1.getX() > e2.getX()) {
                 vfRecomended.setInAnimation(MainActivity.this, R.anim.left_in);
                 vfRecomended.setOutAnimation(MainActivity.this, R.anim.left_out);
-                showRecomended(true);
+                showRecomended(true, false);
             }
 
             // Swipe right (previous)
             if (e1.getX() < e2.getX()) {
                 vfRecomended.setInAnimation(MainActivity.this, R.anim.right_in);
                 vfRecomended.setOutAnimation(MainActivity.this, R.anim.right_out);
-                showRecomended(false);
+                showRecomended(false, false);
 
                 vfRecomended.setInAnimation(MainActivity.this, R.anim.left_in);
                 vfRecomended.setOutAnimation(MainActivity.this, R.anim.left_out);
@@ -318,7 +321,8 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         }
     }
 
-    private void showRecomended(boolean forward){
+    private void showRecomended(boolean forward, boolean play){
+        fling = play;
         if(forward){
             vfRecomended.showNext();
             View view = hlRecomended.getChildAt(hlRecomended.getChildCount() - 1);
@@ -328,20 +332,32 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
             vfRecomended.showPrevious();
             View view = hlRecomended.getChildAt(0);
             hlRecomended.removeView(view);
-            hlRecomended.addView(view, hlRecomended.getChildCount() - 1);
+            hlRecomended.addView(view, hlRecomended.getChildCount());
+        }
+        if(!play){
+            lastFling = System.currentTimeMillis();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (lastFling + 4500 > System.currentTimeMillis()) {
+                        fling = true;
+                    }
+                }
+            }, 8000);
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         gestureDetector.onTouchEvent(event);
-        return true;
+//        return true;
+        return super.onTouchEvent(event);
     }
 
     private void loadNearPlaces(){
         List<BNSite> sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites().values());
 
-        CardRecyclerView rvSites = (CardRecyclerView)findViewById(R.id.rvNearYou);
+        CardRecyclerView rvSites = (CardRecyclerView)findViewById(R.id.rvOtherNearYou);
 //        rvSites.setSnapEnabled(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
@@ -367,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
     private void loadCategories(){
         Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
         // layout al que se va a agregar las listas de categorias
-        LinearLayout layout = (LinearLayout)findViewById(R.id.vlCategories);
+        LinearLayout layout = (LinearLayout)findViewById(R.id.vlShowcases);
 
         // obtener la lista de categorias
         List<BNCategory> categories = new ArrayList<>(BNAppManager.getDataManagerInstance().getBNCategories().values());
@@ -394,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
                 rvCategoryList.setHasFixedSize(true);
                 rvCategoryList.setAdapter(adapter);
 
-                //TODO attach del view en la pantalla principal
+                // attach del view a la pantalla principal
                 layout.addView(view);
             }
         }

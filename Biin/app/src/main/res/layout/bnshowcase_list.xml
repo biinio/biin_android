@@ -8,8 +8,8 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tvCategoryName"
-        android:text="@string/category1"
+        android:id="@+id/tvShowcaseName"
+        android:text="@string/category2"
         android:textAllCaps="true"
         style="@style/MainViewLabel"
         android:textColor="@color/colorWhite"
@@ -19,31 +19,18 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true" />
 
-    <ImageView
-        android:layout_width="48dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/ivCategoryName"
-        android:layout_alignParentTop="false"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/tvCategoryName"
-        android:layout_alignBottom="@+id/tvCategoryName"
-        android:layout_alignRight="@+id/tvCategoryName"
-        android:src="@drawable/right_arrow"
-        android:scaleType="center"
-        android:layout_alignParentRight="true" />
-
     <com.biin.biin.CardView.CardRecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rvCategoryList"
+        android:id="@+id/rvShowcaseList"
         android:orientation="horizontal"
         tools:listitem="@layout/bncategory_item"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        android:layout_below="@+id/tvCategoryName"
+        android:layout_below="@+id/tvShowcaseName"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/tvCategoryName"
-        android:layout_alignRight="@+id/tvCategoryName"
+        android:layout_alignLeft="@+id/tvShowcaseName"
+        android:layout_alignRight="@+id/tvShowcaseName"
         android:overScrollMode="never">
 
     </com.biin.biin.CardView.CardRecyclerView>

@@ -94,4 +94,11 @@ public class BNUtils {
         return identifiers;
     }
 
+    public class BNStringExtras {
+        public static final String BNSite = "BNSiteIdentifier";
+        public static final String BNElement = "BNElementIdentifier";
+        public static final String BNCategory = "BNCategoryIdentifier";
+        public static final String BNShowcase = "BNShowcaseIdentifier";
+    }
+
 }

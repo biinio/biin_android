@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="com.biin.biin.SitesActivity">
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/biin_toolbar"
+        android:id="@+id/include_toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:overScrollMode="never"
+        android:layout_below="@+id/include_toolbar" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/bnsite_item"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/include_bnsite" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/vlSiteShowcases"
+                android:layout_below="@+id/include_bnsite"></LinearLayout>
+
+            <TextView
+                android:id="@+id/tvOtherNearYou"
+                android:text="@string/OtherPlaces1"
+                android:textAllCaps="true"
+                style="@style/MainViewLabel"
+                android:textColor="@color/colorWhite"
+                android:background="@color/colorDarkGrey"
+                android:textSize="12dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/vlSiteShowcases"
+                android:visibility="gone" />
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivOtherNearYou"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/tvOtherNearYou"
+                android:layout_alignBottom="@+id/tvOtherNearYou"
+                android:layout_alignRight="@+id/tvOtherNearYou"
+                android:src="@drawable/right_arrow"
+                android:scaleType="center"
+                android:layout_alignParentRight="true"
+                android:visibility="gone" />
+
+            <com.biin.biin.CardView.CardRecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rvOtherNearYou"
+                android:orientation="horizontal"
+                tools:listitem="@layout/bnsite_item_small"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                android:layout_below="@+id/tvOtherNearYou"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:overScrollMode="never"
+                android:visibility="gone">
+
+            </com.biin.biin.CardView.CardRecyclerView>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

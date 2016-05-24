@@ -1,6 +1,7 @@
 <resources>
 
     <string name="app_name">Biin</string>
+    <string name="preferences_key">com.biin.biin.PREFERENCE_FILE_KEY</string>
 
     /* General button and labelss */
     <string name="Version">Version</string>
@@ -42,6 +43,9 @@
     <string name="Recomended">Our picks</string>
     <string name="FavoritePlaces">Your favourite Places</string>
     <string name="AddFavoritePlaces">Add some places to your favorites</string>
+    <string name="NoMorePlaces">It seems there are no more places near by you.</string>
+    <string name="OtherPlaces1">"More "</string>
+    <string name="OtherPlaces2">" near you"</string>
 
     <string name="LikeTxt">Thanks for liking us!</string>
     <string name="NotLikeTxt">Thanks, see you later!</string>
@@ -91,7 +95,7 @@
     category18 = "Concerts";
     category19 = "GetAways";
     category20 = "Education";
-    category21 =  "Museum and Tours";
+    category21 = "Museum and Tours";
     category22 = "Collectibles y Arts";
     category23 = "Finance";
     category24 = "Instuticional";
@@ -142,7 +146,7 @@
     <string name="Collected">Saved on your collection.</string>
     <string name="Uncollected">Removed from your collection.</string>
 
-    /*Invite friends   hey check out the Salmon al Limo from Spoon  */
+    /*Invite friends hey check out the Salmon al Limo from Spoon */
     <string name="InviteSubject">Shoping and having fun with Biin</string>
     <string name="InviteBody">The best offers and places in your hand. Download Biin at </string>
     <string name="ShareBody1">Hi, I found this on Biin. </string>

@@ -1,9 +1,9 @@
 package com.biin.biin.CardView;
 
 import android.content.Context;
-import android.graphics.ColorMatrix;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.graphics.drawable.VectorDrawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,9 +17,11 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.biin.biin.BNUtils;
+import com.biin.biin.BNUtils.BNStringExtras;
 import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.R;
+import com.biin.biin.SitesActivity;
 
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
 
     @Override
     public BNSiteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bnsite_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bnsite_item_small, parent, false);
         v.setLayoutParams(new RecyclerView.LayoutParams(BNUtils.getWidth() / 2, (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity())));
         BNSiteViewHolder holder = new BNSiteViewHolder(v);
         return holder;
@@ -51,7 +53,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
 
     @Override
     public void onBindViewHolder(BNSiteViewHolder holder, int position) {
-        BNSite item = sites.get(position);
+        final BNSite item = sites.get(position);
         TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth() / 2, (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity()));
 
         loadSiteImage(item.getMedia().get(0).getUrl(), holder);
@@ -61,6 +63,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
         holder.tvSiteTitle.setTextColor(item.getOrganization().getSecondaryColor());
         holder.tvSiteSubtitle.setText(item.getSubTitle());
         holder.tvSiteSubtitle.setTextColor(item.getOrganization().getSecondaryColor());
+        holder.cvSite.setLayoutParams(params);
 
         if(item.isUserLiked()) {
             holder.ivLike.setVisibility(View.GONE);
@@ -72,7 +75,19 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
             holder.ivLike.setColorFilter(item.getOrganization().getSecondaryColor());
         }
 
-        holder.cvSite.setLayoutParams(params);
+        holder.cvSite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, SitesActivity.class);
+
+                SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(BNStringExtras.BNSite, item.getIdentifier());
+                editor.commit();
+
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override

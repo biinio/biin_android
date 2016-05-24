@@ -1,6 +1,7 @@
 <resources>
 
     <string name="app_name">Biin</string>
+    <string name="preferences_key">com.biin.biin.PREFERENCE_FILE_KEY</string>
 
     /* General button and labelss */
     <string name="Version">Versión</string>
@@ -44,6 +45,10 @@
     <string name="Recomended">Recomendaciones</string>
     <string name="FavoritePlaces">Tus lugares Favoritos</string>
     <string name="AddFavoritePlaces">Agrega algunos lugares a tus favoritos</string>
+    <string name="NoMorePlaces">Parece que ya no hay más lugares cerca tuyo.</string>
+    <string name="OtherPlaces1">"Otros "</string>
+    <string name="OtherPlaces2">" cercanos a vos"</string>
+
 
     <string name="LikeTxt">Muchas gracias!</string>
     <string name="NotLikeTxt">Gracias, nos vemos luego!</string>

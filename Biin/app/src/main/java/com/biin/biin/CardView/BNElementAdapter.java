@@ -1,11 +1,9 @@
 package com.biin.biin.CardView;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,7 +147,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
             rlElementLabel = (RelativeLayout)itemView.findViewById(R.id.rlElementLabel);
             flOffer = (FrameLayout)itemView.findViewById(R.id.flElementOffer);
 
-            ivElement = (ImageView)itemView.findViewById(R.id.ivElement);
+            ivElement = (ImageView)itemView.findViewById(R.id.ivSite);
             ivOrganization = (ImageView)itemView.findViewById(R.id.ivOrganization);
             ivOffer = (ImageView)itemView.findViewById(R.id.ivElementOffer);
 
