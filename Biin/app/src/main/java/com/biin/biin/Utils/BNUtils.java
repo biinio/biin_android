@@ -95,13 +95,6 @@ public class BNUtils {
         return identifiers;
     }
 
-    public class BNStringExtras {
-        public static final String BNSite = "BNSiteIdentifier";
-        public static final String BNElement = "BNElementIdentifier";
-        public static final String BNCategory = "BNCategoryIdentifier";
-        public static final String BNShowcase = "BNShowcaseIdentifier";
-    }
-
     public static boolean calculateContrast(int background, int primary, int secondary){
         if(ColorUtils.calculateContrast(background, primary) > ColorUtils.calculateContrast(background, secondary)){
             return true;
@@ -109,4 +102,19 @@ public class BNUtils {
             return false;
         }
     }
+
+    public static String getColorCSS(int color){
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = (color >> 0) & 0xFF;
+        return String.format("rgb(%d, %d, %d)", r, g, b);
+    }
+
+    public class BNStringExtras {
+        public static final String BNSite = "BNSiteIdentifier";
+        public static final String BNElement = "BNElementIdentifier";
+        public static final String BNCategory = "BNCategoryIdentifier";
+        public static final String BNShowcase = "BNShowcaseIdentifier";
+    }
+
 }

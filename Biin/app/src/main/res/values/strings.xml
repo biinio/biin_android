@@ -53,6 +53,9 @@
     <string name="FollowTxt">Thank you!</string>
     <string name="NotFollowTxt">We are sorry to see you go!</string>
 
+    /* html y css */
+    <string name="ElementHtml">We are %1$s to see you %2$s!</string>
+    <string name="ElementCSS">We are sorry to see you go!</string>
 
     /* Menu buttons */
     <string name="Profile">Profile</string>

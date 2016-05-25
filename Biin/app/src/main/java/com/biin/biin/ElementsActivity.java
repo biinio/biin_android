@@ -126,4 +126,50 @@ public class ElementsActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    private String getHtmlBody() {
+        String html = "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><head>";
+        html += "<style>";
+        html += getBiinCSS();
+        html += "</style></head>";
+        html += "<body>";
+        html += currentElement.getDetailsHtml();
+        html += "</body></html>";
+        return html;
+    }
+
+    private String getBiinCSS(){
+        String css = "html { font-family: Lato, Helvetica, sans-serif; background-color: rgb(255,255,255); color:(%s); margin-left: 5px; margin-right: 5px;}";
+        css += "p { font-size: 14px; font-weight:300 !important;}";
+        css += "b { font-size: 14px; font-weight:500 !important;}";
+        css += "li { font-size: 14px; font-weight:300 !important; margin-bottom: 5px; margin-left: -15px !important; }";
+        css += "h1 { font-size: 25px; }";
+        css += "h2 { font-size: 20px; }";
+        css += ".biin_html{ display:table; }";
+        css += ".listPrice_Table { display:table; margin:0 auto; width: 95%; }";
+        css += ".listPrice_Title h2 { color:(%s); font-size: 20px; font-weight:300; margin-bottom: 5px; !important;}";
+        css += ".listPrice { width: 100%; }";
+        css += ".listPrice_Left { width: 80%; float: left; }";
+        css += ".listPrice_Left_Top p{ font-size: 17px; font-weight:400; text-align: left; margin-top: 0px; margin-bottom: 0px; }";
+        css += ".listPrice_Left_Bottom p{ font-size: 14px; font-weight: 200; text-align: left; color: #707070; text-overflow: ellipsis; margin-top: 0px; margin-bottom: 10px; }";
+        css += ".listPrice_Right p{ width: 20%; float: right; font-size: 17px; font-weight:400; text-align: right; margin-top: 0px; margin-bottom: 0px; }";
+        css += ".highlight { display:table; text-align: center; width: 100%; margin-top: 10px; }";
+        css += ".highlight_title p { font-size: 20px; font-weight:300; margin-top: 0px; margin-bottom: 0px; }";
+        css += ".highlight_text p { font-size: 60px; font-weight:600 !important; margin-top: -5px; margin-bottom: 20px; color:(%s);  line-height: 105%;}";
+        css += ".highlight_subtext p { font-size: 15px; font-weight:300; margin-top: -10px; margin-bottom: 0px; }";
+        css += ".biin_h2 { font-size: 25px; font-weight:500 !important; margin-top: 15px;}";
+        css += ".biin_h1 { font-size: 30px; font-weight:600 !important; margin-top: 45px; margin-bottom: 10px;}";
+        css += ".biin_h6 { font-size: 18px; font-weight:500 !important; }";
+        css += ".biin_p { font-size: 15px; font-weight: 300 !important; }";
+        css += "blockquote { border-left: 4px solid (%s); margin: 1.5em 10px; padding: 0.5em 10px; quotes:none;}";
+        css += "blockquote:before { content: open-quote; vertical-align:middle; }";
+        css += "blockquote p { font-size:25px; font-weight: 300; display: inline; }";
+        return String.format(css,
+                BNUtils.getColorCSS(currentElement.getShowcase().getSite().getOrganization().getPrimaryColor()),
+                BNUtils.getColorCSS(currentElement.getMedia().get(0).getVibrantDarkColor()),
+                BNUtils.getColorCSS(getResources().getColor(R.color.colorText)),
+                BNUtils.getColorCSS(getResources().getColor(R.color.colorText)));
+    }
+
+
 }

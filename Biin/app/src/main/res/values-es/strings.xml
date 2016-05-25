@@ -49,12 +49,15 @@
     <string name="OtherPlaces1">"Otros "</string>
     <string name="OtherPlaces2">" cercanos a vos"</string>
 
-
     <string name="LikeTxt">Muchas gracias!</string>
     <string name="NotLikeTxt">Gracias, nos vemos luego!</string>
 
     <string name="FollowTxt">Muchas gracias!</string>
     <string name="NotFollowTxt">Lamentamos tu partida!</string>
+
+    /* html y css */
+    <string name="ElementHtml">We are %1$s to see you %2$s!</string>
+    <string name="ElementCSS">We are sorry to see you go!</string>
 
     /* Menu buttons */
     <string name="Profile">Perfil</string>

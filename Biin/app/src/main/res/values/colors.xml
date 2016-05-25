@@ -9,6 +9,7 @@
     <color name="colorGreen">#4caf50</color>
     <color name="colorDarkGrey">#323232</color>
     <color name="colorLightGrey">#505050</color>
+    <color name="colorText">#282828</color>
 
     <color name="black_alpha_12">#1F000000</color>
 
