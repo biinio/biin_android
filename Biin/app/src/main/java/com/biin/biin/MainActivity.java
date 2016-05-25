@@ -1,11 +1,15 @@
 package com.biin.biin;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -35,6 +39,7 @@ import com.biin.biin.Entities.Listeners.BNBiiniesListener;
 import com.biin.biin.Entities.Listeners.BNInitialDataListener;
 import com.biin.biin.Entities.Listeners.FlipperListener;
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Utils.BNUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -192,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
         for (BNHighlight highlight : highlights) {
-            BNElement element = elements.get(highlight.getIdentifier());
+            final BNElement element = elements.get(highlight.getIdentifier());
             element.setShowcase(BNAppManager.getDataManagerInstance().getBNShowcase(highlight.getShowcaseIdentifier()));
             element.getShowcase().setSite(BNAppManager.getDataManagerInstance().getBNSite(highlight.getSiteIdentifier()));
 
@@ -275,6 +280,19 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
             }
 
             FrameLayout flElement = new FrameLayout(this);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(MainActivity.this, ElementsActivity.class);
+                    SharedPreferences preferences = MainActivity.this.getSharedPreferences(MainActivity.this.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(BNUtils.BNStringExtras.BNElement, element.getIdentifier());
+                    editor.commit();
+                    MainActivity.this.startActivity(i);
+                }
+            });
+
             flElement.addView(view);
             vfRecomended.addView(flElement);
         }

@@ -13,11 +13,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.biin.biin.BNUtils;
-import com.biin.biin.BNUtils.BNStringExtras;
+import com.biin.biin.Utils.BNUtils;
+import com.biin.biin.Utils.BNUtils.BNStringExtras;
 import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.R;
@@ -69,22 +70,34 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
             holder.ivLike.setVisibility(View.GONE);
             holder.ivLiked.setVisibility(View.VISIBLE);
             holder.ivLiked.setColorFilter(item.getOrganization().getSecondaryColor());
+            holder.ivLiked.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO quitar el like y cambiarlo de lista
+                    Toast.makeText(context, "Unlike", Toast.LENGTH_SHORT).show();
+                }
+            });
         }else {
             holder.ivLiked.setVisibility(View.GONE);
             holder.ivLike.setVisibility(View.VISIBLE);
             holder.ivLike.setColorFilter(item.getOrganization().getSecondaryColor());
+            holder.ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO darle like y cambiarlo de lista
+                    Toast.makeText(context, "Like", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         holder.cvSite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SitesActivity.class);
-
                 SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(BNStringExtras.BNSite, item.getIdentifier());
                 editor.commit();
-
                 context.startActivity(i);
             }
         });

@@ -1,6 +1,8 @@
 package com.biin.biin.CardView;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +17,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.biin.biin.BNUtils;
+import com.biin.biin.ElementsActivity;
+import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.R;
@@ -50,7 +53,7 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<BNShowcaseAdapter.BN
 
     @Override
     public void onBindViewHolder(BNShowcaseViewHolder holder, int position) {
-        BNElement item = elements.get(position);
+        final BNElement item = elements.get(position);
         TableRow.LayoutParams params = new TableRow.LayoutParams((elements.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int)(48 * BNUtils.getDensity()));
 
         loadShowcaseElementImage(item.getMedia().get(0).getUrl(), holder);
@@ -69,6 +72,19 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<BNShowcaseAdapter.BN
         }else{
             holder.flShowcaseOffer.setVisibility(View.GONE);
         }
+
+        holder.cvShowcase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, ElementsActivity.class);
+                SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(BNUtils.BNStringExtras.BNElement, item.getIdentifier());
+                editor.commit();
+                context.startActivity(i);
+            }
+        });
+
         holder.cvShowcase.setLayoutParams(params);
     }
 

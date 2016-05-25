@@ -1,7 +1,8 @@
-package com.biin.biin;
+package com.biin.biin.Utils;
 
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
+import android.support.v4.graphics.ColorUtils;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
@@ -101,4 +102,11 @@ public class BNUtils {
         public static final String BNShowcase = "BNShowcaseIdentifier";
     }
 
+    public static boolean calculateContrast(int background, int primary, int secondary){
+        if(ColorUtils.calculateContrast(background, primary) > ColorUtils.calculateContrast(background, secondary)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

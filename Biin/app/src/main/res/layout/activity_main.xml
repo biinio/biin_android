@@ -45,7 +45,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignLeft="@+id/tvRecomended"
             android:layout_alignRight="@+id/tvRecomended"
-            android:layout_below="@+id/hlRecomended">
+            android:layout_below="@+id/hlRecomended"
+            android:nestedScrollingEnabled="true">
 
         </ViewFlipper>
 

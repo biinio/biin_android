@@ -2,14 +2,13 @@ package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
-import com.biin.biin.BNUtils;
+import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Entities.BNShowcase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

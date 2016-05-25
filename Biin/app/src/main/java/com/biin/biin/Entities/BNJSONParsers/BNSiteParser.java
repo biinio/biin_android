@@ -2,8 +2,7 @@ package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
-import com.biin.biin.BNUtils;
-import com.biin.biin.Entities.BNOrganization;
+import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
@@ -14,7 +13,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by ramirezallan on 5/3/16.

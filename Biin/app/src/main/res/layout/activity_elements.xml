@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.biin.biin.ElementsActivity">
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/biin_toolbar"
+        android:id="@+id/elements_toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/elements_toolbar"
+        android:id="@+id/nvElements">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivElementsImage"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/biin"
+                android:visibility="visible" />
+
+            <FrameLayout
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/flElementsOffer"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/ivElementsOffer"
+                    android:src="@drawable/offer_icon" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="-15%"
+                    android:id="@+id/tvElementsOffer"
+                    android:rotation="45"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:padding="8dp"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="16sp" />
+
+            </FrameLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivElementsImage"
+                android:padding="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/Before"
+                    android:id="@+id/tvElementsBefore"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="30sp"
+                    android:layout_marginTop="30dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/Now"
+                    android:id="@+id/tvElementsNow"
+                    android:layout_below="@+id/tvElementsBefore"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/tvElementsTitle"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:layout_below="@+id/tvElementsNow"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/tvElementsSubtitle"
+                    android:textSize="22sp"
+                    android:layout_below="@+id/tvElementsTitle"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/tvElementsDetails"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:layout_below="@+id/tvElementsSubtitle"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="30dp" />
+
+                <WebView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/wvElementDetails"
+                    android:layout_below="@+id/tvElementsDetails"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_above="@+id/tvElementsAction"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/AddAction"
+                    android:id="@+id/tvElementsAction"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:padding="16dp"
+                    android:capitalize="characters"
+                    android:background="@color/colorGreen"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

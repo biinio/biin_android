@@ -1,10 +1,13 @@
 package com.biin.biin.CardView;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -13,11 +16,13 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.biin.biin.BNUtils;
+import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.BiinApp;
+import com.biin.biin.ElementsActivity;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.R;
 
@@ -57,7 +62,7 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
     @Override
     public void onBindViewHolder(BNElementViewHolder holder, int position) {
         position = position % elements.size(); //hacer parecer la lista como infinita, se obtiene el index real
-        BNElement item = elements.get(position);
+        final BNElement item = elements.get(position);
         TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), BNUtils.getWidth() + (int)(68 * BNUtils.getDensity()));
 
         loadElementImage(item.getMedia().get(0).getUrl(), holder); //element.media.url
@@ -86,12 +91,6 @@ public class BNElementAdapter extends RecyclerView.Adapter<BNElementAdapter.BNEl
 //        holder.pbElement.getProgressDrawable().setColorFilter(item.getShowcase().getSite().getOrganization().getSecondaryColor(), PorterDuff.Mode.SRC_ATOP);
 
         holder.cvElement.setLayoutParams(params);
-
-//        if(this.listener != null) {
-//            this.listener.onViewHolderCreated(position);
-//        }else{
-//            Log.e(TAG, "El listener es nulo o no ha sido seteado.");
-//        }
     }
 
     @Override

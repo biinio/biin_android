@@ -1,7 +1,6 @@
 package com.biin.biin;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
@@ -16,11 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.biin.biin.BNUtils.BNStringExtras;
+import com.biin.biin.Utils.BNToolbar;
+import com.biin.biin.Utils.BNUtils.BNStringExtras;
 import com.biin.biin.CardView.BNShowcaseAdapter;
 import com.biin.biin.CardView.BNSiteAdapter;
 import com.biin.biin.CardView.CardRecyclerView;
@@ -40,6 +39,7 @@ public class SitesActivity extends AppCompatActivity {
     private BNSite currentSite;
     private String siteIdentifier;
     private ImageLoader imageLoader;
+    private BNToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +47,13 @@ public class SitesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sites);
 
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
-        siteIdentifier = preferences.getString(BNStringExtras.BNSite, "null");
-
-        Toast.makeText(this, siteIdentifier, Toast.LENGTH_SHORT).show();
+        siteIdentifier = preferences.getString(BNStringExtras.BNSite, "site");
 
         loadSite();
         loadShowcases();
 //        loadNearPlaces();
+
+        (findViewById(R.id.nvSites)).scrollTo(0,0);
     }
 
     private void loadSite(){
@@ -63,13 +63,12 @@ public class SitesActivity extends AppCompatActivity {
             RelativeLayout rlSiteLabel;
             TextView tvTitle, tvSubtitle, tvLocation;
             final ProgressBar pbSite, pbOrganization;
-            final ImageView ivSite, ivSiteOrganization, ivToolbarBack;
+            final ImageView ivSite, ivSiteOrganization;
 
             rlSiteLabel = (RelativeLayout)findViewById(R.id.rlSiteLabel);
 
             ivSite = (ImageView)findViewById(R.id.ivSite);
             ivSiteOrganization = (ImageView)findViewById(R.id.ivSiteOrganization);
-            ivToolbarBack = (ImageView)findViewById(R.id.ivToolbarBack);
 
             tvTitle = (TextView)findViewById(R.id.tvSiteTitle);
             tvSubtitle = (TextView)findViewById(R.id.tvSiteSubtitle);
@@ -116,16 +115,7 @@ public class SitesActivity extends AppCompatActivity {
             tvSubtitle.setText(currentSite.getNutshell());
             tvSubtitle.setTextColor(currentSite.getOrganization().getSecondaryColor());
 
-            ivToolbarBack.setBackgroundColor(currentSite.getOrganization().getPrimaryColor());
-            ivToolbarBack.setColorFilter(currentSite.getOrganization().getSecondaryColor());
-            ivToolbarBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-
-
+            new BNToolbar(this, currentSite.getOrganization().getPrimaryColor(), currentSite.getOrganization().getSecondaryColor(), currentSite.isUserLiked(), true, true, true, true, false);
         }else{
             Log.e(TAG, "No se encontró el site con el identifier " + siteIdentifier);
             finish();

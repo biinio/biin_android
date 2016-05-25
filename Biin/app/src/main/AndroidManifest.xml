@@ -20,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SitesActivity"></activity>
+        <activity android:name=".SitesActivity" />
+        <activity android:name=".ElementsActivity"></activity>
     </application>
 
 </manifest>

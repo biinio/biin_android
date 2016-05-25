@@ -1,4 +1,4 @@
-package com.biin.biin.CardView;
+package com.biin.biin.Components;
 
 import android.content.Context;
 import android.os.Handler;

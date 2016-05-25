@@ -2,7 +2,7 @@ package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
-import com.biin.biin.BNUtils;
+import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Entities.Biinie;
 
 import org.json.JSONArray;

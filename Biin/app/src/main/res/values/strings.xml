@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">Biin</string>
-    <string name="preferences_key">com.biin.biin.PREFERENCE_FILE_KEY</string>
+    <string name="preferences_key">com.biin.biin.BIIN_PREFERENCES</string>
 
     /* General button and labelss */
     <string name="Version">Version</string>
@@ -24,7 +24,7 @@
     <string name="Yes">yes</string>
     <string name="No">no</string>
     <string name="DeleteUser">Delete Current User</string>
-    <string name="AddAction">Add a Action</string>
+    <string name="AddAction">Add an Action</string>
     <string name="From">FROM</string>
     <string name="Price">PRICE</string>
     <string name="LimitedTime">Limited Time</string>
