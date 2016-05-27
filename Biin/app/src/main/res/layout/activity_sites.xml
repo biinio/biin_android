@@ -48,7 +48,7 @@
                 android:layout_below="@+id/include_bnsite"></LinearLayout>
 
             <TextView
-                android:id="@+id/tvOtherNearYou"
+                android:id="@+id/tvSitesNearYou"
                 android:text="@string/OtherPlaces1"
                 android:textAllCaps="true"
                 style="@style/MainViewLabel"
@@ -60,28 +60,14 @@
                 android:layout_below="@+id/vlSiteShowcases"
                 android:visibility="gone" />
 
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/ivOtherNearYou"
-                android:layout_alignParentTop="false"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/tvOtherNearYou"
-                android:layout_alignBottom="@+id/tvOtherNearYou"
-                android:layout_alignRight="@+id/tvOtherNearYou"
-                android:src="@drawable/right_arrow"
-                android:scaleType="center"
-                android:layout_alignParentRight="true"
-                android:visibility="gone" />
-
             <com.biin.biin.CardView.CardRecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/rvOtherNearYou"
+                android:id="@+id/rvSitesNearYou"
                 android:orientation="horizontal"
                 tools:listitem="@layout/bnsite_item_small"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                android:layout_below="@+id/tvOtherNearYou"
+                android:layout_below="@+id/tvSitesNearYou"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:overScrollMode="never"

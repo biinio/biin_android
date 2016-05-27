@@ -71,8 +71,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ivElementsImage"
-                android:padding="6dp">
+                android:paddingBottom="6dp"
+                android:layout_below="@+id/ivElementsImage">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -100,43 +100,40 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:id="@+id/tvElementsTitle"
-                    android:textSize="26sp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
                     android:layout_below="@+id/tvElementsNow"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="20dp" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="6dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:id="@+id/tvElementsSubtitle"
-                    android:textSize="22sp"
+                    android:textSize="25sp"
                     android:layout_below="@+id/tvElementsTitle"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/tvElementsDetails"
-                    android:textSize="26sp"
-                    android:textStyle="bold"
-                    android:layout_below="@+id/tvElementsSubtitle"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="30dp" />
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:id="@+id/viewDummy"
+                    android:layout_below="@+id/tvElementsSubtitle" />
 
                 <WebView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/wvElementDetails"
-                    android:layout_below="@+id/tvElementsDetails"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentRight="true"
-                    android:layout_above="@+id/tvElementsAction"
-                    android:visibility="gone" />
+                    android:visibility="visible"
+                    android:layout_below="@+id/tvElementsSubtitle" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -153,11 +150,9 @@
                     android:capitalize="characters"
                     android:background="@color/colorGreen"
                     android:textStyle="bold"
-                    android:gravity="center" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"/>
+                    android:gravity="center"
+                    android:layout_margin="6dp"
+                    android:layout_below="@+id/wvElementDetails" />
 
             </RelativeLayout>
 

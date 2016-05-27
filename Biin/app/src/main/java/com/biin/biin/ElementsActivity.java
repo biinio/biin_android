@@ -1,6 +1,7 @@
 package com.biin.biin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -27,6 +29,7 @@ public class ElementsActivity extends AppCompatActivity {
     private BNElement currentElement;
     private String elementIdentifier;
     private ImageLoader imageLoader;
+    private boolean showMore = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,11 @@ public class ElementsActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         elementIdentifier = preferences.getString(BNUtils.BNStringExtras.BNElement, "element");
 
+        Intent i = getIntent();
+        if(i != null){
+            showMore = i.getBooleanExtra(BNUtils.BNStringExtras.BNShowMore, false);
+        }
+
         loadElement();
     }
 
@@ -44,20 +52,21 @@ public class ElementsActivity extends AppCompatActivity {
         currentElement = BNAppManager.getDataManagerInstance().getBNElement(elementIdentifier);
         if (currentElement != null) {
             //TODO llenar el layout con la informacion
-            TextView tvBefore, tvNow, tvOffer, tvTitle, tvSubtitle, tvDetails, tvAction;
+            TextView tvBefore, tvNow, tvOffer, tvTitle, tvSubtitle, tvAction, tvMore;
             final ImageView ivElementsImage, ivOffer;
             FrameLayout flOffer;
+            WebView wvDetails;
 
             ivElementsImage = (ImageView)findViewById(R.id.ivElementsImage);
             ivOffer = (ImageView)findViewById(R.id.ivElementsOffer);
             flOffer = (FrameLayout)findViewById(R.id.flElementsOffer);
+            wvDetails = (WebView)findViewById(R.id.wvElementDetails);
 
             tvBefore = (TextView)findViewById(R.id.tvElementsBefore);
             tvNow = (TextView)findViewById(R.id.tvElementsNow);
             tvOffer = (TextView)findViewById(R.id.tvElementsOffer);
             tvTitle = (TextView)findViewById(R.id.tvElementsTitle);
             tvSubtitle = (TextView)findViewById(R.id.tvElementsSubtitle);
-            tvDetails = (TextView)findViewById(R.id.tvElementsDetails);
             tvAction = (TextView)findViewById(R.id.tvElementsAction);
 
             Typeface lato_light = Typeface.createFromAsset(getAssets(),"Lato-Light.ttf");
@@ -69,7 +78,6 @@ public class ElementsActivity extends AppCompatActivity {
             tvOffer.setTypeface(lato_black);
             tvTitle.setTypeface(lato_black);
             tvSubtitle.setTypeface(lato_regular);
-            tvDetails.setTypeface(lato_regular);
             tvAction.setTypeface(lato_black);
 
             int darkColor = currentElement.getShowcase().getSite().getOrganization().getPrimaryColor();
@@ -78,6 +86,9 @@ public class ElementsActivity extends AppCompatActivity {
                 darkColor = currentElement.getShowcase().getSite().getOrganization().getSecondaryColor();
                 lightColor = currentElement.getShowcase().getSite().getOrganization().getPrimaryColor();
             }
+
+            wvDetails.loadData(getHtmlBody(), "text/html;charset=UTF-8", null);
+            wvDetails.setVisibility(View.VISIBLE);
 
             imageLoader.get(currentElement.getMedia().get(0).getUrl(), new ImageLoader.ImageListener() {
                 @Override
@@ -111,7 +122,6 @@ public class ElementsActivity extends AppCompatActivity {
             tvNow.setTextColor(darkColor);
             tvTitle.setText(currentElement.getTitle());
             tvSubtitle.setText(currentElement.getSubTitle());
-            tvDetails.setText(currentElement.getNutshellDescriptionTitle());
 
             if(!currentElement.getCallToActionTitle().isEmpty()) {
                 tvAction.setText(currentElement.getCallToActionTitle());
@@ -120,9 +130,23 @@ public class ElementsActivity extends AppCompatActivity {
             }else{
                 tvAction.setVisibility(View.GONE);
             }
-            new BNToolbar(this, currentElement.getShowcase().getSite().getOrganization().getPrimaryColor(), currentElement.getShowcase().getSite().getOrganization().getSecondaryColor(), currentElement.getShowcase().getSite().isUserLiked(), true, false, false, false, true, currentElement.getShowcase().getSite().getOrganization().getName());
+            new BNToolbar(this, currentElement.getShowcase().getSite().getOrganization().getPrimaryColor(), currentElement.getShowcase().getSite().getOrganization().getSecondaryColor(), currentElement.getShowcase().getSite().isUserLiked(), true, false, false, false, showMore, currentElement.getShowcase().getSite().getOrganization().getName());
+
+            tvMore = (TextView)findViewById(R.id.tvToolbarMore);
+            tvMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(ElementsActivity.this, SitesActivity.class);
+                    SharedPreferences preferences = ElementsActivity.this.getSharedPreferences(ElementsActivity.this.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(BNUtils.BNStringExtras.BNSite, currentElement.getShowcase().getSite().getIdentifier());
+                    editor.commit();
+                    ElementsActivity.this.startActivity(i);
+                }
+            });
+
         }else{
-            Log.e(TAG, "No se encontró el site con el identifier " + elementIdentifier);
+            Log.e(TAG, "No se encontró el elemento con el identifier " + elementIdentifier);
             finish();
         }
     }
@@ -130,7 +154,7 @@ public class ElementsActivity extends AppCompatActivity {
     private String getHtmlBody() {
         String html = "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><head>";
         html += "<style>";
-        html += getBiinCSS();
+        html += getBiinCSS("rgb(0,0,0)");
         html += "</style></head>";
         html += "<body>";
         html += currentElement.getDetailsHtml();
@@ -138,8 +162,9 @@ public class ElementsActivity extends AppCompatActivity {
         return html;
     }
 
-    private String getBiinCSS(){
-        String css = "html { font-family: Lato, Helvetica, sans-serif; background-color: rgb(255,255,255); color:(%s); margin-left: 5px; margin-right: 5px;}";
+    private String getBiinCSS(String color){
+        String css = "html { font-family: Lato, Helvetica, sans-serif; background-color: rgb(238,238,238); color: " + color + "; margin-left: 5px; margin-right: 5px;}";
+        css += "body { margin: 0px !important; padding: 0px !important; }";
         css += "p { font-size: 14px; font-weight:300 !important;}";
         css += "b { font-size: 14px; font-weight:500 !important;}";
         css += "li { font-size: 14px; font-weight:300 !important; margin-bottom: 5px; margin-left: -15px !important; }";
@@ -147,7 +172,7 @@ public class ElementsActivity extends AppCompatActivity {
         css += "h2 { font-size: 20px; }";
         css += ".biin_html{ display:table; }";
         css += ".listPrice_Table { display:table; margin:0 auto; width: 95%; }";
-        css += ".listPrice_Title h2 { color:(%s); font-size: 20px; font-weight:300; margin-bottom: 5px; !important;}";
+        css += ".listPrice_Title h2 { color: " + color + "; font-size: 20px; font-weight:300; margin-bottom: 5px; !important;}";
         css += ".listPrice { width: 100%; }";
         css += ".listPrice_Left { width: 80%; float: left; }";
         css += ".listPrice_Left_Top p{ font-size: 17px; font-weight:400; text-align: left; margin-top: 0px; margin-bottom: 0px; }";
@@ -155,21 +180,16 @@ public class ElementsActivity extends AppCompatActivity {
         css += ".listPrice_Right p{ width: 20%; float: right; font-size: 17px; font-weight:400; text-align: right; margin-top: 0px; margin-bottom: 0px; }";
         css += ".highlight { display:table; text-align: center; width: 100%; margin-top: 10px; }";
         css += ".highlight_title p { font-size: 20px; font-weight:300; margin-top: 0px; margin-bottom: 0px; }";
-        css += ".highlight_text p { font-size: 60px; font-weight:600 !important; margin-top: -5px; margin-bottom: 20px; color:(%s);  line-height: 105%;}";
+        css += ".highlight_text p { font-size: 60px; font-weight:600 !important; margin-top: -5px; margin-bottom: 20px; color: " + color + ";  line-height: 105%;}";
         css += ".highlight_subtext p { font-size: 15px; font-weight:300; margin-top: -10px; margin-bottom: 0px; }";
         css += ".biin_h2 { font-size: 25px; font-weight:500 !important; margin-top: 15px;}";
         css += ".biin_h1 { font-size: 30px; font-weight:600 !important; margin-top: 45px; margin-bottom: 10px;}";
         css += ".biin_h6 { font-size: 18px; font-weight:500 !important; }";
         css += ".biin_p { font-size: 15px; font-weight: 300 !important; }";
-        css += "blockquote { border-left: 4px solid (%s); margin: 1.5em 10px; padding: 0.5em 10px; quotes:none;}";
+        css += "blockquote { border-left: 4px solid " + color + "; margin: 1.5em 10px; padding: 0.5em 10px; quotes:none;}";
         css += "blockquote:before { content: open-quote; vertical-align:middle; }";
         css += "blockquote p { font-size:25px; font-weight: 300; display: inline; }";
-        return String.format(css,
-                BNUtils.getColorCSS(currentElement.getShowcase().getSite().getOrganization().getPrimaryColor()),
-                BNUtils.getColorCSS(currentElement.getMedia().get(0).getVibrantDarkColor()),
-                BNUtils.getColorCSS(getResources().getColor(R.color.colorText)),
-                BNUtils.getColorCSS(getResources().getColor(R.color.colorText)));
+        return css;
     }
-
 
 }

@@ -1,6 +1,7 @@
 package com.biin.biin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.biin.biin.Utils.BNToolbar;
+import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Utils.BNUtils.BNStringExtras;
 import com.biin.biin.CardView.BNShowcaseAdapter;
 import com.biin.biin.CardView.BNSiteAdapter;
@@ -39,7 +41,7 @@ public class SitesActivity extends AppCompatActivity {
     private BNSite currentSite;
     private String siteIdentifier;
     private ImageLoader imageLoader;
-    private BNToolbar toolbar;
+    private boolean showOthers = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +51,16 @@ public class SitesActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         siteIdentifier = preferences.getString(BNStringExtras.BNSite, "site");
 
+        Intent i = getIntent();
+        if(i != null){
+            showOthers = i.getBooleanExtra(BNUtils.BNStringExtras.BNShowOthers, false);
+        }
+
         loadSite();
         loadShowcases();
-//        loadNearPlaces();
+        if(showOthers) {
+            loadNearPlaces();
+        }
 
         (findViewById(R.id.nvSites)).scrollTo(0,0);
     }
@@ -174,16 +183,36 @@ public class SitesActivity extends AppCompatActivity {
     }
 
     private void loadNearPlaces(){
-        List<BNSite> sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites().values());
+        List<String> siteIdentifiers = new ArrayList<>(currentSite.getOrganization().getSites());
+        siteIdentifiers.remove(currentSite.getIdentifier());
 
-        CardRecyclerView rvSites = (CardRecyclerView)findViewById(R.id.rvOtherNearYou);
-//        rvSites.setSnapEnabled(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        if(siteIdentifiers.size() > 0) {
+            Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
+            BNDataManager dataManager = BNAppManager.getDataManagerInstance();
+            List<BNSite> sites = new ArrayList<>();
 
-        BNSiteAdapter adapter = new BNSiteAdapter(this, sites);
-        rvSites.setLayoutManager(layoutManager);
-        rvSites.setHasFixedSize(true);
-        rvSites.setAdapter(adapter);
+            for (String siteIdentifier : siteIdentifiers) {
+                BNSite site = dataManager.getBNSite(siteIdentifier);
+                if (site != null) {
+                    sites.add(site);
+                }
+            }
+
+            TextView tvSites = (TextView) findViewById(R.id.tvSitesNearYou);
+            tvSites.setText(getResources().getString(R.string.OtherPlaces1) + currentSite.getTitle() + getResources().getString(R.string.OtherPlaces2));
+            tvSites.setTypeface(lato_regular);
+            tvSites.setLetterSpacing(0.3f);
+            tvSites.setVisibility(View.VISIBLE);
+
+            CardRecyclerView rvSites = (CardRecyclerView) findViewById(R.id.rvSitesNearYou);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+            BNSiteAdapter adapter = new BNSiteAdapter(this, sites);
+            rvSites.setLayoutManager(layoutManager);
+            rvSites.setHasFixedSize(true);
+            rvSites.setAdapter(adapter);
+            rvSites.setVisibility(View.VISIBLE);
+        }
     }
 
 }

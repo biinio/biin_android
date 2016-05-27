@@ -112,7 +112,9 @@ public class BNUtils {
 
     public class BNStringExtras {
         public static final String BNSite = "BNSiteIdentifier";
+        public static final String BNShowOthers = "BNShowOtherSites";
         public static final String BNElement = "BNElementIdentifier";
+        public static final String BNShowMore = "BNShowMoreFromSite";
         public static final String BNCategory = "BNCategoryIdentifier";
         public static final String BNShowcase = "BNShowcaseIdentifier";
     }

@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -289,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(BNUtils.BNStringExtras.BNElement, element.getIdentifier());
                     editor.commit();
+                    i.putExtra(BNUtils.BNStringExtras.BNShowMore, true);
                     MainActivity.this.startActivity(i);
                 }
             });
@@ -380,6 +380,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
         BNSiteAdapter adapter = new BNSiteAdapter(this, sites);
+        adapter.setShowOthers(true);
         rvSites.setLayoutManager(layoutManager);
         rvSites.setHasFixedSize(true);
         rvSites.setAdapter(adapter);
@@ -393,6 +394,7 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
         BNSiteAdapter adapter = new BNSiteAdapter(this, sites);
+        adapter.setShowOthers(true);
         rvSites.setLayoutManager(layoutManager);
         rvSites.setHasFixedSize(true);
         rvSites.setAdapter(adapter);

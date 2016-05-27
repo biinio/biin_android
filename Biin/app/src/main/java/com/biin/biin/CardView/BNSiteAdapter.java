@@ -36,12 +36,17 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
 
     private List<BNSite> sites;
     private ImageLoader imageLoader;
+    private boolean showOthers = false;
 
     public BNSiteAdapter(Context context, List<BNSite> sites) {
         super();
         this.context = context;
         this.sites = sites;
         imageLoader = BiinApp.getInstance().getImageLoader();
+    }
+
+    public void setShowOthers(boolean showOthers){
+        this.showOthers = showOthers;
     }
 
     @Override
@@ -98,6 +103,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(BNStringExtras.BNSite, item.getIdentifier());
                 editor.commit();
+                i.putExtra(BNStringExtras.BNShowOthers, showOthers);
                 context.startActivity(i);
             }
         });

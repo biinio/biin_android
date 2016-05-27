@@ -27,6 +27,7 @@ public class BNOrganization {
     private int secondaryColor;
 
     private List<BNMedia> media = new ArrayList<>();
+    private List<String> sites = new ArrayList<>();
 
     private boolean hasNPS;
 
@@ -133,11 +134,23 @@ public class BNOrganization {
         this.media = media;
     }
 
+    public List<String> getSites() {
+        return sites;
+    }
+
+    public void setSites(List<String> sites) {
+        this.sites = sites;
+    }
+
     public boolean isHasNPS() {
         return hasNPS;
     }
 
     public void setHasNPS(boolean hasNPS) {
         this.hasNPS = hasNPS;
+    }
+
+    public void addSite(String identifier){
+        this.sites.add(identifier);
     }
 }

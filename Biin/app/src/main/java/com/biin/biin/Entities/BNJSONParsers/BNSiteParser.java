@@ -32,6 +32,7 @@ public class BNSiteParser {
             site.setIdentifier(objectSite.getString("identifier"));
             site.setOrganizationIdentifier(objectSite.getString("organizationIdentifier"));
             site.setOrganization(BNAppManager.getDataManagerInstance().getBNOrganization(site.getOrganizationIdentifier()));
+            site.getOrganization().addSite(site.getIdentifier());
             // TODO proximityUUID
 //            site.setBiinieProximity(Float.parseFloat(objectSite.getString("proximityUUID")));
             site.setMajor(Integer.parseInt(objectSite.getString("major")));
