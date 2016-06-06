@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    /* General button and labelss */
+    <string name="Version">Version</string>
+    <string name="Close">Close</string>
+    <string name="Save">Save</string>
+    <string name="Start">Start</string>
+    <string name="Loading">Downloading content...</string>
+    <string name="Finishing">Updating...</string>
+    <string name="EmailUs">Email us</string>
+    <string name="CallUs">Call us</string>
+    <string name="Phone">Phone</string>
+    <string name="Password">Password</string>
+    <string name="Login">Have an account? Log in</string>
+    <string name="ImNewHere">Sign up using email</string>
+    <string name="SignUpMsj">Sign up using your email address.</string>
+    <string name="LetsGetStarted">"Let's get started!"</string>
+    <string name="DontForget">"Don't forget to check your inbox and verify your email address later on."</string>
+    <string name="HardwareError">Your device does not support Biin due to harware requirements, please close this app.</string>
+    <string name="PleaseWait">Please wait a moment!</string>
+    <string name="Yes">yes</string>
+    <string name="No">no</string>
+    <string name="DeleteUser">Delete Current User</string>
+    <string name="AddAction">Add an Action</string>
+    <string name="From">FROM</string>
+    <string name="Price">PRICE</string>
+    <string name="LimitedTime">Limited Time</string>
+    <string name="OriginalPrice">ORIGINAL PRICE</string>
+    <string name="Quantity">QUANTITY</string>
+    <string name="Reserve">RESERVE</string>
+    <string name="Claimed">CLAIMED</string>
+    <string name="Discount">DISCOUNT</string>
+    <string name="Savings">SAVINGS</string>
+    <string name="YouSave">YOU SAVE</string>
+    <string name="Value">VALUE</string>
+    <string name="Calcel">Cancel</string>
+    <string name="More">more</string>
+    <string name="NearYou">Places near you</string>
+    <string name="MoreFrom">More from</string>
+    <string name="Recomended">Our picks</string>
+    <string name="FavoritePlaces">Your favourite Places</string>
+    <string name="AddFavoritePlaces">Add some places to your favorites</string>
+    <string name="NoMorePlaces">It seems there are no more places near by you.</string>
+    <string name="OtherPlaces1">"More "</string>
+    <string name="OtherPlaces2">" near you"</string>
+
+    <string name="LikeTxt">Thanks for liking us!</string>
+    <string name="NotLikeTxt">Thanks, see you later!</string>
+
+    <string name="FollowTxt">Thank you!</string>
+    <string name="NotFollowTxt">We are sorry to see you go!</string>
+
+    /* html y css */
+    <string name="ElementHtml">We are %1$s to see you %2$s!</string>
+    <string name="ElementCSS">We are sorry to see you go!</string>
+
+    /* Menu buttons */
+    <string name="Profile">Profile</string>
+    <string name="Home">Home</string>
+    <string name="Collections">My Favotires</string>
+    <string name="Loyalty">Loyalty</string>
+    <string name="Notifications">Notifications</string>
+    <string name="InviteFriends">Invite Friends</string>
+    <string name="Settings">Settings</string>
+    <string name="Search">Search</string>
+    <string name="About">About</string>
+    <string name="SignUpTitle">Sign up</string>
+    <string name="LoginTitle">Log in</string>
+    <string name="LoginDesc">Enter your email and password you previously use on biin.</string>
+    <string name="ContinueBtn">Continue</string>
+    <string name="WelcomeDesc">We are glad to see you here, if you are new, you can sign up with your email or login with Facebook.</string>
+    <string name="StartDesc">Excelent, now is time to discover and enjoy special rewards with Biin.</string>
+
+    /* Categories */
+    <string name="category1">Books, Audio and Movies</string>
+    <string name="category2">Entertaiment</string>
+    <string name="category3">Beuty and Health</string>
+    <string name="category4">Woman clothing and shoes</string>
+    <string name="category5">Kids clothing and shoes</string>
+    <string name="category6">Man clothing and shoes</string>
+    <string name="category7">Sports and Outdoors</string>
+    <string name="category8">Home, Garden and Hardware</string>
+    <string name="category9">Technology</string>
+    <string name="category10">Toys and Hobies</string>
+    <string name="category11">Food and Restaurants</string>
+    <string name="category12">Cars and Industrial</string>
+    <string name="category13">Jewelry</string>
+    <string name="category14">In the super market</string>
+    <string name="category15">Pets</string>
+    <string name="category16">Appliances</string>
+    <string name="category17">Furniture</string>
+    <string name="category18">Services</string>
+    /*category16 = "Events";
+    category17 = "Brands";
+    category18 = "Concerts";
+    category19 = "GetAways";
+    category20 = "Education";
+    category21 = "Museum and Tours";
+    category22 = "Collectibles y Arts";
+    category23 = "Finance";
+    category24 = "Instuticional";
+    category25 = "Health";
+    */
+
+    /* Views */
+    /* Profile View*/
+    <string name="Name">Name</string>
+    <string name="Lastname">Lastname</string>
+    <string name="Username">Username</string>
+    <string name="Email">Email</string>
+    <string name="IsEmailVerified">Is email verified?</string>
+    <string name="Birthdate">Birthdate</string>
+    <string name="Gender">"I'm a ..."</string>
+    <string name="GenderMale">"I'm a male"</string>
+    <string name="GenderFemale">"I'm a female"</string>
+    <string name="GenderSelect">Select a gender</string>
+    <string name="WhatAreYouInterest">What are you interested in?</string>
+    <string name="CategoriesMsj">We have selected the most popular categories for you!</string>
+    <string name="EnterYourBirthDate">Enter your birthDate</string>
+    <string name="Optionales">If you share with us your birth day and age we will improve the recomendations we show you.</string>
+
+    /* Showcase - Game View*/
+    <string name="JoinUs">Join us!</string>
+    <string name="StartToEnjoy">And start to enjoy our benefits!</string>
+    <string name="YouSeen">You’ve seen</string>
+    <string name="Done">Done!</string>
+    <string name="ThankYouStop">Thank you for stoping by.</string>
+    <string name="Follow">FOLLOW</string>
+    <string name="Following">FOLLOWING</string>
+
+    /* Login View*/
+    <string name="Wellcome">Welcome!</string>
+
+    /* Email messaje*/
+    <string name="EmailMsj">Hello there!</string>
+
+    /* Collection View Temporal */
+    <string name="CollectionTitle">Your biined stuff.</string>
+    <string name="CollectionSubTitle">This is a list of all your biined stuff.</string>
+
+    <string name="Places">Sites</string>
+    <string name="HightLights">HightLights</string>
+    <string name="Biins">Biins</string>
+    <string name="Biined">Biined!</string>
+    <string name="NotBiins">It seems there are not Biins around here!</string>
+    <string name="Collected">Saved on your collection.</string>
+    <string name="Uncollected">Removed from your collection.</string>
+
+    /*Invite friends hey check out the Salmon al Limo from Spoon */
+    <string name="InviteSubject">Shoping and having fun with Biin</string>
+    <string name="InviteBody">The best offers and places in your hand. Download Biin at </string>
+    <string name="ShareBody1">Hi, I found this on Biin. </string>
+    <string name="ShareBody2">from </string>
+    <string name="ShareBody3">The best offers and places in your hand. Download Biin at </string>
+
+    /*Alert messages*/
+    /* name="PleaseWait">Please wait a moment!*/
+
+    /*Loyalty*/
+    <string name="Points">Points</string>
+    <string name="Of">of</string>
+
+    /*About*/
+    <string name="AboutTitle">About Biin</string>
+    <string name="AboutText">Discover great places for shopping or dinner, browse the menu of your favorite restaurants or browse the latest products from the stores nearby. Find the best deals and get rewards just by walking into the stores, sharing with friends or creating collections of your favorite stuff. This app is currently available only for iPhone4s, iPhone5, iPhone5s, iPhone5c, iPhone6, iPhone6 Plus, iPhone6s and iPhone6s Plus.</string>
+
+    /*Internet Error View*/
+    <string name="InternetErrorTitle">"You're offline."</string>
+    <string name="InternetErrorText">Connect to the internet, then give it another shot.</string>
+    <string name="InternetErrorButton">Continue</string>
+
+    <string name="HardwareErrorTitle">Too bad!</string>
+    <string name="HardwareErrorText">We are sorry but your device does not support Biin due to harware requirements, please close this app.</string>
+    <string name="HardwareErrorButton">Continue</string>
+
+
+    //BluetoothErrorTitle">Oops, Biin needs bluetooth
+    //BluetoothErrorText">Please turn on blutooth and enable Biin to use it.
+    //BluetoothErrorButton">Go to settings.
+
+    <string name="BluetoothErrorText">Biin uses a low energy bluetooth to give you a better experience on the places you visit.</string>
+    <string name="BluetoothErrorTitle">Biin works better with bluetooth enabled!</string>
+    <string name="BluetoothErrorButton">Continue</string>
+
+    <string name="LocationErrorTitle">Hey, Biin needs location services enabled!</string>
+    <string name="LocationErrorText">Please, turn on location services on your device and enable Biin to use them.</string>
+    <string name="LocationErrorButton">Go to settings.</string>
+
+    <string name="NotBiinieErrorTitle">Opps!</string>
+    <string name="NotBiinieErrorText">We are sorry but something is wrong with your account, please create a new one on Biin.</string>
+    <string name="NotBiinieErrorButton">Go to the start screen.</string>
+
+    <string name="ServerErrorTitle">Opps!</string>
+    <string name="ServerErrorText">Something went worng, please try again later on. Thank you</string>
+    <string name="ServerErrorButton">Try again</string>
+
+    <string name="OnboardingTitle1">Discover!</string>
+    <string name="OnboardingText1">The best deals and rewards just steps away from you.</string>
+
+    <string name="OnboardingTitle2">Collect and share!</string>
+    <string name="OnboardingText2">All the things you find in Biin with your friends.</string>
+
+    <string name="OnboardingTitle3">Enjoy!</string>
+    <string name="OnboardingText3">Visit your favorite stores and take advantage the best deals and rewards.</string>
+
+    <string name="SiteBottomTitle">Thank you!</string>
+    <string name="SiteBottomSubtitle">Please comeback soon.</string>
+
+    <string name="BadEmail">Bad email or password!</string>
+    <string name="RequestFailed">Request Failed!</string>
+    <string name="NotInternet">Internet is not available!</string>
+    <string name="Cool">Cool</string>
+
+    <string name="Refresh">REFRESH?</string>
+    <string name="Refreshing">REFRESHING...</string>
+
+    <string name="Before">Before</string>
+    <string name="Now">Now</string>
+
+    /*Survey*/
+    <string name="SurveyTitle">Your opinion matters</string>
+    <string name="Optional">Optional</string>
+    <string name="BrandGreetings">Thank you for stoping by today and come back soon!</string>
+    <string name="SurveyQuestion_1">How likely would you recommend </string>
+    <string name="SurveyQuestion_2"> to your family or friends?</string>
+    <string name="SurveyQuestion_3">Leave your comments about what did you like or dislike so we can improve.</string>
+    <string name="Thankyou">Thank you</string>
+    <string name="Download">Download it at www.biin.io</string>
+
+
+    <string name="likely">Very Likely</string>
+    <string name="not_likely">Not likely</string>
+
+    <string name="UBER">Ride there with Uber</string>
+    <string name="Schedule">Schedule</string>
+
+    <string name="npsBtn">Help us to improve</string>
+    <string name="npsBtn_completed">We received your help!</string>
+
+    <string name="PrivacyPolicy">Privacy policies</string>
+    <string name="TermOfUser">Terms of service</string>
+
+    <string name="Accept">Accept</string>
+
+    <string name="Waze">Waze</string>
+
+</resources>

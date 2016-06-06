@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.biin.biin.LoginActivity">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivLoginBack"
+        android:src="@drawable/left_arrow"
+        android:background="@color/colorOrange"
+        android:scaleType="center" />
+
+    <TextView
+        android:id="@+id/tvLoginTitle"
+        android:text="@string/LoginTitle"
+        android:textAllCaps="true"
+        android:textColor="@color/colorDarkGrey"
+        android:background="@color/colorAccent"
+        android:textSize="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/ivLoginBack"
+        android:layout_alignBottom="@+id/ivLoginBack"
+        android:layout_alignTop="@+id/ivLoginBack"
+        android:layout_toLeftOf="@+id/ivLoginBack"
+        android:gravity="center" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ivLoginBack"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/LoginDesc"
+            android:id="@+id/tvLoginHint"
+            android:layout_gravity="center_horizontal"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/editText"
+            android:layout_gravity="center_horizontal"
+            android:hint="@string/Email"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/editText2"
+            android:layout_gravity="center_horizontal"
+            android:hint="@string/Password"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ContinueBtn"
+            android:id="@+id/tvLoginBiin"
+            android:gravity="center"
+            android:padding="12dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorOrange"
+            android:layout_marginTop="6dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -25,7 +25,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/ivSplash"
         android:indeterminate="true"
-        android:indeterminateTint="#ffab40"
+        android:indeterminateTint="@color/colorOrange"
         android:indeterminateTintMode="src_in" />
 
     <TextView
@@ -43,7 +43,7 @@
         android:text="@string/ContinueBtn"
         android:id="@+id/tvReload"
         android:layout_alignEnd="@+id/ivSplash"
-        android:capitalize="characters"
+        android:textAllCaps="true"
         android:gravity="center"
         android:padding="12dp"
         android:textColor="@color/colorWhite"

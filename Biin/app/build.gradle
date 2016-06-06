@@ -30,5 +30,5 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1'
-    compile 'com.tonicartos:superslim:0.4.+'
+    compile 'com.facebook.android:facebook-android-sdk:4.12.1'
 }

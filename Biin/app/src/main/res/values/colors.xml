@@ -7,6 +7,7 @@
 
     <color name="colorWhite">#ffffff</color>
     <color name="colorGreen">#4caf50</color>
+    <color name="colorOrange">#ffa440</color>
     <color name="colorDarkGrey">#323232</color>
     <color name="colorLightGrey">#505050</color>
     <color name="colorText">#282828</color>

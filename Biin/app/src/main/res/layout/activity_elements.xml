@@ -147,7 +147,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentRight="true"
                     android:padding="16dp"
-                    android:capitalize="characters"
+                    android:textAllCaps="true"
                     android:background="@color/colorGreen"
                     android:textStyle="bold"
                     android:gravity="center"

@@ -9,6 +9,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.biin.biin.Volley.LruBitmapCache;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 /**
  * Created by ramirezallan on 5/2/16.
@@ -26,6 +28,9 @@ public class BiinApp extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 
     public static synchronized BiinApp getInstance() {
