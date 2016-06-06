@@ -1,4 +1,4 @@
-package com.biin.biin.CardView;
+package com.biin.biin.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,28 +17,28 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.biin.biin.Utils.BNUtils;
-import com.biin.biin.Utils.BNUtils.BNStringExtras;
 import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.R;
 import com.biin.biin.SitesActivity;
+import com.biin.biin.Utils.BNUtils;
+import com.biin.biin.Utils.BNUtils.BNStringExtras;
 
 import java.util.List;
 
 /**
  * Created by ramirezallan on 5/11/16.
  */
-public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteViewHolder> {
+public class BNSiteListAdapter extends RecyclerView.Adapter<BNSiteListAdapter.BNSiteListViewHolder> {
 
-    private static final String TAG = "BNSiteAdapter";
+    private static final String TAG = "BNSiteListAdapter";
     private static Context context;
 
     private List<BNSite> sites;
     private ImageLoader imageLoader;
     private boolean showOthers = false;
 
-    public BNSiteAdapter(Context context, List<BNSite> sites) {
+    public BNSiteListAdapter(Context context, List<BNSite> sites) {
         super();
         this.context = context;
         this.sites = sites;
@@ -50,17 +50,17 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
     }
 
     @Override
-    public BNSiteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BNSiteListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bnsite_item_small, parent, false);
-        v.setLayoutParams(new RecyclerView.LayoutParams(BNUtils.getWidth() / 2, (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity())));
-        BNSiteViewHolder holder = new BNSiteViewHolder(v);
+        v.setLayoutParams(new RecyclerView.LayoutParams(BNUtils.getWidth(), (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity())));
+        BNSiteListViewHolder holder = new BNSiteListViewHolder(v);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(BNSiteViewHolder holder, int position) {
+    public void onBindViewHolder(BNSiteListViewHolder holder, int position) {
         final BNSite item = sites.get(position);
-        TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth() / 2, (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity()));
+        TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity()));
 
         loadSiteImage(item.getMedia().get(0).getUrl(), holder);
 
@@ -71,6 +71,11 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
         holder.tvSiteSubtitle.setTextColor(item.getOrganization().getSecondaryColor());
         holder.cvSite.setLayoutParams(params);
 
+        android.view.ViewGroup.LayoutParams layoutParams = holder.ivSite.getLayoutParams();
+        layoutParams.width = BNUtils.getWidth();
+        layoutParams.height = (BNUtils.getWidth() / 2);
+        holder.ivSite.setLayoutParams(layoutParams);
+
         if(item.isUserLiked()) {
             holder.ivLike.setVisibility(View.GONE);
             holder.ivLiked.setVisibility(View.VISIBLE);
@@ -78,7 +83,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
             holder.ivLiked.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO quitar el like y cambiarlo de lista
+                    //TODO quitar el like
                     Toast.makeText(context, "Unlike", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -89,7 +94,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
             holder.ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO darle like y cambiarlo de lista
+                    //TODO darle like
                     Toast.makeText(context, "Like", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -118,7 +123,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
         return sites.get(position);
     }
 
-    private void loadSiteImage(String imageURL, final BNSiteViewHolder holder) {
+    private void loadSiteImage(String imageURL, final BNSiteListViewHolder holder) {
         imageLoader.get(imageURL, new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
@@ -130,14 +135,14 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
         });
     }
 
-    public static class BNSiteViewHolder extends RecyclerView.ViewHolder{
+    public static class BNSiteListViewHolder extends RecyclerView.ViewHolder{
 
         protected CardView cvSite;
         protected RelativeLayout rlSiteLabel;
         protected ImageView ivSite, ivLike, ivLiked;
         protected TextView tvSiteTitle, tvSiteSubtitle;
 
-        public BNSiteViewHolder(View itemView) {
+        public BNSiteListViewHolder(View itemView) {
             super(itemView);
 
             cvSite = (CardView)itemView.findViewById(R.id.cvSite);

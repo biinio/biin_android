@@ -27,9 +27,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.biin.biin.CardView.BNCategoryAdapter;
-import com.biin.biin.CardView.BNSiteAdapter;
-import com.biin.biin.CardView.CardRecyclerView;
+import com.biin.biin.Adapters.BNCategoryAdapter;
+import com.biin.biin.Adapters.BNSiteAdapter;
+import com.biin.biin.Components.CardRecyclerView;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
@@ -71,7 +71,8 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         initialize();
 
 //        getBiinie();
-        getInitialData();
+//        getInitialData();
+        loadData();
     }
 
     private void initialize(){
@@ -165,7 +166,9 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         str.append("Highlights: " + highlights.size() + "\n");
         str.append("Categories: " + categories.size());
         Log.d("Biin",  str.toString());*/
+    }
 
+    public void loadData() {
         loadRecomendations();
         loadNearPlaces();
         loadFavourites();
@@ -374,6 +377,13 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
 
     private void loadNearPlaces(){
         List<BNSite> sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites().values());
+        List<BNSite> favs = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNSites().values());
+
+        for (BNSite site : favs) {
+            if(sites.contains(site)){
+                sites.remove(site);
+            }
+        }
 
         CardRecyclerView rvSites = (CardRecyclerView)findViewById(R.id.rvOtherNearYou);
 //        rvSites.setSnapEnabled(true);
@@ -384,6 +394,15 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         rvSites.setLayoutManager(layoutManager);
         rvSites.setHasFixedSize(true);
         rvSites.setAdapter(adapter);
+
+        findViewById(R.id.ivOtherNearYou).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, SitesListActivity.class);
+                i.putExtra(BNUtils.BNStringExtras.BNFavorites, false);
+                MainActivity.this.startActivity(i);
+            }
+        });
     }
 
     private void loadFavourites(){
@@ -398,6 +417,15 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         rvSites.setLayoutManager(layoutManager);
         rvSites.setHasFixedSize(true);
         rvSites.setAdapter(adapter);
+
+        findViewById(R.id.ivFavouritePlaces).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, SitesListActivity.class);
+                i.putExtra(BNUtils.BNStringExtras.BNFavorites, true);
+                MainActivity.this.startActivity(i);
+            }
+        });
     }
 
     private void loadCategories(){
@@ -409,26 +437,42 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         List<BNCategory> categories = new ArrayList<>(BNAppManager.getDataManagerInstance().getBNCategories().values());
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        for (BNCategory category : categories) {
+        for (final BNCategory category : categories) {
             // obtener la lista de elementos de cada categoria
             List<BNElement> categoryElements = category.getElements();
             if(categoryElements.size() > 0) {
                 // poner el label (titulo) y setear el typeface
                 View view = inflater.inflate(R.layout.bncategory_list, null);
                 TextView tvCategoryName = (TextView) view.findViewById(R.id.tvCategoryName);
+                ImageView ivCategoryName = (ImageView) view.findViewById(R.id.ivCategoryName);
+
                 tvCategoryName.setTypeface(lato_regular);
                 tvCategoryName.setLetterSpacing(0.3f);
                 tvCategoryName.setText(getResources().getIdentifier(category.getIdentifier(),"string",getPackageName()));
 
                 // llenar el recyclerview
                 CardRecyclerView rvCategoryList = (CardRecyclerView)view.findViewById(R.id.rvCategoryList);
-//                    rvCategoryList.setSnapEnabled(true);
+//                rvCategoryList.setSnapEnabled(true);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
                 BNCategoryAdapter adapter = new BNCategoryAdapter(this, categoryElements);
                 rvCategoryList.setLayoutManager(layoutManager);
                 rvCategoryList.setHasFixedSize(true);
                 rvCategoryList.setAdapter(adapter);
+
+                // accion de ver mas
+                ivCategoryName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(MainActivity.this, ElementsListActivity.class);
+                        SharedPreferences preferences = MainActivity.this.getSharedPreferences(MainActivity.this.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString(BNUtils.BNStringExtras.BNCategory, category.getIdentifier());
+                        editor.commit();
+//                        i.putExtra(BNUtils.BNStringExtras.BNShowMore, true);
+                        MainActivity.this.startActivity(i);
+                    }
+                });
 
                 // attach del view a la pantalla principal
                 layout.addView(view);

@@ -19,7 +19,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true" />
 
-    <com.biin.biin.CardView.CardRecyclerView
+    <com.biin.biin.Components.CardRecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/rvShowcaseList"
@@ -33,6 +33,6 @@
         android:layout_alignRight="@+id/tvShowcaseName"
         android:overScrollMode="never">
 
-    </com.biin.biin.CardView.CardRecyclerView>
+    </com.biin.biin.Components.CardRecyclerView>
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.biin.biin.CardView;
+package com.biin.biin.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -88,6 +88,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(BNUtils.BNStringExtras.BNElement, item.getIdentifier());
                 editor.commit();
+                i.putExtra(BNUtils.BNStringExtras.BNShowMore, true);
                 context.startActivity(i);
             }
         });

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.biin.biin.ElementsListActivity">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivElementsListBack"
+        android:src="@drawable/left_arrow"
+        android:background="@color/colorLightGrey"
+        android:scaleType="center" />
+
+    <TextView
+        android:id="@+id/tvElementsListTitle"
+        android:text="@string/NearYou"
+        android:textAllCaps="true"
+        android:textColor="@color/colorDarkGrey"
+        android:background="@color/colorAccent"
+        android:textSize="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/ivElementsListBack"
+        android:layout_alignBottom="@+id/ivElementsListBack"
+        android:layout_alignTop="@+id/ivElementsListBack"
+        android:gravity="center"
+        android:layout_toLeftOf="@+id/ivElementsListBack" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rvElementsList"
+        android:layout_alignStart="@+id/ivElementsListBack"
+        tools:listitem="@layout/bnelement_item"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/ivElementsListBack" />
+
+</RelativeLayout>

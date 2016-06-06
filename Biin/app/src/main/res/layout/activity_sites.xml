@@ -16,7 +16,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
 
-    <android.support.v4.widget.NestedScrollView
+    <com.biin.biin.Components.BNScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
@@ -60,7 +60,7 @@
                 android:layout_below="@+id/vlSiteShowcases"
                 android:visibility="gone" />
 
-            <com.biin.biin.CardView.CardRecyclerView
+            <com.biin.biin.Components.CardRecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/rvSitesNearYou"
@@ -73,10 +73,10 @@
                 android:overScrollMode="never"
                 android:visibility="gone">
 
-            </com.biin.biin.CardView.CardRecyclerView>
+            </com.biin.biin.Components.CardRecyclerView>
 
         </RelativeLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </com.biin.biin.Components.BNScrollView>
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.biin.biin.CardView;
+package com.biin.biin.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,11 +36,17 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<BNShowcaseAdapter.BN
     private List<BNElement> elements;
     private ImageLoader imageLoader;
 
+    private boolean showMore = false;
+
     public BNShowcaseAdapter(Context context, List<BNElement> elements) {
         super();
         this.context = context;
         this.elements = elements;
         imageLoader = BiinApp.getInstance().getImageLoader();
+    }
+
+    public void setShowMore(boolean showMore) {
+        this.showMore = showMore;
     }
 
     @Override
@@ -81,6 +87,7 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<BNShowcaseAdapter.BN
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(BNUtils.BNStringExtras.BNElement, item.getIdentifier());
                 editor.commit();
+                i.putExtra(BNUtils.BNStringExtras.BNShowMore, showMore);
                 context.startActivity(i);
             }
         });

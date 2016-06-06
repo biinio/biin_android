@@ -396,8 +396,8 @@ public class BNDataManager {
     }
 
     public BNCategory getBNCategory(String identifier) {
-        // TODO obtener una category por su identificador
-        return null;
+        // obtener una category por su identificador
+        return this.categories.get(identifier);
     }
 
     public boolean removeBNCategory(String identifier) {
