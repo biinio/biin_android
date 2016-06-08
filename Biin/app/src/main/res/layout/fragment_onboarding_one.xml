@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.biin.biin.Utils.Onboarding.OnboardingOneFragment"
+    android:gravity="center"
+    android:background="@color/colorWhite">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/OnboardingTitle1"
+        android:id="@+id/tvOnboardingTitle1"
+        android:layout_gravity="center_horizontal"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivOnboarding1"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/onbording1"
+        android:adjustViewBounds="true"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/OnboardingText1"
+        android:id="@+id/tvOnboardingText1"
+        android:layout_gravity="center_horizontal"
+        android:textSize="16sp"
+        android:layout_margin="10dp"
+        android:gravity="center" />
+
+</LinearLayout>

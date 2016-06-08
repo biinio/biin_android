@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Entities.Listeners.BNInitialDataListener;
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Utils.BNUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -56,8 +57,15 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
-        Typeface lato_black = Typeface.createFromAsset(getAssets(),"Lato-Black.ttf");
+        setUpScreen();
+
+//        getInitialData("9.73854872449546/-83.9987999326416");
+        locationServices();
+    }
+
+    private void setUpScreen(){
+        Typeface lato_regular = BNUtils.getLato_regular();
+        Typeface lato_black = BNUtils.getLato_black();
 
         tvLoading = (TextView)findViewById(R.id.tvLoading);
         tvReload = (TextView)findViewById(R.id.tvReload);
@@ -65,9 +73,6 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
 
         tvLoading.setTypeface(lato_regular);
         tvReload.setTypeface(lato_black);
-
-//        getInitialData("9.73854872449546/-83.9987999326416");
-        locationServices();
     }
 
     private void locationServices(){
@@ -231,7 +236,6 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     public void onInitialDataLoaded() {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
-        Toast.makeText(this, "Listo", Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -251,4 +255,8 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         });
     }
 
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+    }
 }

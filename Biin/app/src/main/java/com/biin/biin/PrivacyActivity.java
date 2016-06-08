@@ -13,12 +13,12 @@ import android.widget.TextView;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNUtils;
 
-public class TermsActivity extends AppCompatActivity {
+public class PrivacyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_terms);
+        setContentView(R.layout.activity_privacy);
 
         setUpScreen();
         loadWebData();
@@ -28,9 +28,9 @@ public class TermsActivity extends AppCompatActivity {
         Typeface lato_regular = BNUtils.getLato_regular();
         Typeface lato_black = BNUtils.getLato_black();
 
-        ImageView ivBack = (ImageView)findViewById(R.id.ivTermsBack);
-        TextView tvTitle = (TextView)findViewById(R.id.tvTermsTitle);
-        TextView tvContinue = (TextView)findViewById(R.id.tvTermsContinue);
+        ImageView ivBack = (ImageView)findViewById(R.id.ivPrivacyBack);
+        TextView tvTitle = (TextView)findViewById(R.id.tvPrivacyTitle);
+        TextView tvContinue = (TextView)findViewById(R.id.tvPrivacyContinue);
 
         tvTitle.setTypeface(lato_regular);
         tvContinue.setTypeface(lato_black);
@@ -38,7 +38,7 @@ public class TermsActivity extends AppCompatActivity {
         tvContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(TermsActivity.this, OnboardingActivity.class);
+                Intent i = new Intent(PrivacyActivity.this, TermsActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -54,14 +54,14 @@ public class TermsActivity extends AppCompatActivity {
 
     private void loadWebData() {
         String lang = BNUtils.getLanguaje();
-        WebView wvTerms = (WebView)findViewById(R.id.wvTerms);
-        wvTerms.setWebViewClient(new WebViewClient(){
+        WebView wvPrivacy = (WebView)findViewById(R.id.wvPrivacy);
+        wvPrivacy.setWebViewClient(new WebViewClient(){
             public void onPageFinished(WebView view, String url) {
-                findViewById(R.id.tvTermsContinue).setVisibility(View.VISIBLE);
-                findViewById(R.id.pbTermsLoading).setVisibility(View.GONE);
+                findViewById(R.id.tvPrivacyContinue).setVisibility(View.VISIBLE);
+                findViewById(R.id.pbPrivacyLoading).setVisibility(View.GONE);
             }
         });
-        wvTerms.loadUrl(BNAppManager.getNetworkManagerInstance().getTermsOfUse(lang));
+        wvPrivacy.loadUrl(BNAppManager.getNetworkManagerInstance().getPrivacyPolicies(lang));
     }
 
     @Override

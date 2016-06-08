@@ -117,7 +117,7 @@
     <string name="GenderSelect">Select a gender</string>
     <string name="WhatAreYouInterest">What are you interested in?</string>
     <string name="CategoriesMsj">We have selected the most popular categories for you!</string>
-    <string name="EnterYourBirthDate">Enter your birthDate</string>
+    <string name="EnterYourBirthDate">Enter your birthdate</string>
     <string name="Optionales">If you share with us your birth day and age we will improve the recomendations we show you.</string>
 
     /* Showcase - Game View*/
@@ -217,6 +217,10 @@
 
     <string name="Before">Before</string>
     <string name="Now">Now</string>
+
+    /*Validate Forms*/
+    <string name="EmptyString">"Value can't be ampty</string>
+    <string name="EmailFormat">Incorrect email format</string>
 
     /*Survey*/
     <string name="SurveyTitle">Your opinion matters</string>

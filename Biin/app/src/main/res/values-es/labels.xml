@@ -133,7 +133,7 @@
     /* Login View*/
     <string name="Wellcome">Bienvenido!</string>
 
-    /* Email messaje*/
+    /* Email message*/
     <string name="EmailMsj">Saludos, esto es Biin!</string>
 
     /* Collection View Temporal */
@@ -215,6 +215,10 @@
 
     <string name="Before">Antes</string>
     <string name="Now">Ahora</string>
+
+    /*Validate Forms*/
+    <string name="EmptyString">El campo no puede estar vacío</string>
+    <string name="EmailFormat">Debe ingresar un correo válido</string>
 
     /*Survey*/
     <string name="SurveyTitle">Su opinión es importante</string>

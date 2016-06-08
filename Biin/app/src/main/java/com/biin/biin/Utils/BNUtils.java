@@ -1,7 +1,9 @@
 package com.biin.biin.Utils;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
+import android.graphics.Typeface;
 import android.support.v4.graphics.ColorUtils;
 import android.util.Log;
 
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ramirezallan on 5/3/16.
@@ -25,6 +28,28 @@ public class BNUtils {
 
     private static int width = 0;
     private static float density = 1;
+
+    private static Typeface lato_light;
+    private static Typeface lato_regular;
+    private static Typeface lato_black;
+
+    public static void setTypefaces(Context context){
+        lato_light = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
+        lato_regular = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");
+        lato_black = Typeface.createFromAsset(context.getAssets(),"Lato-Black.ttf");
+    }
+
+    public static Typeface getLato_black() {
+        return lato_black;
+    }
+
+    public static Typeface getLato_light() {
+        return lato_light;
+    }
+
+    public static Typeface getLato_regular() {
+        return lato_regular;
+    }
 
     public static int getColorFromString(String values){
         // obtener el color a partir del string en formato RGB ej.: "228, 27, 37"
@@ -108,6 +133,11 @@ public class BNUtils {
         int g = (color >> 8) & 0xFF;
         int b = (color >> 0) & 0xFF;
         return String.format("rgb(%d, %d, %d)", r, g, b);
+    }
+
+    public static String getLanguaje(){
+        // Por el momento sólo español, cualquier otro caso se retornará inglés
+        return Locale.getDefault().getLanguage().equals("es") ? "es" : "en";
     }
 
     public class BNStringExtras {

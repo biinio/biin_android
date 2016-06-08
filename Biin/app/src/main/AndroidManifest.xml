@@ -5,7 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
+    <meta-data
+        android:name="com.facebook.sdk.ApplicationId"
+        android:value="@string/app_id" />
 
     <application
         android:name=".BiinApp"
@@ -22,6 +24,7 @@
         <activity android:name=".SignupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -35,6 +38,7 @@
         <activity android:name=".ElementsActivity" />
         <activity android:name=".SitesListActivity" />
         <activity android:name=".ElementsListActivity" />
+        <activity android:name=".PrivacyActivity"></activity>
     </application>
 
 </manifest>

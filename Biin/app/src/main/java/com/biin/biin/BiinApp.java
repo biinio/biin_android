@@ -8,6 +8,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.LruBitmapCache;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
@@ -28,6 +29,8 @@ public class BiinApp extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        BNUtils.setTypefaces(getBaseContext());
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
