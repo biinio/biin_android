@@ -32,26 +32,20 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
     private TextView tvLoginTitle, tvLoginHint, tvLoginBiin;
     private FormEditText etEmail, etPassword;
 
+    private View.OnClickListener loginClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            tvLoginBiin.setOnClickListener(null);
+            logIn();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         setUpScreen();
-
-        tvLoginBiin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logIn();
-            }
-        });
-
-        findViewById(R.id.ivLoginBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                returnToSignUp();
-            }
-        });
     }
 
     private void setUpScreen(){
@@ -87,26 +81,41 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
 
         etPassword.setBackgroundResource(R.color.colorAccent);
         etPassword.setPadding(etPasswordPaddingLeft, etPasswordPaddingTop, etPasswordPaddingRight, etPasswordPaddingBottom);
+
+        tvLoginBiin.setOnClickListener(loginClick);
+
+        findViewById(R.id.ivLoginBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnToSignUp();
+            }
+        });
     }
 
     private void logIn(){
         if(checkFields()){
-            loginListener = new BNLoginListener();
-            loginListener.setListener(this);
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.GET,
-                    BNAppManager.getNetworkManagerInstance().getAuthUrl(etEmail.getText().toString(), etPassword.getText().toString()),
-                    null,
-                    loginListener,
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            onVolleyError(error);
-                        }
-                    });
-            BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "Login");
+            loginRequest();
+        }else{
+            tvLoginBiin.setOnClickListener(loginClick);
         }
+    }
+
+    private void loginRequest(){
+        loginListener = new BNLoginListener();
+        loginListener.setListener(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                BNAppManager.getNetworkManagerInstance().getAuthUrl(etEmail.getText().toString(), etPassword.getText().toString()),
+                null,
+                loginListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onVolleyError(error);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "Login");
     }
 
     private boolean checkFields(){
@@ -127,6 +136,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
         }else{
             Log.e(TAG, "Error: no se obtuvieron datos");
             Toast.makeText(this, getString(R.string.BadEmail), Toast.LENGTH_LONG).show();
+            tvLoginBiin.setOnClickListener(loginClick);
         }
     }
 
@@ -150,6 +160,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
 
     private void onVolleyError(VolleyError error){
         Log.e(TAG, "Error:" + error.getMessage());
+        tvLoginBiin.setOnClickListener(loginClick);
         Toast.makeText(this, getString(R.string.RequestFailed), Toast.LENGTH_SHORT).show();
     }
 
@@ -181,6 +192,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
     @Override
     public void onBiinieError() {
         Log.e(TAG, getString(R.string.RequestFailed));
+        tvLoginBiin.setOnClickListener(loginClick);
         Toast.makeText(this, getString(R.string.RequestFailed), Toast.LENGTH_SHORT).show();
     }
 }

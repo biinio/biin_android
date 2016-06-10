@@ -32,12 +32,10 @@
         android:gravity="center" />
 
     <com.andreabaccega.widget.FormEditText
-        validate:testType="personName"
+        validate:testType="nocheck"
         validate:emptyErrorString="@string/EmptyString"
-        validate:testErrorString="@string/EmailFormat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/etRegisterName"
         android:layout_gravity="center_horizontal"
@@ -47,15 +45,15 @@
         android:layout_below="@+id/ivRegisterBack"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp"
+        android:inputType="textCapWords|textPersonName" />
 
     <com.andreabaccega.widget.FormEditText
-        validate:testType="personName"
+        validate:testType="nocheck"
         validate:emptyErrorString="@string/EmptyString"
-        validate:testErrorString="@string/EmailFormat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
+        android:inputType="textCapWords|textPersonName"
         android:ems="10"
         android:id="@+id/etRegisterLastName"
         android:layout_gravity="center_horizontal"
@@ -70,6 +68,7 @@
     <com.andreabaccega.widget.FormEditText
         validate:testType="email"
         validate:emptyErrorString="@string/EmptyString"
+        validate:testErrorString="@string/EmailFormat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
@@ -132,25 +131,27 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:id="@+id/ivRegisterMale"
-        android:src="@drawable/abc_scrubber_control_to_pressed_mtrl_005"
+        android:src="@drawable/male"
         android:layout_alignTop="@+id/tvRegisterGender"
         android:layout_alignEnd="@+id/tvRegisterGender"
         android:layout_alignBottom="@+id/tvRegisterGender"
         android:layout_marginRight="12dp"
         android:background="@drawable/bg_feedback"
-        android:tint="@color/colorPrimary" />
+        android:tint="@color/colorPrimary"
+        android:scaleType="center" />
 
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:id="@+id/ivRegisterFemale"
         android:layout_marginRight="6dp"
-        android:src="@drawable/abc_scrubber_control_to_pressed_mtrl_005"
+        android:src="@drawable/female"
         android:layout_above="@+id/tvRegisterBirthdate"
         android:layout_toStartOf="@+id/ivRegisterMale"
         android:layout_below="@+id/tvShareWithUs"
         android:background="@drawable/bg_feedback"
-        android:tint="@color/colorPrimary" />
+        android:tint="@color/colorPrimary"
+        android:scaleType="center" />
 
     <TextView
         android:layout_width="wrap_content"

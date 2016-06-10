@@ -140,6 +140,14 @@ public class BNUtils {
         return Locale.getDefault().getLanguage().equals("es") ? "es" : "en";
     }
 
+    public static String getActionDateFormat(){
+        return "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    }
+
+    public static String getDisplayDateFormat(){
+        return Locale.getDefault().getLanguage().equals("es") ? "dd/MM/yyyy" : "MM/dd/yyyy";
+    }
+
     public class BNStringExtras {
         public static final String BNBiinie = "BNBiinieIdentifier";
         public static final String BNSite = "BNSiteIdentifier";

@@ -1,5 +1,8 @@
 package com.biin.biin.Managers;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * Created by ramirezallan on 5/2/16.
  */
@@ -53,11 +56,26 @@ public class BNNetworkManager {
     }
 
     public String getAuthUrl(String user, String pass){
-        return getUrlBase() + URL_AUTH_BIINIE + "/" + user + "/" + pass;
+        try{
+            user = URLEncoder.encode(user.trim(), "UTF-8");
+            pass = URLEncoder.encode(pass.trim(), "UTF-8");
+        }catch (UnsupportedEncodingException e){ }
+
+        String url = getUrlBase() + URL_AUTH_BIINIE + "/" + user + "/" + pass;
+        return url;
     }
 
     public String getRegisterUrl(String name, String lastName, String email, String pass, String gender, String date){
-        return getUrlBase() + URL_BIINIE + "/" + name + "/" + lastName + "/" + email + "/" + pass + "/" + gender + "/" + date;
+        try{
+            name = URLEncoder.encode(name.trim(), "UTF-8");
+            lastName = URLEncoder.encode(lastName.trim(), "UTF-8");
+            email = URLEncoder.encode(email.trim(), "UTF-8");
+            pass = URLEncoder.encode(pass.trim(), "UTF-8");
+//            date = URLEncoder.encode(date, "UTF-8");
+        }catch (UnsupportedEncodingException e){ }
+
+        String url = getUrlBase() + URL_BIINIE + "/" + name + "/" + lastName + "/" + email + "/" + pass + "/" + gender + "/" + date;
+        return url;
     }
 
 

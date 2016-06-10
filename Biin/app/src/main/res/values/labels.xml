@@ -221,7 +221,7 @@
     <string name="Now">Now</string>
 
     /*Validate Forms*/
-    <string name="EmptyString">"Value can't be ampty</string>
+    <string name="EmptyString">"Value can't be empty</string>
     <string name="EmailFormat">Incorrect email format</string>
 
     /*Survey*/
