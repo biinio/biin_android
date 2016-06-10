@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.R;
@@ -62,7 +63,10 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<BNSiteListAdapter.BN
         final BNSite item = sites.get(position);
         TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity()));
 
-        loadSiteImage(item.getMedia().get(0).getUrl(), holder);
+//        loadSiteImage(item.getMedia().get(0).getUrl(), holder);
+        imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivSite, R.drawable.bg_feedback, R.drawable.biin));
+        holder.ivSite.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
+        holder.ivSite.setBackgroundColor(item.getOrganization().getPrimaryColor());
 
         holder.rlSiteLabel.setBackgroundColor(item.getOrganization().getPrimaryColor());
         holder.tvSiteTitle.setText(item.getTitle());
@@ -123,23 +127,12 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<BNSiteListAdapter.BN
         return sites.get(position);
     }
 
-    private void loadSiteImage(String imageURL, final BNSiteListViewHolder holder) {
-        imageLoader.get(imageURL, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                holder.ivSite.setImageBitmap(response.getBitmap());
-            }
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-    }
-
     public static class BNSiteListViewHolder extends RecyclerView.ViewHolder{
 
         protected CardView cvSite;
         protected RelativeLayout rlSiteLabel;
-        protected ImageView ivSite, ivLike, ivLiked;
+        protected NetworkImageView ivSite;
+        protected ImageView ivLike, ivLiked;
         protected TextView tvSiteTitle, tvSiteSubtitle;
 
         public BNSiteListViewHolder(View itemView) {
@@ -148,16 +141,15 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<BNSiteListAdapter.BN
             cvSite = (CardView)itemView.findViewById(R.id.cvSite);
             rlSiteLabel = (RelativeLayout)itemView.findViewById(R.id.rlSiteLabel);
 
-            ivSite = (ImageView)itemView.findViewById(R.id.ivSite);
+            ivSite = (NetworkImageView)itemView.findViewById(R.id.ivSiteSmall);
             ivLike = (ImageView)itemView.findViewById(R.id.ivLike);
             ivLiked = (ImageView)itemView.findViewById(R.id.ivLiked);
 
             tvSiteTitle = (TextView)itemView.findViewById(R.id.tvSiteTitle);
             tvSiteSubtitle = (TextView)itemView.findViewById(R.id.tvSiteSubtitle);
 
-            Typeface lato_light = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
-            Typeface lato_regular = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");
-            Typeface lato_black = Typeface.createFromAsset(context.getAssets(),"Lato-Black.ttf");
+            Typeface lato_regular = BNUtils.getLato_regular();
+            Typeface lato_black = BNUtils.getLato_black();
 
             tvSiteTitle.setTypeface(lato_black);
             tvSiteSubtitle.setTypeface(lato_regular);

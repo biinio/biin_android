@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.ElementsActivity;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.BiinApp;
@@ -56,7 +57,10 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
         final BNElement item = elements.get(position);
         TableRow.LayoutParams params = new TableRow.LayoutParams((elements.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int)(58 * BNUtils.getDensity()));
 
-        loadCategoryElementImage(item.getMedia().get(0).getUrl(), holder);
+//        loadCategoryElementImage(item.getMedia().get(0).getUrl(), holder);
+        imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivCategoryElement, R.drawable.bg_feedback, R.drawable.biin));
+        holder.ivCategoryElement.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
+        holder.ivCategoryElement.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
 
         holder.rlCategoryLabel.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
         holder.tvCategoryElement.setText(item.getTitle());
@@ -120,7 +124,8 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
         protected CardView cvCategory;
         protected RelativeLayout rlCategoryLabel;
         protected FrameLayout flCategoryOffer;
-        protected ImageView ivCategoryElement, ivCategoryOffer;
+        protected ImageView ivCategoryOffer;
+        protected NetworkImageView ivCategoryElement;
         protected TextView tvCategoryElement, tvCategorySubtitle, tvCategoryLocation, tvCategoryPrice, tvCategoryDiscount, tvCategoryOffer;
 
         public BNCategoryViewHolder(View itemView) {
@@ -130,7 +135,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
             rlCategoryLabel = (RelativeLayout)itemView.findViewById(R.id.rlCategoryLabel);
             flCategoryOffer = (FrameLayout)itemView.findViewById(R.id.flCategoryOffer);
 
-            ivCategoryElement = (ImageView)itemView.findViewById(R.id.ivCategoryElement);
+            ivCategoryElement = (NetworkImageView)itemView.findViewById(R.id.ivCategoryElement);
             ivCategoryOffer = (ImageView)itemView.findViewById(R.id.ivCategoryOffer);
 
             tvCategoryElement = (TextView)itemView.findViewById(R.id.tvCategoryElement);

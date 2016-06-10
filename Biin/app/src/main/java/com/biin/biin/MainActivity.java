@@ -14,6 +14,7 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.Adapters.BNCategoryAdapter;
 import com.biin.biin.Adapters.BNSiteAdapter;
 import com.biin.biin.Components.CardRecyclerView;
@@ -46,8 +48,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BNBiiniesListener biiniesListener;
-    private BNInitialDataListener initialDataListener;
     private ImageLoader imageLoader;
     private GestureDetector gestureDetector;
 
@@ -137,14 +137,14 @@ public class MainActivity extends AppCompatActivity {
             RelativeLayout rlElementLabel;
             FrameLayout flOffer;
             TextView tvTitle, tvSubtitle, tvSubtitleLocation, tvPrice, tvDiscount, tvOffer;
-            final ProgressBar pbElement, pbOrganization;
-            final ImageView ivElement, ivOrganization, ivOffer;
+            ImageView ivOffer;
+            final NetworkImageView ivElement, ivOrganization;
 
             rlElementLabel = (RelativeLayout)view.findViewById(R.id.rlElementLabel);
             flOffer = (FrameLayout)view.findViewById(R.id.flElementOffer);
 
-            ivElement = (ImageView)view.findViewById(R.id.ivSite);
-            ivOrganization = (ImageView)view.findViewById(R.id.ivOrganization);
+            ivElement = (NetworkImageView)view.findViewById(R.id.ivElement);
+            ivOrganization = (NetworkImageView)view.findViewById(R.id.ivOrganization);
             ivOffer = (ImageView)view.findViewById(R.id.ivElementOffer);
 
             tvTitle = (TextView)view.findViewById(R.id.tvTitle);
@@ -153,9 +153,6 @@ public class MainActivity extends AppCompatActivity {
             tvPrice = (TextView)view.findViewById(R.id.tvPrice);
             tvDiscount = (TextView)view.findViewById(R.id.tvDiscount);
             tvOffer = (TextView)view.findViewById(R.id.tvElementOffer);
-
-            pbElement = (ProgressBar)view.findViewById(R.id.pbElement);
-            pbOrganization = (ProgressBar)view.findViewById(R.id.pbOrganization);
 
             Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
             Typeface lato_black = Typeface.createFromAsset(getAssets(),"Lato-Black.ttf");
@@ -167,27 +164,13 @@ public class MainActivity extends AppCompatActivity {
             tvDiscount.setTypeface(lato_regular);
             tvOffer.setTypeface(lato_black);
 
-            imageLoader.get(element.getMedia().get(0).getUrl(), new ImageLoader.ImageListener() {
-                @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                    ivElement.setImageBitmap(response.getBitmap());
-                    pbElement.setVisibility(View.GONE);
-                }
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
+            imageLoader.get(element.getMedia().get(0).getUrl(), ImageLoader.getImageListener(ivElement, R.drawable.bg_feedback, R.drawable.biin));
+            ivElement.setImageUrl(element.getMedia().get(0).getUrl(), imageLoader);
+            ivElement.setBackgroundColor(element.getShowcase().getSite().getOrganization().getPrimaryColor());
 
-            imageLoader.get(element.getShowcase().getSite().getMedia().get(0).getUrl(), new ImageLoader.ImageListener() {
-                @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                    ivOrganization.setImageBitmap(response.getBitmap());
-                    pbOrganization.setVisibility(View.GONE);
-                }
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
+            imageLoader.get(element.getShowcase().getSite().getMedia().get(0).getUrl(), ImageLoader.getImageListener(ivOrganization, R.drawable.bg_feedback, R.drawable.biin));
+            ivOrganization.setImageUrl(element.getShowcase().getSite().getMedia().get(0).getUrl(), imageLoader);
+            ivOrganization.setBackgroundColor(element.getShowcase().getSite().getOrganization().getPrimaryColor());
 
             rlElementLabel.setBackgroundColor(element.getShowcase().getSite().getOrganization().getPrimaryColor());
             tvTitle.setText(element.getTitle());
@@ -336,25 +319,48 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadFavourites(){
         List<BNSite> sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNSites().values());
+        CardRecyclerView rvFavouritePlaces = (CardRecyclerView) findViewById(R.id.rvFavouritePlaces);
+        ImageView ivFavouritePlaces = (ImageView) findViewById(R.id.ivFavouritePlaces);
 
-        CardRecyclerView rvSites = (CardRecyclerView)findViewById(R.id.rvFavouritePlaces);
-//        rvSites.setSnapEnabled(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        if(sites.size() > 0) {
+//        rvFavouritePlaces.setSnapEnabled(true);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
-        BNSiteAdapter adapter = new BNSiteAdapter(this, sites);
-        adapter.setShowOthers(true);
-        rvSites.setLayoutManager(layoutManager);
-        rvSites.setHasFixedSize(true);
-        rvSites.setAdapter(adapter);
+            BNSiteAdapter adapter = new BNSiteAdapter(this, sites);
+            adapter.setShowOthers(true);
+            rvFavouritePlaces.setLayoutManager(layoutManager);
+            rvFavouritePlaces.setHasFixedSize(true);
+            rvFavouritePlaces.setAdapter(adapter);
 
-        findViewById(R.id.ivFavouritePlaces).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, SitesListActivity.class);
-                i.putExtra(BNUtils.BNStringExtras.BNFavorites, true);
-                MainActivity.this.startActivity(i);
-            }
-        });
+            ivFavouritePlaces.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(MainActivity.this, SitesListActivity.class);
+                    i.putExtra(BNUtils.BNStringExtras.BNFavorites, true);
+                    MainActivity.this.startActivity(i);
+                }
+            });
+        }else{
+            tvFavouritePlaces.setVisibility(View.GONE);
+            ivFavouritePlaces.setVisibility(View.GONE);
+            rvFavouritePlaces.setVisibility(View.GONE);
+
+            RelativeLayout layout = (RelativeLayout)findViewById(R.id.rvFavourites);
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            layout.getLayoutParams().height = (BNUtils.getWidth() / 2) + (int)(48 * BNUtils.getDensity());
+
+            View view = inflater.inflate(R.layout.add_favourites, null);
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (BNUtils.getWidth() / 2) + (int)(48 * BNUtils.getDensity()));
+            view.setLayoutParams(params);
+
+            Typeface lato_regular = BNUtils.getLato_regular();
+            TextView tvFavourites = (TextView) view.findViewById(R.id.tvEmptyFavourites);
+            tvFavourites.setTypeface(lato_regular);
+            tvFavourites.setLetterSpacing(0.3f);
+
+            layout.addView(view);
+        }
     }
 
     private void loadCategories(){

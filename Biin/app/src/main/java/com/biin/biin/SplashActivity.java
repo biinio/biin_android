@@ -242,7 +242,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     private void onInitialDataError(VolleyError error){
-        Log.e(TAG, error.getMessage());
+        Log.e(TAG, "Error:" + error.getMessage());
         Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
 
         tvLoading.setVisibility(View.GONE);

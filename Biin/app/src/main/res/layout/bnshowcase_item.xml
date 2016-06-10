@@ -10,14 +10,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/rlShowcase"
-        android:layout_alignParentStart="true"
-        android:background="@color/colorGreen">
+        android:layout_alignParentStart="true">
 
-        <ImageView
+        <com.android.volley.toolbox.NetworkImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ivShowcaseElement"
-            android:src="@drawable/biin"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:layout_alignParentLeft="true"
@@ -26,7 +24,6 @@
             android:layout_marginTop="0dp"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/biin"
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
             android:layout_above="@+id/rlShowcaseLabel" />

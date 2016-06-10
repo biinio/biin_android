@@ -1,6 +1,8 @@
 package com.biin.biin.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +18,9 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.BiinApp;
+import com.biin.biin.ElementsActivity;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.R;
 import com.biin.biin.Utils.BNUtils;
@@ -54,8 +58,15 @@ public class BNElementListAdapter extends RecyclerView.Adapter<BNElementListAdap
         final BNElement item = elements.get(position);
         TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), (BNUtils.getWidth() / 2) + (int)(68 * BNUtils.getDensity()));
 
-        loadElementImage(item.getMedia().get(0).getUrl(), holder); //element.media.url
-        loadOrganizationImage(item.getShowcase().getSite().getMedia().get(0).getUrl(), holder);
+//        loadElementImage(item.getMedia().get(0).getUrl(), holder); //element.media.url
+        imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivElement, R.drawable.bg_feedback, R.drawable.biin));
+        holder.ivElement.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
+        holder.ivElement.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
+
+//        loadOrganizationImage(item.getShowcase().getSite().getMedia().get(0).getUrl(), holder);
+        imageLoader.get(item.getShowcase().getSite().getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivOrganization, R.drawable.bg_feedback, R.drawable.biin));
+        holder.ivOrganization.setImageUrl(item.getShowcase().getSite().getMedia().get(0).getUrl(), imageLoader);
+        holder.ivOrganization.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
 
         holder.rlElementLabel.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
         holder.tvTitle.setText(item.getTitle());
@@ -85,6 +96,18 @@ public class BNElementListAdapter extends RecyclerView.Adapter<BNElementListAdap
         layoutParams.width = BNUtils.getWidth();
         layoutParams.height = (BNUtils.getWidth() / 2);
         holder.ivElement.setLayoutParams(layoutParams);
+
+        holder.cvElement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, ElementsActivity.class);
+                SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(BNUtils.BNStringExtras.BNElement, item.getIdentifier());
+                editor.commit();
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -96,40 +119,14 @@ public class BNElementListAdapter extends RecyclerView.Adapter<BNElementListAdap
         return elements.get(position);
     }
 
-    private void loadElementImage(String imageURL, final BNElementViewHolder holder) {
-        imageLoader.get(imageURL, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                holder.ivElement.setImageBitmap(response.getBitmap());
-                holder.pbElement.setVisibility(View.GONE);
-            }
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-    }
-
-    private void loadOrganizationImage(String imageURL, final BNElementViewHolder holder) {
-        imageLoader.get(imageURL, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                holder.ivOrganization.setImageBitmap(response.getBitmap());
-                holder.pbOrganization.setVisibility(View.GONE);
-            }
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-    }
-
     public static class BNElementViewHolder extends RecyclerView.ViewHolder{
 
         protected CardView cvElement;
         protected RelativeLayout rlElementLabel;
         protected FrameLayout flOffer;
-        protected ImageView ivElement, ivOrganization, ivOffer;
+        protected ImageView ivOffer;
+        protected NetworkImageView ivElement, ivOrganization;
         protected TextView tvTitle, tvSubtitle, tvSubtitleLocation, tvPrice, tvDiscount, tvOffer;
-        protected ProgressBar pbElement, pbOrganization;
 
         public BNElementViewHolder(View itemView) {
             super(itemView);
@@ -138,8 +135,8 @@ public class BNElementListAdapter extends RecyclerView.Adapter<BNElementListAdap
             rlElementLabel = (RelativeLayout)itemView.findViewById(R.id.rlElementLabel);
             flOffer = (FrameLayout)itemView.findViewById(R.id.flElementOffer);
 
-            ivElement = (ImageView)itemView.findViewById(R.id.ivSite);
-            ivOrganization = (ImageView)itemView.findViewById(R.id.ivOrganization);
+            ivElement = (NetworkImageView)itemView.findViewById(R.id.ivElement);
+            ivOrganization = (NetworkImageView)itemView.findViewById(R.id.ivOrganization);
             ivOffer = (ImageView)itemView.findViewById(R.id.ivElementOffer);
 
             tvTitle = (TextView)itemView.findViewById(R.id.tvTitle);
@@ -149,12 +146,8 @@ public class BNElementListAdapter extends RecyclerView.Adapter<BNElementListAdap
             tvDiscount = (TextView)itemView.findViewById(R.id.tvDiscount);
             tvOffer = (TextView)itemView.findViewById(R.id.tvElementOffer);
 
-            pbElement = (ProgressBar)itemView.findViewById(R.id.pbElement);
-            pbOrganization = (ProgressBar)itemView.findViewById(R.id.pbOrganization);
-
-            Typeface lato_light = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
-            Typeface lato_regular = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");
-            Typeface lato_black = Typeface.createFromAsset(context.getAssets(),"Lato-Black.ttf");
+            Typeface lato_regular = BNUtils.getLato_regular();
+            Typeface lato_black = BNUtils.getLato_black();
 
             tvTitle.setTypeface(lato_regular);
             tvSubtitle.setTypeface(lato_black);

@@ -43,6 +43,7 @@
     <string name="Recomended">Recomendaciones</string>
     <string name="FavoritePlaces">Tus lugares Favoritos</string>
     <string name="AddFavoritePlaces">Agrega algunos lugares a tus favoritos</string>
+    <string name="NoFavoritePlaces">Usa el botón de like para agregar lugares a tus favoritos</string>
     <string name="NoMorePlaces">Parece que ya no hay más lugares cerca tuyo.</string>
     <string name="OtherPlaces1">"Otros "</string>
     <string name="OtherPlaces2">" cercanos a vos"</string>

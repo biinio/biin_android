@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Utils.BNUtils.BNStringExtras;
 import com.biin.biin.BiinApp;
@@ -62,7 +63,10 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
         final BNSite item = sites.get(position);
         TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth() / 2, (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity()));
 
-        loadSiteImage(item.getMedia().get(0).getUrl(), holder);
+//        loadSiteImage(item.getMedia().get(0).getUrl(), holder);
+        imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivSite, R.drawable.bg_feedback, R.drawable.biin));
+        holder.ivSite.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
+        holder.ivSite.setBackgroundColor(item.getOrganization().getPrimaryColor());
 
         holder.rlSiteLabel.setBackgroundColor(item.getOrganization().getPrimaryColor());
         holder.tvSiteTitle.setText(item.getTitle());
@@ -134,7 +138,8 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
 
         protected CardView cvSite;
         protected RelativeLayout rlSiteLabel;
-        protected ImageView ivSite, ivLike, ivLiked;
+        protected ImageView ivLike, ivLiked;
+        protected NetworkImageView ivSite;
         protected TextView tvSiteTitle, tvSiteSubtitle;
 
         public BNSiteViewHolder(View itemView) {
@@ -143,7 +148,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
             cvSite = (CardView)itemView.findViewById(R.id.cvSite);
             rlSiteLabel = (RelativeLayout)itemView.findViewById(R.id.rlSiteLabel);
 
-            ivSite = (ImageView)itemView.findViewById(R.id.ivSite);
+            ivSite = (NetworkImageView)itemView.findViewById(R.id.ivSiteSmall);
             ivLike = (ImageView)itemView.findViewById(R.id.ivLike);
             ivLiked = (ImageView)itemView.findViewById(R.id.ivLiked);
 

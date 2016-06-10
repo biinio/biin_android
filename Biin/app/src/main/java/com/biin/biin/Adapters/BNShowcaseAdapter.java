@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.ElementsActivity;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.BiinApp;
@@ -62,7 +63,10 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<BNShowcaseAdapter.BN
         final BNElement item = elements.get(position);
         TableRow.LayoutParams params = new TableRow.LayoutParams((elements.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int)(48 * BNUtils.getDensity()));
 
-        loadShowcaseElementImage(item.getMedia().get(0).getUrl(), holder);
+//        loadShowcaseElementImage(item.getMedia().get(0).getUrl(), holder);
+        imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivShowcaseElement, R.drawable.bg_feedback, R.drawable.biin));
+        holder.ivShowcaseElement.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
+        holder.ivShowcaseElement.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
 
         holder.rlShowcaseLabel.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
         holder.tvShowcaseTitle.setText(item.getTitle());
@@ -121,7 +125,8 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<BNShowcaseAdapter.BN
         protected CardView cvShowcase;
         protected RelativeLayout rlShowcaseLabel;
         protected FrameLayout flShowcaseOffer;
-        protected ImageView ivShowcaseElement, ivShowcaseOffer;
+        protected ImageView ivShowcaseOffer;
+        protected NetworkImageView ivShowcaseElement;
         protected TextView tvShowcaseTitle, tvShowcaseSubtitle, tvShowcaseOffer;
 
         public BNShowcaseViewHolder(View itemView) {
@@ -131,7 +136,7 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<BNShowcaseAdapter.BN
             rlShowcaseLabel = (RelativeLayout)itemView.findViewById(R.id.rlShowcaseLabel);
             flShowcaseOffer = (FrameLayout)itemView.findViewById(R.id.flShowcaseOffer);
 
-            ivShowcaseElement = (ImageView)itemView.findViewById(R.id.ivShowcaseElement);
+            ivShowcaseElement = (NetworkImageView)itemView.findViewById(R.id.ivShowcaseElement);
             ivShowcaseOffer = (ImageView)itemView.findViewById(R.id.ivShowcaseOffer);
 
             tvShowcaseTitle = (TextView)itemView.findViewById(R.id.tvShowcaseTitle);
