@@ -1,6 +1,5 @@
 package com.biin.biin;
 
-import android.*;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
@@ -20,7 +19,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.biin.biin.Entities.Listeners.BNInitialDataListener;
+import com.biin.biin.Entities.Biinie;
+import com.biin.biin.Volley.Listeners.BNInitialDataListener;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNUtils;
 import com.google.android.gms.common.ConnectionResult;
@@ -101,7 +101,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     private String getLatLon(){
-        String loc = "0,0";
+        String loc = "0/0";
         if (lastLocation != null) {
             double latitude = lastLocation.getLatitude();
             double longitude = lastLocation.getLongitude();
@@ -157,6 +157,8 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     private void getInitialData(String location){
+        Biinie biinie = BNAppManager.getDataManagerInstance().getBiinie();
+
         initialDataListener = new BNInitialDataListener();
         initialDataListener.setListener(this);
 
@@ -166,7 +168,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                BNAppManager.getNetworkManagerInstance().getUrlGetInitialDataTest() + location,
+                BNAppManager.getNetworkManagerInstance().getUrlInitialData(biinie.getIdentifier(), location),
                 null,
                 initialDataListener,
                 new Response.ErrorListener() {

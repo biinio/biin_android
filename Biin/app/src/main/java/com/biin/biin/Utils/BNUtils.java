@@ -141,6 +141,7 @@ public class BNUtils {
     }
 
     public class BNStringExtras {
+        public static final String BNBiinie = "BNBiinieIdentifier";
         public static final String BNSite = "BNSiteIdentifier";
         public static final String BNShowOthers = "BNShowOtherSites";
         public static final String BNFavorites = "BNFavoriteSites";

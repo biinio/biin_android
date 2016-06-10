@@ -1,16 +1,33 @@
 package com.biin.biin;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.andreabaccega.widget.FormEditText;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNUtils;
+import com.biin.biin.Volley.Listeners.BNBiiniesListener;
+import com.biin.biin.Volley.Listeners.BNInitialDataListener;
+import com.biin.biin.Volley.Listeners.BNLoginListener;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements BNLoginListener.IBNLoginListener, BNBiiniesListener.IBNBiiniesListener {
+
+    private static final String TAG = "LoginActivity";
+
+    private BNLoginListener loginListener;
+    private BNBiiniesListener biiniesListener;
 
     private TextView tvLoginTitle, tvLoginHint, tvLoginBiin;
     private FormEditText etEmail, etPassword;
@@ -73,11 +90,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void logIn(){
-//        if(checkFields()){
-            Intent i = new Intent(LoginActivity.this, PrivacyActivity.class);
-            startActivity(i);
-            finish();
-//        }
+        if(checkFields()){
+            loginListener = new BNLoginListener();
+            loginListener.setListener(this);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    BNAppManager.getNetworkManagerInstance().getAuthUrl(etEmail.getText().toString(), etPassword.getText().toString()),
+                    null,
+                    loginListener,
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            onVolleyError(error);
+                        }
+                    });
+            BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "Login");
+        }
     }
 
     private boolean checkFields(){
@@ -92,6 +121,39 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onLoginResponse(String identifier) {
+        if(!identifier.isEmpty()){
+            getBiinie(identifier);
+        }else{
+            Log.e(TAG, "Error: no se obtuvieron datos");
+            Toast.makeText(this, getString(R.string.BadEmail), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void getBiinie(final String identifier){
+        biiniesListener = new BNBiiniesListener();
+        biiniesListener.setListener(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                BNAppManager.getNetworkManagerInstance().getUrlBiinie(identifier),
+                null,
+                biiniesListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onVolleyError(error);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "Biinie");
+    }
+
+    private void onVolleyError(VolleyError error){
+        Log.e(TAG, "Error:" + error.getMessage());
+        Toast.makeText(this, getString(R.string.RequestFailed), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onBackPressed() {
         returnToSignUp();
     }
@@ -100,5 +162,25 @@ public class LoginActivity extends AppCompatActivity {
         Intent i = new Intent(this, SignupActivity.class);
         startActivity(i);
         finish();
+    }
+
+    @Override
+    public void onBiiniesLoaded() {
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(BNUtils.BNStringExtras.BNBiinie, BNAppManager.getDataManagerInstance().getBiinie().getIdentifier());
+        editor.commit();
+
+        Log.e(TAG, "Biinie cargado correctamente");
+
+        Intent i = new Intent(LoginActivity.this, PrivacyActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    public void onBiinieError() {
+        Log.e(TAG, getString(R.string.RequestFailed));
+        Toast.makeText(this, getString(R.string.RequestFailed), Toast.LENGTH_SHORT).show();
     }
 }

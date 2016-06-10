@@ -26,7 +26,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_above="@+id/tvOptionLogin"
-        android:gravity="center">
+        android:gravity="center"
+        android:id="@+id/linearLayout">
 
         <ImageView
             android:layout_width="match_parent"
@@ -117,5 +118,18 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Desarrollo (herokuapp.com) "
+        android:id="@+id/swEnvironment"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:showText="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:checked="false"
+        android:theme="@style/DevTheme" />
 
 </RelativeLayout>

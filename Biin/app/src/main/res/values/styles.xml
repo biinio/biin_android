@@ -17,4 +17,11 @@
         <item name="android:layout_alignParentStart">true</item>
     </style>
 
+    <style name="DevTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorOrange</item>
+    </style>
+
 </resources>

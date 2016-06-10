@@ -34,9 +34,9 @@ import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
 import com.biin.biin.Entities.BNSite;
-import com.biin.biin.Entities.Listeners.BNBiiniesListener;
-import com.biin.biin.Entities.Listeners.BNInitialDataListener;
-import com.biin.biin.Entities.Listeners.FlipperListener;
+import com.biin.biin.Volley.Listeners.BNBiiniesListener;
+import com.biin.biin.Volley.Listeners.BNInitialDataListener;
+import com.biin.biin.Components.Listeners.FlipperListener;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNUtils;
 
@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BNInitialDataListener.IBNInitialDataListener, BNBiiniesListener.IBNBiiniesListener {
+public class MainActivity extends AppCompatActivity {
 
     private BNBiiniesListener biiniesListener;
     private BNInitialDataListener initialDataListener;
@@ -68,16 +68,13 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         BNUtils.setWidth(metrics.widthPixels);
         BNUtils.setDensity(metrics.density);
 
-        initialize();
+        setUpScreen();
 
-//        getBiinie();
-//        getInitialData();
         loadData();
     }
 
-    private void initialize(){
-        Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
-//        Typeface lato_light = Typeface.createFromAsset(getAssets(),"Lato-Light.ttf");
+    private void setUpScreen(){
+        Typeface lato_regular = BNUtils.getLato_regular();
 
         tvRecomended = (TextView)findViewById(R.id.tvRecomended);
         tvRecomended.setTypeface(lato_regular);
@@ -98,74 +95,6 @@ public class MainActivity extends AppCompatActivity implements BNInitialDataList
         gestureDetector = new GestureDetector(this, customGestureDetector);
 
         imageLoader = BiinApp.getInstance().getImageLoader();
-    }
-
-    private void getBiinie(){
-        biiniesListener = new BNBiiniesListener();
-        biiniesListener.setListener(this);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                BNAppManager.getNetworkManagerInstance().getUrlGetBiiniesTest(),
-                null,
-                biiniesListener,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "Biinies");
-    }
-
-    private void getInitialData(){
-        initialDataListener = new BNInitialDataListener();
-        initialDataListener.setListener(this);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                BNAppManager.getNetworkManagerInstance().getUrlGetInitialDataTest(),
-                null,
-                initialDataListener,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "InitialData");
-    }
-
-    @Override
-    public void onBiiniesLoaded() {
-        /*Log.d("Biin", "Biinies loaded");
-        Biinie biinie = BNAppManager.getDataManagerInstance().getBiinie();
-        StringBuilder str = new StringBuilder();
-        str.append("Biinie data:\n");
-        str.append("FirstName: " + biinie.getFirstName() + "\n");
-        str.append("LastName: " + biinie.getLastName() + "\n");
-        str.append("Gender: " + biinie.getGender() + "\n");
-        str.append("Email: " + biinie.getEmail());
-        Log.d("Biin",  str.toString());*/
-//        tvBiinies.setText(str.toString());
-    }
-
-    @Override
-    public void onInitialDataLoaded() {
-        /*Log.d("Biin", "Initial data loaded");
-        HashMap<String,BNSite> sites = BNAppManager.getDataManagerInstance().getBNSites();
-        HashMap<String,BNOrganization> organizations = BNAppManager.getDataManagerInstance().getBNOrganizations();
-        HashMap<String,BNElement> elements = BNAppManager.getDataManagerInstance().getBNElements();
-        List<BNHighlight> highlights = BNAppManager.getDataManagerInstance().getBNHighlights();
-        HashMap<String,BNCategory> categories = BNAppManager.getDataManagerInstance().getBNCategories();
-        StringBuilder str = new StringBuilder();
-        str.append("Initial data:\n");
-        str.append("Sites: " + sites.size() + "\n");
-        str.append("Organizations: " + organizations.size() + "\n");
-        str.append("Elements: " + elements.size() + "\n");
-        str.append("Highlights: " + highlights.size() + "\n");
-        str.append("Categories: " + categories.size());
-        Log.d("Biin",  str.toString());*/
     }
 
     public void loadData() {

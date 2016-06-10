@@ -18,6 +18,8 @@
     <string name="LetsGetStarted">"Let's get started!"</string>
     <string name="DontForget">"Don't forget to check your inbox and verify your email address later on."</string>
     <string name="HardwareError">Your device does not support Biin due to harware requirements, please close this app.</string>
+    <string name="DevideNotSupported">Your device is not supported.</string>
+    <string name="BiinIsNotAbleToRun">Biin is not able to run on this device</string>
     <string name="PleaseWait">Please wait a moment!</string>
     <string name="Yes">yes</string>
     <string name="No">no</string>
