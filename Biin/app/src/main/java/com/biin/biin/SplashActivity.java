@@ -1,6 +1,7 @@
 package com.biin.biin;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -49,7 +50,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
 
     private BNInitialDataListener initialDataListener;
 
-    private TextView tvLoading, tvReload;
+    private TextView tvLoading, tvReload, tvVersion;
     private ProgressBar pbLoading;
 
     @Override
@@ -68,11 +69,21 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         Typeface lato_black = BNUtils.getLato_black();
 
         tvLoading = (TextView)findViewById(R.id.tvLoading);
+        tvVersion = (TextView)findViewById(R.id.tvSplashVersion);
         tvReload = (TextView)findViewById(R.id.tvReload);
         pbLoading = (ProgressBar)findViewById(R.id.pbLoading);
 
         tvLoading.setTypeface(lato_regular);
+        tvVersion.setTypeface(lato_regular);
         tvReload.setTypeface(lato_black);
+
+        String version = "";
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = packageInfo.versionName.trim();
+        }catch (PackageManager.NameNotFoundException ex){}
+
+        tvVersion.setText(tvVersion.getText().toString() + " " + version);
     }
 
     private void locationServices(){
