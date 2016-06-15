@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     private TextView tvGender, tvBirthdate, tvRegister;
     private FormEditText etName, etLastName, etEmail, etPassword;
     private ImageView ivMale, ivFemale;
+    private ProgressBar pbRegister;
 
     private String date, gender, male, female;
     private int colorNormal, colorSelected;
@@ -46,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         @Override
         public void onClick(View v) {
             tvRegister.setOnClickListener(null);
+            pbRegister.setVisibility(View.VISIBLE);
             signUp();
         }
     };
@@ -75,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         etPassword = (FormEditText) findViewById(R.id.etRegisterPass);
         ivMale = (ImageView) findViewById(R.id.ivRegisterMale);
         ivFemale = (ImageView) findViewById(R.id.ivRegisterFemale);
+        pbRegister = (ProgressBar)findViewById(R.id.pbRegister);
 
         tvRegisterTitle.setTypeface(lato_regular);
         tvShareWithUs.setTypeface(lato_regular);
@@ -184,6 +188,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             ivFemale.setOnClickListener(femaleClick);
             tvBirthdate.setOnClickListener(dateClick);
             tvRegister.setOnClickListener(signupClick);
+            pbRegister.setVisibility(View.GONE);
         }
     }
 
@@ -227,6 +232,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             ivFemale.setOnClickListener(femaleClick);
             tvBirthdate.setOnClickListener(dateClick);
             tvRegister.setOnClickListener(signupClick);
+            pbRegister.setVisibility(View.GONE);
         }
     }
 
@@ -254,6 +260,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         ivFemale.setOnClickListener(femaleClick);
         tvBirthdate.setOnClickListener(dateClick);
         tvRegister.setOnClickListener(signupClick);
+        pbRegister.setVisibility(View.GONE);
         Toast.makeText(this, getString(R.string.RequestFailed), Toast.LENGTH_SHORT).show();
     }
 
@@ -289,6 +296,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         ivFemale.setOnClickListener(femaleClick);
         tvBirthdate.setOnClickListener(dateClick);
         tvRegister.setOnClickListener(signupClick);
+        pbRegister.setVisibility(View.GONE);
         Toast.makeText(this, getString(R.string.RequestFailed), Toast.LENGTH_SHORT).show();
     }
 }

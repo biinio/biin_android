@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,11 +32,13 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
 
     private TextView tvLoginTitle, tvLoginHint, tvLoginBiin;
     private FormEditText etEmail, etPassword;
+    private ProgressBar pbLogin;
 
     private View.OnClickListener loginClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             tvLoginBiin.setOnClickListener(null);
+            pbLogin.setVisibility(View.VISIBLE);
             logIn();
         }
     };
@@ -57,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
         tvLoginBiin = (TextView)findViewById(R.id.tvLoginBiin);
         etEmail = (FormEditText)findViewById(R.id.etLoginEmail);
         etPassword = (FormEditText)findViewById(R.id.etLoginPass);
+        pbLogin = (ProgressBar)findViewById(R.id.pbLogin);
 
         tvLoginTitle.setTypeface(lato_regular);
         tvLoginHint.setTypeface(lato_regular);
@@ -97,6 +101,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
             loginRequest();
         }else{
             tvLoginBiin.setOnClickListener(loginClick);
+            pbLogin.setVisibility(View.GONE);
         }
     }
 
@@ -137,6 +142,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
             Log.e(TAG, "Error: no se obtuvieron datos");
             Toast.makeText(this, getString(R.string.BadEmail), Toast.LENGTH_LONG).show();
             tvLoginBiin.setOnClickListener(loginClick);
+            pbLogin.setVisibility(View.GONE);
         }
     }
 
@@ -161,6 +167,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
     private void onVolleyError(VolleyError error){
         Log.e(TAG, "Error:" + error.getMessage());
         tvLoginBiin.setOnClickListener(loginClick);
+        pbLogin.setVisibility(View.GONE);
         Toast.makeText(this, getString(R.string.RequestFailed), Toast.LENGTH_SHORT).show();
     }
 
@@ -193,6 +200,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
     public void onBiinieError() {
         Log.e(TAG, getString(R.string.RequestFailed));
         tvLoginBiin.setOnClickListener(loginClick);
+        pbLogin.setVisibility(View.GONE);
         Toast.makeText(this, getString(R.string.RequestFailed), Toast.LENGTH_SHORT).show();
     }
 }

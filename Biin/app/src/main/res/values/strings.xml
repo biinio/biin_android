@@ -1,7 +1,7 @@
 <resources>
 
-    <string translatable="false" name="app_id">8934976303740374563876</string>
-    <string translatable="false" name="app_name">Biin</string>
-    <string translatable="false" name="preferences_key">com.biin.biin.BIIN_PREFERENCES</string>
+    <string name="app_id" translatable="false">8934976303740374563876</string>
+    <string name="app_name" translatable="false">Biin</string>
+    <string name="preferences_key" translatable="false">com.biin.biin.BIIN_PREFERENCES</string>
 
 </resources>

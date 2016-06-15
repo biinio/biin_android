@@ -94,7 +94,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:id="@+id/imageView"
+                android:id="@+id/ivSignupFb"
                 android:src="@drawable/com_facebook_button_icon_white"
                 android:layout_alignTop="@+id/tvSignupFb"
                 android:layout_alignStart="@+id/tvSignupFb"

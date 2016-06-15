@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/tvElementsListTitle"
-        android:text="@string/NearYou"
+        android:text="@string/Collections"
         android:textAllCaps="true"
         android:textColor="@color/colorDarkGrey"
         android:background="@color/colorAccent"

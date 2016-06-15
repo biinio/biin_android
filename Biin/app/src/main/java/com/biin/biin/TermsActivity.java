@@ -47,7 +47,7 @@ public class TermsActivity extends AppCompatActivity {
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                returnToSignUp();
+                returnToPrevious();
             }
         });
     }
@@ -66,11 +66,11 @@ public class TermsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        returnToSignUp();
+        returnToPrevious();
     }
 
-    private void returnToSignUp(){
-        Intent i = new Intent(this, SignupActivity.class);
+    private void returnToPrevious(){
+        Intent i = new Intent(this, PrivacyActivity.class);
         startActivity(i);
         finish();
     }

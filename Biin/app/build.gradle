@@ -7,8 +7,8 @@ android {
         applicationId "com.biin.biin"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 3
-        versionName '1.2'
+        versionCode 4
+        versionName '1.2.1d'
         multiDexEnabled true
     }
     buildTypes {
@@ -37,4 +37,5 @@ dependencies {
     compile 'com.andreabaccega:android-form-edittext:1.2.1@aar'
     compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
     compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.eightbitlab:blurview:1.0.4'
 }

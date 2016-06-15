@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:validate="http://schemas.android.com/apk/res-auto"
+    tools:context="com.biin.biin.ProfileActivity">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivProfileBack"
+        android:src="@drawable/left_arrow"
+        android:background="@color/colorLightGrey"
+        android:scaleType="center" />
+
+    <TextView
+        android:id="@+id/tvProfileTitle"
+        android:text="@string/Profile"
+        android:textAllCaps="true"
+        android:textColor="@color/colorDarkGrey"
+        android:background="@color/colorAccent"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/ivProfileBack"
+        android:layout_alignBottom="@+id/ivProfileBack"
+        android:layout_alignTop="@+id/ivProfileBack"
+        android:gravity="center"
+        android:layout_toLeftOf="@+id/ivProfileBack" />
+
+    <Space
+        android:id="@+id/spProfileName"
+        android:layout_width="12dp"
+        android:layout_height="28dp"
+        android:layout_below="@+id/tvProfileTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Name"
+        android:id="@+id/tvProfileName"
+        android:layout_alignTop="@+id/spProfileName"
+        android:gravity="center_vertical|right"
+        android:layout_alignParentStart="true"
+        android:textAllCaps="true"
+        android:layout_toLeftOf="@+id/spProfileName"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/spProfileName"
+        android:textSize="12sp" />
+
+    <com.andreabaccega.widget.FormEditText
+        validate:testType="nocheck"
+        validate:emptyErrorString="@string/EmptyString"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Name"
+        android:id="@+id/etProfileName"
+        android:gravity="left|center_vertical"
+        android:inputType="textCapWords|textPersonName"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/spProfileName"
+        android:layout_alignBottom="@+id/spProfileName"
+        android:layout_toRightOf="@+id/spProfileName"
+        android:textSize="12sp"
+        android:singleLine="true"
+        android:background="@null"
+        android:textColor="@color/colorLightGrey" />
+
+    <View
+        android:id="@+id/vwProfileName"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/spProfileName"
+        android:background="@color/colorAccent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+
+    <Space
+        android:id="@+id/spProfileLastName"
+        android:layout_width="12dp"
+        android:layout_height="28dp"
+        android:layout_below="@+id/vwProfileName"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Lastname"
+        android:id="@+id/tvProfileLastName"
+        android:layout_alignTop="@+id/spProfileLastName"
+        android:gravity="center_vertical|right"
+        android:layout_alignParentStart="true"
+        android:textAllCaps="true"
+        android:layout_toLeftOf="@+id/spProfileLastName"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/spProfileLastName"
+        android:textSize="12sp" />
+
+    <com.andreabaccega.widget.FormEditText
+        validate:testType="nocheck"
+        validate:emptyErrorString="@string/EmptyString"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Lastname"
+        android:id="@+id/etProfileLastName"
+        android:inputType="textCapWords|textPersonName"
+        android:layout_alignTop="@+id/spProfileLastName"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/spProfileLastName"
+        android:gravity="left|center_vertical"
+        android:layout_alignBottom="@+id/spProfileLastName"
+        android:textSize="12sp"
+        android:background="@null"
+        android:textColor="@color/colorLightGrey" />
+
+    <View
+        android:id="@+id/vwProfileLastName"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/spProfileLastName"
+        android:background="@color/colorAccent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+
+    <Space
+        android:id="@+id/spProfileUserName"
+        android:layout_width="12dp"
+        android:layout_height="28dp"
+        android:layout_below="@+id/vwProfileLastName"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Username"
+        android:id="@+id/tvProfileUserName"
+        android:layout_alignTop="@+id/spProfileUserName"
+        android:gravity="center_vertical|right"
+        android:layout_alignParentStart="true"
+        android:textAllCaps="true"
+        android:layout_toLeftOf="@+id/spProfileUserName"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/spProfileUserName"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Username"
+        android:id="@+id/etProfileUserName"
+        android:layout_alignTop="@+id/spProfileUserName"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/spProfileUserName"
+        android:gravity="left|center_vertical"
+        android:layout_alignBottom="@+id/spProfileUserName"
+        android:textSize="12sp"
+        android:textColor="@color/colorLightGrey" />
+
+    <View
+        android:id="@+id/vwProfileUserName"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/spProfileUserName"
+        android:background="@color/colorAccent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+
+    <Space
+        android:id="@+id/spProfileEmail"
+        android:layout_width="12dp"
+        android:layout_height="28dp"
+        android:layout_below="@+id/vwProfileUserName"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Email"
+        android:id="@+id/tvProfileEmail"
+        android:layout_alignTop="@+id/spProfileEmail"
+        android:gravity="center_vertical|right"
+        android:layout_alignParentStart="true"
+        android:textAllCaps="true"
+        android:layout_toLeftOf="@+id/spProfileEmail"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/spProfileEmail"
+        android:textSize="12sp" />
+
+    <com.andreabaccega.widget.FormEditText
+        validate:testType="email"
+        validate:emptyErrorString="@string/EmptyString"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Email"
+        android:id="@+id/etProfileEmail"
+        android:inputType="textEmailAddress"
+        android:layout_alignTop="@+id/spProfileEmail"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/spProfileEmail"
+        android:gravity="left|center_vertical"
+        android:layout_alignBottom="@+id/spProfileEmail"
+        android:textSize="12sp"
+        android:background="@null"
+        android:textColor="@color/colorLightGrey" />
+
+    <View
+        android:id="@+id/vwProfileEmail"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/spProfileEmail"
+        android:background="@color/colorAccent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+
+    <Space
+        android:id="@+id/spProfileVerified"
+        android:layout_width="12dp"
+        android:layout_height="28dp"
+        android:layout_below="@+id/vwProfileEmail"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/IsEmailVerified"
+        android:id="@+id/tvProfileVerified"
+        android:layout_alignTop="@+id/spProfileVerified"
+        android:gravity="center_vertical|right"
+        android:layout_alignParentStart="true"
+        android:textAllCaps="true"
+        android:layout_toLeftOf="@+id/spProfileVerified"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/spProfileVerified"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/No"
+        android:id="@+id/etProfileVerified"
+        android:layout_alignTop="@+id/spProfileVerified"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/spProfileVerified"
+        android:gravity="left|center_vertical"
+        android:layout_alignBottom="@+id/spProfileVerified"
+        android:textSize="12sp"
+        android:textColor="@color/colorOrange" />
+
+    <View
+        android:id="@+id/vwProfileVerified"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/spProfileVerified"
+        android:background="@color/colorAccent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+
+    <Space
+        android:id="@+id/spProfileBirthDate"
+        android:layout_width="12dp"
+        android:layout_height="28dp"
+        android:layout_below="@+id/vwProfileVerified"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Birthdate"
+        android:id="@+id/tvProfileBirthDate"
+        android:layout_alignTop="@+id/spProfileBirthDate"
+        android:gravity="center_vertical|right"
+        android:layout_alignParentStart="true"
+        android:textAllCaps="true"
+        android:layout_toLeftOf="@+id/spProfileBirthDate"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/spProfileBirthDate"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/EnterYourBirthDate"
+        android:id="@+id/etProfileBirthDate"
+        android:layout_alignTop="@+id/spProfileBirthDate"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/spProfileBirthDate"
+        android:gravity="left|center_vertical"
+        android:layout_alignBottom="@+id/spProfileBirthDate"
+        android:textSize="12sp"
+        android:textColor="@color/colorLightGrey" />
+
+    <View
+        android:id="@+id/vwProfileBirthDate"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/spProfileBirthDate"
+        android:background="@color/colorAccent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+
+    <Space
+        android:id="@+id/spProfileGender"
+        android:layout_width="12dp"
+        android:layout_height="28dp"
+        android:layout_below="@+id/vwProfileBirthDate"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Gender"
+        android:id="@+id/tvProfileGender"
+        android:layout_alignTop="@+id/spProfileGender"
+        android:gravity="center_vertical|right"
+        android:layout_alignParentStart="true"
+        android:textAllCaps="true"
+        android:layout_toLeftOf="@+id/spProfileGender"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/spProfileGender"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/ivProfileMale"
+        android:src="@drawable/male"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/bg_feedback"
+        android:tint="@color/colorPrimary"
+        android:scaleType="center"
+        android:layout_alignTop="@+id/spProfileGender"
+        android:layout_alignBottom="@+id/spProfileGender"
+        android:layout_toRightOf="@+id/ivProfileFemale" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/ivProfileFemale"
+        android:layout_marginRight="6dp"
+        android:src="@drawable/female"
+        android:background="@drawable/bg_feedback"
+        android:tint="@color/colorPrimary"
+        android:scaleType="center"
+        android:layout_alignTop="@+id/spProfileGender"
+        android:layout_alignBottom="@+id/spProfileGender"
+        android:layout_toRightOf="@+id/spProfileGender" />
+
+    <View
+        android:id="@+id/vwProfileGender"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/spProfileGender"
+        android:background="@color/colorAccent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+
+    <RelativeLayout
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rlProfileFb"
+        android:layout_above="@+id/tvProfileSave">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/com_facebook_loginview_log_in_button_long"
+            android:id="@+id/tvProfileFb"
+            android:gravity="center"
+            android:padding="12dp"
+            android:textColor="@color/colorWhite"
+            android:background="@color/com_facebook_button_background_color"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/ivProfileFb"
+            android:src="@drawable/com_facebook_button_icon_white"
+            android:layout_alignTop="@+id/tvProfileFb"
+            android:layout_alignStart="@+id/tvProfileFb"
+            android:layout_alignBottom="@+id/tvProfileFb"
+            android:layout_marginLeft="8dp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Save"
+        android:id="@+id/tvProfileSave"
+        android:gravity="center"
+        android:padding="12dp"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorOrange"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="6dp" />
+
+</RelativeLayout>

@@ -32,6 +32,7 @@ public class BNUtils {
     private static Typeface lato_light;
     private static Typeface lato_regular;
     private static Typeface lato_black;
+    private static String version = "";
 
     public static void setTypefaces(Context context){
         lato_light = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
@@ -107,6 +108,14 @@ public class BNUtils {
         BNUtils.density = density;
     }
 
+    public static String getVersion() {
+        return version;
+    }
+
+    public static void setVersion(String version) {
+        BNUtils.version = version;
+    }
+
     public static List<String> getIdentifiers(JSONArray array){
         List<String> identifiers = new ArrayList<>();
         try{
@@ -146,6 +155,10 @@ public class BNUtils {
 
     public static String getDisplayDateFormat(){
         return Locale.getDefault().getLanguage().equals("es") ? "dd/MM/yyyy" : "MM/dd/yyyy";
+    }
+
+    public static String getUserDateFormat(){
+        return Locale.getDefault().getLanguage().equals("es") ? "dd MMM yyyy" : "MMM dd yyyy";
     }
 
     public class BNStringExtras {

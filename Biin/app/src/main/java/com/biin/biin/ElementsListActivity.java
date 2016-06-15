@@ -35,7 +35,21 @@ public class ElementsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_elements_list);
 
-        Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
+        setUpScreen();
+
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        categoryIdentifier = preferences.getString(BNUtils.BNStringExtras.BNCategory, "favorites");
+
+        if(categoryIdentifier.equals("favorites")){
+            loadFavorites();
+        }else {
+            loadElements();
+        }
+    }
+
+    private void setUpScreen(){
+        Typeface lato_regular = BNUtils.getLato_regular();
+
         tvTitle = (TextView)findViewById(R.id.tvElementsListTitle);
         tvTitle.setTypeface(lato_regular);
         tvTitle.setLetterSpacing(0.3f);
@@ -46,11 +60,6 @@ public class ElementsListActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
-        categoryIdentifier = preferences.getString(BNUtils.BNStringExtras.BNCategory, "category");
-
-        loadElements();
     }
 
     private void loadElements() {
@@ -67,5 +76,9 @@ public class ElementsListActivity extends AppCompatActivity {
             rvElementsList.setHasFixedSize(true);
             rvElementsList.setAdapter(adapter);
         }
+    }
+
+    private void loadFavorites() {
+
     }
 }

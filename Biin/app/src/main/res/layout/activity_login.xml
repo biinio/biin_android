@@ -81,19 +81,36 @@
             android:layout_marginTop="6dp"
             android:layout_marginRight="6dp" />
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ContinueBtn"
-            android:id="@+id/tvLoginBiin"
-            android:gravity="center"
-            android:padding="12dp"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:textColor="@color/colorWhite"
-            android:background="@color/colorOrange"
-            android:layout_marginTop="6dp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ContinueBtn"
+                android:id="@+id/tvLoginBiin"
+                android:gravity="center"
+                android:padding="12dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:textColor="@color/colorWhite"
+                android:background="@color/colorOrange"
+                android:layout_marginTop="6dp"
+                android:textStyle="bold" />
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pbLogin"
+                android:layout_alignEnd="@+id/tvLoginBiin"
+                android:layout_alignTop="@+id/tvLoginBiin"
+                android:layout_alignBottom="@+id/tvLoginBiin"
+                android:layout_marginRight="12dp"
+                android:visibility="gone"
+                android:indeterminate="true" />
+        </RelativeLayout>
 
     </LinearLayout>
 

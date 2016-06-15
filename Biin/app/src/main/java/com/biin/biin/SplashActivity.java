@@ -59,8 +59,6 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         setContentView(R.layout.activity_splash);
 
         setUpScreen();
-
-//        getInitialData("9.73854872449546/-83.9987999326416");
         locationServices();
     }
 
@@ -83,7 +81,8 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
             version = packageInfo.versionName.trim();
         }catch (PackageManager.NameNotFoundException ex){}
 
-        tvVersion.setText(tvVersion.getText().toString() + " " + version);
+        BNUtils.setVersion(version);
+        tvVersion.setText(tvVersion.getText().toString() + " " + BNUtils.getVersion());
     }
 
     private void locationServices(){

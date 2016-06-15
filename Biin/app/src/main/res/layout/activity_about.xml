@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.biin.biin.AboutActivity"
+    android:background="@color/colorWhite">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivAboutBack"
+        android:src="@drawable/left_arrow"
+        android:background="@color/colorLightGrey"
+        android:scaleType="center" />
+
+    <TextView
+        android:id="@+id/tvAboutTitle"
+        android:text="@string/About"
+        android:textAllCaps="true"
+        android:textColor="@color/colorDarkGrey"
+        android:background="@color/colorAccent"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/ivAboutBack"
+        android:layout_alignBottom="@+id/ivAboutBack"
+        android:layout_alignTop="@+id/ivAboutBack"
+        android:gravity="center"
+        android:layout_toLeftOf="@+id/ivAboutBack" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivAboutBiin"
+        android:layout_below="@+id/tvAboutTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/biin_fit"
+        android:paddingLeft="100dp"
+        android:paddingRight="100dp"
+        android:adjustViewBounds="true"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/AboutTitle"
+        android:id="@+id/tvAboutHeader"
+        android:layout_below="@+id/ivAboutBiin"
+        android:layout_centerHorizontal="true"
+        android:textAllCaps="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/AboutText"
+        android:id="@+id/tvAboutText"
+        android:layout_below="@+id/tvAboutHeader"
+        android:textColor="@color/colorLightGrey"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentEnd="false"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Version"
+        android:id="@+id/tvAboutVersion"
+        android:textColor="@color/colorLightGrey"
+        android:textSize="12sp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:layout_below="@+id/tvAboutText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="www.biin.io"
+        android:id="@+id/tvAboutWeb"
+        android:textColor="@color/colorLightGrey"
+        android:textSize="12sp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp" />
+
+</RelativeLayout>

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private GestureDetector gestureDetector;
 
     private TextView tvRecomended, tvNearYou, tvFavouritePlaces;
+    private TextView tvProfile, tvFavourites, tvFriends, tvAbout;
     private LinearLayout hlRecomended;
     private ViewFlipper vfRecomended;
 
@@ -95,6 +98,73 @@ public class MainActivity extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, customGestureDetector);
 
         imageLoader = BiinApp.getInstance().getImageLoader();
+
+        setUpDrawer(lato_regular);
+    }
+
+    private void setUpDrawer(Typeface lato_regular){
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.dlMain);
+
+        tvProfile = (TextView)findViewById(R.id.tvMenuProfile);
+        tvProfile.setTypeface(lato_regular);
+        tvProfile.setLetterSpacing(0.3f);
+        tvProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(i);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        tvFavourites = (TextView)findViewById(R.id.tvMenuFavourites);
+        tvFavourites.setTypeface(lato_regular);
+        tvFavourites.setLetterSpacing(0.3f);
+        tvFavourites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, ElementsListActivity.class);
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(BNUtils.BNStringExtras.BNCategory, "favorites");
+                editor.commit();
+
+                startActivity(i);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        tvFriends = (TextView)findViewById(R.id.tvMenuFriends);
+        tvFriends.setTypeface(lato_regular);
+        tvFriends.setLetterSpacing(0.3f);
+
+        tvAbout = (TextView)findViewById(R.id.tvMenuAbout);
+        tvAbout.setTypeface(lato_regular);
+        tvAbout.setLetterSpacing(0.3f);
+        tvAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(i);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        ImageView ivMenu = (ImageView)findViewById(R.id.ivToolbarMenu);
+        ivMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
+
+        RelativeLayout rlDrawer = (RelativeLayout)findViewById(R.id.bnNavView);
+        rlDrawer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
     }
 
     public void loadData() {
@@ -400,11 +470,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(MainActivity.this, ElementsListActivity.class);
-                        SharedPreferences preferences = MainActivity.this.getSharedPreferences(MainActivity.this.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                        SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString(BNUtils.BNStringExtras.BNCategory, category.getIdentifier());
                         editor.commit();
-//                        i.putExtra(BNUtils.BNStringExtras.BNShowMore, true);
                         MainActivity.this.startActivity(i);
                     }
                 });

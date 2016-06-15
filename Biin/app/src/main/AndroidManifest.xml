@@ -38,7 +38,10 @@
         <activity android:name=".ElementsActivity" />
         <activity android:name=".SitesListActivity" />
         <activity android:name=".ElementsListActivity" />
-        <activity android:name=".PrivacyActivity"></activity>
+        <activity android:name=".PrivacyActivity" />
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".FavoritesListActivity"></activity>
     </application>
 
 </manifest>
