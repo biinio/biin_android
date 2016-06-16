@@ -2,6 +2,8 @@ package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
+import com.biin.biin.Entities.BNShowcase;
+import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Managers.BNAppManager;
@@ -202,6 +204,27 @@ public class BNElementParser {
 
                 if(element != null) {
                     result.put(element.get_id(), element);
+                }
+            }
+        }catch (JSONException e){
+            Log.e(TAG, "Error parseando el JSON.", e);
+        }
+        return result;
+    }
+
+    public HashMap<String, BNElement> parseFavouriteBNElements(JSONArray arrayElements){
+        HashMap<String, BNElement> result = new HashMap<>();
+        try{
+            for(int i = 0; i < arrayElements.length(); i++){
+                JSONObject objectElement = (JSONObject) arrayElements.get(i);
+                BNElement element = dataManager.getBNElement(objectElement.getString("identifier"));
+                BNShowcase showcase = dataManager.getBNShowcase(objectElement.getString("showcaseIdentifier"));
+                BNSite site = dataManager.getBNSite(objectElement.getString("siteIdentifier"));
+
+                if(element != null && showcase != null && site != null) {
+                    showcase.setSite(site);
+                    element.setShowcase(showcase);
+                    result.put(element.getIdentifier(), element);
                 }
             }
         }catch (JSONException e){

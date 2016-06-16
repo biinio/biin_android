@@ -190,14 +190,11 @@
         android:layout_alignBottom="@+id/spProfileEmail"
         android:textSize="12sp" />
 
-    <com.andreabaccega.widget.FormEditText
-        validate:testType="email"
-        validate:emptyErrorString="@string/EmptyString"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Email"
         android:id="@+id/etProfileEmail"
-        android:inputType="textEmailAddress"
         android:layout_alignTop="@+id/spProfileEmail"
         android:layout_alignParentEnd="true"
         android:layout_toRightOf="@+id/spProfileEmail"
@@ -402,5 +399,16 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="6dp" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbSave"
+        android:layout_alignTop="@+id/tvProfileSave"
+        android:layout_alignEnd="@+id/tvProfileSave"
+        android:layout_alignBottom="@+id/tvProfileSave"
+        android:layout_marginRight="12dp"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -1,14 +1,12 @@
 package com.biin.biin;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +21,9 @@ import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNBiiniesListener;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -30,14 +31,24 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
 
     private static final String TAG = "ProfileActivity";
 
-    private BNBiiniesListener biiniesListener;
+    private BNBiiniesListener profileListener;
 
-    private FormEditText etName, etLastName, etEmail;
-    private TextView etUsername, etVerified, etBirthdate, tvGender, tvLoginFb, tvSave;
+    private FormEditText etName, etLastName;
+    private TextView etUsername, etVerified, etBirthdate, tvGender, etEmail, tvLoginFb, tvSave;
     private ImageView ivMale, ivFemale;
 
     private String date, gender, male, female, none;
     private int colorNormal, colorSelected;
+    private ProgressBar pbSave;
+
+    private View.OnClickListener saveClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            tvSave.setOnClickListener(null);
+            pbSave.setVisibility(View.VISIBLE);
+            saveBiinie();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +80,14 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         TextView tvEmail = (TextView) findViewById(R.id.tvProfileEmail);
         TextView tvVerified = (TextView) findViewById(R.id.tvProfileVerified);
         TextView tvBirthdate = (TextView) findViewById(R.id.tvProfileBirthDate);
+        pbSave = (ProgressBar)findViewById(R.id.pbSave);
 
         tvGender = (TextView) findViewById(R.id.tvProfileGender);
 
         etName = (FormEditText) findViewById(R.id.etProfileName);
         etLastName = (FormEditText) findViewById(R.id.etProfileLastName);
         etUsername = (TextView) findViewById(R.id.etProfileUserName);
-        etEmail = (FormEditText) findViewById(R.id.etProfileEmail);
+        etEmail = (TextView) findViewById(R.id.etProfileEmail);
         etVerified = (TextView) findViewById(R.id.etProfileVerified);
         etBirthdate = (TextView) findViewById(R.id.etProfileBirthDate);
 
@@ -113,25 +125,16 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         colorSelected = getResources().getColor(R.color.colorOrange);
 
         setUpFields();
-//        getBiinie(BNAppManager.getDataManagerInstance().getBiinie().getIdentifier());
-    }
 
-    private void getBiinie(final String identifier){
-        biiniesListener = new BNBiiniesListener();
-        biiniesListener.setListener(this);
+        tvSave.setOnClickListener(saveClick);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                BNAppManager.getNetworkManagerInstance().getUrlBiinie(identifier),
-                null,
-                biiniesListener,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onVolleyError(error);
-                    }
-                });
-        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "Biinie");
+        tvLoginFb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ProfileActivity.this, "Pronto! Login con FB", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void setUpFields(){
@@ -218,21 +221,80 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         etBirthdate.setText(showFormatter.format(calendar.getTime()));
     }
 
+    private void saveBiinie(){
+        if(checkFields()){
+            saveRequest();
+        }else{
+            tvSave.setOnClickListener(saveClick);
+            pbSave.setVisibility(View.GONE);
+        }
+    }
+
+    private boolean checkFields(){
+        boolean allValid = true;
+        FormEditText[] allFields = { etName, etLastName };
+
+        for (FormEditText field: allFields) {
+            allValid = field.testValidity() && allValid;
+        }
+
+        return allValid;
+    }
+
+    private void saveRequest(){
+        profileListener = new BNBiiniesListener();
+        profileListener.setListener(this);
+
+        Biinie biinie = BNAppManager.getDataManagerInstance().getBiinie();
+
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject model = new JSONObject();
+            model.put("gender", gender);
+            model.put("facebook_id", "");
+            model.put("lastName", etLastName.getText().toString().trim());
+            model.put("password", "");
+            model.put("firstName", etName.getText().toString().trim());
+            model.put("email", biinie.getEmail());
+            model.put("facebookAvatarUrl", "");
+            model.put("isEmailVerified", biinie.isEmailVerified() ? "1" : "0");
+            model.put("birthDate", date);
+            request.put("model", model);
+        }catch (JSONException e){
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                BNAppManager.getNetworkManagerInstance().getUrlBiinie(biinie.getIdentifier()),
+                request,
+                profileListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onVolleyError(error);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "SaveProfile");
+    }
+
+    private void onVolleyError(VolleyError error){
+        Log.e(TAG, "Error:" + error.getMessage());
+        tvSave.setOnClickListener(saveClick);
+        pbSave.setVisibility(View.GONE);
+    }
+
     @Override
     public void onBiiniesLoaded() {
-        setUpFields();
         Log.e(TAG, "Biinie cargado correctamente");
+        tvSave.setOnClickListener(saveClick);
     }
 
     @Override
     public void onBiinieError() {
         Log.e(TAG, getString(R.string.RequestFailed));
-//        tvLoginBiin.setOnClickListener(loginClick);
+        tvSave.setOnClickListener(saveClick);
+        pbSave.setVisibility(View.GONE);
+        Toast.makeText(this, getString(R.string.RequestFailed), Toast.LENGTH_SHORT).show();
     }
-
-    private void onVolleyError(VolleyError error){
-        Log.e(TAG, "Error:" + error.getMessage());
-//        tvLoginBiin.setOnClickListener(loginClick);
-    }
-
 }

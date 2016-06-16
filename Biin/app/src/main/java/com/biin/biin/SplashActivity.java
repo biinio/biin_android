@@ -176,9 +176,12 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         pbLoading.setVisibility(View.VISIBLE);
         tvReload.setVisibility(View.GONE);
 
+        String url = BNAppManager.getNetworkManagerInstance().getUrlInitialData(biinie.getIdentifier(), location);
+        Log.d(TAG, url);
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                BNAppManager.getNetworkManagerInstance().getUrlInitialData(biinie.getIdentifier(), location),
+                url,
                 null,
                 initialDataListener,
                 new Response.ErrorListener() {

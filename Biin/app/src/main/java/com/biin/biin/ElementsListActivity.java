@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.biin.biin.Adapters.BNElementListAdapter;
 import com.biin.biin.Entities.BNCategory;
+import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNUtils;
@@ -66,7 +68,7 @@ public class ElementsListActivity extends AppCompatActivity {
         currentCategory = BNAppManager.getDataManagerInstance().getBNCategory(categoryIdentifier);
 
         if (currentCategory != null) {
-            tvTitle.setText(getResources().getIdentifier(currentCategory.getIdentifier(),"string",getPackageName()));
+            tvTitle.setText(getResources().getIdentifier(currentCategory.getIdentifier(), "string", getPackageName()));
 
             RecyclerView rvElementsList = (RecyclerView)findViewById(R.id.rvElementsList);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -79,6 +81,20 @@ public class ElementsListActivity extends AppCompatActivity {
     }
 
     private void loadFavorites() {
+        List<BNElement> favorites = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNElements().values());
 
+        RecyclerView rvElementsList = (RecyclerView) findViewById(R.id.rvElementsList);
+        if(favorites.size() > 0) {
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+            BNElementListAdapter adapter = new BNElementListAdapter(this, favorites);
+            rvElementsList.setLayoutManager(layoutManager);
+            rvElementsList.setHasFixedSize(true);
+            rvElementsList.setAdapter(adapter);
+        }else{
+            LinearLayout vlFavourites = (LinearLayout) findViewById(R.id.vlAddFavouriteElements);
+            rvElementsList.setVisibility(View.GONE);
+            vlFavourites.setVisibility(View.VISIBLE);
+        }
     }
 }

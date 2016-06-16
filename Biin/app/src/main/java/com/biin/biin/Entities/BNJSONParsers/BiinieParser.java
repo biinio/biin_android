@@ -32,8 +32,8 @@ public class BiinieParser {
             //TODO facebook friends array
             //TODO categories array
             //TODO friends array
-            biinie.setFollowers(Integer.parseInt(objectBiinie.getString("followers")));
-            biinie.setFollowing(Integer.parseInt(objectBiinie.getString("following")));
+//            biinie.setFollowers(Integer.parseInt(objectBiinie.getString("followers")));
+//            biinie.setFollowing(Integer.parseInt(objectBiinie.getString("following")));
             //url (no se utiliza)
 //            biinie.setUrl(objectBiinie.getString("url"));
             biinie.setEmail(objectBiinie.getString("email"));

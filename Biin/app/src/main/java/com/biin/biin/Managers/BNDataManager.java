@@ -29,6 +29,7 @@ public class BNDataManager {
     private HashMap<String, BNElement> elements = new HashMap<>();
     private HashMap<String, BNElement> elements_by_id = new HashMap<>();
     private HashMap<String, BNCategory> categories = new HashMap<>();
+    private HashMap<String, BNElement> favouriteElements = new HashMap<>();
     private List<BNHighlight> highlights = new ArrayList<>();
 
     protected static BNDataManager getInstance() {
@@ -372,6 +373,47 @@ public class BNDataManager {
     }
 
     /****************** Highlights end ******************/
+
+
+    /****************** Elements favourites start ******************/
+
+    public void setFavouriteBNElements(HashMap<String, BNElement> elements) {
+        // reemplazar la coleccion completa de elements
+        this.favouriteElements = elements;
+    }
+
+    public int addFavouriteBNElements(HashMap<String, BNElement> elements) {
+        // agregar elements a la coleccion
+        // TODO solo los que no existian previamente
+        this.favouriteElements = elements;
+        // TODO retornar el numero de sites agregados a la coleccion
+        return 0;
+    }
+
+    public boolean addFavouriteBNElement(BNElement element) {
+        // agregar un element a la coleccion
+        this.favouriteElements.put(element.getIdentifier(), element);
+        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        return true;
+    }
+
+    public BNElement getFavouriteBNElement(String identifier) {
+        // obtener un element por su identificador
+        return this.favouriteElements.get(identifier);
+    }
+
+    public boolean removeFavouriteBNElement(String identifier) {
+        // TODO remover un element de la coleccion
+        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        return true;
+    }
+
+    public HashMap<String,BNElement> getFavouriteBNElements(){
+        // retornar la lista de elements
+        return this.favouriteElements;
+    }
+
+    /****************** Elements favourites end ******************/
 
 
     /****************** Categories start ******************/

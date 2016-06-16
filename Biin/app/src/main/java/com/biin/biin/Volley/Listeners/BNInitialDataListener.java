@@ -72,8 +72,9 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
             // parsear highlights
             parseHighlights(data.getJSONArray("highlights"));
 
-            //TODO parsear favourite elements
-//            parseFavouriteElements(data.getJSONObject("favorites").getJSONArray("elements"));
+            // parsear favourite elements
+            parseFavouriteElements(data.getJSONObject("favorites").getJSONArray("elements"));
+
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }
@@ -134,11 +135,11 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
         dataManager.setBNElementsId(result);
     }
 
-    private void parseFavouriteElements(JSONArray arrayElements){ //TODO parsear los favoritos de la lista del json
+    private void parseFavouriteElements(JSONArray arrayElements){
         BNElementParser elementParser = new BNElementParser();
-        HashMap<String, BNElement> result = elementParser.parseBNElements(arrayElements);
+        HashMap<String, BNElement> result = elementParser.parseFavouriteBNElements(arrayElements);
         // guardar el resultado de elements en el data manager
-        dataManager.setBNElements(result);
+        dataManager.setFavouriteBNElements(result);
     }
 
     private void parseHighlights(JSONArray arrayHighlights){

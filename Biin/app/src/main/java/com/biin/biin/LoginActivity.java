@@ -20,7 +20,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNBiiniesListener;
-import com.biin.biin.Volley.Listeners.BNInitialDataListener;
 import com.biin.biin.Volley.Listeners.BNLoginListener;
 
 public class LoginActivity extends AppCompatActivity implements BNLoginListener.IBNLoginListener, BNBiiniesListener.IBNBiiniesListener {
