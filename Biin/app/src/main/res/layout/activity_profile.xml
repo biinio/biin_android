@@ -19,7 +19,7 @@
         android:text="@string/Profile"
         android:textAllCaps="true"
         android:textColor="@color/colorDarkGrey"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccentGray"
         android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/spProfileName"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccentGray"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp" />
 
@@ -122,7 +122,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/spProfileLastName"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccentGray"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp" />
 
@@ -165,7 +165,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/spProfileUserName"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccentGray"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp" />
 
@@ -209,7 +209,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/spProfileEmail"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccentGray"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp" />
 
@@ -252,7 +252,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/spProfileVerified"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccentGray"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp" />
 
@@ -295,7 +295,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/spProfileBirthDate"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccentGray"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp" />
 
@@ -351,7 +351,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/spProfileGender"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccentGray"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp" />
 

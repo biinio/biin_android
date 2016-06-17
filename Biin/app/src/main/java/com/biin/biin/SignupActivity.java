@@ -76,6 +76,7 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
 
     @Override
     public void onBiinieError() {
+        Log.e(TAG, "Error cargando biinie");
         setUpScreen();
     }
 

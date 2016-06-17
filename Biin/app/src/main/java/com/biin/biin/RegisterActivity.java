@@ -99,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         int etNamePaddingRight = etName.getPaddingRight();
         int etNamePaddingBottom = etName.getPaddingBottom();
 
-        etName.setBackgroundResource(R.color.colorAccent);
+        etName.setBackgroundResource(R.color.colorAccentGray);
         etName.setPadding(etNamePaddingLeft, etNamePaddingTop, etNamePaddingRight, etNamePaddingBottom);
 
         int etLastNamePaddingLeft = etLastName.getPaddingLeft();
@@ -107,13 +107,13 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         int etLastNamePaddingRight = etLastName.getPaddingRight();
         int etLastNamePaddingBottom = etLastName.getPaddingBottom();
 
-        etLastName.setBackgroundResource(R.color.colorAccent);
+        etLastName.setBackgroundResource(R.color.colorAccentGray);
         etLastName.setPadding(etLastNamePaddingLeft, etLastNamePaddingTop, etLastNamePaddingRight, etLastNamePaddingBottom);
 
-        etEmail.setBackgroundResource(R.color.colorAccent);
+        etEmail.setBackgroundResource(R.color.colorAccentGray);
         etEmail.setPadding(etLastNamePaddingLeft, etLastNamePaddingTop, etLastNamePaddingRight, etLastNamePaddingBottom);
 
-        etPassword.setBackgroundResource(R.color.colorAccent);
+        etPassword.setBackgroundResource(R.color.colorAccentGray);
         etPassword.setPadding(etLastNamePaddingLeft, etLastNamePaddingTop, etLastNamePaddingRight, etLastNamePaddingBottom);
 
         date = "none";
@@ -270,6 +270,11 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     }
 
     private void returnToSignUp(){
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(BNUtils.BNStringExtras.BNBiinie);
+        editor.commit();
+
         Intent i = new Intent(this, SignupActivity.class);
         startActivity(i);
         finish();

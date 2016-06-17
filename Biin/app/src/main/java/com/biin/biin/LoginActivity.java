@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
         int etEmailPaddingRight = etEmail.getPaddingRight();
         int etEmailPaddingBottom = etEmail.getPaddingBottom();
 
-        etEmail.setBackgroundResource(R.color.colorAccent);
+        etEmail.setBackgroundResource(R.color.colorAccentGray);
         etEmail.setPadding(etEmailPaddingLeft, etEmailPaddingTop, etEmailPaddingRight, etEmailPaddingBottom);
 
         int etPasswordPaddingLeft = etPassword.getPaddingLeft();
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
         int etPasswordPaddingRight = etPassword.getPaddingRight();
         int etPasswordPaddingBottom = etPassword.getPaddingBottom();
 
-        etPassword.setBackgroundResource(R.color.colorAccent);
+        etPassword.setBackgroundResource(R.color.colorAccentGray);
         etPassword.setPadding(etPasswordPaddingLeft, etPasswordPaddingTop, etPasswordPaddingRight, etPasswordPaddingBottom);
 
         tvLoginBiin.setOnClickListener(loginClick);
@@ -176,6 +176,11 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
     }
 
     private void returnToSignUp(){
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(BNUtils.BNStringExtras.BNBiinie);
+        editor.commit();
+
         Intent i = new Intent(this, SignupActivity.class);
         startActivity(i);
         finish();

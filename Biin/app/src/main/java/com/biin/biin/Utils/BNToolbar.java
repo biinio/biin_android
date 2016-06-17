@@ -83,7 +83,7 @@ public class BNToolbar {
             ivToolbarLike.setVisibility(View.VISIBLE);
         }
 
-        if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorAccent), primaryColor, secondaryColor)){
+        if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorAccentGray), primaryColor, secondaryColor)){
             ivToolbarLiked.setColorFilter(primaryColor);
             ivToolbarLike.setColorFilter(primaryColor);
         }else{

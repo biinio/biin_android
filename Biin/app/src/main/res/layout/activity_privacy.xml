@@ -19,7 +19,7 @@
         android:text="@string/PrivacyPolicy"
         android:textAllCaps="true"
         android:textColor="@color/colorDarkGrey"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccentGray"
         android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

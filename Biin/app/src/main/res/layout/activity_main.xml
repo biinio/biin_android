@@ -50,18 +50,18 @@
 
                     </LinearLayout>
 
-                    <ViewFlipper
+                    <com.jude.rollviewpager.RollPagerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/vfRecomended"
+                        android:id="@+id/pvRecomended"
+                        app:rollviewpager_play_delay="6000"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignLeft="@+id/tvRecomended"
                         android:layout_alignRight="@+id/tvRecomended"
-                        android:layout_below="@+id/hlRecomended"
-                        android:nestedScrollingEnabled="true">
+                        android:layout_below="@+id/hlRecomended">
 
-                    </ViewFlipper>
+                    </com.jude.rollviewpager.RollPagerView>
 
                     <TextView
                         android:id="@+id/tvOtherNearYou"
@@ -71,7 +71,7 @@
                         android:textColor="@color/colorWhite"
                         android:background="@color/colorDarkGrey"
                         android:textSize="12dp"
-                        android:layout_below="@+id/vfRecomended"
+                        android:layout_below="@+id/pvRecomended"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignLeft="@+id/tvRecomended"
@@ -164,7 +164,7 @@
                         android:layout_alignLeft="@+id/tvRecomended"
                         android:layout_alignRight="@+id/tvRecomended"
                         android:id="@+id/vlShowcases"
-                        android:layout_marginBottom="24dp"></LinearLayout>
+                        android:layout_marginBottom="32dp"></LinearLayout>
 
                 </RelativeLayout>
 

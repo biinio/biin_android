@@ -123,6 +123,7 @@
     <string name="CategoriesMsj">We have selected the most popular categories for you!</string>
     <string name="EnterYourBirthDate">Enter your birthdate</string>
     <string name="Optionales">If you share with us your birth day and age we will improve the recomendations we show you.</string>
+    <string name="SaveSuccess">Information updated successfully</string>
 
     /* Showcase - Game View*/
     <string name="JoinUs">Join us!</string>

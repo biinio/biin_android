@@ -122,6 +122,7 @@
     <string name="CategoriesMsj">Hemos pre-seleccionado algunas categorías para vos!</string>
     <string name="EnterYourBirthDate">Fecha de nacimiento</string>
     <string name="Optionales">Si gustas compartir tu edad y genero podremos mejorar el contenido que te recomendamos.</string>
+    <string name="SaveSuccess">Información actualizada correctamente</string>
 
     /* Showcase - Game View*/
     <string name="JoinUs">Uníte!</string>

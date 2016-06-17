@@ -253,7 +253,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
             model.put("gender", gender);
             model.put("facebook_id", "");
             model.put("lastName", etLastName.getText().toString().trim());
-            model.put("password", "");
+//            model.put("password", "qwerty");
             model.put("firstName", etName.getText().toString().trim());
             model.put("email", biinie.getEmail());
             model.put("facebookAvatarUrl", "");
@@ -288,6 +288,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     public void onBiiniesLoaded() {
         Log.e(TAG, "Biinie cargado correctamente");
         tvSave.setOnClickListener(saveClick);
+        pbSave.setVisibility(View.GONE);
+        Toast.makeText(this, getString(R.string.SaveSuccess), Toast.LENGTH_SHORT).show();
     }
 
     @Override
