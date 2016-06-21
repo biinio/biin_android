@@ -2,6 +2,7 @@ package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
+import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNAppManager;
@@ -32,7 +33,10 @@ public class BNSiteParser {
             site.setIdentifier(objectSite.getString("identifier"));
             site.setOrganizationIdentifier(objectSite.getString("organizationIdentifier"));
             site.setOrganization(BNAppManager.getDataManagerInstance().getBNOrganization(site.getOrganizationIdentifier()));
-            site.getOrganization().addSite(site.getIdentifier());
+            BNOrganization organization = site.getOrganization();
+            if(organization != null){
+                organization.addSite(site.getIdentifier());
+            }
             // TODO proximityUUID
 //            site.setBiinieProximity(Float.parseFloat(objectSite.getString("proximityUUID")));
             site.setMajor(Integer.parseInt(objectSite.getString("major")));

@@ -8,13 +8,18 @@ import java.net.URLEncoder;
  */
 public class BNNetworkManager {
 
+    private static String encoding = "US-ASCII";
+
     private static BNNetworkManager ourInstance = new BNNetworkManager();
     private static boolean production = false;
 
     private static String URL_BASE_DEV = "https://dev-biin-backend.herokuapp.com";
     private static String URL_BASE = "https://www.biin.io";
 
-    private static String URL_AUTH_BIINIE = "/mobile/biinies/auth";
+    private static String URL_AUTH_BIINIE = "/auth";
+
+    private static String URL_SITES = "/requestSites/0";
+    private static String URL_CATEGORIES = "/requestElementsForCategory";
 
     private static String URL_BIINIE = "/mobile/biinies";
     private static String URL_INITIALDATA = "/mobile/initialData";
@@ -57,26 +62,37 @@ public class BNNetworkManager {
 
     public String getAuthUrl(String user, String pass){
         try{
-            user = URLEncoder.encode(user.trim(), "UTF-8");
-            pass = URLEncoder.encode(pass.trim(), "UTF-8");
+            user = URLEncoder.encode(user.trim(), encoding);
+            pass = URLEncoder.encode(pass.trim(), encoding);
         }catch (UnsupportedEncodingException e){ }
 
-        String url = getUrlBase() + URL_AUTH_BIINIE + "/" + user + "/" + pass;
+        String url = getUrlBase() + URL_BIINIE + URL_AUTH_BIINIE + "/" + user + "/" + pass;
         return url;
     }
 
     public String getRegisterUrl(String name, String lastName, String email, String pass, String gender, String date){
         try{
-            name = URLEncoder.encode(name.trim(), "UTF-8");
-            lastName = URLEncoder.encode(lastName.trim(), "UTF-8");
-            email = URLEncoder.encode(email.trim(), "UTF-8");
-            pass = URLEncoder.encode(pass.trim(), "UTF-8");
-//            date = URLEncoder.encode(date, "UTF-8");
+            name = URLEncoder.encode(name.trim(), encoding);
+            lastName = URLEncoder.encode(lastName.trim(), encoding);
+            email = URLEncoder.encode(email.trim(), encoding);
+            pass = URLEncoder.encode(pass.trim(), encoding);
+//            date = URLEncoder.encode(date, encoding);
         }catch (UnsupportedEncodingException e){ }
 
         String url = getUrlBase() + URL_BIINIE + "/" + name + "/" + lastName + "/" + email + "/" + pass + "/" + gender + "/" + date;
         return url;
     }
+
+    public String getMoreSitesUrl(String identifier){
+        String url = getUrlBiinie(identifier) + URL_SITES;
+        return url;
+    }
+
+    public String getMoreCategoryElementsUrl(String identifier, String category){
+        String url = getUrlBiinie(identifier) + URL_CATEGORIES + "/" + category + "/0";
+        return url;
+    }
+
 
 
 

@@ -83,7 +83,7 @@ public class BNDataManager {
     public boolean removeBNSite(String identifier) {
         // TODO remover un site de la coleccion
         // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return true;
+        return false;
     }
 
     public HashMap<String,BNSite> getBNSites(){
@@ -123,7 +123,7 @@ public class BNDataManager {
     public boolean removeNearByBNSite(String identifier) {
         // TODO remover un site de la coleccion
         // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return true;
+        return false;
     }
 
     public HashMap<String,BNSite> getNearByBNSites(){
@@ -164,7 +164,7 @@ public class BNDataManager {
     public boolean removeFavouriteBNSite(String identifier) {
         // TODO remover un site de la coleccion
         // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return true;
+        return false;
     }
 
     public HashMap<String,BNSite> getFavouriteBNSites(){
@@ -183,17 +183,26 @@ public class BNDataManager {
     }
 
     public int addBNShowcases(HashMap<String, BNShowcase> showcases) {
-        // TODO agregar showcases a la coleccion (solo los que no existian previamente)
-        this.showcases = showcases;
-        // TODO retornar el numero de showcases agregados a la coleccion
-        return 0;
+        // agregar showcases a la coleccion (solo los que no existian previamente)
+        int added = 0;
+        for (BNShowcase showcase : showcases.values()) {
+            if(addBNShowcase(showcase)){
+                added++;
+            }
+        }
+        // retornar el numero de showcases agregados a la coleccion
+        return added;
     }
 
     public boolean addBNShowcase(BNShowcase showcase) {
-        // TODO agregar un showcase a la coleccion
-        this.showcases.put(showcase.getIdentifier(), showcase);
-        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
-        return true;
+        boolean added = false;
+        // agregar un showcase a la coleccion
+        if(!this.showcases.containsKey(showcase.getIdentifier())){
+            this.showcases.put(showcase.getIdentifier(), showcase);
+            added = true;
+        }
+        // retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        return added;
     }
 
     public BNShowcase getBNShowcase(String identifier) {
@@ -204,7 +213,7 @@ public class BNDataManager {
     public boolean removeBNShowcase(String identifier) {
         // TODO remover un showcase de la coleccion
         // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return true;
+        return false;
     }
 
     public HashMap<String,BNShowcase> getBNShowcases(){
@@ -223,17 +232,26 @@ public class BNDataManager {
     }
 
     public int addBNOrganizations(HashMap<String, BNOrganization> organizations) {
-        // TODO agregar organizations a la coleccion (solo los que no existian previamente)
-        this.organizations = organizations;
-        // TODO retornar el numero de organizations agregados a la coleccion
-        return 0;
+        // agregar organizations a la coleccion (solo los que no existian previamente)
+        int added = 0;
+        for (BNOrganization organization : organizations.values()) {
+            if(addBNOrganization(organization)){
+                added++;
+            }
+        }
+        // retornar el numero de organizations agregados a la coleccion
+        return added;
     }
 
     public boolean addBNOrganization(BNOrganization organization) {
-        // TODO agregar una organization a la coleccion
-        this.organizations.put(organization.getIdentifier(), organization);
-        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
-        return true;
+        boolean added = false;
+        // agregar una organization a la coleccion
+        if(!this.organizations.containsKey(organization.getIdentifier())){
+            this.organizations.put(organization.getIdentifier(), organization);
+            added = true;
+        }
+        // retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        return added;
     }
 
     public BNOrganization getBNOrganization(String identifier) {
@@ -244,7 +262,7 @@ public class BNDataManager {
     public boolean removeBNOrganization(String identifier) {
         // TODO remover una organization de la coleccion
         // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return true;
+        return false;
     }
 
     public HashMap<String,BNOrganization> getBNOrganizations(){
@@ -263,17 +281,26 @@ public class BNDataManager {
     }
 
     public int addBNElements(HashMap<String, BNElement> elements) {
-        // TODO agregar elements a la coleccion (solo los que no existian previamente)
-        this.elements = elements;
-        // TODO retornar el numero de elements agregados a la coleccion
-        return 0;
+        // agregar elements a la coleccion (solo los que no existian previamente)
+        int added = 0;
+        for (BNElement element : elements.values()) {
+            if(addBNElement(element)){
+                added++;
+            }
+        }
+        // retornar el numero de elements agregados a la coleccion
+        return added;
     }
 
     public boolean addBNElement(BNElement element) {
-        // TODO agregar un element a la coleccion
-        this.elements.put(element.getIdentifier(), element);
-        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
-        return true;
+        boolean added = false;
+        // agregar un element a la coleccion
+        if(!this.elements.containsKey(element.getIdentifier())){
+            this.elements.put(element.getIdentifier(), element);
+            added = true;
+        }
+        // retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        return added;
     }
 
     public BNElement getBNElement(String identifier) {
@@ -284,7 +311,7 @@ public class BNDataManager {
     public boolean removeBNElement(String identifier) {
         // TODO remover un element de la coleccion
         // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return true;
+        return false;
     }
 
     public HashMap<String,BNElement> getBNElements(){
@@ -324,7 +351,7 @@ public class BNDataManager {
     public boolean removeBNElementId(String id) {
         // TODO remover un element de la coleccion
         // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return true;
+        return false;
     }
 
     public HashMap<String,BNElement> getBNElementsId(){
@@ -364,7 +391,7 @@ public class BNDataManager {
     public boolean removeBNHighlight(String identifier) {
         // TODO remover un highlight de la coleccion
         // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return true;
+        return false;
     }
 
     public List<BNHighlight> getBNHighlights(){
@@ -405,7 +432,7 @@ public class BNDataManager {
     public boolean removeFavouriteBNElement(String identifier) {
         // TODO remover un element de la coleccion
         // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return true;
+        return false;
     }
 
     public HashMap<String,BNElement> getFavouriteBNElements(){
@@ -445,7 +472,7 @@ public class BNDataManager {
     public boolean removeBNCategory(String identifier) {
         // TODO remover una category de la coleccion
         // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return true;
+        return false;
     }
 
     public HashMap<String,BNCategory> getBNCategories(){

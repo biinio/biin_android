@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.biin.biin.Adapters.BNCategoryAdapter;
 import com.biin.biin.Adapters.BNHighlightAdapter;
@@ -47,7 +46,9 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     private TextView tvRecomended, tvNearYou, tvFavouritePlaces;
     private TextView tvProfile, tvFavourites, tvFriends, tvAbout;
+    private TextView tvCloseApp, tvConfirmClose, tvDontClose;
     private LinearLayout hlRecomended;
+    private RelativeLayout rlCloseApp;
     private DrawerLayout drawer;
 
     private int total = 0;
@@ -83,6 +84,37 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         tvFavouritePlaces.setLetterSpacing(0.3f);
 
         hlRecomended = (LinearLayout)findViewById(R.id.hlRecomended);
+        rlCloseApp = (RelativeLayout)findViewById(R.id.rlCloseApp);
+        rlCloseApp.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
+        tvCloseApp = (TextView)findViewById(R.id.tvCloseApp);
+        tvCloseApp.setTypeface(lato_regular);
+        tvCloseApp.setLetterSpacing(0.3f);
+
+        tvConfirmClose = (TextView)findViewById(R.id.tvConfirmClose);
+        tvConfirmClose.setTypeface(lato_regular);
+        tvConfirmClose.setLetterSpacing(0.3f);
+        tvConfirmClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.super.onBackPressed();
+            }
+        });
+
+        tvDontClose = (TextView)findViewById(R.id.tvDontClose);
+        tvDontClose.setTypeface(lato_regular);
+        tvDontClose.setLetterSpacing(0.3f);
+        tvDontClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rlCloseApp.setVisibility(View.GONE);
+            }
+        });
 
         setUpDrawer(lato_regular);
     }
@@ -204,8 +236,10 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(!drawer.isDrawerOpen(GravityCompat.START)){
-            drawer.openDrawer(GravityCompat.START);
+        if(rlCloseApp.getVisibility() == View.GONE) {
+            if (!drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.openDrawer(GravityCompat.START);
+            }
         }
         return false;
     }
@@ -354,6 +388,15 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
                 // attach del view a la pantalla principal
                 layout.addView(view);
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(rlCloseApp.getVisibility() == View.GONE){
+            rlCloseApp.setVisibility(View.VISIBLE);
+        }else{
+            rlCloseApp.setVisibility(View.GONE);
         }
     }
 }

@@ -14,6 +14,8 @@
     <color name="colorLightGrey">#505050</color>
     <color name="colorText">#282828</color>
 
-    <color name="black_alpha_12">#1F000000</color>
+    <color name="black_alpha_12">#1e000000</color>
+    <color name="black_alpha_80">#cd000000</color>
+    <color name="white_alpha_4">#12ffffff</color>
 
 </resources>

@@ -92,9 +92,15 @@ public class ElementsListActivity extends AppCompatActivity {
             rvElementsList.setHasFixedSize(true);
             rvElementsList.setAdapter(adapter);
         }else{
+            Typeface lato_regular = BNUtils.getLato_regular();
+
             LinearLayout vlFavourites = (LinearLayout) findViewById(R.id.vlAddFavouriteElements);
             rvElementsList.setVisibility(View.GONE);
             vlFavourites.setVisibility(View.VISIBLE);
+
+            TextView tvFavorites = (TextView)findViewById(R.id.tvEmptyFavourites);
+            tvFavorites.setTypeface(lato_regular);
+            tvFavorites.setLetterSpacing(0.3f);
         }
     }
 }

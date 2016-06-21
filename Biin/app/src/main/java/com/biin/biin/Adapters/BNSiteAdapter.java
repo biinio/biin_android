@@ -53,7 +53,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
     @Override
     public BNSiteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bnsite_item_small, parent, false);
-        v.setLayoutParams(new RecyclerView.LayoutParams(BNUtils.getWidth() / 2, (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity())));
+        v.setLayoutParams(new RecyclerView.LayoutParams((sites.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity())));
         BNSiteViewHolder holder = new BNSiteViewHolder(v);
         return holder;
     }
@@ -61,7 +61,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
     @Override
     public void onBindViewHolder(BNSiteViewHolder holder, int position) {
         final BNSite item = sites.get(position);
-        TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth() / 2, (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity()));
+        TableRow.LayoutParams params = new TableRow.LayoutParams((sites.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity()));
 
 //        loadSiteImage(item.getMedia().get(0).getUrl(), holder);
         imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivSite, R.drawable.bg_feedback, R.drawable.biin));
