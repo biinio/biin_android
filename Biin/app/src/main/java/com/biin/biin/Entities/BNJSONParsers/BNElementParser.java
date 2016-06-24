@@ -13,7 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by ramirezallan on 5/3/16.
@@ -138,8 +138,8 @@ public class BNElementParser {
         return element;
     }
 
-    public HashMap<String, BNElement> parseBNElements(JSONArray arrayElements){
-        HashMap<String, BNElement> result = new HashMap<>();
+    public LinkedHashMap<String, BNElement> parseBNElements(JSONArray arrayElements){
+        LinkedHashMap<String, BNElement> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayElements.length(); i++){
                 JSONObject objectElement = (JSONObject) arrayElements.get(i);
@@ -153,8 +153,8 @@ public class BNElementParser {
         return result;
     }
 
-    public HashMap<String, BNElement> parseBNElementsId(JSONArray arrayElements){
-        HashMap<String, BNElement> result = new HashMap<>();
+    public LinkedHashMap<String, BNElement> parseBNElementsId(JSONArray arrayElements){
+        LinkedHashMap<String, BNElement> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayElements.length(); i++){
                 JSONObject objectElement = (JSONObject) arrayElements.get(i);
@@ -195,8 +195,8 @@ public class BNElementParser {
         return element;
     }
 
-    public HashMap<String, BNElement> cloneBNElements(JSONArray arrayElements){
-        HashMap<String, BNElement> result = new HashMap<>();
+    public LinkedHashMap<String, BNElement> cloneBNElements(JSONArray arrayElements){
+        LinkedHashMap<String, BNElement> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayElements.length(); i++){
                 JSONObject objectElement = (JSONObject) arrayElements.get(i);
@@ -212,8 +212,8 @@ public class BNElementParser {
         return result;
     }
 
-    public HashMap<String, BNElement> parseFavouriteBNElements(JSONArray arrayElements){
-        HashMap<String, BNElement> result = new HashMap<>();
+    public LinkedHashMap<String, BNElement> parseFavouriteBNElements(JSONArray arrayElements){
+        LinkedHashMap<String, BNElement> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayElements.length(); i++){
                 JSONObject objectElement = (JSONObject) arrayElements.get(i);

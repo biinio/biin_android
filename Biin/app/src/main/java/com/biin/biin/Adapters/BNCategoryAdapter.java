@@ -145,9 +145,8 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<BNCategoryAdapter.BN
             tvCategoryDiscount = (TextView)itemView.findViewById(R.id.tvCategoryDiscount);
             tvCategoryOffer = (TextView)itemView.findViewById(R.id.tvCategoryOffer);
 
-            Typeface lato_light = Typeface.createFromAsset(context.getAssets(),"Lato-Light.ttf");
-            Typeface lato_regular = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");
-            Typeface lato_black = Typeface.createFromAsset(context.getAssets(),"Lato-Black.ttf");
+            Typeface lato_regular = BNUtils.getLato_regular();
+            Typeface lato_black = BNUtils.getLato_black();
 
             tvCategoryElement.setTypeface(lato_black);
             tvCategorySubtitle.setTypeface(lato_black);

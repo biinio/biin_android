@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by ramirezallan on 5/4/16.
@@ -48,8 +48,8 @@ public class BiinieParser {
         return biinie;
     }
 
-    public HashMap<String, Biinie> parseBiinies(JSONArray arrayBiinies){
-        HashMap<String, Biinie> result = new HashMap<>();
+    public LinkedHashMap<String, Biinie> parseBiinies(JSONArray arrayBiinies){
+        LinkedHashMap<String, Biinie> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayBiinies.length(); i++){
                 JSONObject objectBiinie = (JSONObject) arrayBiinies.get(i);

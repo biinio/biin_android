@@ -22,7 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -88,56 +88,56 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
 
     private void parseSites(JSONArray arraySites){
         BNSiteParser siteParser = new BNSiteParser();
-        HashMap<String, BNSite> result = siteParser.parseBNSites(arraySites);
+        LinkedHashMap<String, BNSite> result = siteParser.parseBNSites(arraySites);
         // guardar el resultado de sites en el data manager
         dataManager.setBNSites(result);
     }
 
     private void parseNearBySites(JSONArray arraySites){
         BNSiteParser siteParser = new BNSiteParser();
-        HashMap<String, BNSite> result = siteParser.parseNearByBNSites(arraySites);
+        LinkedHashMap<String, BNSite> result = siteParser.parseNearByBNSites(arraySites);
         // guardar el resultado de sites cercanos en el data manager
         dataManager.setNearByBNSites(result);
     }
 
     private void parseFavouriteSites(JSONArray arraySites){
         BNSiteParser siteParser = new BNSiteParser();
-        HashMap<String, BNSite> result = siteParser.parseFavouriteBNSites(arraySites);
+        LinkedHashMap<String, BNSite> result = siteParser.parseFavouriteBNSites(arraySites);
         // guardar el resultado de sites favoritos en el data manager
         dataManager.setFavouriteBNSites(result);
     }
 
     private void parseShowcases(JSONArray arrayShowcases){
         BNShowcaseParser showcaseParser = new BNShowcaseParser();
-        HashMap<String, BNShowcase> result = showcaseParser.parseBNShowcases(arrayShowcases);
+        LinkedHashMap<String, BNShowcase> result = showcaseParser.parseBNShowcases(arrayShowcases);
         // guardar el resultado de showcases en el data manager
         dataManager.setBNShowcases(result);
     }
 
     private void parseOrganizations(JSONArray arrayOrganizations){
         BNOrganizationParser organizationParser = new BNOrganizationParser();
-        HashMap<String, BNOrganization> result = organizationParser.parseBNOrganizations(arrayOrganizations);
+        LinkedHashMap<String, BNOrganization> result = organizationParser.parseBNOrganizations(arrayOrganizations);
         // guardar el resultado de organizations en el data manager
         dataManager.setBNOrganizations(result);
     }
 
     private void parseElements(JSONArray arrayElements){
         BNElementParser elementParser = new BNElementParser();
-        HashMap<String, BNElement> result = elementParser.parseBNElements(arrayElements);
+        LinkedHashMap<String, BNElement> result = elementParser.parseBNElements(arrayElements);
         // guardar el resultado de elements en el data manager
         dataManager.setBNElements(result);
     }
 
     private void parseElementsId(JSONArray arrayElements){
         BNElementParser elementParser = new BNElementParser();
-        HashMap<String, BNElement> result = elementParser.parseBNElementsId(arrayElements);
+        LinkedHashMap<String, BNElement> result = elementParser.parseBNElementsId(arrayElements);
         // guardar el resultado de elements en el data manager
         dataManager.setBNElementsId(result);
     }
 
     private void parseFavouriteElements(JSONArray arrayElements){
         BNElementParser elementParser = new BNElementParser();
-        HashMap<String, BNElement> result = elementParser.parseFavouriteBNElements(arrayElements);
+        LinkedHashMap<String, BNElement> result = elementParser.parseFavouriteBNElements(arrayElements);
         // guardar el resultado de elements en el data manager
         dataManager.setFavouriteBNElements(result);
     }
@@ -151,7 +151,7 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
 
     private void parseCategories(JSONArray arrayCategories){
         BNCategoryParser categoryParser = new BNCategoryParser();
-        HashMap<String, BNCategory> result = categoryParser.parseBNCategories(arrayCategories);
+        LinkedHashMap<String, BNCategory> result = categoryParser.parseBNCategories(arrayCategories);
         // guardar el resultado de categories en el data manager
         dataManager.setBNCategories(result);
     }

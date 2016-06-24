@@ -18,7 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class BNSitesListener implements Response.Listener<JSONObject> {
 
-    private static final String TAG = "BNSitesListener";
+    private static final String TAG = "BNSitesLikeListener";
 
     private IBNSitesListener listener;
     private List<BNSite> sites;
@@ -79,21 +79,21 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
 
     private void parseElements(JSONArray arrayElements){
         BNElementParser elementParser = new BNElementParser();
-        HashMap<String, BNElement> result = elementParser.parseBNElements(arrayElements);
+        LinkedHashMap<String, BNElement> result = elementParser.parseBNElements(arrayElements);
         // agregar el resultado de elements al data manager
         dataManager.addBNElements(result);
     }
 
     private void parseOrganizations(JSONArray arrayOrganizations){
         BNOrganizationParser organizationParser = new BNOrganizationParser();
-        HashMap<String, BNOrganization> result = organizationParser.parseBNOrganizations(arrayOrganizations);
+        LinkedHashMap<String, BNOrganization> result = organizationParser.parseBNOrganizations(arrayOrganizations);
         // agregar el resultado de organizations al data manager
         dataManager.addBNOrganizations(result);
     }
 
     private void parseShowcases(JSONArray arrayShowcases){
         BNShowcaseParser showcaseParser = new BNShowcaseParser();
-        HashMap<String, BNShowcase> result = showcaseParser.parseBNShowcases(arrayShowcases);
+        LinkedHashMap<String, BNShowcase> result = showcaseParser.parseBNShowcases(arrayShowcases);
         // agregar el resultado de showcases al data manager
         dataManager.addBNShowcases(result);
     }

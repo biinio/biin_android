@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by ramirezallan on 5/3/16.
@@ -23,7 +23,6 @@ public class BNSiteParser {
     private static final String TAG = "BNSiteParser";
 
     private BNMediaParser mediaParser = new BNMediaParser();
-    private BNShowcaseParser showcaseParser = new BNShowcaseParser();
 
     private BNDataManager dataManager = BNAppManager.getDataManagerInstance();
 
@@ -73,8 +72,8 @@ public class BNSiteParser {
         return site;
     }
 
-    public HashMap<String, BNSite> parseBNSites(JSONArray arraySites){
-        HashMap<String, BNSite> result = new HashMap<>();
+    public LinkedHashMap<String, BNSite> parseBNSites(JSONArray arraySites){
+        LinkedHashMap<String, BNSite> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arraySites.length(); i++){
                 JSONObject objectSite = (JSONObject) arraySites.get(i);
@@ -88,19 +87,15 @@ public class BNSiteParser {
         return result;
     }
 
-    public HashMap<String, BNSite> parseNearByBNSites(JSONArray arraySites){
-        HashMap<String, BNSite> result = new HashMap<>();
-        ArrayList<String> organizations = new ArrayList<>();
+    public LinkedHashMap<String, BNSite> parseNearByBNSites(JSONArray arraySites){
+        LinkedHashMap<String, BNSite> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arraySites.length(); i++){
                 JSONObject objectSite = (JSONObject) arraySites.get(i);
                 BNSite site = dataManager.getBNSite(objectSite.getString("identifier"));
 
-                if(site != null && site.getOrganization() != null
-                        && site.getOrganization().getIdentifier() != null
-                        && !organizations.contains(site.getOrganization().getIdentifier())) {
+                if(site != null) {
                     result.put(site.getIdentifier(), site);
-                    organizations.add(site.getOrganization().getIdentifier());
                 }
             }
         }catch (JSONException e){
@@ -109,8 +104,8 @@ public class BNSiteParser {
         return result;
     }
 
-    public HashMap<String, BNSite> parseFavouriteBNSites(JSONArray arraySites){
-        HashMap<String, BNSite> result = new HashMap<>();
+    public LinkedHashMap<String, BNSite> parseFavouriteBNSites(JSONArray arraySites){
+        LinkedHashMap<String, BNSite> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arraySites.length(); i++){
                 JSONObject objectSite = (JSONObject) arraySites.get(i);

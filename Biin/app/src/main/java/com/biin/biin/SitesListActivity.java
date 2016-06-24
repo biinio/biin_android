@@ -56,7 +56,7 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
             sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNSites().values());
             tvTitle.setText(getResources().getString(R.string.FavoritePlaces));
         }else {
-            sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites().values());
+            sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites(true).values());
         }
 
         rvSites = (RecyclerView)findViewById(R.id.rvSitesList);

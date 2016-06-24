@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by ramirezallan on 5/9/16.
@@ -39,8 +39,8 @@ public class BNShowcaseParser {
         return showcase;
     }
 
-    public HashMap<String, BNShowcase> parseBNShowcases(JSONArray arrayShowcases){
-        HashMap<String, BNShowcase> result = new HashMap<>();
+    public LinkedHashMap<String, BNShowcase> parseBNShowcases(JSONArray arrayShowcases){
+        LinkedHashMap<String, BNShowcase> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayShowcases.length(); i++){
                 JSONObject objectShowcase = (JSONObject) arrayShowcases.get(i);

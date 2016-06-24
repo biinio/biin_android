@@ -34,7 +34,9 @@
                         android:textColor="@color/colorWhite"
                         android:background="@color/colorLightGrey"
                         android:textSize="12dp"
-                        android:layout_alignParentStart="true" />
+                        android:layout_alignParentStart="true"
+                        android:layout_height="@dimen/section_height"
+                        android:gravity="center_vertical" />
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -63,6 +65,15 @@
 
                     </com.jude.rollviewpager.RollPagerView>
 
+                    <include
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        layout="@layout/empty_near_by"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignTop="@+id/tvOtherNearYou"
+                        android:layout_alignBottom="@+id/rvOtherNearYou" />
+
                     <TextView
                         android:id="@+id/tvOtherNearYou"
                         android:text="@string/NearYou"
@@ -75,7 +86,9 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignLeft="@+id/tvRecomended"
-                        android:layout_alignRight="@+id/tvRecomended" />
+                        android:layout_alignRight="@+id/tvRecomended"
+                        android:layout_height="@dimen/section_height"
+                        android:gravity="center_vertical" />
 
                     <ImageView
                         android:layout_width="48dp"
@@ -106,53 +119,53 @@
 
                     </com.biin.biin.Components.CardRecyclerView>
 
-                    <RelativeLayout
+                    <include
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        layout="@layout/empty_favourites"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignTop="@+id/tvFavouritePlaces"
+                        android:layout_alignBottom="@+id/rvFavouritePlaces" />
+
+                    <TextView
+                        android:id="@+id/tvFavouritePlaces"
+                        android:text="@string/FavoritePlaces"
+                        android:textAllCaps="true"
+                        style="@style/MainViewLabel"
+                        android:textColor="@color/colorWhite"
+                        android:background="@color/colorDarkGrey"
+                        android:textSize="12dp"
+                        android:layout_height="@dimen/section_height"
+                        android:gravity="center_vertical"
+                        android:layout_below="@+id/rvOtherNearYou" />
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ivFavouritePlaces"
+                        android:layout_alignParentTop="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignTop="@+id/tvFavouritePlaces"
+                        android:layout_alignBottom="@+id/tvFavouritePlaces"
+                        android:layout_alignRight="@+id/tvFavouritePlaces"
+                        android:src="@drawable/right_arrow"
+                        android:scaleType="center"
+                        android:layout_alignParentRight="true" />
+
+                    <com.biin.biin.Components.CardRecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/rvFavourites"
-                        android:layout_below="@+id/rvOtherNearYou"
+                        android:id="@+id/rvFavouritePlaces"
+                        android:orientation="horizontal"
+                        tools:listitem="@layout/bnsite_item_small"
+                        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                        android:layout_below="@+id/tvFavouritePlaces"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignLeft="@+id/tvRecomended"
-                        android:layout_alignRight="@+id/tvRecomended" >
+                        android:overScrollMode="never">
 
-                        <TextView
-                            android:id="@+id/tvFavouritePlaces"
-                            android:text="@string/FavoritePlaces"
-                            android:textAllCaps="true"
-                            style="@style/MainViewLabel"
-                            android:textColor="@color/colorWhite"
-                            android:background="@color/colorDarkGrey"
-                            android:textSize="12dp"/>
-
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/ivFavouritePlaces"
-                            android:layout_alignParentTop="false"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignTop="@+id/tvFavouritePlaces"
-                            android:layout_alignBottom="@+id/tvFavouritePlaces"
-                            android:layout_alignRight="@+id/tvFavouritePlaces"
-                            android:src="@drawable/right_arrow"
-                            android:scaleType="center"
-                            android:layout_alignParentRight="true" />
-
-                        <com.biin.biin.Components.CardRecyclerView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/rvFavouritePlaces"
-                            android:orientation="horizontal"
-                            tools:listitem="@layout/bnsite_item_small"
-                            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                            android:layout_below="@+id/tvFavouritePlaces"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentEnd="true"
-                            android:overScrollMode="never">
-
-                        </com.biin.biin.Components.CardRecyclerView>
-
-                    </RelativeLayout>
+                    </com.biin.biin.Components.CardRecyclerView>
 
                     <LinearLayout
                         android:orientation="vertical"
@@ -160,11 +173,11 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentStart="true"
-                        android:layout_below="@+id/rvFavourites"
                         android:layout_alignLeft="@+id/tvRecomended"
                         android:layout_alignRight="@+id/tvRecomended"
                         android:id="@+id/vlShowcases"
-                        android:layout_marginBottom="32dp"></LinearLayout>
+                        android:layout_marginBottom="32dp"
+                        android:layout_below="@+id/rvFavouritePlaces"></LinearLayout>
 
                 </RelativeLayout>
 

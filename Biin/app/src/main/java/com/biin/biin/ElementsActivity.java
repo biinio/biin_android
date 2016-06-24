@@ -69,9 +69,9 @@ public class ElementsActivity extends AppCompatActivity {
             tvSubtitle = (TextView)findViewById(R.id.tvElementsSubtitle);
             tvAction = (TextView)findViewById(R.id.tvElementsAction);
 
-            Typeface lato_light = Typeface.createFromAsset(getAssets(),"Lato-Light.ttf");
-            Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
-            Typeface lato_black = Typeface.createFromAsset(getAssets(),"Lato-Black.ttf");
+            Typeface lato_light = BNUtils.getLato_light();
+            Typeface lato_regular = BNUtils.getLato_regular();
+            Typeface lato_black = BNUtils.getLato_black();
 
             tvBefore.setTypeface(lato_light);
             tvNow.setTypeface(lato_black);

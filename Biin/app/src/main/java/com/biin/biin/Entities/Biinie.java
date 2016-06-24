@@ -2,7 +2,7 @@ package com.biin.biin.Entities;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by ramirezallan on 5/2/16.
@@ -26,7 +26,7 @@ public class Biinie {
     private String jsonUrl;
 
     private ArrayList<BNCategory> categories = new ArrayList<>();
-    //private HashMap<String, BNCollection> collections;
+    //private LinkedHashMap<String, BNCollection> collections;
     private String temporalCollectionIdentifier;
     private String[] BiinieAction;
 
@@ -38,7 +38,7 @@ public class Biinie {
     private boolean isInStore;
     private int actionCounter;
     private String[] storedElementsViewed;
-    private HashMap<String, String> elementsViewed;
+    private LinkedHashMap<String, String> elementsViewed;
 
     private String facebookAvatarUrl;
 
@@ -242,11 +242,11 @@ public class Biinie {
         this.storedElementsViewed = storedElementsViewed;
     }
 
-    public HashMap<String, String> getElementsViewed() {
+    public LinkedHashMap<String, String> getElementsViewed() {
         return elementsViewed;
     }
 
-    public void setElementsViewed(HashMap<String, String> elementsViewed) {
+    public void setElementsViewed(LinkedHashMap<String, String> elementsViewed) {
         this.elementsViewed = elementsViewed;
     }
 

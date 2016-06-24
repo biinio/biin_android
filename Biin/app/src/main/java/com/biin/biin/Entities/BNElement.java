@@ -2,7 +2,7 @@ package com.biin.biin.Entities;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -454,7 +454,7 @@ public class BNElement implements Cloneable {
         private String identifier;
         private boolean isReady;
         private boolean isHighlight;
-        private HashMap<String,BNCategory> categories;
+        private LinkedHashMap<String,BNCategory> categories;
 
         public BNElementLite() {
         }
@@ -491,11 +491,11 @@ public class BNElement implements Cloneable {
             isHighlight = highlight;
         }
 
-        public HashMap<String, BNCategory> getCategories() {
+        public LinkedHashMap<String, BNCategory> getCategories() {
             return categories;
         }
 
-        public void setCategories(HashMap<String, BNCategory> categories) {
+        public void setCategories(LinkedHashMap<String, BNCategory> categories) {
             this.categories = categories;
         }
     }

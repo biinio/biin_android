@@ -172,4 +172,9 @@ public class BNUtils {
         public static final String BNShowcase = "BNShowcaseIdentifier";
     }
 
+    public class BNStringTypes {
+        public static final String NearSites = "NearSites";
+        public static final String FavouriteSites = "FavouriteSites";
+    }
+
 }

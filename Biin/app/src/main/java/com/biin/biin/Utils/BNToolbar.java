@@ -158,7 +158,7 @@ public class BNToolbar {
         }
 
         if(showMore) {
-            Typeface lato_regular = Typeface.createFromAsset(context.getAssets(), "Lato-Regular.ttf");
+            Typeface lato_regular = BNUtils.getLato_regular();
             tvMoreFrom.setTypeface(lato_regular);
             tvMoreFrom.setText(context.getResources().getText(R.string.MoreFrom).toString().trim() + " " + stringMore);
             tvMoreFrom.setVisibility(View.VISIBLE);

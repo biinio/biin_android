@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,6 +26,8 @@ import com.biin.biin.Adapters.BNCategoryAdapter;
 import com.biin.biin.Adapters.BNHighlightAdapter;
 import com.biin.biin.Adapters.BNSiteAdapter;
 import com.biin.biin.Components.CardRecyclerView;
+import com.biin.biin.Components.LinearLayoutManagerSmooth;
+import com.biin.biin.Components.Listeners.BNAdapterListener;
 import com.biin.biin.Components.Listeners.HighlightsPagerListener;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
@@ -33,23 +35,39 @@ import com.biin.biin.Entities.BNHighlight;
 import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
+import com.biin.biin.Utils.BNUtils.BNStringTypes;
 import com.jude.rollviewpager.RollPagerView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements HighlightsPagerListener.IBNHighlightsListener {
+import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
+public class MainActivity extends AppCompatActivity implements HighlightsPagerListener.IBNHighlightsListener, BNAdapterListener, BNAdapterListener.BNSitesLikeListener {
 
     private static final String TAG = "MainActivity";
 
     private TextView tvRecomended, tvNearYou, tvFavouritePlaces;
     private TextView tvProfile, tvFavourites, tvFriends, tvAbout;
     private TextView tvCloseApp, tvConfirmClose, tvDontClose;
+    private CardRecyclerView rvNearSites, rvFavouritePlaces;
     private LinearLayout hlRecomended;
     private RelativeLayout rlCloseApp;
     private DrawerLayout drawer;
+
+    private BNDataManager dataManager;
+    private List<BNSite> nearSites;
+    private List<BNSite> favoriteSites;
+    private BNSiteAdapter nearPlacesAdapter;
+    private BNSiteAdapter favoritesAdapter;
+
+//    private long nearAnimDuration;
+//    private long favsAnimDuration;
+    private long animDuration = 300;
 
     private int total = 0;
 
@@ -185,21 +203,23 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     }
 
     public void loadData() {
+        dataManager = BNAppManager.getDataManagerInstance();
+
         loadRecomendations();
-        loadNearPlaces();
         loadFavourites();
+        loadNearPlaces();
         loadCategories();
     }
 
     private void loadRecomendations(){
-        HashMap<String,BNElement> allElements = BNAppManager.getDataManagerInstance().getBNElements();
-        List<BNHighlight> highlights = BNAppManager.getDataManagerInstance().getBNHighlights();
+        LinkedHashMap<String,BNElement> allElements = dataManager.getBNElements();
+        List<BNHighlight> highlights = dataManager.getBNHighlights();
         List<BNElement> elements = new ArrayList<>();
 
         for (BNHighlight highlight : highlights) {
             BNElement element = allElements.get(highlight.getIdentifier());
-            BNShowcase showcase = BNAppManager.getDataManagerInstance().getBNShowcase(highlight.getShowcaseIdentifier());
-            BNSite site = BNAppManager.getDataManagerInstance().getBNSite(highlight.getSiteIdentifier());
+            BNShowcase showcase = dataManager.getBNShowcase(highlight.getShowcaseIdentifier());
+            BNSite site = dataManager.getBNSite(highlight.getSiteIdentifier());
 
             if(element != null && showcase != null && site != null) {
                 showcase.setSite(site);
@@ -265,24 +285,46 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     }
 
     private void loadNearPlaces(){
-        List<BNSite> sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites().values());
-        List<BNSite> favs = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNSites().values());
+        nearSites = new ArrayList<>(dataManager.getNearByBNSites(false).values());
+        List<String> organizations = new ArrayList<>();
+        List<BNSite> removeSites = new ArrayList<>();
 
-        for (BNSite site : favs) {
-            if(sites.contains(site)){
-                sites.remove(site);
+        for (BNSite site : nearSites) {
+            if(organizations.contains(site.getOrganizationIdentifier())) {
+                removeSites.add(site);
+            }else{
+                organizations.add(site.getOrganizationIdentifier());
             }
         }
 
-        CardRecyclerView rvSites = (CardRecyclerView)findViewById(R.id.rvOtherNearYou);
-//        rvSites.setSnapEnabled(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        for (BNSite site : removeSites) {
+            nearSites.remove(site);
+        }
 
-        BNSiteAdapter adapter = new BNSiteAdapter(this, sites);
-        adapter.setShowOthers(true);
-        rvSites.setLayoutManager(layoutManager);
-        rvSites.setHasFixedSize(true);
-        rvSites.setAdapter(adapter);
+        if(nearSites.size() > 0) {
+            showNearPlacesList();
+        }else{
+            showNearPlacesEmpty(true);
+        }
+    }
+
+    private void showNearPlacesList(){
+        rvNearSites = (CardRecyclerView) findViewById(R.id.rvOtherNearYou);
+
+        /*SlideInUpAnimator animator = new SlideInUpAnimator();
+//        nearAnimDuration = animator.getRemoveDuration();
+        animator.setAddDuration(animDuration);
+        animator.setRemoveDuration(animDuration);
+        rvNearSites.setItemAnimator(animator);*/
+
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManagerSmooth layoutManager = new LinearLayoutManagerSmooth(this, LinearLayoutManager.HORIZONTAL, false);
+
+        nearPlacesAdapter = new BNSiteAdapter(this, nearSites, this, animDuration);
+        nearPlacesAdapter.setShowOthers(true);
+        rvNearSites.setLayoutManager(layoutManager);
+        rvNearSites.setHasFixedSize(true);
+        rvNearSites.setAdapter(nearPlacesAdapter);
 
         findViewById(R.id.ivOtherNearYou).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,59 +336,88 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         });
     }
 
+    private void showNearPlacesEmpty(boolean empty){
+        CardRecyclerView rvNearYou = (CardRecyclerView) findViewById(R.id.rvOtherNearYou);
+        ImageView ivNearYou = (ImageView) findViewById(R.id.ivOtherNearYou);
+        LinearLayout vlNearYou = (LinearLayout) findViewById(R.id.vlEmptyNearPlaces);
+
+        if(empty) {
+            tvNearYou.setVisibility(View.INVISIBLE);
+            ivNearYou.setVisibility(View.GONE);
+            rvNearYou.setVisibility(View.INVISIBLE);
+            vlNearYou.setVisibility(View.VISIBLE);
+        } else {
+            tvNearYou.setVisibility(View.VISIBLE);
+            ivNearYou.setVisibility(View.VISIBLE);
+            rvNearYou.setVisibility(View.VISIBLE);
+            vlNearYou.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void loadFavourites(){
-        List<BNSite> sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNSites().values());
-        CardRecyclerView rvFavouritePlaces = (CardRecyclerView) findViewById(R.id.rvFavouritePlaces);
+        favoriteSites = new ArrayList<>(dataManager.getFavouriteBNSites().values());
+
+        if(favoriteSites.size() > 0) {
+            showFavouritesList();
+        }else{
+            showFavouritesEmpty(true);
+        }
+    }
+
+    private void showFavouritesList(){
+        rvFavouritePlaces = (CardRecyclerView) findViewById(R.id.rvFavouritePlaces);
         ImageView ivFavouritePlaces = (ImageView) findViewById(R.id.ivFavouritePlaces);
 
-        if(sites.size() > 0) {
-//        rvFavouritePlaces.setSnapEnabled(true);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        /*SlideInDownAnimator animator = new SlideInDownAnimator();
+//        favsAnimDuration = animator.getRemoveDuration();
+        animator.setAddDuration(animDuration);
+        animator.setRemoveDuration(animDuration);
+        rvFavouritePlaces.setItemAnimator(animator);*/
 
-            BNSiteAdapter adapter = new BNSiteAdapter(this, sites);
-            adapter.setShowOthers(true);
-            rvFavouritePlaces.setLayoutManager(layoutManager);
-            rvFavouritePlaces.setHasFixedSize(true);
-            rvFavouritePlaces.setAdapter(adapter);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManagerSmooth layoutManager = new LinearLayoutManagerSmooth(this, LinearLayoutManager.HORIZONTAL, false);
 
-            ivFavouritePlaces.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(MainActivity.this, SitesListActivity.class);
-                    i.putExtra(BNUtils.BNStringExtras.BNFavorites, true);
-                    MainActivity.this.startActivity(i);
-                }
-            });
-        }else{
-            tvFavouritePlaces.setVisibility(View.GONE);
+        favoritesAdapter = new BNSiteAdapter(this, favoriteSites, this, animDuration);
+        favoritesAdapter.setShowOthers(true);
+        rvFavouritePlaces.setLayoutManager(layoutManager);
+        rvFavouritePlaces.setHasFixedSize(true);
+        rvFavouritePlaces.setAdapter(favoritesAdapter);
+
+        ivFavouritePlaces.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, SitesListActivity.class);
+                i.putExtra(BNUtils.BNStringExtras.BNFavorites, true);
+                MainActivity.this.startActivity(i);
+            }
+        });
+    }
+
+    private void showFavouritesEmpty(boolean empty){
+        CardRecyclerView rvFavouritePlaces = (CardRecyclerView) findViewById(R.id.rvFavouritePlaces);
+        ImageView ivFavouritePlaces = (ImageView) findViewById(R.id.ivFavouritePlaces);
+        LinearLayout vlFavourites = (LinearLayout) findViewById(R.id.vlEmptyFavorites);
+
+        if(empty) {
+            tvFavouritePlaces.setVisibility(View.INVISIBLE);
             ivFavouritePlaces.setVisibility(View.GONE);
-            rvFavouritePlaces.setVisibility(View.GONE);
-
-            RelativeLayout layout = (RelativeLayout)findViewById(R.id.rvFavourites);
-            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-            layout.getLayoutParams().height = (BNUtils.getWidth() / 2) + (int)(48 * BNUtils.getDensity());
-
-            View view = inflater.inflate(R.layout.add_favourites, null);
-
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (BNUtils.getWidth() / 2) + (int)(48 * BNUtils.getDensity()));
-            view.setLayoutParams(params);
-
-            Typeface lato_regular = BNUtils.getLato_regular();
-            TextView tvFavourites = (TextView) view.findViewById(R.id.tvEmptyFavourites);
-            tvFavourites.setTypeface(lato_regular);
-            tvFavourites.setLetterSpacing(0.3f);
-
-            layout.addView(view);
+            rvFavouritePlaces.setVisibility(View.INVISIBLE);
+            vlFavourites.setVisibility(View.VISIBLE);
+        } else {
+            tvFavouritePlaces.setVisibility(View.VISIBLE);
+            ivFavouritePlaces.setVisibility(View.VISIBLE);
+            rvFavouritePlaces.setVisibility(View.VISIBLE);
+            vlFavourites.setVisibility(View.INVISIBLE);
         }
     }
 
     private void loadCategories(){
-        Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
+        Typeface lato_regular = BNUtils.getLato_regular();
         // layout al que se va a agregar las listas de categorias
         LinearLayout layout = (LinearLayout)findViewById(R.id.vlShowcases);
 
         // obtener la lista de categorias
-        List<BNCategory> categories = new ArrayList<>(BNAppManager.getDataManagerInstance().getBNCategories().values());
+        List<BNCategory> categories = new ArrayList<>(dataManager.getBNCategories().values());
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
         for (final BNCategory category : categories) {
@@ -399,6 +470,180 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             rlCloseApp.setVisibility(View.GONE);
         }
     }
+
+    @Override
+    public void onEmptyAdapter(String type) {
+        if(type.equals(BNStringTypes.NearSites)) {
+            showNearPlacesEmpty(true);
+        }else if(type.equals(BNStringTypes.FavouriteSites)) {
+            showFavouritesEmpty(true);
+        }
+    }
+
+    @Override
+    public void onLoadAdapter(String type) {
+        if(type.equals(BNStringTypes.NearSites)) {
+            showNearPlacesEmpty(false);
+        }else if(type.equals(BNStringTypes.FavouriteSites)) {
+            showFavouritesEmpty(false);
+        }
+    }
+
+    @Override
+    public void onSiteLiked(String identifier) {
+        boolean added = dataManager.likeBNSite(identifier);
+
+        addFavouriteSite(identifier);
+        favoritesAdapter.notifyItemInserted(0);
+        rvFavouritePlaces.smoothScrollToPosition(0);
+
+        final int position = removeNearSite(identifier);
+        if(position > -1){
+            nearPlacesAdapter.notifyItemRemoved(position);
+        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                favoritesAdapter.notifyItemRangeChanged(0, favoriteSites.size());
+                favoritesAdapter.notifyDataSetChanged();
+                if(position > -1) {
+                    nearPlacesAdapter.notifyItemRangeChanged(position, nearSites.size());
+                    nearPlacesAdapter.notifyDataSetChanged();
+                }
+            }
+        }, animDuration + 300);
+    }
+
+    @Override
+    public void onSiteUnliked(String identifier) {
+        boolean removed = dataManager.unlikeBNSite(identifier);
+
+        addNearSite(identifier);
+        nearPlacesAdapter.notifyItemInserted(0);
+        rvNearSites.smoothScrollToPosition(0);
+
+        final int position = removeFavouriteSite(identifier);
+        if(position > -1){
+            favoritesAdapter.notifyItemRemoved(position);
+        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                nearPlacesAdapter.notifyItemRangeChanged(0, nearSites.size());
+                nearPlacesAdapter.notifyDataSetChanged();
+                if(position > -1) {
+                    favoritesAdapter.notifyItemRangeChanged(position, favoriteSites.size());
+                    favoritesAdapter.notifyDataSetChanged();
+                }
+            }
+        }, animDuration + 300);
+    }
+
+    private boolean addNearSite(String identifier){
+        boolean attach = true;
+        int size = nearSites.size();
+
+        if(size > 0) {
+            int i = 0;
+            do {
+                if (nearSites.get(i).getIdentifier().equals(identifier)) {
+                    attach = false;
+                }
+                i++;
+            } while (i < size && attach);
+        }
+
+        if(attach){
+            if(size == 0){
+                showNearPlacesEmpty(false);
+            }
+            nearSites.add(0, dataManager.getBNSite(identifier));
+        }
+
+        return attach;
+    }
+
+    private int removeNearSite(String identifier){
+        int index = -1;
+        int size = nearSites.size();
+
+        if(size > 0) {
+            int i = 0;
+            do {
+                if (nearSites.get(i).getIdentifier().equals(identifier)) {
+                    nearSites.remove(i);
+                    index = i;
+                }
+                i++;
+            } while (i < size && index == -1);
+        }
+
+        if(size == 1 && index == 0) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showNearPlacesEmpty(true);
+
+                }
+            }, animDuration + 300);
+        }
+
+        return index;
+    }
+
+    private boolean addFavouriteSite(String identifier){
+        boolean attach = true;
+        int size = favoriteSites.size();
+
+        if(size > 0) {
+            int i = 0;
+            do {
+                if (favoriteSites.get(i).getIdentifier().equals(identifier)) {
+                    attach = false;
+                }
+                i++;
+            } while (i < size && attach);
+        }
+
+        if(attach){
+            if(size == 0){
+                showFavouritesEmpty(false);
+            }
+            favoriteSites.add(0, dataManager.getBNSite(identifier));
+        }
+
+        return attach;
+    }
+
+    private int removeFavouriteSite(String identifier){
+        int index = -1;
+        int size = favoriteSites.size();
+
+        if(size > 0) {
+            int i = 0;
+            do {
+                if (favoriteSites.get(i).getIdentifier().equals(identifier)) {
+                    favoriteSites.remove(i);
+                    index = i;
+                }
+                i++;
+            } while (i < size && index == -1);
+
+            if(size == 1 && index == 0){
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showFavouritesEmpty(true);
+                    }
+                }, animDuration + 300);
+            }
+        }
+
+        return index;
+    }
+
 }
 
 

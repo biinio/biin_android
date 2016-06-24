@@ -143,8 +143,8 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<BNShowcaseAdapter.BN
             tvShowcaseSubtitle = (TextView)itemView.findViewById(R.id.tvShowcaseSubtitle);
             tvShowcaseOffer = (TextView)itemView.findViewById(R.id.tvShowcaseOffer);
 
-            Typeface lato_regular = Typeface.createFromAsset(context.getAssets(),"Lato-Regular.ttf");
-            Typeface lato_black = Typeface.createFromAsset(context.getAssets(),"Lato-Black.ttf");
+            Typeface lato_regular = BNUtils.getLato_regular();
+            Typeface lato_black = BNUtils.getLato_black();
 
             tvShowcaseTitle.setTypeface(lato_black);
             tvShowcaseSubtitle.setTypeface(lato_regular);

@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.biin.biin.Components.Listeners.BNAdapterListener;
 import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Utils.BNUtils.BNStringExtras;
@@ -34,7 +35,7 @@ import com.biin.biin.Managers.BNDataManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SitesActivity extends AppCompatActivity {
+public class SitesActivity extends AppCompatActivity implements BNAdapterListener.BNSitesLikeListener {
 
     private static final String TAG = "SitesActivity";
 
@@ -86,9 +87,9 @@ public class SitesActivity extends AppCompatActivity {
             pbSite = (ProgressBar)findViewById(R.id.pbSite);
             pbOrganization = (ProgressBar)findViewById(R.id.pbSiteOrganization);
 
-            Typeface lato_light = Typeface.createFromAsset(getAssets(),"Lato-Light.ttf");
-            Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
-            Typeface lato_black = Typeface.createFromAsset(getAssets(),"Lato-Black.ttf");
+            Typeface lato_light = BNUtils.getLato_light();
+            Typeface lato_regular = BNUtils.getLato_regular();
+            Typeface lato_black = BNUtils.getLato_black();
 
             tvTitle.setTypeface(lato_black);
             tvLocation.setTypeface(lato_regular);
@@ -133,7 +134,7 @@ public class SitesActivity extends AppCompatActivity {
 
     private void loadShowcases(){
         BNDataManager dataManager = BNAppManager.getDataManagerInstance();
-        Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
+        Typeface lato_regular = BNUtils.getLato_regular();
         // layout al que se va a agregar las listas de categorias
         LinearLayout layout = (LinearLayout)findViewById(R.id.vlSiteShowcases);
 
@@ -187,7 +188,7 @@ public class SitesActivity extends AppCompatActivity {
         siteIdentifiers.remove(currentSite.getIdentifier());
 
         if(siteIdentifiers.size() > 0) {
-            Typeface lato_regular = Typeface.createFromAsset(getAssets(),"Lato-Regular.ttf");
+            Typeface lato_regular = BNUtils.getLato_regular();
             BNDataManager dataManager = BNAppManager.getDataManagerInstance();
             List<BNSite> sites = new ArrayList<>();
 
@@ -207,7 +208,7 @@ public class SitesActivity extends AppCompatActivity {
             CardRecyclerView rvSites = (CardRecyclerView) findViewById(R.id.rvSitesNearYou);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
-            BNSiteAdapter adapter = new BNSiteAdapter(this, sites);
+            BNSiteAdapter adapter = new BNSiteAdapter(this, sites, this, 0);
             rvSites.setLayoutManager(layoutManager);
             rvSites.setHasFixedSize(true);
             rvSites.setAdapter(adapter);
@@ -215,4 +216,13 @@ public class SitesActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onSiteLiked(String identifier) {
+
+    }
+
+    @Override
+    public void onSiteUnliked(String identifier) {
+
+    }
 }

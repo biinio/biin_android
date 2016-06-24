@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by ramirezallan on 5/3/16.
@@ -31,8 +31,8 @@ public class BNCategoryParser {
         return category;
     }
 
-    public HashMap<String, BNCategory> parseBNCategories(JSONArray arrayCategory){
-        HashMap<String, BNCategory> result = new HashMap<>();
+    public LinkedHashMap<String, BNCategory> parseBNCategories(JSONArray arrayCategory){
+        LinkedHashMap<String, BNCategory> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayCategory.length(); i++){
                 JSONObject objectCategory = (JSONObject) arrayCategory.get(i);
@@ -46,9 +46,9 @@ public class BNCategoryParser {
         return result;
     }
 
-    public HashMap<String, BNElement> getBNElements(JSONArray arrayElements){
-        HashMap<String, BNElement> elements = BNAppManager.getDataManagerInstance().getBNElements();
-        HashMap<String, BNElement> result = new HashMap<>();
+    public LinkedHashMap<String, BNElement> getBNElements(JSONArray arrayElements){
+        LinkedHashMap<String, BNElement> elements = BNAppManager.getDataManagerInstance().getBNElements();
+        LinkedHashMap<String, BNElement> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayElements.length(); i++){
                 JSONObject objectElement = (JSONObject) arrayElements.get(i);

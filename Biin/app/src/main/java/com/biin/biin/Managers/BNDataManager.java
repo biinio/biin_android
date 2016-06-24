@@ -9,7 +9,7 @@ import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -21,16 +21,19 @@ public class BNDataManager {
 
     private Biinie biinie = new Biinie();
 
-    private HashMap<String, BNSite> sites = new HashMap<>();
-    private HashMap<String, BNSite> nearBySites = new HashMap<>();
-    private HashMap<String, BNSite> favouriteSites = new HashMap<>();
-    private HashMap<String, BNShowcase> showcases = new HashMap<>();
-    private HashMap<String, BNOrganization> organizations = new HashMap<>();
-    private HashMap<String, BNElement> elements = new HashMap<>();
-    private HashMap<String, BNElement> elements_by_id = new HashMap<>();
-    private HashMap<String, BNCategory> categories = new HashMap<>();
-    private HashMap<String, BNElement> favouriteElements = new HashMap<>();
+    private LinkedHashMap<String, BNSite> sites = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNSite> nearBySites = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNSite> favouriteSites = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNShowcase> showcases = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNOrganization> organizations = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNElement> elements = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNElement> elements_by_id = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNCategory> categories = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNElement> favouriteElements = new LinkedHashMap<>();
     private List<BNHighlight> highlights = new ArrayList<>();
+
+    private LinkedHashMap<String, BNSite> pendingLikeSites = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNSite> pendingUnlikeSites = new LinkedHashMap<>();
 
     protected static BNDataManager getInstance() {
         return ourInstance;
@@ -56,14 +59,14 @@ public class BNDataManager {
 
     /****************** Sites start ******************/
 
-    public void setBNSites(HashMap<String, BNSite> sites) {
+    public void setBNSites(LinkedHashMap<String, BNSite> sites) {
         // reemplazar la coleccion completa de sites
         this.sites = sites;
     }
 
-    public int addBNSites(HashMap<String, BNSite> sites) {
+    public int addBNSites(LinkedHashMap<String, BNSite> sites) {
         // TODO agregar sites a la coleccion (solo los que no existian previamente)
-        this.sites = sites;
+        //this.sites = sites;
         // TODO retornar el numero de sites agregados a la coleccion
         return 0;
     }
@@ -86,7 +89,7 @@ public class BNDataManager {
         return false;
     }
 
-    public HashMap<String,BNSite> getBNSites(){
+    public LinkedHashMap<String,BNSite> getBNSites(){
         // retornar la lista de sites
         return this.sites;
     }
@@ -96,12 +99,12 @@ public class BNDataManager {
 
     /****************** Sites near by start ******************/
 
-    public void setNearByBNSites(HashMap<String, BNSite> sites) {
+    public void setNearByBNSites(LinkedHashMap<String, BNSite> sites) {
         // reemplazar la coleccion completa de sites
         this.nearBySites = sites;
     }
 
-    public int addNearByBNSites(HashMap<String, BNSite> sites) {
+    public int addNearByBNSites(LinkedHashMap<String, BNSite> sites) {
         // TODO agregar sites a la coleccion (solo los que no existian previamente)
         this.nearBySites = sites;
         // TODO retornar el numero de sites agregados a la coleccion
@@ -109,10 +112,14 @@ public class BNDataManager {
     }
 
     public boolean addNearByBNSite(BNSite site) {
-        // TODO agregar un site a la coleccion
-        this.nearBySites.put(site.getIdentifier(), site);
-        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
-        return true;
+        boolean added = false;
+        // agregar un site a la coleccion
+        if(!this.nearBySites.containsKey(site.getIdentifier())){
+            this.nearBySites.put(site.getIdentifier(), site);
+            added = true;
+        }
+        // retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        return added;
     }
 
     public BNSite getNearByBNSite(String identifier) {
@@ -121,27 +128,80 @@ public class BNDataManager {
     }
 
     public boolean removeNearByBNSite(String identifier) {
-        // TODO remover un site de la coleccion
-        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return false;
+        boolean removed = false;
+        // remover un site de la coleccion
+        if(!this.nearBySites.containsKey(identifier)){
+            this.nearBySites.remove(identifier);
+            removed = true;
+        }
+        // retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        return removed;
     }
 
-    public HashMap<String,BNSite> getNearByBNSites(){
+    public LinkedHashMap<String,BNSite> getNearByBNSites(boolean favorites){
+        LinkedHashMap<String,BNSite> sites = this.nearBySites;
+
+        if(!favorites){
+            // remover los sites favoritos de los cercanos
+            for (BNSite favorite : this.favouriteSites.values()) {
+                if(sites.containsKey(favorite.getIdentifier())){
+                    sites.remove(favorite.getIdentifier());
+                }
+            }
+        }
+
         // retornar la lista de sites
-        return this.nearBySites;
+        return sites;
     }
 
     /****************** Sites near by end ******************/
 
 
+    /****************** Manage favourites start ******************/
+
+    public boolean likeBNSite(String identifier){
+        BNSite site = getBNSite(identifier);
+        site.setUserLiked(true);
+
+        if(this.pendingUnlikeSites.containsKey(identifier)){
+            this.pendingUnlikeSites.remove(identifier);
+        }else{
+            if(!this.pendingLikeSites.containsKey(identifier)){
+                this.pendingLikeSites.put(identifier, site);
+            }
+        }
+
+        return addFavouriteBNSite(site);
+    }
+
+    public boolean unlikeBNSite(String identifier){
+        BNSite site = getBNSite(identifier);
+        site.setUserLiked(false);
+
+        if(this.pendingLikeSites.containsKey(identifier)){
+            this.pendingLikeSites.remove(identifier);
+        }else{
+            if(!this.pendingUnlikeSites.containsKey(identifier)){
+                this.pendingUnlikeSites.put(identifier, site);
+            }
+        }
+
+        boolean added = addNearByBNSite(site);
+
+        return removeFavouriteBNSite(identifier);
+    }
+
+    /****************** Manage favourites end ******************/
+
+
     /****************** Sites favourites start ******************/
 
-    public void setFavouriteBNSites(HashMap<String, BNSite> sites) {
+    public void setFavouriteBNSites(LinkedHashMap<String, BNSite> sites) {
         // reemplazar la coleccion completa de sites
         this.favouriteSites = sites;
     }
 
-    public int addFavouriteBNSites(HashMap<String, BNSite> sites) {
+    public int addFavouriteBNSites(LinkedHashMap<String, BNSite> sites) {
         // agregar sites a la coleccion
         // TODO solo los que no existian previamente
         this.favouriteSites = sites;
@@ -150,10 +210,14 @@ public class BNDataManager {
     }
 
     public boolean addFavouriteBNSite(BNSite site) {
+        boolean added = false;
         // agregar un site a la coleccion
-        this.favouriteSites.put(site.getIdentifier(), site);
-        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
-        return true;
+        if(!this.favouriteSites.containsKey(site.getIdentifier())){
+            this.favouriteSites.put(site.getIdentifier(), site);
+            added = true;
+        }
+        // retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        return added;
     }
 
     public BNSite getFavouriteBNSite(String identifier) {
@@ -162,12 +226,17 @@ public class BNDataManager {
     }
 
     public boolean removeFavouriteBNSite(String identifier) {
-        // TODO remover un site de la coleccion
-        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return false;
+        boolean removed = false;
+        // remover un site de la coleccion
+        if(!this.favouriteSites.containsKey(identifier)){
+            this.favouriteSites.remove(identifier);
+            removed = true;
+        }
+        // retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        return removed;
     }
 
-    public HashMap<String,BNSite> getFavouriteBNSites(){
+    public LinkedHashMap<String,BNSite> getFavouriteBNSites(){
         // retornar la lista de sites
         return this.favouriteSites;
     }
@@ -177,12 +246,12 @@ public class BNDataManager {
 
     /****************** Showcases start ******************/
 
-    public void setBNShowcases(HashMap<String, BNShowcase> showcases) {
+    public void setBNShowcases(LinkedHashMap<String, BNShowcase> showcases) {
         // reemplazar la coleccion completa de showcases
         this.showcases = showcases;
     }
 
-    public int addBNShowcases(HashMap<String, BNShowcase> showcases) {
+    public int addBNShowcases(LinkedHashMap<String, BNShowcase> showcases) {
         // agregar showcases a la coleccion (solo los que no existian previamente)
         int added = 0;
         for (BNShowcase showcase : showcases.values()) {
@@ -216,7 +285,7 @@ public class BNDataManager {
         return false;
     }
 
-    public HashMap<String,BNShowcase> getBNShowcases(){
+    public LinkedHashMap<String,BNShowcase> getBNShowcases(){
         // retornar la lista de showcases
         return this.showcases;
     }
@@ -226,12 +295,12 @@ public class BNDataManager {
 
     /****************** Organizations start ******************/
 
-    public void setBNOrganizations(HashMap<String, BNOrganization> organizations) {
+    public void setBNOrganizations(LinkedHashMap<String, BNOrganization> organizations) {
         // reemplazar la coleccion completa de organizations
         this.organizations = organizations;
     }
 
-    public int addBNOrganizations(HashMap<String, BNOrganization> organizations) {
+    public int addBNOrganizations(LinkedHashMap<String, BNOrganization> organizations) {
         // agregar organizations a la coleccion (solo los que no existian previamente)
         int added = 0;
         for (BNOrganization organization : organizations.values()) {
@@ -265,7 +334,7 @@ public class BNDataManager {
         return false;
     }
 
-    public HashMap<String,BNOrganization> getBNOrganizations(){
+    public LinkedHashMap<String,BNOrganization> getBNOrganizations(){
         // retornar la lista de organizations
         return this.organizations;
     }
@@ -275,12 +344,12 @@ public class BNDataManager {
 
     /****************** Elements start ******************/
 
-    public void setBNElements(HashMap<String, BNElement> elements) {
+    public void setBNElements(LinkedHashMap<String, BNElement> elements) {
         // reemplazar la coleccion completa de elements
         this.elements = elements;
     }
 
-    public int addBNElements(HashMap<String, BNElement> elements) {
+    public int addBNElements(LinkedHashMap<String, BNElement> elements) {
         // agregar elements a la coleccion (solo los que no existian previamente)
         int added = 0;
         for (BNElement element : elements.values()) {
@@ -314,7 +383,7 @@ public class BNDataManager {
         return false;
     }
 
-    public HashMap<String,BNElement> getBNElements(){
+    public LinkedHashMap<String,BNElement> getBNElements(){
         // retornar la lista de elements
         return this.elements;
     }
@@ -324,12 +393,12 @@ public class BNDataManager {
 
     /****************** Elements start ******************/
 
-    public void setBNElementsId(HashMap<String, BNElement> elements) {
+    public void setBNElementsId(LinkedHashMap<String, BNElement> elements) {
         // reemplazar la coleccion completa de elements
         this.elements_by_id = elements;
     }
 
-    public int addBNElementsId(HashMap<String, BNElement> elements) {
+    public int addBNElementsId(LinkedHashMap<String, BNElement> elements) {
         // TODO agregar elements a la coleccion (solo los que no existian previamente)
         this.elements_by_id = elements;
         // TODO retornar el numero de elements agregados a la coleccion
@@ -354,7 +423,7 @@ public class BNDataManager {
         return false;
     }
 
-    public HashMap<String,BNElement> getBNElementsId(){
+    public LinkedHashMap<String,BNElement> getBNElementsId(){
         // retornar la lista de elements
         return this.elements_by_id;
     }
@@ -369,7 +438,7 @@ public class BNDataManager {
         this.highlights = highlights;
     }
 
-//    public int addBNHighlights(HashMap<String, BNHighlight> highlights) {
+//    public int addBNHighlights(LinkedHashMap<String, BNHighlight> highlights) {
 //        // TODO agregar highlights a la coleccion (solo los que no existian previamente)
 //        this.highlights = highlights;
 //        // TODO retornar el numero de highlights agregados a la coleccion
@@ -404,12 +473,12 @@ public class BNDataManager {
 
     /****************** Elements favourites start ******************/
 
-    public void setFavouriteBNElements(HashMap<String, BNElement> elements) {
+    public void setFavouriteBNElements(LinkedHashMap<String, BNElement> elements) {
         // reemplazar la coleccion completa de elements
         this.favouriteElements = elements;
     }
 
-    public int addFavouriteBNElements(HashMap<String, BNElement> elements) {
+    public int addFavouriteBNElements(LinkedHashMap<String, BNElement> elements) {
         // agregar elements a la coleccion
         // TODO solo los que no existian previamente
         this.favouriteElements = elements;
@@ -435,7 +504,7 @@ public class BNDataManager {
         return false;
     }
 
-    public HashMap<String,BNElement> getFavouriteBNElements(){
+    public LinkedHashMap<String,BNElement> getFavouriteBNElements(){
         // retornar la lista de elements
         return this.favouriteElements;
     }
@@ -445,12 +514,12 @@ public class BNDataManager {
 
     /****************** Categories start ******************/
 
-    public void setBNCategories(HashMap<String, BNCategory> categories) {
+    public void setBNCategories(LinkedHashMap<String, BNCategory> categories) {
         // reemplazar la coleccion completa de categories
         this.categories = categories;
     }
 
-    public int addBNCategories(HashMap<String, BNCategory> categories) {
+    public int addBNCategories(LinkedHashMap<String, BNCategory> categories) {
         // TODO agregar categories a la coleccion (solo los que no existian previamente)
         this.categories = categories;
         // TODO retornar el numero de categories agregados a la coleccion
@@ -475,7 +544,7 @@ public class BNDataManager {
         return false;
     }
 
-    public HashMap<String,BNCategory> getBNCategories(){
+    public LinkedHashMap<String,BNCategory> getBNCategories(){
         // retornar la lista de categories
         return this.categories;
     }

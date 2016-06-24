@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -46,8 +46,8 @@ public class BNHighlightParser {
         return result;
     }
 
-    public HashMap<String, BNHighlight> parseBNHighlightsHM(JSONArray arrayHighlight){
-        HashMap<String, BNHighlight> result = new HashMap<>();
+    public LinkedHashMap<String, BNHighlight> parseBNHighlightsHM(JSONArray arrayHighlight){
+        LinkedHashMap<String, BNHighlight> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayHighlight.length(); i++){
                 JSONObject objectHighlight = (JSONObject) arrayHighlight.get(i);
