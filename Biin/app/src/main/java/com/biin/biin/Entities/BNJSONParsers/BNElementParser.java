@@ -212,7 +212,7 @@ public class BNElementParser {
         return result;
     }
 
-    public LinkedHashMap<String, BNElement> parseFavouriteBNElements(JSONArray arrayElements){
+    public LinkedHashMap<String, BNElement> parseReferenceBNElements(JSONArray arrayElements){
         LinkedHashMap<String, BNElement> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayElements.length(); i++){

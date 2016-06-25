@@ -11,17 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.BiinApp;
-import com.biin.biin.Components.Listeners.BNLoadMoreListener;
+import com.biin.biin.Components.BNProgressViewHolder;
+import com.biin.biin.Components.Listeners.BNLoadMoreSitesListener;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.R;
 import com.biin.biin.SitesActivity;
@@ -47,9 +46,9 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int VIEW_PROG = 0;
 
     private int visibleThreshold = 5;
-    private int lastVIsibleItem, totalItemCount;
+    private int lastVisibleItem, totalItemCount;
     private boolean loading;
-    private BNLoadMoreListener onLoadMoreListener;
+    private BNLoadMoreSitesListener onLoadMoreListener;
     // load more end
 
     public BNSiteListAdapter(Context context, List<BNSite> sites) {
@@ -185,17 +184,8 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         loading = false;
     }
 
-    public void setOnLoadMoreListener(BNLoadMoreListener onLoadMoreListener){
+    public void setOnLoadMoreListener(BNLoadMoreSitesListener onLoadMoreListener){
         this.onLoadMoreListener = onLoadMoreListener;
-    }
-
-    public static class BNProgressViewHolder extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
-
-        public BNProgressViewHolder(View view){
-            super(view);
-            progressBar = (ProgressBar)view.findViewById(R.id.pbLoadingMore);
-        }
     }
 
     public BNSiteListAdapter(Context context, List<BNSite> sites, RecyclerView recyclerView, final boolean isFavourites) {
@@ -209,11 +199,11 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
                     totalItemCount = linearLayoutManager.getItemCount();
-                    lastVIsibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
-                    if(!loading && totalItemCount <= (lastVIsibleItem + visibleThreshold)){
+                    if(!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)){
                         if(onLoadMoreListener != null){
-                            onLoadMoreListener.onLoadMore(isFavourites);
+                            onLoadMoreListener.onLoadMoreSites(isFavourites);
                         }
                         loading = true;
                     }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,18 +13,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.biin.biin.Components.Listeners.BNAdapterListener;
 import com.biin.biin.Components.Listeners.BNAdapterListener.BNSitesLikeListener;
-import com.biin.biin.Managers.BNAppManager;
-import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Utils.BNUtils.BNStringExtras;
-import com.biin.biin.Utils.BNUtils.BNStringTypes;
 import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.R;
@@ -44,30 +38,14 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
     private List<BNSite> sites;
     private ImageLoader imageLoader;
     private boolean showOthers = false;
-    private long duration = 1000;
-    private BNAdapterListener adapterListener;
     private BNSitesLikeListener sitesListener;
-    private BNDataManager dataManager;
 
-    public BNSiteAdapter(Context context, List<BNSite> sites, BNSitesLikeListener sitesListener, long duration) {
+    public BNSiteAdapter(Context context, List<BNSite> sites, BNSitesLikeListener sitesListener) {
         super();
         this.context = context;
         this.sites = sites;
         this.sitesListener = sitesListener;
-        this.duration = duration + 200;
         imageLoader = BiinApp.getInstance().getImageLoader();
-        dataManager = BNAppManager.getInstance().getDataManagerInstance();
-    }
-
-    public BNSiteAdapter(Context context, List<BNSite> sites, BNAdapterListener adapterListener, BNSitesLikeListener sitesListener, long duration) {
-        super();
-        this.context = context;
-        this.sites = sites;
-        this.adapterListener = adapterListener;
-        this.sitesListener = sitesListener;
-        this.duration = duration + 200;
-        imageLoader = BiinApp.getInstance().getImageLoader();
-        dataManager = BNAppManager.getInstance().getDataManagerInstance();
     }
 
     public void setShowOthers(boolean showOthers){
@@ -107,26 +85,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
                 @Override
                 public void onClick(View v) {
                     // quitar el like y cambiarlo de lista
-//                    Toast.makeText(context, "Unlike", Toast.LENGTH_SHORT).show();
-//                    sites.remove(position);
-//                    notifyItemRemoved(position);
-//                    dataManager.unlikeBNSite(item);
                     sitesListener.onSiteUnliked(item.getIdentifier());
-//                    if(dataManager.unlikeBNSite(item)){
-//                        sitesListener.onSiteUnliked(item);
-//                    }
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            notifyItemRangeChanged(position, sites.size());
-//                            notifyDataSetChanged();
-//                            if(sites.size() == 0){
-//                                adapterListener.onEmptyAdapter(BNStringTypes.FavouriteSites);
-//                            }else{
-//                                adapterListener.onLoadAdapter(BNStringTypes.FavouriteSites);
-//                            }
-//                        }
-//                    }, duration);
                 }
             });
         }else {
@@ -137,26 +96,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
                 @Override
                 public void onClick(View v) {
                     // darle like y cambiarlo de lista
-//                    Toast.makeText(context, "Like", Toast.LENGTH_SHORT).show();
-//                    sites.remove(position);
-//                    notifyItemRemoved(position);
-//                    dataManager.likeBNSite(item);
                     sitesListener.onSiteLiked(item.getIdentifier());
-//                    if(dataManager.likeBNSite(item)){
-//                        sitesListener.onSiteLiked(item);
-//                    }
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            notifyItemRangeChanged(position, sites.size());
-//                            notifyDataSetChanged();
-//                            if(sites.size() == 0){
-//                                adapterListener.onEmptyAdapter(BNStringTypes.NearSites);
-//                            }else{
-//                                adapterListener.onLoadAdapter(BNStringTypes.NearSites);
-//                            }
-//                        }
-//                    }, duration);
                 }
             });
         }

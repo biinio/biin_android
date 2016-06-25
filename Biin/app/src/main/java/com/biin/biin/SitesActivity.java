@@ -208,7 +208,7 @@ public class SitesActivity extends AppCompatActivity implements BNAdapterListene
             CardRecyclerView rvSites = (CardRecyclerView) findViewById(R.id.rvSitesNearYou);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
-            BNSiteAdapter adapter = new BNSiteAdapter(this, sites, this, 0);
+            BNSiteAdapter adapter = new BNSiteAdapter(this, sites, this);
             rvSites.setLayoutManager(layoutManager);
             rvSites.setHasFixedSize(true);
             rvSites.setAdapter(adapter);

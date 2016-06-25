@@ -89,13 +89,17 @@ public class BNSiteParser {
 
     public LinkedHashMap<String, BNSite> parseNearByBNSites(JSONArray arraySites){
         LinkedHashMap<String, BNSite> result = new LinkedHashMap<>();
+        ArrayList<String> organizations = new ArrayList<>();
         try{
             for(int i = 0; i < arraySites.length(); i++){
                 JSONObject objectSite = (JSONObject) arraySites.get(i);
                 BNSite site = dataManager.getBNSite(objectSite.getString("identifier"));
 
-                if(site != null) {
+                if(site != null && site.getOrganization() != null
+                        && site.getOrganization().getIdentifier() != null
+                        && !organizations.contains(site.getOrganization().getIdentifier())) {
                     result.put(site.getIdentifier(), site);
+                    organizations.add(site.getOrganization().getIdentifier());
                 }
             }
         }catch (JSONException e){

@@ -2,7 +2,6 @@ package com.biin.biin;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,14 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Adapters.BNSiteListAdapter;
-import com.biin.biin.Components.Listeners.BNLoadMoreListener;
+import com.biin.biin.Components.Listeners.BNLoadMoreSitesListener;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
@@ -56,7 +54,7 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
             sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNSites().values());
             tvTitle.setText(getResources().getString(R.string.FavoritePlaces));
         }else {
-            sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites(true).values());
+            sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites(false).values()); //TODO true para incluir favorites, false para omitirlos
         }
 
         rvSites = (RecyclerView)findViewById(R.id.rvSitesList);
@@ -64,9 +62,9 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
 
         adapter = new BNSiteListAdapter(this, sites, rvSites, isFavourites);
         adapter.setShowOthers(true);
-        adapter.setOnLoadMoreListener(new BNLoadMoreListener(){
+        adapter.setOnLoadMoreListener(new BNLoadMoreSitesListener(){
             @Override
-            public void onLoadMore(boolean isFavourites) {
+            public void onLoadMoreSites(boolean isFavourites) {
                 sites.add(null);
                 adapter.notifyItemInserted(sites.size() - 1);
 
@@ -87,7 +85,7 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
                                 onLoadMoreError(error);
                             }
                         });
-                BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "InitialData");
+                BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "MoreSitesData");
             }
         });
         rvSites.setLayoutManager(layoutManager);

@@ -286,7 +286,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     private void loadNearPlaces(){
         nearSites = new ArrayList<>(dataManager.getNearByBNSites(false).values());
-        List<String> organizations = new ArrayList<>();
+
+        /*List<String> organizations = new ArrayList<>();
         List<BNSite> removeSites = new ArrayList<>();
 
         for (BNSite site : nearSites) {
@@ -299,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
         for (BNSite site : removeSites) {
             nearSites.remove(site);
-        }
+        }*/
 
         if(nearSites.size() > 0) {
             showNearPlacesList();
@@ -320,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManagerSmooth layoutManager = new LinearLayoutManagerSmooth(this, LinearLayoutManager.HORIZONTAL, false);
 
-        nearPlacesAdapter = new BNSiteAdapter(this, nearSites, this, animDuration);
+        nearPlacesAdapter = new BNSiteAdapter(this, nearSites, this);
         nearPlacesAdapter.setShowOthers(true);
         rvNearSites.setLayoutManager(layoutManager);
         rvNearSites.setHasFixedSize(true);
@@ -377,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManagerSmooth layoutManager = new LinearLayoutManagerSmooth(this, LinearLayoutManager.HORIZONTAL, false);
 
-        favoritesAdapter = new BNSiteAdapter(this, favoriteSites, this, animDuration);
+        favoritesAdapter = new BNSiteAdapter(this, favoriteSites, this);
         favoritesAdapter.setShowOthers(true);
         rvFavouritePlaces.setLayoutManager(layoutManager);
         rvFavouritePlaces.setHasFixedSize(true);
@@ -491,7 +492,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     @Override
     public void onSiteLiked(String identifier) {
-        boolean added = dataManager.likeBNSite(identifier);
+        dataManager.likeBNSite(identifier);
 
         addFavouriteSite(identifier);
         favoritesAdapter.notifyItemInserted(0);
@@ -517,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     @Override
     public void onSiteUnliked(String identifier) {
-        boolean removed = dataManager.unlikeBNSite(identifier);
+        dataManager.unlikeBNSite(identifier);
 
         addNearSite(identifier);
         nearPlacesAdapter.notifyItemInserted(0);

@@ -137,7 +137,7 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
 
     private void parseFavouriteElements(JSONArray arrayElements){
         BNElementParser elementParser = new BNElementParser();
-        LinkedHashMap<String, BNElement> result = elementParser.parseFavouriteBNElements(arrayElements);
+        LinkedHashMap<String, BNElement> result = elementParser.parseReferenceBNElements(arrayElements);
         // guardar el resultado de elements en el data manager
         dataManager.setFavouriteBNElements(result);
     }

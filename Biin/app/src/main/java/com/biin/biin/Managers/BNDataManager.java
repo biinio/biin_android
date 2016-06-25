@@ -32,6 +32,9 @@ public class BNDataManager {
     private LinkedHashMap<String, BNElement> favouriteElements = new LinkedHashMap<>();
     private List<BNHighlight> highlights = new ArrayList<>();
 
+    private LinkedHashMap<String, BNSite> likedSites = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNSite> unlikedSites = new LinkedHashMap<>();
+
     private LinkedHashMap<String, BNSite> pendingLikeSites = new LinkedHashMap<>();
     private LinkedHashMap<String, BNSite> pendingUnlikeSites = new LinkedHashMap<>();
 
@@ -171,6 +174,14 @@ public class BNDataManager {
             }
         }
 
+//        if(this.unlikedSites.containsKey(identifier)){
+//            this.unlikedSites.remove(identifier);
+//        }else{
+//            if(!this.likedSites.containsKey(identifier)){
+//                this.likedSites.put(identifier, site);
+//            }
+//        }
+
         return addFavouriteBNSite(site);
     }
 
@@ -186,6 +197,14 @@ public class BNDataManager {
             }
         }
 
+//        if(this.likedSites.containsKey(identifier)){
+//            this.likedSites.remove(identifier);
+//        }else{
+//            if(!this.unlikedSites.containsKey(identifier)){
+//                this.unlikedSites.put(identifier, site);
+//            }
+//        }
+
         boolean added = addNearByBNSite(site);
 
         return removeFavouriteBNSite(identifier);
@@ -197,6 +216,12 @@ public class BNDataManager {
     /****************** Sites favourites start ******************/
 
     public void setFavouriteBNSites(LinkedHashMap<String, BNSite> sites) {
+        // remover los sites favoritos de los cercanos
+        for (BNSite site : sites.values()) {
+            if(this.nearBySites.containsKey(site.getIdentifier())){
+                nearBySites.remove(site.getIdentifier());
+            }
+        }
         // reemplazar la coleccion completa de sites
         this.favouriteSites = sites;
     }

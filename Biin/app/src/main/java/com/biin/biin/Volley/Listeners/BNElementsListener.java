@@ -18,28 +18,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- * Created by ramirezallan on 6/20/16.
+ * Created by ramirezallan on 6/24/16.
  */
-public class BNSitesListener implements Response.Listener<JSONObject> {
+public class BNElementsListener implements Response.Listener<JSONObject> {
 
-    private static final String TAG = "BNSitesListener";
+    private static final String TAG = "BNElementsListener";
 
-    private IBNSitesListener listener;
-    private List<BNSite> sites;
+    private IBNElementsListener listener;
+    private List<BNElement> elements;
     private BNDataManager dataManager;
     private boolean isFavourites = false;
 
-    public BNSitesListener(List<BNSite> sites, boolean isFavourites) {
-        this.sites = sites;
+    public BNElementsListener(List<BNElement> elements, boolean isFavourites) {
+        this.elements = elements;
         this.isFavourites = isFavourites;
         dataManager = BNAppManager.getDataManagerInstance();
     }
 
-    public void setListener(IBNSitesListener listener) {
+    public void setListener(IBNElementsListener listener) {
         this.listener = listener;
     }
 
@@ -48,7 +49,7 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
         try {
             JSONObject data = response.getJSONObject("data");
 
-            // parsear elements_by_identifier
+            // parsear elements
             parseElements(data.getJSONArray("elements"));
 
             // parsear organizations
@@ -57,21 +58,25 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
             // parsear showcases
             parseShowcases(data.getJSONArray("showcases"));
 
-            sites.remove(sites.size() - 1);
+            // parsear sites
+            parseSites(data.getJSONArray("sites"));
+
+            elements.remove(elements.size() - 1);
             if (this.listener != null) {
-                this.listener.onItemRemoved(sites.size());
+                this.listener.onItemRemoved(elements.size());
             } else {
                 Log.e(TAG, "El listener es nulo o no ha sido seteado.");
             }
 
-            // parsear sites
-            parseSites(data.getJSONArray("sites"));
+            // parsear elements por categoria
+            parseElementsForCategory(data.getJSONArray("elementsForCategory"));
+
         } catch (JSONException e) {
             Log.e(TAG, "Error parseando el JSON.", e);
         }
 
         if (this.listener != null) {
-            this.listener.onLoadMoreSitesResponse();
+            this.listener.onLoadMoreElementsResponse();
         } else {
             Log.e(TAG, "El listener es nulo o no ha sido seteado.");
         }
@@ -99,34 +104,37 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
     }
 
     private void parseSites(JSONArray arraySites){
-        BNSiteParser siteParser = new BNSiteParser();
+        BNSiteParser sitesParser = new BNSiteParser();
+        LinkedHashMap<String, BNSite> result = sitesParser.parseBNSites(arraySites);
+        // agregar el resultado de sites al data manager
+        dataManager.addBNSites(result);
+    }
 
-        try {
-            for(int i = 0; i < arraySites.length(); i++){
-                JSONObject objectSite = (JSONObject) arraySites.get(i);
-                BNSite site = siteParser.parseBNSite(objectSite);
-                sites.add(site);
-                dataManager.addNearByBNSite(site);
+    private void parseElementsForCategory(JSONArray arrayElements){
+        BNElementParser elementParser = new BNElementParser();
+        List<BNElement> cateogryElements = new ArrayList<>(elementParser.parseReferenceBNElements(arrayElements).values());
 
-                if(site.isUserLiked()){
-                    dataManager.addFavouriteBNSite(site);
-                }
+        for(int i = 0; i < cateogryElements.size(); i++){
+            BNElement element = cateogryElements.get(i);
+            elements.add(element);
+            dataManager.addBNElement(element);
 
-                if (this.listener != null && (!isFavourites || site.isUserLiked())) {
-                    this.listener.onItemInserted(sites.size());
-                } else {
-                    Log.e(TAG, "El listener es nulo o no ha sido seteado.");
-                }
+            if(element.isUserLiked()){
+                dataManager.addFavouriteBNElement(element);
             }
-        } catch (JSONException e) {
-            Log.e(TAG, "Error parseando el JSON.", e);
+
+            if (this.listener != null && (!isFavourites || element.isUserLiked())) {
+                this.listener.onItemInserted(elements.size());
+            } else {
+                Log.e(TAG, "El listener es nulo o no ha sido seteado.");
+            }
         }
     }
 
-    public interface IBNSitesListener {
+    public interface IBNElementsListener {
         void onItemRemoved(int position);
         void onItemInserted(int position);
-        void onLoadMoreSitesResponse();
+        void onLoadMoreElementsResponse();
     }
 
 }
