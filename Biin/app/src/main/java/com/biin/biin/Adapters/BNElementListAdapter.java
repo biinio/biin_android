@@ -91,7 +91,7 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
             holder.progressBar.setIndeterminate(true);
         }else if(viewHolder instanceof BNElementViewHolder) {
             BNElementViewHolder holder = (BNElementViewHolder) viewHolder;
-            // load more end
+        // load more end
 
             final BNElement item = elements.get(position);
             TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), (BNUtils.getWidth() / 2) + (int) (68 * BNUtils.getDensity()));
@@ -147,7 +147,7 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
 
-            // load more start
+        // load more start
         }
         // load more end
 

@@ -22,22 +22,29 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Adapters.BNCategoryAdapter;
 import com.biin.biin.Adapters.BNHighlightAdapter;
 import com.biin.biin.Adapters.BNSiteAdapter;
 import com.biin.biin.Components.CardRecyclerView;
 import com.biin.biin.Components.LinearLayoutManagerSmooth;
-import com.biin.biin.Components.Listeners.BNAdapterListener;
+import com.biin.biin.Components.Listeners.BNLoadMoreElementsListener;
+import com.biin.biin.Components.Listeners.BNMoreElementsListener;
+import com.biin.biin.Components.Listeners.BNSitesLikeListener;
 import com.biin.biin.Components.Listeners.HighlightsPagerListener;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
 import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
+import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
-import com.biin.biin.Utils.BNUtils.BNStringTypes;
+import com.biin.biin.Volley.Listeners.BNElementsListener;
 import com.jude.rollviewpager.RollPagerView;
 
 import java.util.ArrayList;
@@ -47,7 +54,7 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
-public class MainActivity extends AppCompatActivity implements HighlightsPagerListener.IBNHighlightsListener, BNAdapterListener, BNAdapterListener.BNSitesLikeListener {
+public class MainActivity extends AppCompatActivity implements HighlightsPagerListener.IBNHighlightsListener, BNSitesLikeListener {
 
     private static final String TAG = "MainActivity";
 
@@ -59,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private RelativeLayout rlCloseApp;
     private DrawerLayout drawer;
 
+    private Biinie biinie;
     private BNDataManager dataManager;
     private List<BNSite> nearSites;
     private List<BNSite> favoriteSites;
@@ -80,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         BNUtils.setWidth(metrics.widthPixels);
         BNUtils.setDensity(metrics.density);
+
+        biinie = BNAppManager.getDataManagerInstance().getBiinie();
 
         setUpScreen();
 
@@ -285,7 +295,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     }
 
     private void loadNearPlaces(){
-        nearSites = new ArrayList<>(dataManager.getNearByBNSites(false).values());
+//        nearSites = new ArrayList<>(dataManager.getNearByBNSites(false).values());
+        nearSites = dataManager.getNearByBNSites(false);
 
         /*List<String> organizations = new ArrayList<>();
         List<BNSite> removeSites = new ArrayList<>();
@@ -321,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManagerSmooth layoutManager = new LinearLayoutManagerSmooth(this, LinearLayoutManager.HORIZONTAL, false);
 
-        nearPlacesAdapter = new BNSiteAdapter(this, nearSites, this);
+        nearPlacesAdapter = new BNSiteAdapter(this, nearSites, this, rvNearSites, false);
         nearPlacesAdapter.setShowOthers(true);
         rvNearSites.setLayoutManager(layoutManager);
         rvNearSites.setHasFixedSize(true);
@@ -356,7 +367,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     }
 
     private void loadFavourites(){
-        favoriteSites = new ArrayList<>(dataManager.getFavouriteBNSites().values());
+//        favoriteSites = new ArrayList<>(dataManager.getFavouriteBNSites().values());
+        favoriteSites = dataManager.getFavouriteBNSites();
 
         if(favoriteSites.size() > 0) {
             showFavouritesList();
@@ -378,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManagerSmooth layoutManager = new LinearLayoutManagerSmooth(this, LinearLayoutManager.HORIZONTAL, false);
 
-        favoritesAdapter = new BNSiteAdapter(this, favoriteSites, this);
+        favoritesAdapter = new BNSiteAdapter(this, favoriteSites, this, rvFavouritePlaces, true);
         favoritesAdapter.setShowOthers(true);
         rvFavouritePlaces.setLayoutManager(layoutManager);
         rvFavouritePlaces.setHasFixedSize(true);
@@ -439,7 +451,34 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 //                rvCategoryList.setSnapEnabled(true);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
-                BNCategoryAdapter adapter = new BNCategoryAdapter(this, categoryElements);
+                final BNCategoryAdapter adapter = new BNCategoryAdapter(this, categoryElements, rvCategoryList);
+                adapter.setOnLoadMoreListener(new BNLoadMoreElementsListener(){
+                    @Override
+                    public void onLoadMoreElements() {
+                        category.getElements().add(null);
+                        adapter.notifyItemInserted(category.getElements().size() - 1);
+
+                        BNElementsListener elementsListener = new BNElementsListener(category.getElements(), false);
+                        elementsListener.setListener(new BNMoreElementsListener(adapter));
+
+                        String url = BNAppManager.getNetworkManagerInstance().getMoreCategoryElementsUrl(biinie.getIdentifier(), category.getIdentifier());
+                        Log.d(TAG, url);
+
+                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                                Request.Method.GET,
+                                url,
+                                null,
+                                elementsListener,
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.e(TAG, "Error:" + error.getMessage());
+                                        adapter.setLoaded();
+                                    }
+                                });
+                        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "MoreElementsData");
+                    }
+                });
                 rvCategoryList.setLayoutManager(layoutManager);
                 rvCategoryList.setHasFixedSize(true);
                 rvCategoryList.setAdapter(adapter);
@@ -472,8 +511,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         }
     }
 
-    @Override
-    public void onEmptyAdapter(String type) {
+    /*public void onEmptyAdapter(String type) {
         if(type.equals(BNStringTypes.NearSites)) {
             showNearPlacesEmpty(true);
         }else if(type.equals(BNStringTypes.FavouriteSites)) {
@@ -481,14 +519,13 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         }
     }
 
-    @Override
     public void onLoadAdapter(String type) {
         if(type.equals(BNStringTypes.NearSites)) {
             showNearPlacesEmpty(false);
         }else if(type.equals(BNStringTypes.FavouriteSites)) {
             showFavouritesEmpty(false);
         }
-    }
+    }*/
 
     @Override
     public void onSiteLiked(String identifier) {

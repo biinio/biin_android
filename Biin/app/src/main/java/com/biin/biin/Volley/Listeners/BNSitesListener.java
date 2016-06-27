@@ -32,6 +32,7 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
     private List<BNSite> sites;
     private BNDataManager dataManager;
     private boolean isFavourites = false;
+    private String identifier;
 
     public BNSitesListener(List<BNSite> sites, boolean isFavourites) {
         this.sites = sites;
@@ -41,6 +42,10 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
 
     public void setListener(IBNSitesListener listener) {
         this.listener = listener;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     @Override
@@ -105,17 +110,19 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
             for(int i = 0; i < arraySites.length(); i++){
                 JSONObject objectSite = (JSONObject) arraySites.get(i);
                 BNSite site = siteParser.parseBNSite(objectSite);
-                sites.add(site);
-                dataManager.addNearByBNSite(site);
+                if(this.identifier == null || site.getOrganizationIdentifier().equals(this.identifier)) {
+                    sites.add(site);
+//                    dataManager.addNearByBNSite(site);
 
-                if(site.isUserLiked()){
-                    dataManager.addFavouriteBNSite(site);
-                }
+                    if (site.isUserLiked()) {
+                        dataManager.addFavouriteBNSite(site);
+                    }
 
-                if (this.listener != null && (!isFavourites || site.isUserLiked())) {
-                    this.listener.onItemInserted(sites.size());
-                } else {
-                    Log.e(TAG, "El listener es nulo o no ha sido seteado.");
+                    if (this.listener != null && (!isFavourites || site.isUserLiked())) {
+                        this.listener.onItemInserted(sites.size());
+                    } else {
+                        Log.e(TAG, "El listener es nulo o no ha sido seteado.");
+                    }
                 }
             }
         } catch (JSONException e) {

@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -97,14 +98,16 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
         BNSiteParser siteParser = new BNSiteParser();
         LinkedHashMap<String, BNSite> result = siteParser.parseNearByBNSites(arraySites);
         // guardar el resultado de sites cercanos en el data manager
-        dataManager.setNearByBNSites(result);
+//        dataManager.setNearByBNSites(result);
+        dataManager.setNearByBNSites(new ArrayList<>(result.values()));
     }
 
     private void parseFavouriteSites(JSONArray arraySites){
         BNSiteParser siteParser = new BNSiteParser();
         LinkedHashMap<String, BNSite> result = siteParser.parseFavouriteBNSites(arraySites);
         // guardar el resultado de sites favoritos en el data manager
-        dataManager.setFavouriteBNSites(result);
+//        dataManager.setFavouriteBNSites(result);
+        dataManager.setFavouriteBNSites(new ArrayList<>(result.values()));
     }
 
     private void parseShowcases(JSONArray arrayShowcases){

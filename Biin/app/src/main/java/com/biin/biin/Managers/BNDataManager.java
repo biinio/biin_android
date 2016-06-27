@@ -22,8 +22,8 @@ public class BNDataManager {
     private Biinie biinie = new Biinie();
 
     private LinkedHashMap<String, BNSite> sites = new LinkedHashMap<>();
-    private LinkedHashMap<String, BNSite> nearBySites = new LinkedHashMap<>();
-    private LinkedHashMap<String, BNSite> favouriteSites = new LinkedHashMap<>();
+    private List<BNSite> nearBySites = new ArrayList<>();
+    private List<BNSite> favouriteSites = new ArrayList<>();
     private LinkedHashMap<String, BNShowcase> showcases = new LinkedHashMap<>();
     private LinkedHashMap<String, BNOrganization> organizations = new LinkedHashMap<>();
     private LinkedHashMap<String, BNElement> elements = new LinkedHashMap<>();
@@ -77,7 +77,7 @@ public class BNDataManager {
     public boolean addBNSite(BNSite site) {
         // TODO agregar un site a la coleccion
         this.sites.put(site.getIdentifier(), site);
-        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        // TODO retornar true si se agrego o false si no se agrego
         return true;
     }
 
@@ -88,7 +88,7 @@ public class BNDataManager {
 
     public boolean removeBNSite(String identifier) {
         // TODO remover un site de la coleccion
-        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        // TODO retornar true si se elimino o false si no se elimino
         return false;
     }
 
@@ -102,12 +102,12 @@ public class BNDataManager {
 
     /****************** Sites near by start ******************/
 
-    public void setNearByBNSites(LinkedHashMap<String, BNSite> sites) {
+    public void setNearByBNSites(List<BNSite> sites) {
         // reemplazar la coleccion completa de sites
         this.nearBySites = sites;
     }
 
-    public int addNearByBNSites(LinkedHashMap<String, BNSite> sites) {
+    public int addNearByBNSites(List<BNSite> sites) {
         // TODO agregar sites a la coleccion (solo los que no existian previamente)
         this.nearBySites = sites;
         // TODO retornar el numero de sites agregados a la coleccion
@@ -117,11 +117,12 @@ public class BNDataManager {
     public boolean addNearByBNSite(BNSite site) {
         boolean added = false;
         // agregar un site a la coleccion
-        if(!this.nearBySites.containsKey(site.getIdentifier())){
-            this.nearBySites.put(site.getIdentifier(), site);
+        int index = nearBySitesContains(site.getIdentifier());
+        if(index > -1){
+            this.nearBySites.add(site);
             added = true;
         }
-        // retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        // retornar true si se agrego o false si no se agrego
         return added;
     }
 
@@ -133,31 +134,102 @@ public class BNDataManager {
     public boolean removeNearByBNSite(String identifier) {
         boolean removed = false;
         // remover un site de la coleccion
-        if(!this.nearBySites.containsKey(identifier)){
-            this.nearBySites.remove(identifier);
+        int index = nearBySitesContains(identifier);
+        if(index > -1){
+            this.nearBySites.remove(index);
             removed = true;
         }
-        // retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        // retornar true si se elimino o false si no se elimino
         return removed;
     }
 
-    public LinkedHashMap<String,BNSite> getNearByBNSites(boolean favorites){
-        LinkedHashMap<String,BNSite> sites = this.nearBySites;
+    public List<BNSite> getNearByBNSites(boolean favorites){
+        List<BNSite> sites = this.nearBySites;
 
         if(!favorites){
-            // remover los sites favoritos de los cercanos
-            for (BNSite favorite : this.favouriteSites.values()) {
-                if(sites.containsKey(favorite.getIdentifier())){
-                    sites.remove(favorite.getIdentifier());
-                }
-            }
+            sites.removeAll(this.favouriteSites);
         }
 
         // retornar la lista de sites
         return sites;
     }
 
+    public int nearBySitesContains(String identifier){
+        int index = -1;
+
+        for (int i = 0; i < this.nearBySites.size(); i++) {
+            if(this.nearBySites.get(i).getIdentifier().equals(identifier)){
+                index = i;
+            }
+        }
+        
+        return index;
+    }
     /****************** Sites near by end ******************/
+
+
+    /****************** Sites favourites start ******************/
+
+    public void setFavouriteBNSites(List<BNSite> sites) {
+        // reemplazar la coleccion completa de sites
+        this.favouriteSites = sites;
+    }
+
+    public int addFavouriteBNSites(List<BNSite> sites) {
+        // agregar sites a la coleccion
+        // TODO solo los que no existian previamente
+        this.favouriteSites = sites;
+        // TODO retornar el numero de sites agregados a la coleccion
+        return 0;
+    }
+
+    public boolean addFavouriteBNSite(BNSite site) {
+        boolean added = false;
+        // agregar un site a la coleccion
+        int index = favouriteSitesContains(site.getIdentifier());
+        if(index > -1){
+            this.favouriteSites.add(site);
+            added = true;
+        }
+        // retornar true si se agrego o false si no se agrego
+        return added;
+    }
+
+    public BNSite getFavouriteBNSite(String identifier) {
+        // TODO obtener un site por su identificador
+        return null;
+    }
+
+    public boolean removeFavouriteBNSite(String identifier) {
+        boolean removed = false;
+        // remover un site de la coleccion
+        int index = favouriteSitesContains(identifier);
+        if(index > -1){
+            this.favouriteSites.remove(index);
+            removed = true;
+        }
+        // retornar true si se elimino o false si no se elimino
+        return removed;
+    }
+
+    public List<BNSite> getFavouriteBNSites(){
+        // retornar la lista de sites
+        return this.favouriteSites;
+    }
+
+    public int favouriteSitesContains(String identifier){
+        int index = -1;
+
+        for (int i = 0; i < this.favouriteSites.size(); i++) {
+            if(this.favouriteSites.get(i).getIdentifier().equals(identifier)){
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    /****************** Sites favourites end ******************/
 
 
     /****************** Manage favourites start ******************/
@@ -213,62 +285,6 @@ public class BNDataManager {
     /****************** Manage favourites end ******************/
 
 
-    /****************** Sites favourites start ******************/
-
-    public void setFavouriteBNSites(LinkedHashMap<String, BNSite> sites) {
-        // remover los sites favoritos de los cercanos
-        for (BNSite site : sites.values()) {
-            if(this.nearBySites.containsKey(site.getIdentifier())){
-                nearBySites.remove(site.getIdentifier());
-            }
-        }
-        // reemplazar la coleccion completa de sites
-        this.favouriteSites = sites;
-    }
-
-    public int addFavouriteBNSites(LinkedHashMap<String, BNSite> sites) {
-        // agregar sites a la coleccion
-        // TODO solo los que no existian previamente
-        this.favouriteSites = sites;
-        // TODO retornar el numero de sites agregados a la coleccion
-        return 0;
-    }
-
-    public boolean addFavouriteBNSite(BNSite site) {
-        boolean added = false;
-        // agregar un site a la coleccion
-        if(!this.favouriteSites.containsKey(site.getIdentifier())){
-            this.favouriteSites.put(site.getIdentifier(), site);
-            added = true;
-        }
-        // retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
-        return added;
-    }
-
-    public BNSite getFavouriteBNSite(String identifier) {
-        // TODO obtener un site por su identificador
-        return null;
-    }
-
-    public boolean removeFavouriteBNSite(String identifier) {
-        boolean removed = false;
-        // remover un site de la coleccion
-        if(!this.favouriteSites.containsKey(identifier)){
-            this.favouriteSites.remove(identifier);
-            removed = true;
-        }
-        // retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
-        return removed;
-    }
-
-    public LinkedHashMap<String,BNSite> getFavouriteBNSites(){
-        // retornar la lista de sites
-        return this.favouriteSites;
-    }
-
-    /****************** Sites favourites end ******************/
-
-
     /****************** Showcases start ******************/
 
     public void setBNShowcases(LinkedHashMap<String, BNShowcase> showcases) {
@@ -295,7 +311,7 @@ public class BNDataManager {
             this.showcases.put(showcase.getIdentifier(), showcase);
             added = true;
         }
-        // retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        // retornar true si se agrego o false si no se agrego
         return added;
     }
 
@@ -306,7 +322,7 @@ public class BNDataManager {
 
     public boolean removeBNShowcase(String identifier) {
         // TODO remover un showcase de la coleccion
-        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        // TODO retornar true si se elimino o false si no se elimino
         return false;
     }
 
@@ -344,7 +360,7 @@ public class BNDataManager {
             this.organizations.put(organization.getIdentifier(), organization);
             added = true;
         }
-        // retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        // retornar true si se agrego o false si no se agrego
         return added;
     }
 
@@ -355,7 +371,7 @@ public class BNDataManager {
 
     public boolean removeBNOrganization(String identifier) {
         // TODO remover una organization de la coleccion
-        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        // TODO retornar true si se elimino o false si no se elimino
         return false;
     }
 
@@ -393,7 +409,7 @@ public class BNDataManager {
             this.elements.put(element.getIdentifier(), element);
             added = true;
         }
-        // retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        // retornar true si se agrego o false si no se agrego
         return added;
     }
 
@@ -404,7 +420,7 @@ public class BNDataManager {
 
     public boolean removeBNElement(String identifier) {
         // TODO remover un element de la coleccion
-        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        // TODO retornar true si se elimino o false si no se elimino
         return false;
     }
 
@@ -433,7 +449,7 @@ public class BNDataManager {
     public boolean addBNElementId(BNElement element) {
         // TODO agregar un element a la coleccion
         this.elements_by_id.put(element.get_id(), element);
-        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        // TODO retornar true si se agrego o false si no se agrego
         return true;
     }
 
@@ -444,7 +460,7 @@ public class BNDataManager {
 
     public boolean removeBNElementId(String id) {
         // TODO remover un element de la coleccion
-        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        // TODO retornar true si se elimino o false si no se elimino
         return false;
     }
 
@@ -473,7 +489,7 @@ public class BNDataManager {
 //    public boolean addBNHighlights(BNHighlight highlight) {
 //        // TODO agregar un highlight a la coleccion
 //        this.highlights.put(highlight.getIdentifier(), highlight);
-//        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+//        // TODO retornar true si se agrego o false si no se agrego
 //        return true;
 //    }
 
@@ -484,7 +500,7 @@ public class BNDataManager {
 
     public boolean removeBNHighlight(String identifier) {
         // TODO remover un highlight de la coleccion
-        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        // TODO retornar true si se elimino o false si no se elimino
         return false;
     }
 
@@ -514,7 +530,7 @@ public class BNDataManager {
     public boolean addFavouriteBNElement(BNElement element) {
         // agregar un element a la coleccion
         this.favouriteElements.put(element.getIdentifier(), element);
-        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        // TODO retornar true si se agrego o false si no se agrego
         return true;
     }
 
@@ -525,7 +541,7 @@ public class BNDataManager {
 
     public boolean removeFavouriteBNElement(String identifier) {
         // TODO remover un element de la coleccion
-        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        // TODO retornar true si se elimino o false si no se elimino
         return false;
     }
 
@@ -554,7 +570,7 @@ public class BNDataManager {
     public boolean addBNCategory(BNCategory category) {
         // TODO agregar una category a la coleccion
         this.categories.put(category.getIdentifier(), category);
-        // TODO retornar true si se agrego o false si no se agrego (por ejemplo si ya existia)
+        // TODO retornar true si se agrego o false si no se agrego
         return true;
     }
 
@@ -565,7 +581,7 @@ public class BNDataManager {
 
     public boolean removeBNCategory(String identifier) {
         // TODO remover una category de la coleccion
-        // TODO retornar true si se elimino o false si no se elimino (por ejemplo si no existia)
+        // TODO retornar true si se elimino o false si no se elimino
         return false;
     }
 

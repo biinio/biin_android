@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,9 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.biin.biin.Components.Listeners.BNAdapterListener.BNSitesLikeListener;
+import com.biin.biin.Components.BNProgressViewHolder;
+import com.biin.biin.Components.Listeners.BNSitesLikeListener;
+import com.biin.biin.Components.Listeners.BNLoadMoreSitesListener;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Utils.BNUtils.BNStringExtras;
 import com.biin.biin.BiinApp;
@@ -30,7 +33,7 @@ import java.util.List;
 /**
  * Created by ramirezallan on 5/11/16.
  */
-public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteViewHolder> {
+public class BNSiteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "BNSiteAdapter";
     private static Context context;
@@ -39,6 +42,16 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
     private ImageLoader imageLoader;
     private boolean showOthers = false;
     private BNSitesLikeListener sitesListener;
+
+    // load more start
+    private final int VIEW_ITEM = 1;
+    private final int VIEW_PROG = 0;
+
+    private int visibleThreshold = 5;
+    private int lastVisibleItem, totalItemCount;
+    private boolean loading;
+    private BNLoadMoreSitesListener onLoadMoreListener;
+    // load more end
 
     public BNSiteAdapter(Context context, List<BNSite> sites, BNSitesLikeListener sitesListener) {
         super();
@@ -53,72 +66,143 @@ public class BNSiteAdapter extends RecyclerView.Adapter<BNSiteAdapter.BNSiteView
     }
 
     @Override
-    public BNSiteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bnsite_item_small, parent, false);
-        v.setLayoutParams(new RecyclerView.LayoutParams((sites.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity())));
-        BNSiteViewHolder holder = new BNSiteViewHolder(v);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        // load more start
+        RecyclerView.ViewHolder holder = null;
+
+        if(viewType == VIEW_PROG){
+
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_item, parent, false);
+            v.setLayoutParams(new RecyclerView.LayoutParams((int)(56 * BNUtils.getDensity()), (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity())));
+            holder = new BNProgressViewHolder(v);
+
+        }else if(viewType == VIEW_ITEM) {
+        // load more end
+
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bnsite_item_small, parent, false);
+            v.setLayoutParams(new RecyclerView.LayoutParams((sites.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int) (56 * BNUtils.getDensity())));
+            holder = new BNSiteViewHolder(v);
+
+        // load more start
+        }
+        // load more end
+
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(BNSiteViewHolder holder, final int position) {
-        final BNSite item = sites.get(position);
-        TableRow.LayoutParams params = new TableRow.LayoutParams((sites.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int)(56 * BNUtils.getDensity()));
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+
+        // load more start
+        if(viewHolder instanceof BNProgressViewHolder){
+            BNProgressViewHolder holder = (BNProgressViewHolder)viewHolder;
+            holder.progressBar.setIndeterminate(true);
+        }else if(viewHolder instanceof BNSiteViewHolder) {
+            BNSiteViewHolder holder = (BNSiteViewHolder) viewHolder;
+            // load more end
+
+            final BNSite item = sites.get(position);
+            TableRow.LayoutParams params = new TableRow.LayoutParams((sites.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int) (56 * BNUtils.getDensity()));
 
 //        loadSiteImage(item.getMedia().get(0).getUrl(), holder);
-        imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivSite, R.drawable.bg_feedback, R.drawable.biin));
-        holder.ivSite.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
-        holder.ivSite.setBackgroundColor(item.getOrganization().getPrimaryColor());
+            imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivSite, R.drawable.bg_feedback, R.drawable.biin));
+            holder.ivSite.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
+            holder.ivSite.setBackgroundColor(item.getOrganization().getPrimaryColor());
 
-        holder.rlSiteLabel.setBackgroundColor(item.getOrganization().getPrimaryColor());
-        holder.tvSiteTitle.setText(item.getTitle());
-        holder.tvSiteTitle.setTextColor(item.getOrganization().getSecondaryColor());
-        holder.tvSiteSubtitle.setText(item.getSubTitle());
-        holder.tvSiteSubtitle.setTextColor(item.getOrganization().getSecondaryColor());
-        holder.cvSite.setLayoutParams(params);
+            holder.rlSiteLabel.setBackgroundColor(item.getOrganization().getPrimaryColor());
+            holder.tvSiteTitle.setText(item.getTitle());
+            holder.tvSiteTitle.setTextColor(item.getOrganization().getSecondaryColor());
+            holder.tvSiteSubtitle.setText(item.getSubTitle());
+            holder.tvSiteSubtitle.setTextColor(item.getOrganization().getSecondaryColor());
+            holder.cvSite.setLayoutParams(params);
 
-        if(item.isUserLiked()) {
-            holder.ivLike.setVisibility(View.GONE);
-            holder.ivLiked.setVisibility(View.VISIBLE);
-            holder.ivLiked.setColorFilter(item.getOrganization().getSecondaryColor());
-            holder.ivLiked.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // quitar el like y cambiarlo de lista
-                    sitesListener.onSiteUnliked(item.getIdentifier());
-                }
-            });
-        }else {
-            holder.ivLiked.setVisibility(View.GONE);
-            holder.ivLike.setVisibility(View.VISIBLE);
-            holder.ivLike.setColorFilter(item.getOrganization().getSecondaryColor());
-            holder.ivLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // darle like y cambiarlo de lista
-                    sitesListener.onSiteLiked(item.getIdentifier());
-                }
-            });
-        }
-
-        holder.cvSite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(context, SitesActivity.class);
-                SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(BNStringExtras.BNSite, item.getIdentifier());
-                editor.commit();
-                i.putExtra(BNStringExtras.BNShowOthers, showOthers);
-                context.startActivity(i);
+            if (item.isUserLiked()) {
+                holder.ivLike.setVisibility(View.GONE);
+                holder.ivLiked.setVisibility(View.VISIBLE);
+                holder.ivLiked.setColorFilter(item.getOrganization().getSecondaryColor());
+                holder.ivLiked.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // quitar el like y cambiarlo de lista
+                        sitesListener.onSiteUnliked(item.getIdentifier());
+                    }
+                });
+            } else {
+                holder.ivLiked.setVisibility(View.GONE);
+                holder.ivLike.setVisibility(View.VISIBLE);
+                holder.ivLike.setColorFilter(item.getOrganization().getSecondaryColor());
+                holder.ivLike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // darle like y cambiarlo de lista
+                        sitesListener.onSiteLiked(item.getIdentifier());
+                    }
+                });
             }
-        });
+
+            holder.cvSite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, SitesActivity.class);
+                    SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(BNStringExtras.BNSite, item.getIdentifier());
+                    editor.commit();
+                    i.putExtra(BNStringExtras.BNShowOthers, showOthers);
+                    context.startActivity(i);
+                }
+            });
+
+        // load more start
+        }
+        // load more end
+
     }
 
     @Override
     public int getItemCount() {
         return sites.size();
     }
+
+    // load more start
+    @Override
+    public int getItemViewType(int position) {
+        return sites.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+    }
+
+    public void setLoaded(){
+        loading = false;
+    }
+
+    public void setOnLoadMoreListener(BNLoadMoreSitesListener onLoadMoreListener){
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
+
+    public BNSiteAdapter(Context context, List<BNSite> sites, BNSitesLikeListener sitesListener, RecyclerView recyclerView, final boolean isFavourites) {
+        this(context, sites, sitesListener);
+
+        if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+
+                    if(!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)){
+                        if(onLoadMoreListener != null){
+                            onLoadMoreListener.onLoadMoreSites(isFavourites);
+                        }
+                        loading = true;
+                    }
+                }
+            });
+        }
+    }
+    // load more end
 
     public BNSite getSite(int position){
         return sites.get(position);

@@ -22,7 +22,6 @@ import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNSitesListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SitesListActivity extends AppCompatActivity implements BNSitesListener.IBNSitesListener {
@@ -51,10 +50,12 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
 
         final List<BNSite> sites;
         if(isFavourites) {
-            sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNSites().values());
+//            sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNSites().values());
+            sites = BNAppManager.getDataManagerInstance().getFavouriteBNSites();
             tvTitle.setText(getResources().getString(R.string.FavoritePlaces));
         }else {
-            sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites(false).values()); //TODO true para incluir favorites, false para omitirlos
+//            sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites(false).values()); //TODO true para incluir favorites, false para omitirlos
+            sites = BNAppManager.getDataManagerInstance().getNearByBNSites(false);
         }
 
         rvSites = (RecyclerView)findViewById(R.id.rvSitesList);
