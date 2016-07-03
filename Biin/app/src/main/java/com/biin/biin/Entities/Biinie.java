@@ -1,5 +1,13 @@
 package com.biin.biin.Entities;
 
+import android.util.Log;
+
+import com.biin.biin.Utils.BNUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -8,6 +16,8 @@ import java.util.LinkedHashMap;
  * Created by ramirezallan on 5/2/16.
  */
 public class Biinie {
+
+    private static final String TAG = "Biinie";
 
     private String facebook_id;
     private String identifier;
@@ -257,4 +267,26 @@ public class Biinie {
     public void setFacebookAvatarUrl(String facebookAvatarUrl) {
         this.facebookAvatarUrl = facebookAvatarUrl;
     }
+
+    public JSONObject getModel(){
+        SimpleDateFormat apiFormatter = new SimpleDateFormat(BNUtils.getActionDateFormat());
+        String date = apiFormatter.format(birthDate);
+        JSONObject model = new JSONObject();
+        try {
+            model.put("gender", gender);
+//            model.put("facebook_id", facebook_id);
+            model.put("lastName", lastName);
+//            model.put("password", password);
+            model.put("firstName", firstName);
+            model.put("email", email);
+//            model.put("facebookAvatarUrl", "");
+            model.put("isEmailVerified", isEmailVerified ? "1" : "0");
+            model.put("birthDate", date);
+        }catch (JSONException e){
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
+
+        return model;
+    }
+
 }

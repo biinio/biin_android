@@ -153,65 +153,6 @@ public class BNElementParser {
         return result;
     }
 
-    public LinkedHashMap<String, BNElement> parseBNElementsId(JSONArray arrayElements){
-        LinkedHashMap<String, BNElement> result = new LinkedHashMap<>();
-        try{
-            for(int i = 0; i < arrayElements.length(); i++){
-                JSONObject objectElement = (JSONObject) arrayElements.get(i);
-                BNElement element = parseBNElement(objectElement);
-
-                result.put(element.get_id(), element);
-            }
-        }catch (JSONException e){
-            Log.e(TAG, "Error parseando el JSON.", e);
-        }
-        return result;
-    }
-
-    public BNElement cloneBNElement(JSONObject objectElement){
-        BNElement element = new BNElement();
-        try{
-            if (objectElement.has("_id")) {
-                element = dataManager.getBNElementId(objectElement.getString("_id"));
-            }
-            if(element == null) {
-                if (objectElement.has("identifier")) {
-                    BNElement clon = dataManager.getBNElement(objectElement.getString("identifier"));
-                    if(clon != null) {
-                        try {
-                            element = (BNElement) clon.clone();
-                            element.set_id(objectElement.getString("_id"));
-                        } catch (CloneNotSupportedException e) {
-                            Log.e(TAG, "Error clonando el objeto.", e);
-                        }
-                    }else{
-                        Log.e(TAG, "No se obtuvo el elemento ni por _id ni por identifier.");
-                    }
-                }
-            }
-        }catch (JSONException e){
-            Log.e(TAG, "Error parseando el JSON.", e);
-        }
-        return element;
-    }
-
-    public LinkedHashMap<String, BNElement> cloneBNElements(JSONArray arrayElements){
-        LinkedHashMap<String, BNElement> result = new LinkedHashMap<>();
-        try{
-            for(int i = 0; i < arrayElements.length(); i++){
-                JSONObject objectElement = (JSONObject) arrayElements.get(i);
-                BNElement element = cloneBNElement(objectElement);
-
-                if(element != null) {
-                    result.put(element.get_id(), element);
-                }
-            }
-        }catch (JSONException e){
-            Log.e(TAG, "Error parseando el JSON.", e);
-        }
-        return result;
-    }
-
     public LinkedHashMap<String, BNElement> parseReferenceBNElements(JSONArray arrayElements){
         LinkedHashMap<String, BNElement> result = new LinkedHashMap<>();
         try{

@@ -17,11 +17,13 @@ public class BNMoreElementsListener implements BNElementsListener.IBNElementsLis
     @Override
     public void onItemRemoved(int position) {
         adapter.notifyItemRemoved(position);
+        adapter.notifyItemRangeChanged(position, adapter.getItemCount());
     }
 
     @Override
     public void onItemInserted(int position) {
         adapter.notifyItemInserted(position);
+        adapter.notifyItemRangeChanged(position, adapter.getItemCount());
     }
 
     @Override

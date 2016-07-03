@@ -42,4 +42,37 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/ivSitesListBack" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_below="@+id/ivSitesListBack"
+        android:id="@+id/vlAddFavouriteSites">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/ivEmptyFavouritesSites"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
+            android:src="@drawable/near_by"
+            android:tint="@color/colorPrimaryDark" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/NoFavoritePlaces"
+            android:id="@+id/tvEmptyFavouriteSites"
+            android:textAllCaps="true"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center" />
+
+    </LinearLayout>
+
 </RelativeLayout>

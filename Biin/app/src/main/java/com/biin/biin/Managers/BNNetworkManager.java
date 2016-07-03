@@ -20,12 +20,19 @@ public class BNNetworkManager {
 
     private static String URL_SITES = "/requestSites/0";
     private static String URL_CATEGORIES = "/requestElementsForCategory";
+    private static String URL_SHOWCASES = "/requestElementsForShowcase";
 
     private static String URL_BIINIE = "/mobile/biinies";
     private static String URL_INITIALDATA = "/mobile/initialData";
 
     private static String URL_PRIVACY_POLICY = "/privacy.html";
     private static String URL_TERMS_OF_USE = "/termsofuse.html";
+
+    private static String URL_FOLLOW = "/follow";
+    private static String URL_UNFOLLOW = "/unfollow";
+
+    private static String URL_LIKE = "/like";
+    private static String URL_UNLIKE = "/unlike";
 
     protected static BNNetworkManager getInstance() {
         return ourInstance;
@@ -90,6 +97,16 @@ public class BNNetworkManager {
 
     public String getMoreCategoryElementsUrl(String identifier, String category){
         String url = getUrlBiinie(identifier) + URL_CATEGORIES + "/" + category + "/0";
+        return url;
+    }
+
+    public String getMoreShowcaseElementsUrl(String identifier, String showcase, String site){
+        String url = getUrlBiinie(identifier) + URL_SHOWCASES + "/" + site + "/" + showcase + "/1";
+        return url;
+    }
+
+    public String getLikeUrl(String identifier, boolean like){
+        String url = getUrlBiinie(identifier) + (like ? URL_LIKE : URL_UNLIKE);
         return url;
     }
 

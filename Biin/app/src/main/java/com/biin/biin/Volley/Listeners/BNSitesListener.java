@@ -62,6 +62,9 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
             // parsear showcases
             parseShowcases(data.getJSONArray("showcases"));
 
+            // parsear sites
+            parseSites(data.getJSONArray("sites"));
+
             sites.remove(sites.size() - 1);
             if (this.listener != null) {
                 this.listener.onItemRemoved(sites.size());
@@ -69,8 +72,9 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
                 Log.e(TAG, "El listener es nulo o no ha sido seteado.");
             }
 
-            // parsear sites
-            parseSites(data.getJSONArray("sites"));
+            // parsear sites cercanos
+            parseNearSites(data.getJSONArray("sites"));
+
         } catch (JSONException e) {
             Log.e(TAG, "Error parseando el JSON.", e);
         }
@@ -104,6 +108,13 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
     }
 
     private void parseSites(JSONArray arraySites){
+        BNSiteParser sitesParser = new BNSiteParser();
+        LinkedHashMap<String, BNSite> result = sitesParser.parseBNSites(arraySites);
+        // agregar el resultado de sites al data manager
+        dataManager.addBNSites(result);
+    }
+
+    private void parseNearSites(JSONArray arraySites){
         BNSiteParser siteParser = new BNSiteParser();
 
         try {
@@ -111,11 +122,15 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
                 JSONObject objectSite = (JSONObject) arraySites.get(i);
                 BNSite site = siteParser.parseBNSite(objectSite);
                 if(this.identifier == null || site.getOrganizationIdentifier().equals(this.identifier)) {
-                    sites.add(site);
-//                    dataManager.addNearByBNSite(site);
+
+                    if (this.listener != null && (!isFavourites || site.isUserLiked())) {
+                        sites.add(site);
+                    }
 
                     if (site.isUserLiked()) {
                         dataManager.addFavouriteBNSite(site);
+                    }else{
+                        dataManager.addNearByBNSite(site);
                     }
 
                     if (this.listener != null && (!isFavourites || site.isUserLiked())) {

@@ -137,8 +137,16 @@
     /* Login View*/
     <string name="Wellcome">Welcome!</string>
 
+    /* Toolbar */
+    <string name="NoMail">There is not email defined</string>
+    <string name="NoPhone">There is not phone number defined</string>
+    <string name="NoLocation">There is not location defined</string>
+    <string name="ActionShare">Share with…</string>
+
     /* Email messaje*/
-    <string name="EmailMsj">Hello there!</string>
+    <string name="EmailSend">Send email…</string>
+    <string name="EmailMsj">"Hi! There's a new mail from Biin"</string>
+    <string name="EmailBody">"Hello there! I just found you on Biin and I would like to contact you to..."</string>
 
     /* Collection View Temporal */
     <string name="CollectionTitle">Your biined stuff.</string>
@@ -168,7 +176,7 @@
 
     /*About*/
     <string name="AboutTitle">About Biin</string>
-    <string name="AboutText">Discover great places for shopping or dinner, browse the menu of your favorite restaurants or browse the latest products from the stores nearby. Find the best deals and get rewards just by walking into the stores, sharing with friends or creating collections of your favorite stuff. This app is currently available only for iPhone4s, iPhone5, iPhone5s, iPhone5c, iPhone6, iPhone6 Plus, iPhone6s and iPhone6s Plus.</string>
+    <string name="AboutText">Discover great places for shopping or dinner, browse the menu of your favorite restaurants or browse the latest products from the stores nearby. Find the best deals and get rewards just by walking into the stores, sharing with friends or creating collections of your favorite stuff. This app is currently available for iPhone4s, iPhone5, iPhone5s, iPhone5c, iPhone6, iPhone6 Plus, iPhone6s, iPhone6s Plus and Android devices with 5.1 (Lollipop) or above.</string>
 
     /*Internet Error View*/
     <string name="InternetErrorTitle">"You're offline."</string>

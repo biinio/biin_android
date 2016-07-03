@@ -2,12 +2,14 @@ package com.biin.biin;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -15,16 +17,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Adapters.BNSiteListAdapter;
-import com.biin.biin.Components.Listeners.BNLoadMoreSitesListener;
+import com.biin.biin.Components.Listeners.IBNLoadMoreSitesListener;
+import com.biin.biin.Components.Listeners.IBNSitesLikeListener;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
+import com.biin.biin.Volley.Listeners.BNLikesListener;
 import com.biin.biin.Volley.Listeners.BNSitesListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Calendar;
 import java.util.List;
 
-public class SitesListActivity extends AppCompatActivity implements BNSitesListener.IBNSitesListener {
+public class SitesListActivity extends AppCompatActivity implements BNSitesListener.IBNSitesListener, BNLikesListener.IBNLikesListener, IBNSitesLikeListener {
 
     private static final String TAG = "SitesListActivity";
 
@@ -32,38 +41,73 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
     private TextView tvTitle;
     private RecyclerView rvSites;
 
+    private BNDataManager dataManager;
     private Biinie biinie;
     private BNSitesListener sitesListener;
     private BNSiteListAdapter adapter;
+    private BNLikesListener likesListener;
+
+    private int sitesVersion;
+    private long animDuration = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sites_list);
 
-        setUpScreen();
+        dataManager = BNAppManager.getDataManagerInstance();
 
         Intent i = getIntent();
-        if(i != null){
+        if (i != null) {
             isFavourites = i.getBooleanExtra(BNUtils.BNStringExtras.BNFavorites, false);
         }
 
-        final List<BNSite> sites;
-        if(isFavourites) {
-//            sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getFavouriteBNSites().values());
-            sites = BNAppManager.getDataManagerInstance().getFavouriteBNSites();
-            tvTitle.setText(getResources().getString(R.string.FavoritePlaces));
-        }else {
-//            sites = new ArrayList<>(BNAppManager.getDataManagerInstance().getNearByBNSites(false).values()); //TODO true para incluir favorites, false para omitirlos
-            sites = BNAppManager.getDataManagerInstance().getNearByBNSites(false);
+        setUpScreen();
+        loadData();
+    }
+
+    private void setUpScreen() {
+        Typeface lato_regular = BNUtils.getLato_regular();
+        tvTitle = (TextView) findViewById(R.id.tvSitesListTitle);
+        tvTitle.setTypeface(lato_regular);
+        tvTitle.setLetterSpacing(0.3f);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        rvSites = (RecyclerView) findViewById(R.id.rvSitesList);
+        rvSites.setLayoutManager(layoutManager);
+        rvSites.setHasFixedSize(true);
+
+        findViewById(R.id.ivSitesListBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        biinie = dataManager.getBiinie();
+        if (isFavourites) {
+            sitesVersion = dataManager.getFavouriteSitesVersion();
+        } else {
+            sitesVersion = dataManager.getNearBySitesVersion();
         }
 
-        rvSites = (RecyclerView)findViewById(R.id.rvSitesList);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        likesListener = new BNLikesListener();
+        likesListener.setListener(this);
+    }
 
-        adapter = new BNSiteListAdapter(this, sites, rvSites, isFavourites);
+    private void loadData(){
+        final List<BNSite> sites;
+        if (isFavourites) {
+            sites = dataManager.getFavouriteBNSites();
+            tvTitle.setText(getResources().getString(R.string.FavoritePlaces));
+        } else {
+//          //TODO true para incluir favorites, false para omitirlos
+            sites = dataManager.getNearByBNSites();
+        }
+
+        adapter = new BNSiteListAdapter(this, sites, this, rvSites, isFavourites);
         adapter.setShowOthers(true);
-        adapter.setOnLoadMoreListener(new BNLoadMoreSitesListener(){
+        adapter.setOnLoadMoreListener(new IBNLoadMoreSitesListener() {
             @Override
             public void onLoadMoreSites(boolean isFavourites) {
                 sites.add(null);
@@ -89,26 +133,26 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
                 BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "MoreSitesData");
             }
         });
-        rvSites.setLayoutManager(layoutManager);
-        rvSites.setHasFixedSize(true);
         rvSites.setAdapter(adapter);
-
     }
 
-    private void setUpScreen(){
-        Typeface lato_regular = BNUtils.getLato_regular();
-        tvTitle = (TextView)findViewById(R.id.tvSitesListTitle);
-        tvTitle.setTypeface(lato_regular);
-        tvTitle.setLetterSpacing(0.3f);
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        findViewById(R.id.ivSitesListBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+        if (isFavourites) {
+            int favsVersion = dataManager.getFavouriteSitesVersion();
+            if (favsVersion > sitesVersion) {
+                sitesVersion = favsVersion;
+                loadData();
             }
-        });
-
-        biinie = BNAppManager.getDataManagerInstance().getBiinie();
+        }else {
+            int nearVersion = dataManager.getNearBySitesVersion();
+            if (nearVersion > sitesVersion) {
+                sitesVersion = nearVersion;
+                loadData();
+            }
+        }
     }
 
     @Override
@@ -126,9 +170,100 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
         adapter.setLoaded();
     }
 
-    private void onLoadMoreError(VolleyError error){
+    private void onLoadMoreError(VolleyError error) {
         Log.e(TAG, "Error:" + error.getMessage());
         adapter.setLoaded();
+    }
+
+    @Override
+    public void onLikeResponseOk() {
+
+    }
+
+    @Override
+    public void onLikeResponseError() {
+
+    }
+
+    @Override
+    public void onSiteLiked(String identifier, int position) {
+        likeSite(identifier, true);
+
+        dataManager.likeBNSite(identifier);
+
+        dataManager.addFavouriteBNSite(dataManager.getBNSite(identifier), 0);
+        dataManager.removeNearByBNSite(identifier);
+    }
+
+    @Override
+    public void onSiteUnliked(String identifier, final int position) {
+        likeSite(identifier, false);
+
+        dataManager.unlikeBNSite(identifier);
+
+        dataManager.addNearByBNSite(dataManager.getBNSite(identifier), 0);
+        dataManager.removeFavouriteBNSite(identifier);
+
+        if(isFavourites){
+            adapter.notifyItemRemoved(position);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyItemRangeChanged(position, dataManager.getFavouriteBNElements().size());
+
+                    if(!(dataManager.getFavouriteBNSites().size() > 0)) {
+                        LinearLayout vlFavourites = (LinearLayout) findViewById(R.id.vlAddFavouriteSites);
+                        rvSites.setVisibility(View.GONE);
+                        vlFavourites.setVisibility(View.VISIBLE);
+                    }
+                }
+            }, animDuration + 300);
+        }
+    }
+
+    private void likeSite(final String identifier, final boolean liked) {
+        BNSite site = dataManager.getBNSite(identifier);
+        site.setUserLiked(liked);
+
+        if (liked) {
+            site.setLikeDate(Calendar.getInstance().getTime());
+        } else {
+            site.setLikeDate(null);
+        }
+
+        String url = BNAppManager.getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
+        Log.d(TAG, url);
+
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject model = site.getModel();
+            request.put("model", model);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                url,
+                request,
+                likesListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onLikeError(error, identifier, liked);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "LikeSite");
+    }
+
+    private void onLikeError(VolleyError error, String identifier, boolean liked) {
+        Log.e(TAG, "Error:" + error.getMessage());
+        if (liked) {
+            dataManager.addPendingLikeSite(identifier);
+        } else {
+            dataManager.addPendingUnlikeSite(identifier);
+        }
     }
 
 }

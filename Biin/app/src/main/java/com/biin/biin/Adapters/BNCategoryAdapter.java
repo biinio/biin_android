@@ -20,7 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.Components.BNProgressViewHolder;
-import com.biin.biin.Components.Listeners.BNLoadMoreElementsListener;
+import com.biin.biin.Components.Listeners.IBNLoadMoreElementsListener;
 import com.biin.biin.ElementsActivity;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.BiinApp;
@@ -47,7 +47,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
-    private BNLoadMoreElementsListener onLoadMoreListener;
+    private IBNLoadMoreElementsListener onLoadMoreListener;
     // load more end
 
     public BNCategoryAdapter(Context context, List<BNElement> elements) {
@@ -157,7 +157,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         loading = false;
     }
 
-    public void setOnLoadMoreListener(BNLoadMoreElementsListener onLoadMoreListener){
+    public void setOnLoadMoreListener(IBNLoadMoreElementsListener onLoadMoreListener){
         this.onLoadMoreListener = onLoadMoreListener;
     }
 

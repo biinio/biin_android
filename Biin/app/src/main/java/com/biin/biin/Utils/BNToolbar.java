@@ -3,12 +3,12 @@ package com.biin.biin.Utils;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v4.graphics.ColorUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.biin.biin.Components.Listeners.IBNToolbarListener;
 import com.biin.biin.R;
 
 /**
@@ -18,6 +18,7 @@ public class BNToolbar {
 
     private Context context;
     private Activity activity;
+    private IBNToolbarListener listener;
 
     private ImageView ivToolbarBack, ivToolbarLike, ivToolbarLiked, ivToolbarShare, ivToolbarPosition, ivToolbarCall, ivToolbarMail;
     private TextView tvMoreFrom;
@@ -71,6 +72,7 @@ public class BNToolbar {
         ivToolbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listener.onBack();
                 activity.finish();
             }
         });
@@ -94,8 +96,8 @@ public class BNToolbar {
         ivToolbarLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO darle like
-                Toast.makeText(context, "Like", Toast.LENGTH_SHORT).show();
+                listener.onLike();
+//                Toast.makeText(context, "Like", Toast.LENGTH_SHORT).show();
                 // cambiar el boton
                 ivToolbarLike.setVisibility(View.GONE);
                 ivToolbarLiked.setVisibility(View.VISIBLE);
@@ -105,8 +107,8 @@ public class BNToolbar {
         ivToolbarLiked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO quitar el like
-                Toast.makeText(context, "Unlike", Toast.LENGTH_SHORT).show();
+                listener.onUnlike();
+//                Toast.makeText(context, "Unlike", Toast.LENGTH_SHORT).show();
                 // cambiar el boton
                 ivToolbarLiked.setVisibility(View.GONE);
                 ivToolbarLike.setVisibility(View.VISIBLE);
@@ -118,6 +120,7 @@ public class BNToolbar {
             ivToolbarShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listener.onShare();
                     //TODO abrir ventana de compartir
                     Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();
                 }
@@ -129,6 +132,7 @@ public class BNToolbar {
             ivToolbarPosition.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listener.onLocation();
                     //TODO mostrar la ventana de geoposicion
                     Toast.makeText(context, "Geoposition", Toast.LENGTH_SHORT).show();
                 }
@@ -140,6 +144,7 @@ public class BNToolbar {
             ivToolbarCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listener.onCall();
                     //TODO realizar llamada telefonica o marcar numero
                     Toast.makeText(context, "Call", Toast.LENGTH_SHORT).show();
                 }
@@ -151,6 +156,7 @@ public class BNToolbar {
             ivToolbarMail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listener.onMail();
                     //TODO abrir aplicacion para enviar mail
                     Toast.makeText(context, "Mail", Toast.LENGTH_SHORT).show();
                 }
@@ -165,11 +171,16 @@ public class BNToolbar {
             tvMoreFrom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listener.onShowMore();
                     //TODO abrir vista de site
                     Toast.makeText(context, "Show more", Toast.LENGTH_SHORT).show();
                 }
             });
         }
+    }
+
+    public void setListener(IBNToolbarListener listener) {
+        this.listener = listener;
     }
 
     public Context getContext() {

@@ -3,5 +3,6 @@
     <string name="app_id" translatable="false">8934976303740374563876</string>
     <string name="app_name" translatable="false">Biin</string>
     <string name="preferences_key" translatable="false">com.biin.biin.BIIN_PREFERENCES</string>
+    <string name="contact_mail" translatable="false">contact@biin.io</string>
 
 </resources>

@@ -21,25 +21,69 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".SignupActivity">
+        <activity
+            android:name=".SignupActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".TermsActivity" />
-        <activity android:name=".OnboardingActivity" />
-        <activity android:name=".SplashActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SitesActivity" />
-        <activity android:name=".ElementsActivity" />
-        <activity android:name=".SitesListActivity" />
-        <activity android:name=".ElementsListActivity" />
-        <activity android:name=".PrivacyActivity" />
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".ProfileActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TermsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OnboardingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SitesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ElementsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SitesListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ElementsListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PrivacyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".LoadActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="biin.io" />
+                <data android:scheme="https"
+                    android:host="www.biin.io" />
+                <data android:scheme="https"
+                    android:host="dev-biin-backend.herokuapp.com" />
+                <data android:scheme="https"
+                    android:host="www.dev-biin-backend.herokuapp.com" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

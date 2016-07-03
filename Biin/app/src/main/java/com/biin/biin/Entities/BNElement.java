@@ -1,5 +1,10 @@
 package com.biin.biin.Entities;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -9,6 +14,8 @@ import java.util.List;
  * Created by ramirezallan on 5/2/16.
  */
 public class BNElement implements Cloneable {
+
+    private static final String TAG = "BNElement";
 
     private String _id;
     private String identifier;
@@ -449,55 +456,22 @@ public class BNElement implements Cloneable {
         isRemovedFromShowcase = removedFromShowcase;
     }
 
-    public class BNElementLite {
-        private String _id;
-        private String identifier;
-        private boolean isReady;
-        private boolean isHighlight;
-        private LinkedHashMap<String,BNCategory> categories;
-
-        public BNElementLite() {
+    public JSONObject getModel() {
+        JSONObject model = new JSONObject();
+        try {
+            model.put("type", "element");
+            model.put("identifier", identifier);
+            if (getShowcase() != null && getShowcase().getSite() != null) {
+                model.put("showcaseIdentifier", getShowcase().getIdentifier());
+                model.put("siteIdentifier", getShowcase().getSite().getIdentifier());
+            }else{
+                model.put("showcaseIdentifier", "");
+                model.put("siteIdentifier", "");
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error: " + e.getMessage());
         }
-
-        public String get_id() {
-            return _id;
-        }
-
-        public void set_id(String _id) {
-            this._id = _id;
-        }
-
-        public String getIdentifier() {
-            return identifier;
-        }
-
-        public void setIdentifier(String identifier) {
-            this.identifier = identifier;
-        }
-
-        public boolean isReady() {
-            return isReady;
-        }
-
-        public void setReady(boolean ready) {
-            isReady = ready;
-        }
-
-        public boolean isHighlight() {
-            return isHighlight;
-        }
-
-        public void setHighlight(boolean highlight) {
-            isHighlight = highlight;
-        }
-
-        public LinkedHashMap<String, BNCategory> getCategories() {
-            return categories;
-        }
-
-        public void setCategories(LinkedHashMap<String, BNCategory> categories) {
-            this.categories = categories;
-        }
+        return model;
     }
 
     public Object clone() throws CloneNotSupportedException {

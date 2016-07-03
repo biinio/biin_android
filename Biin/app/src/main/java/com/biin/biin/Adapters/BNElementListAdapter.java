@@ -20,7 +20,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.BiinApp;
 import com.biin.biin.Components.BNProgressViewHolder;
-import com.biin.biin.Components.Listeners.BNLoadMoreElementsListener;
+import com.biin.biin.Components.Listeners.IBNElementsLikeListener;
+import com.biin.biin.Components.Listeners.IBNLoadMoreElementsListener;
 import com.biin.biin.ElementsActivity;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.R;
@@ -38,6 +39,7 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private List<BNElement> elements;
     private ImageLoader imageLoader;
+    private IBNElementsLikeListener elementsListener;
 
     // load more start
     private final int VIEW_ITEM = 1;
@@ -46,13 +48,14 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
-    private BNLoadMoreElementsListener onLoadMoreListener;
+    private IBNLoadMoreElementsListener onLoadMoreListener;
     // load more end
 
-    public BNElementListAdapter(Context context, List<BNElement> elements) {
+    public BNElementListAdapter(Context context, List<BNElement> elements, IBNElementsLikeListener elementsListener) {
         super();
         this.context = context;
         this.elements = elements;
+        this.elementsListener = elementsListener;
         imageLoader = BiinApp.getInstance().getImageLoader();
     }
 
@@ -83,14 +86,14 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
 
         // load more start
         if(viewHolder instanceof BNProgressViewHolder){
             BNProgressViewHolder holder = (BNProgressViewHolder)viewHolder;
             holder.progressBar.setIndeterminate(true);
         }else if(viewHolder instanceof BNElementViewHolder) {
-            BNElementViewHolder holder = (BNElementViewHolder) viewHolder;
+            final BNElementViewHolder holder = (BNElementViewHolder) viewHolder;
         // load more end
 
             final BNElement item = elements.get(position);
@@ -130,6 +133,39 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             holder.cvElement.setLayoutParams(params);
 
+            if(item.getShowcase() != null && item.getShowcase().getSite() != null && item.getShowcase().getSite().getOrganization() != null) {
+                holder.ivLiked.setColorFilter(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+                holder.ivLike.setColorFilter(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+            }
+
+            holder.ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // informar del like al element
+                    holder.ivLike.setVisibility(View.GONE);
+                    holder.ivLiked.setVisibility(View.VISIBLE);
+                    elementsListener.onElementLiked(item.getIdentifier(), position);
+                }
+            });
+
+            holder.ivLiked.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // informar del unlike al element
+                    holder.ivLiked.setVisibility(View.GONE);
+                    holder.ivLike.setVisibility(View.VISIBLE);
+                    elementsListener.onElementUnliked(item.getIdentifier(), position);
+                }
+            });
+
+            if (item.isUserLiked()) {
+                holder.ivLike.setVisibility(View.GONE);
+                holder.ivLiked.setVisibility(View.VISIBLE);
+            } else {
+                holder.ivLiked.setVisibility(View.GONE);
+                holder.ivLike.setVisibility(View.VISIBLE);
+            }
+
             android.view.ViewGroup.LayoutParams layoutParams = holder.ivElement.getLayoutParams();
             layoutParams.width = BNUtils.getWidth();
             layoutParams.height = (BNUtils.getWidth() / 2);
@@ -168,12 +204,12 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
         loading = false;
     }
 
-    public void setOnLoadMoreListener(BNLoadMoreElementsListener onLoadMoreListener){
+    public void setOnLoadMoreListener(IBNLoadMoreElementsListener onLoadMoreListener){
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
-    public BNElementListAdapter(Context context, List<BNElement> elements, RecyclerView recyclerView) {
-        this(context, elements);
+    public BNElementListAdapter(Context context, List<BNElement> elements, RecyclerView recyclerView, IBNElementsLikeListener elementsListener) {
+        this(context, elements, elementsListener);
 
         if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -206,7 +242,7 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
         protected CardView cvElement;
         protected RelativeLayout rlElementLabel;
         protected FrameLayout flOffer;
-        protected ImageView ivOffer;
+        protected ImageView ivOffer, ivLike, ivLiked;
         protected NetworkImageView ivElement, ivOrganization;
         protected TextView tvTitle, tvSubtitle, tvSubtitleLocation, tvPrice, tvDiscount, tvOffer;
 
@@ -220,6 +256,8 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
             ivElement = (NetworkImageView)itemView.findViewById(R.id.ivElement);
             ivOrganization = (NetworkImageView)itemView.findViewById(R.id.ivOrganization);
             ivOffer = (ImageView)itemView.findViewById(R.id.ivElementOffer);
+            ivLike = (ImageView)itemView.findViewById(R.id.ivElementLike);
+            ivLiked = (ImageView)itemView.findViewById(R.id.ivElementLiked);
 
             tvTitle = (TextView)itemView.findViewById(R.id.tvTitle);
             tvSubtitle = (TextView)itemView.findViewById(R.id.tvSubtitle);

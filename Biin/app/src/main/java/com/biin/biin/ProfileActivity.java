@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class ProfileActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, BNBiiniesListener.IBNBiiniesListener {
 
@@ -37,7 +38,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     private TextView etUsername, etVerified, etBirthdate, tvGender, etEmail, tvLoginFb, tvSave;
     private ImageView ivMale, ivFemale;
 
-    private String date, gender, male, female, none;
+    private Date date;
+    private String gender, male, female, none;
     private int colorNormal, colorSelected;
     private ProgressBar pbSave;
 
@@ -156,7 +158,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         etBirthdate.setText(formatter.format(biinie.getBirthDate()));
 
         SimpleDateFormat apiFormatter = new SimpleDateFormat(BNUtils.getActionDateFormat());
-        date = apiFormatter.format(biinie.getBirthDate());
+        date = biinie.getBirthDate();
 
         gender = biinie.getGender();
         setGender(gender);
@@ -205,6 +207,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         @Override
         public void onClick(View v) {
             final Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(date.getTime());
             final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(ProfileActivity.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), false);
 
             datePickerDialog.show(getSupportFragmentManager(), TAG);
@@ -215,8 +218,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
-        SimpleDateFormat apiFormatter = new SimpleDateFormat(BNUtils.getActionDateFormat());
-        date = apiFormatter.format(calendar.getTime());
+        date = calendar.getTime();
         SimpleDateFormat showFormatter = new SimpleDateFormat(BNUtils.getUserDateFormat());
         etBirthdate.setText(showFormatter.format(calendar.getTime()));
     }
@@ -246,19 +248,14 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         profileListener.setListener(this);
 
         Biinie biinie = BNAppManager.getDataManagerInstance().getBiinie();
+        biinie.setLastName(etName.getText().toString().trim());
+        biinie.setFirstName(etLastName.getText().toString().trim());
+        biinie.setGender(gender);
+        biinie.setBirthDate(date);
 
         JSONObject request = new JSONObject();
         try {
-            JSONObject model = new JSONObject();
-            model.put("gender", gender);
-            model.put("facebook_id", "");
-            model.put("lastName", etLastName.getText().toString().trim());
-//            model.put("password", "qwerty");
-            model.put("firstName", etName.getText().toString().trim());
-            model.put("email", biinie.getEmail());
-            model.put("facebookAvatarUrl", "");
-            model.put("isEmailVerified", biinie.isEmailVerified() ? "1" : "0");
-            model.put("birthDate", date);
+            JSONObject model = biinie.getModel();
             request.put("model", model);
         }catch (JSONException e){
             Log.e(TAG, "Error:" + e.getMessage());

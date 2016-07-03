@@ -1,10 +1,17 @@
 package com.biin.biin.Entities;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Utils.BNUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +19,8 @@ import java.util.List;
  * Created by ramirezallan on 5/2/16.
  */
 public class BNSite {
+
+    private static final String TAG = "BNSite";
 
     private String _id;
     private String identifier;
@@ -383,4 +392,18 @@ public class BNSite {
             }
         }
     }
+
+
+    public JSONObject getModel(){
+        JSONObject model = new JSONObject();
+        try {
+            model.put("type", "site");
+            model.put("identifier", identifier);
+        }catch (JSONException e){
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
+        return model;
+    }
+
+
 }

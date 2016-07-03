@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,14 +18,16 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.biin.biin.Components.Listeners.BNLoadMoreSitesListener;
-import com.biin.biin.Components.Listeners.BNSitesLikeListener;
+import com.biin.biin.Components.Listeners.IBNLoadMoreSitesListener;
+import com.biin.biin.Components.Listeners.IBNSitesLikeListener;
+import com.biin.biin.Components.Listeners.IBNToolbarListener;
 import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
@@ -36,12 +40,17 @@ import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
+import com.biin.biin.Volley.Listeners.BNLikesListener;
 import com.biin.biin.Volley.Listeners.BNSitesListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-public class SitesActivity extends AppCompatActivity implements BNSitesLikeListener, BNSitesListener.IBNSitesListener {
+public class SitesActivity extends AppCompatActivity implements IBNSitesLikeListener, BNSitesListener.IBNSitesListener, IBNToolbarListener, BNLikesListener.IBNLikesListener {
 
     private static final String TAG = "SitesActivity";
 
@@ -51,7 +60,9 @@ public class SitesActivity extends AppCompatActivity implements BNSitesLikeListe
     private boolean showOthers = false;
 
     private Biinie biinie;
+    private BNDataManager dataManager;
     private BNSitesListener sitesListener;
+    private BNLikesListener likesListener;
     private BNSiteAdapter adapter;
 
     @Override
@@ -59,7 +70,8 @@ public class SitesActivity extends AppCompatActivity implements BNSitesLikeListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sites);
 
-        biinie = BNAppManager.getDataManagerInstance().getBiinie();
+        dataManager = BNAppManager.getDataManagerInstance();
+        biinie = dataManager.getBiinie();
 
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         siteIdentifier = preferences.getString(BNStringExtras.BNSite, "site");
@@ -75,12 +87,13 @@ public class SitesActivity extends AppCompatActivity implements BNSitesLikeListe
             loadNearPlaces();
         }
 
-        (findViewById(R.id.nvSites)).scrollTo(0,0);
+        likesListener = new BNLikesListener();
+        likesListener.setListener(this);
     }
 
     private void loadSite(){
         imageLoader = BiinApp.getInstance().getImageLoader();
-        currentSite = BNAppManager.getDataManagerInstance().getBNSite(siteIdentifier);
+        currentSite = dataManager.getBNSite(siteIdentifier);
         if(currentSite != null) {
             RelativeLayout rlSiteLabel;
             TextView tvTitle, tvSubtitle, tvLocation;
@@ -137,7 +150,8 @@ public class SitesActivity extends AppCompatActivity implements BNSitesLikeListe
             tvSubtitle.setText(currentSite.getNutshell());
             tvSubtitle.setTextColor(currentSite.getOrganization().getSecondaryColor());
 
-            new BNToolbar(this, currentSite.getOrganization().getPrimaryColor(), currentSite.getOrganization().getSecondaryColor(), currentSite.isUserLiked(), true, true, true, true, false);
+            BNToolbar toolbar = new BNToolbar(this, currentSite.getOrganization().getPrimaryColor(), currentSite.getOrganization().getSecondaryColor(), currentSite.isUserLiked(), true, true, true, true, false);
+            toolbar.setListener(this);
         }else{
             Log.e(TAG, "No se encontró el site con el identifier " + siteIdentifier);
             finish();
@@ -145,7 +159,6 @@ public class SitesActivity extends AppCompatActivity implements BNSitesLikeListe
     }
 
     private void loadShowcases(){
-        BNDataManager dataManager = BNAppManager.getDataManagerInstance();
         Typeface lato_regular = BNUtils.getLato_regular();
         // layout al que se va a agregar las listas de categorias
         LinearLayout layout = (LinearLayout)findViewById(R.id.vlSiteShowcases);
@@ -196,12 +209,11 @@ public class SitesActivity extends AppCompatActivity implements BNSitesLikeListe
     }
 
     private void loadNearPlaces(){
-        List<String> siteIdentifiers = new ArrayList<>(currentSite.getOrganization().getSites());
+        List<String> siteIdentifiers = currentSite.getOrganization().getSites();
         siteIdentifiers.remove(currentSite.getIdentifier());
 
         if(siteIdentifiers.size() > 0) {
             Typeface lato_regular = BNUtils.getLato_regular();
-            BNDataManager dataManager = BNAppManager.getDataManagerInstance();
             final List<BNSite> sites = new ArrayList<>();
 
             for (String siteIdentifier : siteIdentifiers) {
@@ -221,7 +233,7 @@ public class SitesActivity extends AppCompatActivity implements BNSitesLikeListe
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
             adapter = new BNSiteAdapter(this, sites, this, rvSites, false);
-            adapter.setOnLoadMoreListener(new BNLoadMoreSitesListener(){
+            adapter.setOnLoadMoreListener(new IBNLoadMoreSitesListener(){
                 @Override
                 public void onLoadMoreSites(boolean isFavourites) {
                     sites.add(null);
@@ -256,12 +268,61 @@ public class SitesActivity extends AppCompatActivity implements BNSitesLikeListe
     }
 
     @Override
-    public void onSiteLiked(String identifier) {
+    public void onSiteLiked(String identifier, int position) {
+        likeSite(identifier, true);
+    }
+
+    @Override
+    public void onSiteUnliked(String identifier, int position) {
+        likeSite(identifier, false);
+    }
+
+    private void likeSite(final String identifier, final boolean liked){
+        BNSite site = dataManager.getBNSite(identifier);
+        site.setUserLiked(liked);
+
+        if(liked) {
+            site.setLikeDate(Calendar.getInstance().getTime());
+            dataManager.addFavouriteBNSite(site, 0);
+            dataManager.removeNearByBNSite(identifier);
+        }else{
+            site.setLikeDate(null);
+            dataManager.addNearByBNSite(site, 0);
+            dataManager.removeFavouriteBNSite(identifier);
+        }
+
+        String url = BNAppManager.getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
+        Log.d(TAG, url);
+
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject model = site.getModel();
+            request.put("model", model);
+        }catch (JSONException e){
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                url,
+                request,
+                likesListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onLikeError(error, identifier, liked);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "LikeSite");
+    }
+
+    @Override
+    public void onLikeResponseOk() {
 
     }
 
     @Override
-    public void onSiteUnliked(String identifier) {
+    public void onLikeResponseError() {
 
     }
 
@@ -283,5 +344,77 @@ public class SitesActivity extends AppCompatActivity implements BNSitesLikeListe
     private void onLoadMoreError(VolleyError error){
         Log.e(TAG, "Error:" + error.getMessage());
         adapter.setLoaded();
+    }
+
+    private void onLikeError(VolleyError error, String identifier, boolean liked){
+        Log.e(TAG, "Error:" + error.getMessage());
+        if(liked) {
+            dataManager.addPendingLikeSite(identifier);
+        }else{
+            dataManager.addPendingUnlikeSite(identifier);
+        }
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onLike() {
+        currentSite.setUserLiked(true);
+        likeSite(currentSite.getIdentifier(), true);
+    }
+
+    @Override
+    public void onUnlike() {
+        currentSite.setUserLiked(false);
+        likeSite(currentSite.getIdentifier(), false);
+    }
+
+    @Override
+    public void onShare() {
+        String text = BNAppManager.getNetworkManagerInstance().getUrlBase() + "/sites/" + currentSite.getIdentifier();
+        Intent i = new Intent();
+        i.setAction(Intent.ACTION_SEND);
+        i.putExtra(Intent.EXTRA_TEXT, text);
+        i.setType("text/plain");
+        startActivity(Intent.createChooser(i, getString(R.string.ActionShare)));
+    }
+
+    @Override
+    public void onLocation() {
+
+    }
+
+    @Override
+    public void onCall() {
+        if(currentSite.getPhoneNumber() != null && !currentSite.getPhoneNumber().isEmpty()){
+            Intent i = new Intent(Intent.ACTION_DIAL);
+            i.setData(Uri.parse("tel:" + currentSite.getPhoneNumber()));
+            startActivity(i);
+        }else{
+            Toast.makeText(this, R.string.NoPhone, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onMail() {
+        if(currentSite.getEmail() != null && !currentSite.getEmail().isEmpty()){
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", currentSite.getEmail(), null));
+//            intent.setType("text/plain");
+//            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { currentSite.getEmail() });
+            intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.EmailMsj));
+            intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.EmailBody));
+
+            startActivity(Intent.createChooser(intent, getResources().getString(R.string.EmailSend)));
+        }else{
+            Toast.makeText(this, R.string.NoMail, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onShowMore() {
+
     }
 }

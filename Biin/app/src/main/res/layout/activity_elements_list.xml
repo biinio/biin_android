@@ -42,39 +42,39 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/ivElementsListBack" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorWhite"
-            android:gravity="center"
-            android:layout_below="@+id/ivElementsListBack"
-            android:visibility="gone"
-            android:id="@+id/vlAddFavouriteElements">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:layout_below="@+id/ivElementsListBack"
+        android:visibility="gone"
+        android:id="@+id/vlAddFavouriteElements">
 
-            <ImageView
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:id="@+id/ivEmptyFavourites"
-                android:layout_gravity="center_horizontal"
-                android:scaleType="fitXY"
-                android:src="@drawable/liked_small"
-                android:tint="@color/colorPrimaryDark"
-                android:layout_marginBottom="-25dp"
-                android:layout_marginTop="-40dp" />
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:id="@+id/ivEmptyFavourites"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
+            android:src="@drawable/liked_small"
+            android:tint="@color/colorPrimaryDark"
+            android:layout_marginBottom="-25dp"
+            android:layout_marginTop="-40dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/NoFavoriteElements"
-                android:id="@+id/tvEmptyFavourites"
-                android:textAllCaps="true"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:gravity="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/NoFavoriteElements"
+            android:id="@+id/tvEmptyFavourites"
+            android:textAllCaps="true"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center" />
 
-        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

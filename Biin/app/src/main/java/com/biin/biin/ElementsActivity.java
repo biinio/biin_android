@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,17 +13,29 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.biin.biin.Components.Listeners.IBNToolbarListener;
 import com.biin.biin.Entities.BNElement;
+import com.biin.biin.Entities.BNSite;
+import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
+import com.biin.biin.Volley.Listeners.BNLikesListener;
 
-public class ElementsActivity extends AppCompatActivity {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Calendar;
+
+public class ElementsActivity extends AppCompatActivity implements IBNToolbarListener, BNLikesListener.IBNLikesListener {
 
     private static final String TAG = "ElementsActivity";
 
@@ -31,10 +44,17 @@ public class ElementsActivity extends AppCompatActivity {
     private ImageLoader imageLoader;
     private boolean showMore = false;
 
+    private Biinie biinie;
+    private BNDataManager dataManager;
+    private BNLikesListener likesListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_elements);
+
+        dataManager = BNAppManager.getDataManagerInstance();
+        biinie = dataManager.getBiinie();
 
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         elementIdentifier = preferences.getString(BNUtils.BNStringExtras.BNElement, "element");
@@ -45,13 +65,16 @@ public class ElementsActivity extends AppCompatActivity {
         }
 
         loadElement();
+
+        likesListener = new BNLikesListener();
+        likesListener.setListener(this);
     }
 
     private void loadElement() {
         imageLoader = BiinApp.getInstance().getImageLoader();
-        currentElement = BNAppManager.getDataManagerInstance().getBNElement(elementIdentifier);
+        currentElement = dataManager.getBNElement(elementIdentifier);
         if (currentElement != null) {
-            //TODO llenar el layout con la informacion
+            // llenar el layout con la informacion
             TextView tvBefore, tvNow, tvOffer, tvTitle, tvSubtitle, tvAction, tvMore;
             final ImageView ivElementsImage, ivOffer;
             FrameLayout flOffer;
@@ -127,10 +150,20 @@ public class ElementsActivity extends AppCompatActivity {
                 tvAction.setText(currentElement.getCallToActionTitle());
                 tvAction.setBackgroundColor(darkColor);
                 tvAction.setTextColor(lightColor);
+                tvAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(currentElement.getCallToActionURL()));
+                        startActivity(i);
+                    }
+                });
             }else{
                 tvAction.setVisibility(View.GONE);
             }
-            new BNToolbar(this, currentElement.getShowcase().getSite().getOrganization().getPrimaryColor(), currentElement.getShowcase().getSite().getOrganization().getSecondaryColor(), currentElement.getShowcase().getSite().isUserLiked(), true, false, false, false, showMore, currentElement.getShowcase().getSite().getOrganization().getName());
+
+            BNToolbar toolbar = new BNToolbar(this, currentElement.getShowcase().getSite().getOrganization().getPrimaryColor(), currentElement.getShowcase().getSite().getOrganization().getSecondaryColor(), currentElement.isUserLiked(), true, false, false, false, showMore, currentElement.getShowcase().getSite().getOrganization().getName());
+            toolbar.setListener(this);
 
             tvMore = (TextView)findViewById(R.id.tvToolbarMore);
             tvMore.setOnClickListener(new View.OnClickListener() {
@@ -192,4 +225,104 @@ public class ElementsActivity extends AppCompatActivity {
         return css;
     }
 
+    @Override
+    public void onLikeResponseOk() {
+
+    }
+
+    @Override
+    public void onLikeResponseError() {
+
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onLike() {
+        currentElement.setUserLiked(true);
+        likeElement(currentElement.getIdentifier(), true);
+    }
+
+    @Override
+    public void onUnlike() {
+        currentElement.setUserLiked(false);
+        likeElement(currentElement.getIdentifier(), false);
+    }
+
+    private void likeElement(final String identifier, final boolean liked){
+        BNElement element = dataManager.getBNElement(identifier);
+        element.setUserLiked(liked);
+
+        if(liked) {
+            dataManager.addFavouriteBNElement(element, 0);
+        }else{
+            dataManager.removeFavouriteBNElement(identifier);
+        }
+
+        String url = BNAppManager.getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
+        Log.d(TAG, url);
+
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject model = element.getModel();
+            request.put("model", model);
+        }catch (JSONException e){
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                url,
+                request,
+                likesListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onLikeError(error, identifier, liked);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "LikeElement");
+    }
+
+    private void onLikeError(VolleyError error, String identifier, boolean liked){
+        Log.e(TAG, "Error:" + error.getMessage());
+        if(liked) {
+            dataManager.addPendingLikeElement(identifier);
+        }else{
+            dataManager.addPendingUnlikeElement(identifier);
+        }
+    }
+
+    @Override
+    public void onShare() {
+        String text = BNAppManager.getNetworkManagerInstance().getUrlBase() + "/elements/" + currentElement.getIdentifier();
+        Intent i = new Intent();
+        i.setAction(Intent.ACTION_SEND);
+        i.putExtra(Intent.EXTRA_TEXT, text);
+        i.setType("text/plain");
+        startActivity(Intent.createChooser(i, getString(R.string.ActionShare)));
+    }
+
+    @Override
+    public void onLocation() {
+
+    }
+
+    @Override
+    public void onCall() {
+
+    }
+
+    @Override
+    public void onMail() {
+
+    }
+
+    @Override
+    public void onShowMore() {
+
+    }
 }

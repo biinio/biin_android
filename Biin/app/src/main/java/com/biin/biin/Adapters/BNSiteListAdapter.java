@@ -20,7 +20,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.BiinApp;
 import com.biin.biin.Components.BNProgressViewHolder;
-import com.biin.biin.Components.Listeners.BNLoadMoreSitesListener;
+import com.biin.biin.Components.Listeners.IBNLoadMoreSitesListener;
+import com.biin.biin.Components.Listeners.IBNSitesLikeListener;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.R;
 import com.biin.biin.SitesActivity;
@@ -40,6 +41,7 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<BNSite> sites;
     private ImageLoader imageLoader;
     private boolean showOthers = false;
+    private IBNSitesLikeListener sitesListener;
 
     // load more start
     private final int VIEW_ITEM = 1;
@@ -48,13 +50,14 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
-    private BNLoadMoreSitesListener onLoadMoreListener;
+    private IBNLoadMoreSitesListener onLoadMoreListener;
     // load more end
 
-    public BNSiteListAdapter(Context context, List<BNSite> sites) {
+    public BNSiteListAdapter(Context context, List<BNSite> sites, IBNSitesLikeListener sitesListener) {
         super();
         this.context = context;
         this.sites = sites;
+        this.sitesListener = sitesListener;
         imageLoader = BiinApp.getInstance().getImageLoader();
     }
 
@@ -89,14 +92,14 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
 
         // load more start
         if(viewHolder instanceof BNProgressViewHolder){
             BNProgressViewHolder holder = (BNProgressViewHolder)viewHolder;
             holder.progressBar.setIndeterminate(true);
         }else if(viewHolder instanceof BNSiteListViewHolder){
-            BNSiteListViewHolder holder = (BNSiteListViewHolder)viewHolder;
+            final BNSiteListViewHolder holder = (BNSiteListViewHolder)viewHolder;
         // load more end
 
             final BNSite item = sites.get(position);
@@ -122,32 +125,37 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             layoutParams.height = (BNUtils.getWidth() / 2);
             holder.ivSite.setLayoutParams(layoutParams);
 
+            if(item.getOrganization() != null) {
+                holder.ivLike.setColorFilter(item.getOrganization().getSecondaryColor());
+                holder.ivLiked.setColorFilter(item.getOrganization().getSecondaryColor());
+            }
+
+            holder.ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // informar del like al site
+                    holder.ivLike.setVisibility(View.GONE);
+                    holder.ivLiked.setVisibility(View.VISIBLE);
+                    sitesListener.onSiteLiked(item.getIdentifier(), position);
+                }
+            });
+
+            holder.ivLiked.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // informar del unlike al site
+                    holder.ivLiked.setVisibility(View.GONE);
+                    holder.ivLike.setVisibility(View.VISIBLE);
+                    sitesListener.onSiteUnliked(item.getIdentifier(), position);
+                }
+            });
+
             if (item.isUserLiked()) {
                 holder.ivLike.setVisibility(View.GONE);
                 holder.ivLiked.setVisibility(View.VISIBLE);
-                if(item.getOrganization() != null) {
-                    holder.ivLiked.setColorFilter(item.getOrganization().getSecondaryColor());
-                }
-                holder.ivLiked.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO quitar el like
-                        Toast.makeText(context, "Unlike", Toast.LENGTH_SHORT).show();
-                    }
-                });
             } else {
                 holder.ivLiked.setVisibility(View.GONE);
                 holder.ivLike.setVisibility(View.VISIBLE);
-                if(item.getOrganization() != null) {
-                    holder.ivLike.setColorFilter(item.getOrganization().getSecondaryColor());
-                }
-                holder.ivLike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO darle like
-                        Toast.makeText(context, "Like", Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
 
             holder.cvSite.setOnClickListener(new View.OnClickListener() {
@@ -184,12 +192,12 @@ public class BNSiteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         loading = false;
     }
 
-    public void setOnLoadMoreListener(BNLoadMoreSitesListener onLoadMoreListener){
+    public void setOnLoadMoreListener(IBNLoadMoreSitesListener onLoadMoreListener){
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
-    public BNSiteListAdapter(Context context, List<BNSite> sites, RecyclerView recyclerView, final boolean isFavourites) {
-        this(context, sites);
+    public BNSiteListAdapter(Context context, List<BNSite> sites, IBNSitesLikeListener sitesListener, RecyclerView recyclerView, final boolean isFavourites) {
+        this(context, sites, sitesListener);
 
         if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

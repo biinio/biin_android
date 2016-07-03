@@ -49,9 +49,6 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
             // parsear elements_by_identifier
             parseElements(data.getJSONArray("elements"));
 
-            // parsear elements_by_id
-//            parseElementsId(data.getJSONArray("elements"));
-
             // parsear organizations
             parseOrganizations(data.getJSONArray("organizations"));
 
@@ -131,18 +128,11 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
         dataManager.setBNElements(result);
     }
 
-    private void parseElementsId(JSONArray arrayElements){
-        BNElementParser elementParser = new BNElementParser();
-        LinkedHashMap<String, BNElement> result = elementParser.parseBNElementsId(arrayElements);
-        // guardar el resultado de elements en el data manager
-        dataManager.setBNElementsId(result);
-    }
-
     private void parseFavouriteElements(JSONArray arrayElements){
         BNElementParser elementParser = new BNElementParser();
         LinkedHashMap<String, BNElement> result = elementParser.parseReferenceBNElements(arrayElements);
         // guardar el resultado de elements en el data manager
-        dataManager.setFavouriteBNElements(result);
+        dataManager.setFavouriteBNElements(new ArrayList<>(result.values()));
     }
 
     private void parseHighlights(JSONArray arrayHighlights){
