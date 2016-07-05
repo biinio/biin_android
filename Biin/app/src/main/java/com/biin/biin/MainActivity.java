@@ -57,7 +57,7 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements HighlightsPagerListener.IBNHighlightsListener, IBNSitesLikeListener, BNLikesListener.IBNLikesListener {
+public class MainActivity extends AppCompatActivity implements HighlightsPagerListener.IBNHighlightsListener, IBNSitesLikeListener {
 
     private static final String TAG = "MainActivity";
 
@@ -70,11 +70,11 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     private Biinie biinie;
     private BNDataManager dataManager;
-    //    private List<BNSite> nearSites;
-//    private List<BNSite> favoriteSites;
+
+    private List<BNSite> nearSites;
+    private List<BNSite> favoriteSites;
     private BNSiteAdapter nearPlacesAdapter;
     private BNSiteAdapter favoritesAdapter;
-    private BNLikesListener likesListener;
 
     private int nearBySitesVersion;
     private int favouriteSitesVersion;
@@ -100,9 +100,6 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         setUpScreen();
 
         loadData();
-
-        likesListener = new BNLikesListener();
-        likesListener.setListener(this);
     }
 
     private void setUpScreen() {
@@ -298,12 +295,26 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
         if (nearVersion > nearBySitesVersion) {
             nearBySitesVersion = nearVersion;
-            loadNearPlaces();
+            nearSites = dataManager.getNearByBNSites();
+            int size = nearSites.size();
+            nearPlacesAdapter.notifyItemRangeChanged(0, size);
+            if(size > 0){
+                showNearPlacesEmpty(false);
+            }else{
+                showNearPlacesEmpty(true);
+            }
         }
 
         if (favsVersion > favouriteSitesVersion) {
             favouriteSitesVersion = favsVersion;
-            loadFavourites();
+            favoriteSites = dataManager.getFavouriteBNSites();
+            int size = favoriteSites.size();
+            favoritesAdapter.notifyItemRangeChanged(0, size);
+            if(size > 0){
+                showFavouritesEmpty(false);
+            }else{
+                showFavouritesEmpty(true);
+            }
         }
     }
 
@@ -343,8 +354,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     }
 
     private void loadNearPlaces() {
-        if (dataManager.getNearByBNSites().size() > 0) {
-            showNearPlacesList();
+        showNearPlacesList();
+        if (nearSites.size() > 0) {
             showNearPlacesEmpty(false);
         } else {
             showNearPlacesEmpty(true);
@@ -354,7 +365,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private void showNearPlacesList() {
         LinearLayoutManagerSmooth layoutManager = new LinearLayoutManagerSmooth(this, LinearLayoutManager.HORIZONTAL, false);
 
-        nearPlacesAdapter = new BNSiteAdapter(this, dataManager.getNearByBNSites(), this, rvNearSites, false);
+        nearSites = dataManager.getNearByBNSites();
+        nearPlacesAdapter = new BNSiteAdapter(this, nearSites, this, rvNearSites, false);
         nearPlacesAdapter.setShowOthers(true);
         rvNearSites.setLayoutManager(layoutManager);
         rvNearSites.setHasFixedSize(true);
@@ -389,8 +401,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     }
 
     private void loadFavourites() {
-        if (dataManager.getFavouriteBNSites().size() > 0) {
-            showFavouritesList();
+        showFavouritesList();
+        if (favoriteSites.size() > 0) {
             showFavouritesEmpty(false);
         } else {
             showFavouritesEmpty(true);
@@ -401,7 +413,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         ImageView ivFavouritePlaces = (ImageView) findViewById(R.id.ivFavouritePlaces);
         LinearLayoutManagerSmooth layoutManager = new LinearLayoutManagerSmooth(this, LinearLayoutManager.HORIZONTAL, false);
 
-        favoritesAdapter = new BNSiteAdapter(this, dataManager.getFavouriteBNSites(), this, rvFavouritePlaces, true);
+        favoriteSites = dataManager.getFavouriteBNSites();
+        favoritesAdapter = new BNSiteAdapter(this, favoriteSites, this, rvFavouritePlaces, true);
         favoritesAdapter.setShowOthers(true);
         rvFavouritePlaces.setLayoutManager(layoutManager);
         rvFavouritePlaces.setHasFixedSize(true);
@@ -523,223 +536,69 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     }
 
     @Override
-    public void onSiteLiked(String identifier, int position) {
-        likeSite(identifier, true);
+    public void onSiteLiked(String identifier, final int position) {
+        if(dataManager.likeBNSite(identifier)) {
 
-        dataManager.likeBNSite(identifier);
+            nearSites = dataManager.getNearByBNSites();
+            favoriteSites = dataManager.getFavouriteBNSites();
 
-        addFavouriteSite(identifier);
-        favoritesAdapter.notifyItemInserted(0);
+            favoritesAdapter.notifyItemInserted(0);
+            nearPlacesAdapter.notifyItemRemoved(position);
 
-        if(dataManager.getFavouriteBNSites().size() > 2) {
-            rvFavouritePlaces.smoothScrollToPosition(0);
-        }
-
-        final int index = removeNearSite(identifier);
-        if (index > -1) {
-            nearPlacesAdapter.notifyItemRemoved(index);
-        }
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                favoritesAdapter.notifyItemRangeChanged(0, dataManager.getFavouriteBNSites().size());
-                favoritesAdapter.notifyDataSetChanged();
-                if (index > -1) {
-                    nearPlacesAdapter.notifyItemRangeChanged(index, dataManager.getNearByBNSites().size());
-                    nearPlacesAdapter.notifyDataSetChanged();
-                }
+            if (favoriteSites.size() > 2) {
+                rvFavouritePlaces.smoothScrollToPosition(0);
             }
-        }, animDuration + 300);
-    }
 
-    @Override
-    public void onSiteUnliked(String identifier, int position) {
-        likeSite(identifier, false);
+            verifyLists();
 
-        dataManager.unlikeBNSite(identifier);
-
-        addNearSite(identifier);
-        nearPlacesAdapter.notifyItemInserted(0);
-
-        if(dataManager.getNearByBNSites().size() > 2) {
-            rvNearSites.smoothScrollToPosition(0);
-        }
-
-        final int index = removeFavouriteSite(identifier);
-        if (index > -1) {
-            favoritesAdapter.notifyItemRemoved(index);
-        }
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                nearPlacesAdapter.notifyItemRangeChanged(0, dataManager.getNearByBNSites().size());
-                nearPlacesAdapter.notifyDataSetChanged();
-                if (index > -1) {
-                    favoritesAdapter.notifyItemRangeChanged(index, dataManager.getFavouriteBNSites().size());
-                    favoritesAdapter.notifyDataSetChanged();
-                }
-            }
-        }, animDuration + 300);
-    }
-
-    private void likeSite(final String identifier, final boolean liked) {
-        BNSite site = dataManager.getBNSite(identifier);
-        site.setUserLiked(liked);
-
-        if (liked) {
-            site.setLikeDate(Calendar.getInstance().getTime());
-        } else {
-            site.setLikeDate(null);
-        }
-
-        String url = BNAppManager.getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
-        Log.d(TAG, url);
-
-        JSONObject request = new JSONObject();
-        try {
-            JSONObject model = site.getModel();
-            request.put("model", model);
-        } catch (JSONException e) {
-            Log.e(TAG, "Error:" + e.getMessage());
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.PUT,
-                url,
-                request,
-                likesListener,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onLikeError(error, identifier, liked);
-                    }
-                });
-        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "LikeSite");
-    }
-
-    private void onLikeError(VolleyError error, String identifier, boolean liked) {
-        Log.e(TAG, "Error:" + error.getMessage());
-        if (liked) {
-            dataManager.addPendingLikeSite(identifier);
-        } else {
-            dataManager.addPendingUnlikeSite(identifier);
-        }
-    }
-
-    private boolean addNearSite(String identifier) {
-        boolean attach = true;
-        int size = dataManager.getNearByBNSites().size();
-
-        if (size > 0) {
-            int i = 0;
-            do {
-                if (dataManager.getNearByBNSites().get(i).getIdentifier().equals(identifier)) {
-                    attach = false;
-                }
-                i++;
-            } while (i < size && attach);
-        }
-
-        if (attach) {
-            dataManager.addNearByBNSite(dataManager.getBNSite(identifier), 0);
-            if (size == 0) {
-                showNearPlacesEmpty(false);
-                showNearPlacesList();
-            }
-        }
-
-        return attach;
-    }
-
-    private int removeNearSite(String identifier) {
-        int index = -1;
-        int size = dataManager.getNearByBNSites().size();
-
-        if (size > 0) {
-            int i = 0;
-            do {
-                if (dataManager.getNearByBNSites().get(i).getIdentifier().equals(identifier)) {
-                    dataManager.removeNearByBNSite(identifier);
-                    index = i;
-                }
-                i++;
-            } while (i < size && index == -1);
-        }
-
-        if (size == 1 && index == 0) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    showNearPlacesEmpty(true);
-
+                    favoritesAdapter.notifyItemRangeChanged(0, favoriteSites.size());
+                    nearPlacesAdapter.notifyItemRangeChanged(position, nearSites.size());
                 }
             }, animDuration + 300);
         }
-
-        return index;
-    }
-
-    private boolean addFavouriteSite(String identifier) {
-        boolean attach = true;
-        int size = dataManager.getFavouriteBNSites().size();
-
-        if (size > 0) {
-            int i = 0;
-            do {
-                if (dataManager.getFavouriteBNSites().get(i).getIdentifier().equals(identifier)) {
-                    attach = false;
-                }
-                i++;
-            } while (i < size && attach);
-        }
-
-        if (attach) {
-            dataManager.addFavouriteBNSite(dataManager.getBNSite(identifier), 0);
-            if (size == 0) {
-                showFavouritesEmpty(false);
-                showFavouritesList();
-            }
-        }
-
-        return attach;
-    }
-
-    private int removeFavouriteSite(String identifier) {
-        int index = -1;
-        int size = dataManager.getFavouriteBNSites().size();
-
-        if (size > 0) {
-            int i = 0;
-            do {
-                if (dataManager.getFavouriteBNSites().get(i).getIdentifier().equals(identifier)) {
-                    dataManager.removeFavouriteBNSite(identifier);
-                    index = i;
-                }
-                i++;
-            } while (i < size && index == -1);
-
-            if (size == 1 && index == 0) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        showFavouritesEmpty(true);
-                    }
-                }, animDuration + 300);
-            }
-        }
-
-        return index;
     }
 
     @Override
-    public void onLikeResponseOk() {
-        //TODO show OK message
+    public void onSiteUnliked(String identifier, final int position) {
+        if(dataManager.unlikeBNSite(identifier)) {
+
+            nearSites = dataManager.getNearByBNSites();
+            favoriteSites = dataManager.getFavouriteBNSites();
+
+            nearPlacesAdapter.notifyItemInserted(0);
+            favoritesAdapter.notifyItemRemoved(position);
+
+            if (nearSites.size() > 2) {
+                rvNearSites.smoothScrollToPosition(0);
+            }
+
+            verifyLists();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    nearPlacesAdapter.notifyItemRangeChanged(0, nearSites.size());
+                    favoritesAdapter.notifyItemRangeChanged(position, favoriteSites.size());
+                }
+            }, animDuration + 300);
+        }
     }
 
-    @Override
-    public void onLikeResponseError() {
+    private void verifyLists(){
+        if(nearSites.size() > 0){
+            showNearPlacesEmpty(false);
+        }else{
+            showNearPlacesEmpty(true);
+        }
+
+        if(favoriteSites.size() > 0){
+            showFavouritesEmpty(false);
+        }else{
+            showFavouritesEmpty(true);
+        }
     }
 }
 

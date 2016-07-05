@@ -1,5 +1,12 @@
 package com.biin.biin.Managers;
 
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
@@ -7,16 +14,22 @@ import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
+import com.biin.biin.Volley.Listeners.BNLikesListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
  * Created by ramirezallan on 5/2/16.
  */
-public class BNDataManager {
+public class BNDataManager implements BNLikesListener.IBNLikesListener {
 
+    private static final String TAG = "BNDataManager";
     private static BNDataManager ourInstance = new BNDataManager();
 
     private Biinie biinie = new Biinie();
@@ -42,11 +55,15 @@ public class BNDataManager {
     private static int favouriteSitesVersion = 1;
     private static int favouriteElementsVersion = 1;
 
+    private BNLikesListener likesListener;
+
     protected static BNDataManager getInstance() {
         return ourInstance;
     }
 
     private BNDataManager() {
+        likesListener = new BNLikesListener();
+        likesListener.setListener(this);
     }
 
 
@@ -299,18 +316,72 @@ public class BNDataManager {
     /****************** Manage favourites start ******************/
 
     public boolean likeBNSite(String identifier){
-        BNSite site = getBNSite(identifier);
-        site.setUserLiked(true);
+        likeSite(identifier, true);
 
-        /*return addFavouriteBNSite(site);*/
-        return true;
+        BNSite site = getBNSite(identifier);
+
+        int index = this.nearBySites.indexOf(site);
+        if(index > -1){
+            this.nearBySites.remove(index);
+            nearBySitesVersion++;
+        }
+
+        site.setUserLiked(true);
+        site.setLikeDate(Calendar.getInstance().getTime());
+        return addFavouriteBNSite(site, 0);
     }
 
     public boolean unlikeBNSite(String identifier){
-        BNSite site = getBNSite(identifier);
-        site.setUserLiked(false);
+        likeSite(identifier, false);
 
-        return true;
+        BNSite site = getBNSite(identifier);
+
+        int index = this.favouriteSites.indexOf(site);
+        if(index > -1){
+            site.setUserLiked(false);
+            site.setLikeDate(null);
+            this.favouriteSites.remove(index);
+            favouriteSitesVersion++;
+        }
+
+        return addNearByBNSite(site, 0);
+    }
+
+    private void likeSite(final String identifier, final boolean liked) {
+        BNSite site = getBNSite(identifier);
+
+        String url = BNAppManager.getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
+        Log.d(TAG, url);
+
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject model = site.getModel();
+            request.put("model", model);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                url,
+                request,
+                likesListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onLikeError(error, identifier, liked);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "LikeSite");
+    }
+
+    private void onLikeError(VolleyError error, String identifier, boolean liked) {
+        Log.e(TAG, "Error:" + error.getMessage());
+        if (liked) {
+            addPendingLikeSite(identifier);
+        } else {
+            addPendingUnlikeSite(identifier);
+        }
     }
 
     public void addPendingLikeSite(String identifier){
@@ -695,5 +766,15 @@ public class BNDataManager {
     }
 
     /****************** Categories end ******************/
+
+    @Override
+    public void onLikeResponseOk() {
+
+    }
+
+    @Override
+    public void onLikeResponseError() {
+
+    }
 
 }

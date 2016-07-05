@@ -6,11 +6,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 /**
  * Created by ramirezallan on 5/13/16.
  */
 public class LinearLayoutManagerSmooth extends LinearLayoutManager {
+
+    private static final String TAG = "LinearLayoutManager";
 
     public LinearLayoutManagerSmooth(Context context) {
         super(context, HORIZONTAL, false);
@@ -42,4 +45,12 @@ public class LinearLayoutManagerSmooth extends LinearLayoutManager {
         startSmoothScroll(linearSmoothScroller);
     }
 
+    @Override
+    public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+        try {
+            super.onLayoutChildren(recycler, state);
+        }catch (IndexOutOfBoundsException ex){
+            Log.e(TAG, "Error: " + ex.getMessage());
+        }
+    }
 }

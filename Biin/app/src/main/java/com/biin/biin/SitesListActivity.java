@@ -33,7 +33,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.List;
 
-public class SitesListActivity extends AppCompatActivity implements BNSitesListener.IBNSitesListener, BNLikesListener.IBNLikesListener, IBNSitesLikeListener {
+public class SitesListActivity extends AppCompatActivity implements BNSitesListener.IBNSitesListener, IBNSitesLikeListener {
 
     private static final String TAG = "SitesListActivity";
 
@@ -45,7 +45,6 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
     private Biinie biinie;
     private BNSitesListener sitesListener;
     private BNSiteListAdapter adapter;
-    private BNLikesListener likesListener;
 
     private int sitesVersion;
     private long animDuration = 300;
@@ -90,9 +89,6 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
         } else {
             sitesVersion = dataManager.getNearBySitesVersion();
         }
-
-        likesListener = new BNLikesListener();
-        likesListener.setListener(this);
     }
 
     private void loadData(){
@@ -176,93 +172,31 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
     }
 
     @Override
-    public void onLikeResponseOk() {
-
-    }
-
-    @Override
-    public void onLikeResponseError() {
-
-    }
-
-    @Override
     public void onSiteLiked(String identifier, int position) {
-        likeSite(identifier, true);
-
-        dataManager.likeBNSite(identifier);
-
-        dataManager.addFavouriteBNSite(dataManager.getBNSite(identifier), 0);
-        dataManager.removeNearByBNSite(identifier);
+        if(dataManager.likeBNSite(identifier)){
+            String ok = "ok";
+        }
     }
 
     @Override
     public void onSiteUnliked(String identifier, final int position) {
-        likeSite(identifier, false);
+        if(dataManager.unlikeBNSite(identifier)) {
+            if (isFavourites) {
+                adapter.notifyItemRemoved(position);
 
-        dataManager.unlikeBNSite(identifier);
-
-        dataManager.addNearByBNSite(dataManager.getBNSite(identifier), 0);
-        dataManager.removeFavouriteBNSite(identifier);
-
-        if(isFavourites){
-            adapter.notifyItemRemoved(position);
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.notifyItemRangeChanged(position, dataManager.getFavouriteBNElements().size());
-
-                    if(!(dataManager.getFavouriteBNSites().size() > 0)) {
-                        LinearLayout vlFavourites = (LinearLayout) findViewById(R.id.vlAddFavouriteSites);
-                        rvSites.setVisibility(View.GONE);
-                        vlFavourites.setVisibility(View.VISIBLE);
-                    }
-                }
-            }, animDuration + 300);
-        }
-    }
-
-    private void likeSite(final String identifier, final boolean liked) {
-        BNSite site = dataManager.getBNSite(identifier);
-        site.setUserLiked(liked);
-
-        if (liked) {
-            site.setLikeDate(Calendar.getInstance().getTime());
-        } else {
-            site.setLikeDate(null);
-        }
-
-        String url = BNAppManager.getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
-        Log.d(TAG, url);
-
-        JSONObject request = new JSONObject();
-        try {
-            JSONObject model = site.getModel();
-            request.put("model", model);
-        } catch (JSONException e) {
-            Log.e(TAG, "Error:" + e.getMessage());
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.PUT,
-                url,
-                request,
-                likesListener,
-                new Response.ErrorListener() {
+                new Handler().postDelayed(new Runnable() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onLikeError(error, identifier, liked);
-                    }
-                });
-        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "LikeSite");
-    }
+                    public void run() {
+                        adapter.notifyItemRangeChanged(position, dataManager.getFavouriteBNSites().size());
 
-    private void onLikeError(VolleyError error, String identifier, boolean liked) {
-        Log.e(TAG, "Error:" + error.getMessage());
-        if (liked) {
-            dataManager.addPendingLikeSite(identifier);
-        } else {
-            dataManager.addPendingUnlikeSite(identifier);
+                        if (!(dataManager.getFavouriteBNSites().size() > 0)) {
+                            LinearLayout vlFavourites = (LinearLayout) findViewById(R.id.vlAddFavouriteSites);
+                            rvSites.setVisibility(View.GONE);
+                            vlFavourites.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }, animDuration + 300);
+            }
         }
     }
 
