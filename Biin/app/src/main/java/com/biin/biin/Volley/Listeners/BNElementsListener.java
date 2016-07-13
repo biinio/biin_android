@@ -37,7 +37,7 @@ public class BNElementsListener implements Response.Listener<JSONObject> {
     public BNElementsListener(List<BNElement> elements, boolean isFavourites) {
         this.elements = elements;
         this.isFavourites = isFavourites;
-        dataManager = BNAppManager.getDataManagerInstance();
+        dataManager = BNAppManager.getInstance().getDataManagerInstance();
     }
 
     public void setListener(IBNElementsListener listener) {

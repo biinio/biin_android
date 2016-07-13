@@ -16,16 +16,13 @@ import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.Components.BNProgressViewHolder;
 import com.biin.biin.Components.Listeners.IBNLoadMoreElementsListener;
 import com.biin.biin.ElementsActivity;
 import com.biin.biin.Utils.BNUtils;
-import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -54,7 +51,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         super();
         this.context = context;
         this.elements = elements;
-        imageLoader = BiinApp.getInstance().getImageLoader();
+        imageLoader = ImageLoader.getInstance();
     }
 
     @Override
@@ -96,9 +93,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             final BNElement item = elements.get(position);
             TableRow.LayoutParams params = new TableRow.LayoutParams((elements.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int) (58 * BNUtils.getDensity()));
 
-//        loadCategoryElementImage(item.getMedia().get(0).getUrl(), holder);
-            imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivCategoryElement, R.drawable.bg_feedback, R.drawable.biin));
-            holder.ivCategoryElement.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
+            imageLoader.displayImage(item.getMedia().get(0).getUrl(), holder.ivCategoryElement);
             holder.ivCategoryElement.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
 
             holder.rlCategoryLabel.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
@@ -190,25 +185,12 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return elements.get(position);
     }
 
-    private void loadCategoryElementImage(String imageURL, final BNCategoryViewHolder holder) {
-        imageLoader.get(imageURL, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                holder.ivCategoryElement.setImageBitmap(response.getBitmap());
-            }
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-    }
-
     public static class BNCategoryViewHolder extends RecyclerView.ViewHolder{
 
         protected CardView cvCategory;
         protected RelativeLayout rlCategoryLabel;
         protected FrameLayout flCategoryOffer;
-        protected ImageView ivCategoryOffer;
-        protected NetworkImageView ivCategoryElement;
+        protected ImageView ivCategoryOffer, ivCategoryElement;
         protected TextView tvCategoryElement, tvCategorySubtitle, tvCategoryLocation, tvCategoryPrice, tvCategoryDiscount, tvCategoryOffer;
 
         public BNCategoryViewHolder(View itemView) {
@@ -218,7 +200,7 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             rlCategoryLabel = (RelativeLayout)itemView.findViewById(R.id.rlCategoryLabel);
             flCategoryOffer = (FrameLayout)itemView.findViewById(R.id.flCategoryOffer);
 
-            ivCategoryElement = (NetworkImageView)itemView.findViewById(R.id.ivCategoryElement);
+            ivCategoryElement = (ImageView)itemView.findViewById(R.id.ivCategoryElement);
             ivCategoryOffer = (ImageView)itemView.findViewById(R.id.ivCategoryOffer);
 
             tvCategoryElement = (TextView)itemView.findViewById(R.id.tvCategoryElement);

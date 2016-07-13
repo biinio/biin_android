@@ -15,17 +15,15 @@ import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.Components.BNProgressViewHolder;
 import com.biin.biin.Components.Listeners.IBNSitesLikeListener;
 import com.biin.biin.Components.Listeners.IBNLoadMoreSitesListener;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Utils.BNUtils.BNStringExtras;
-import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.R;
 import com.biin.biin.SitesActivity;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -57,7 +55,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.context = context;
         this.sites = sites;
         this.sitesListener = sitesListener;
-        imageLoader = BiinApp.getInstance().getImageLoader();
+        imageLoader = ImageLoader.getInstance();
     }
 
     public void setShowOthers(boolean showOthers){
@@ -104,8 +102,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             final BNSite item = sites.get(position);
             TableRow.LayoutParams params = new TableRow.LayoutParams((sites.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int) (56 * BNUtils.getDensity()));
 
-            imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivSite, R.drawable.bg_feedback, R.drawable.biin));
-            holder.ivSite.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
+            imageLoader.displayImage(item.getMedia().get(0).getUrl(), holder.ivSite);
             holder.ivSite.setBackgroundColor(item.getOrganization().getPrimaryColor());
 
             holder.rlSiteLabel.setBackgroundColor(item.getOrganization().getPrimaryColor());
@@ -210,8 +207,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         protected CardView cvSite;
         protected RelativeLayout rlSiteLabel;
-        protected ImageView ivLike, ivLiked;
-        protected NetworkImageView ivSite;
+        protected ImageView ivLike, ivLiked, ivSite;
         protected TextView tvSiteTitle, tvSiteSubtitle;
 
         public BNSiteViewHolder(View itemView) {
@@ -220,7 +216,7 @@ public class BNSiteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             cvSite = (CardView)itemView.findViewById(R.id.cvSite);
             rlSiteLabel = (RelativeLayout)itemView.findViewById(R.id.rlSiteLabel);
 
-            ivSite = (NetworkImageView)itemView.findViewById(R.id.ivSiteSmall);
+            ivSite = (ImageView)itemView.findViewById(R.id.ivSiteSmall);
             ivLike = (ImageView)itemView.findViewById(R.id.ivLike);
             ivLiked = (ImageView)itemView.findViewById(R.id.ivLiked);
 

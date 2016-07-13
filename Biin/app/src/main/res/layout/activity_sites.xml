@@ -25,7 +25,8 @@
         android:layout_below="@+id/sites_toolbar"
         android:id="@+id/nvSites">
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -33,9 +34,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 layout="@layout/bnsite_item"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
                 android:id="@+id/include_bnsite" />
 
             <LinearLayout
@@ -54,10 +52,7 @@
                 style="@style/MainViewLabel"
                 android:textColor="@color/colorWhite"
                 android:background="@color/colorDarkGrey"
-                android:textSize="12dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/vlSiteShowcases"
+                android:textSize="12sp"
                 android:visibility="gone" />
 
             <com.biin.biin.Components.CardRecyclerView
@@ -67,16 +62,54 @@
                 android:orientation="horizontal"
                 tools:listitem="@layout/bnsite_item_small"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                android:layout_below="@+id/tvSitesNearYou"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
                 android:overScrollMode="never"
                 android:visibility="gone">
 
             </com.biin.biin.Components.CardRecyclerView>
 
-        </RelativeLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/flNpsInclude"
+                android:visibility="gone">
+
+                <include
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/site_nps" />
+
+            </FrameLayout>
+
+        </LinearLayout>
 
     </com.biin.biin.Components.BNScrollView>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_alpha_80"
+        android:id="@+id/vlMapSitesScreen"
+        android:gravity="bottom"
+        android:padding="6dp"
+        android:layout_alignParentTop="true"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/vlMapSitesInclude"
+        android:gravity="bottom"
+        android:padding="6dp"
+        android:layout_alignParentTop="true"
+        android:visibility="gone">
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/bnsites_map" />
+
+    </LinearLayout>
 
 </RelativeLayout>

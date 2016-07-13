@@ -42,18 +42,15 @@ import com.biin.biin.Entities.BNHighlight;
 import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
+import com.biin.biin.Entities.BiinieAction;
+import com.biin.biin.Managers.BNAnalyticsManager;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNElementsListener;
-import com.biin.biin.Volley.Listeners.BNLikesListener;
 import com.jude.rollviewpager.RollPagerView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -70,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     private Biinie biinie;
     private BNDataManager dataManager;
+    private BNAnalyticsManager analyticsManager;
 
     private List<BNSite> nearSites;
     private List<BNSite> favoriteSites;
@@ -79,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private int nearBySitesVersion;
     private int favouriteSitesVersion;
 
-    //    private long nearAnimDuration;
-//    private long favsAnimDuration;
     private long animDuration = 300;
 
     private int total = 0;
@@ -95,11 +91,16 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         BNUtils.setWidth(metrics.widthPixels);
         BNUtils.setDensity(metrics.density);
 
-        biinie = BNAppManager.getDataManagerInstance().getBiinie();
+        dataManager = BNAppManager.getInstance().getDataManagerInstance();
+        analyticsManager = BNAppManager.getInstance().getAnalyticsManagerInstance();
+
+        biinie = dataManager.getBiinie();
 
         setUpScreen();
 
         loadData();
+
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.OPEN_APP, BiinieAction.AndroidApp));
     }
 
     private void setUpScreen() {
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         tvConfirmClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                analyticsManager.addAction(new BiinieAction("", BiinieAction.CLOSE_APP, BiinieAction.AndroidApp));
                 MainActivity.super.onBackPressed();
             }
         });
@@ -169,10 +171,11 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         rvNearSites.setLayoutParams(nearSitesParams);
         rvFavouritePlaces.setLayoutParams(favsSitesParams);
 
-        setUpDrawer(lato_regular);
+        setUpDrawer();
     }
 
-    private void setUpDrawer(Typeface lato_regular) {
+    private void setUpDrawer() {
+        Typeface lato_regular = BNUtils.getLato_regular();
         drawer = (DrawerLayout) findViewById(R.id.dlMain);
 
         tvProfile = (TextView) findViewById(R.id.tvMenuProfile);
@@ -207,6 +210,17 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         tvFriends = (TextView) findViewById(R.id.tvMenuFriends);
         tvFriends.setTypeface(lato_regular);
         tvFriends.setLetterSpacing(0.3f);
+        tvFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.setAction(Intent.ACTION_SEND);
+                i.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.share_link));
+                i.setType("text/plain");
+                startActivity(Intent.createChooser(i, getString(R.string.ActionShare)));
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
 
         tvAbout = (TextView) findViewById(R.id.tvMenuAbout);
         tvAbout.setTypeface(lato_regular);
@@ -238,8 +252,6 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     }
 
     private void loadData() {
-        dataManager = BNAppManager.getDataManagerInstance();
-
         nearBySitesVersion = dataManager.getNearBySitesVersion();
         favouriteSitesVersion = dataManager.getFavouriteSitesVersion();
 
@@ -485,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
                         BNElementsListener elementsListener = new BNElementsListener(category.getElements(), false);
                         elementsListener.setListener(new BNMoreElementsListener(adapter));
 
-                        String url = BNAppManager.getNetworkManagerInstance().getMoreCategoryElementsUrl(biinie.getIdentifier(), category.getIdentifier());
+                        String url = BNAppManager.getInstance().getNetworkManagerInstance().getMoreCategoryElementsUrl(biinie.getIdentifier(), category.getIdentifier());
                         Log.d(TAG, url);
 
                         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -537,6 +549,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     @Override
     public void onSiteLiked(String identifier, final int position) {
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.LIKE_SITE, identifier));
+
         if(dataManager.likeBNSite(identifier)) {
 
             nearSites = dataManager.getNearByBNSites();
@@ -563,6 +577,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     @Override
     public void onSiteUnliked(String identifier, final int position) {
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.UNLIKE_SITE, identifier));
+
         if(dataManager.unlikeBNSite(identifier)) {
 
             nearSites = dataManager.getNearByBNSites();

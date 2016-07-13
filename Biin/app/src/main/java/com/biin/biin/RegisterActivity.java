@@ -209,7 +209,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                BNAppManager.getNetworkManagerInstance().getRegisterUrl(etName.getText().toString(), etLastName.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString(), gender, date),
+                BNAppManager.getInstance().getNetworkManagerInstance().getRegisterUrl(etName.getText().toString(), etLastName.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString(), gender, date),
                 null,
                 signupListener,
                 new Response.ErrorListener() {
@@ -242,7 +242,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                BNAppManager.getNetworkManagerInstance().getUrlBiinie(identifier),
+                BNAppManager.getInstance().getNetworkManagerInstance().getUrlBiinie(identifier),
                 null,
                 biiniesListener,
                 new Response.ErrorListener() {
@@ -284,7 +284,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     public void onBiiniesLoaded() {
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(BNUtils.BNStringExtras.BNBiinie, BNAppManager.getDataManagerInstance().getBiinie().getIdentifier());
+        editor.putString(BNUtils.BNStringExtras.BNBiinie, BNAppManager.getInstance().getDataManagerInstance().getBiinie().getIdentifier());
         editor.commit();
 
         Log.e(TAG, "Biinie cargado correctamente");

@@ -35,7 +35,7 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
 
     private IBNInitialDataListener listener;
 
-    private BNDataManager dataManager = BNAppManager.getDataManagerInstance();
+    private BNDataManager dataManager = BNAppManager.getInstance().getDataManagerInstance();
 
     public void setListener(IBNInitialDataListener listener) {
         this.listener = listener;

@@ -43,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/pbSite"
+                android:visibility="gone"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:indeterminate="true"
@@ -80,6 +81,7 @@
                 android:id="@+id/pbSiteOrganization"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
+                android:visibility="gone"
                 android:layout_margin="6dp"
                 android:indeterminate="true"
                 android:progressTint="@color/colorGreen" />

@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:background="@color/colorGreen">
 
-        <com.android.volley.toolbox.NetworkImageView
+        <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ivElement"
@@ -70,7 +70,7 @@
             android:layout_alignLeft="@+id/ivElement"
             android:layout_alignRight="@+id/ivElement">
 
-            <com.android.volley.toolbox.NetworkImageView
+            <ImageView
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:id="@+id/ivOrganization"

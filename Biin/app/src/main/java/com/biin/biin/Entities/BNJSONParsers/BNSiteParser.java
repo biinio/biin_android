@@ -24,14 +24,14 @@ public class BNSiteParser {
 
     private BNMediaParser mediaParser = new BNMediaParser();
 
-    private BNDataManager dataManager = BNAppManager.getDataManagerInstance();
+    private BNDataManager dataManager = BNAppManager.getInstance().getDataManagerInstance();
 
     public BNSite parseBNSite(JSONObject objectSite){
         BNSite site = new BNSite();
         try{
             site.setIdentifier(objectSite.getString("identifier"));
             site.setOrganizationIdentifier(objectSite.getString("organizationIdentifier"));
-            site.setOrganization(BNAppManager.getDataManagerInstance().getBNOrganization(site.getOrganizationIdentifier()));
+            site.setOrganization(BNAppManager.getInstance().getDataManagerInstance().getBNOrganization(site.getOrganizationIdentifier()));
             BNOrganization organization = site.getOrganization();
             if(organization != null){
                 organization.addSite(site.getIdentifier());

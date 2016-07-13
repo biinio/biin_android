@@ -37,7 +37,7 @@ public class BNSitesListener implements Response.Listener<JSONObject> {
     public BNSitesListener(List<BNSite> sites, boolean isFavourites) {
         this.sites = sites;
         this.isFavourites = isFavourites;
-        dataManager = BNAppManager.getDataManagerInstance();
+        dataManager = BNAppManager.getInstance().getDataManagerInstance();
     }
 
     public void setListener(IBNSitesListener listener) {

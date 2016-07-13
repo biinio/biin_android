@@ -54,7 +54,7 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sites_list);
 
-        dataManager = BNAppManager.getDataManagerInstance();
+        dataManager = BNAppManager.getInstance().getDataManagerInstance();
 
         Intent i = getIntent();
         if (i != null) {
@@ -112,7 +112,7 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
                 sitesListener = new BNSitesListener(sites, isFavourites);
                 sitesListener.setListener(SitesListActivity.this);
 
-                String url = BNAppManager.getNetworkManagerInstance().getMoreSitesUrl(biinie.getIdentifier());
+                String url = BNAppManager.getInstance().getNetworkManagerInstance().getMoreSitesUrl(biinie.getIdentifier());
                 Log.d(TAG, url);
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(

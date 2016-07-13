@@ -24,7 +24,7 @@ public class BNElementParser {
 
     private BNMediaParser mediaParser = new BNMediaParser();
 
-    private BNDataManager dataManager = BNAppManager.getDataManagerInstance();
+    private BNDataManager dataManager = BNAppManager.getInstance().getDataManagerInstance();
 
     public BNElement parseBNElement(JSONObject objectElement){
         BNElement element = new BNElement();

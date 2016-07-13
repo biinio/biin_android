@@ -140,7 +140,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void setUpFields(){
-        Biinie biinie = BNAppManager.getDataManagerInstance().getBiinie();
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
 
         etName.setText(biinie.getFirstName());
         etLastName.setText(biinie.getLastName());
@@ -247,7 +247,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         profileListener = new BNBiiniesListener();
         profileListener.setListener(this);
 
-        Biinie biinie = BNAppManager.getDataManagerInstance().getBiinie();
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
         biinie.setLastName(etName.getText().toString().trim());
         biinie.setFirstName(etLastName.getText().toString().trim());
         biinie.setGender(gender);
@@ -263,7 +263,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                BNAppManager.getNetworkManagerInstance().getUrlBiinie(biinie.getIdentifier()),
+                BNAppManager.getInstance().getNetworkManagerInstance().getUrlBiinie(biinie.getIdentifier()),
                 request,
                 profileListener,
                 new Response.ErrorListener() {

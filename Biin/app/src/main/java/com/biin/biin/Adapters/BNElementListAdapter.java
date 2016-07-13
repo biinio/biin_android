@@ -16,9 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
-import com.biin.biin.BiinApp;
 import com.biin.biin.Components.BNProgressViewHolder;
 import com.biin.biin.Components.Listeners.IBNElementsLikeListener;
 import com.biin.biin.Components.Listeners.IBNLoadMoreElementsListener;
@@ -26,6 +23,7 @@ import com.biin.biin.ElementsActivity;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.R;
 import com.biin.biin.Utils.BNUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -56,7 +54,7 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
         this.context = context;
         this.elements = elements;
         this.elementsListener = elementsListener;
-        imageLoader = BiinApp.getInstance().getImageLoader();
+        imageLoader = ImageLoader.getInstance();
     }
 
     @Override
@@ -99,14 +97,10 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
             final BNElement item = elements.get(position);
             TableRow.LayoutParams params = new TableRow.LayoutParams(BNUtils.getWidth(), (BNUtils.getWidth() / 2) + (int) (68 * BNUtils.getDensity()));
 
-//        loadElementImage(item.getMedia().get(0).getUrl(), holder); //element.media.url
-            imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivElement, R.drawable.bg_feedback, R.drawable.biin));
-            holder.ivElement.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
+            imageLoader.displayImage(item.getMedia().get(0).getUrl(), holder.ivElement);
             holder.ivElement.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
 
-//        loadOrganizationImage(item.getShowcase().getSite().getMedia().get(0).getUrl(), holder);
-            imageLoader.get(item.getShowcase().getSite().getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivOrganization, R.drawable.bg_feedback, R.drawable.biin));
-            holder.ivOrganization.setImageUrl(item.getShowcase().getSite().getMedia().get(0).getUrl(), imageLoader);
+            imageLoader.displayImage(item.getShowcase().getSite().getMedia().get(0).getUrl(), holder.ivOrganization);
             holder.ivOrganization.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
 
             holder.rlElementLabel.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
@@ -242,8 +236,7 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
         protected CardView cvElement;
         protected RelativeLayout rlElementLabel;
         protected FrameLayout flOffer;
-        protected ImageView ivOffer, ivLike, ivLiked;
-        protected NetworkImageView ivElement, ivOrganization;
+        protected ImageView ivOffer, ivLike, ivLiked, ivElement, ivOrganization;
         protected TextView tvTitle, tvSubtitle, tvSubtitleLocation, tvPrice, tvDiscount, tvOffer;
 
         public BNElementViewHolder(View itemView) {
@@ -253,8 +246,8 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
             rlElementLabel = (RelativeLayout)itemView.findViewById(R.id.rlElementLabel);
             flOffer = (FrameLayout)itemView.findViewById(R.id.flElementOffer);
 
-            ivElement = (NetworkImageView)itemView.findViewById(R.id.ivElement);
-            ivOrganization = (NetworkImageView)itemView.findViewById(R.id.ivOrganization);
+            ivElement = (ImageView)itemView.findViewById(R.id.ivElement);
+            ivOrganization = (ImageView)itemView.findViewById(R.id.ivOrganization);
             ivOffer = (ImageView)itemView.findViewById(R.id.ivElementOffer);
             ivLike = (ImageView)itemView.findViewById(R.id.ivElementLike);
             ivLiked = (ImageView)itemView.findViewById(R.id.ivElementLiked);

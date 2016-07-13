@@ -239,15 +239,18 @@
     <string name="SurveyTitle">Your opinion matters</string>
     <string name="Optional">Optional</string>
     <string name="BrandGreetings">Thank you for stoping by today and come back soon!</string>
+    <string name="SurveyQuestion">How likely would you recommend us to your family or friends?</string>
     <string name="SurveyQuestion_1">How likely would you recommend </string>
     <string name="SurveyQuestion_2"> to your family or friends?</string>
     <string name="SurveyQuestion_3">Leave your comments about what did you like or dislike so we can improve.</string>
-    <string name="Thankyou">Thank you</string>
-    <string name="Download">Download it at www.biin.io</string>
-
+    <string name="SurveyQuestion_4">We appreciate that you took the time to fill out our survey. We hope to make changes soon with you recommendations. Thank you.</string>
 
     <string name="likely">Very Likely</string>
     <string name="not_likely">Not likely</string>
+    <string name="Send">Send</string>
+
+    <string name="Thankyou">Thank you</string>
+    <string name="Download">Download it at www.biin.io</string>
 
     <string name="UBER">Ride there with Uber</string>
     <string name="Schedule">Schedule</string>
@@ -260,7 +263,7 @@
 
     <string name="Accept">Accept</string>
 
-    <string name="Waze">Waze</string>
+    <string name="Waze">Drive there with Waze</string>
 
     <string name="ExitApp">Quit Biin?</string>
 

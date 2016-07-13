@@ -63,7 +63,7 @@ public class PrivacyActivity extends AppCompatActivity {
                 findViewById(R.id.pbPrivacyLoading).setVisibility(View.GONE);
             }
         });
-        wvPrivacy.loadUrl(BNAppManager.getNetworkManagerInstance().getPrivacyPolicies(lang));
+        wvPrivacy.loadUrl(BNAppManager.getInstance().getNetworkManagerInstance().getPrivacyPolicies(lang));
     }
 
     @Override

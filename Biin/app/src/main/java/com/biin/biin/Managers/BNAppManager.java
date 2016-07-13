@@ -7,6 +7,7 @@ public class BNAppManager {
 
     private static BNAppManager ourInstance = new BNAppManager();
     private static BNDataManager dataManager;
+    private static BNAnalyticsManager analyticsManager;
     private static BNNetworkManager networkManager;
     private static BNLocationManager positionManager;
 
@@ -14,21 +15,26 @@ public class BNAppManager {
         return ourInstance;
     }
 
-    public static BNDataManager getDataManagerInstance() {
+    public BNDataManager getDataManagerInstance() {
         return dataManager;
     }
 
-    public static BNNetworkManager getNetworkManagerInstance() {
+    public BNAnalyticsManager getAnalyticsManagerInstance() {
+        return analyticsManager;
+    }
+
+    public BNNetworkManager getNetworkManagerInstance() {
         return networkManager;
     }
 
-    public static BNLocationManager getPositionManagerInstance() {
+    public BNLocationManager getPositionManagerInstance() {
         return positionManager;
     }
 
     private BNAppManager() {
         // instanciar los otros managers
         dataManager = BNDataManager.getInstance();
+        analyticsManager = BNAnalyticsManager.getInstance();
         networkManager = BNNetworkManager.getInstance();
         positionManager = BNLocationManager.getInstance();
     }

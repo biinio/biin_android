@@ -386,7 +386,7 @@ public class BNSite {
 
     public void setShowcasesSite(){
         for (String identifier : this.showcases) {
-            BNShowcase showcase = BNAppManager.getDataManagerInstance().getBNShowcase(identifier);
+            BNShowcase showcase = BNAppManager.getInstance().getDataManagerInstance().getBNShowcase(identifier);
             if(showcase != null){
                 showcase.setSite(this);
             }

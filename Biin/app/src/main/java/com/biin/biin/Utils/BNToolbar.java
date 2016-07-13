@@ -97,7 +97,6 @@ public class BNToolbar {
             @Override
             public void onClick(View v) {
                 listener.onLike();
-//                Toast.makeText(context, "Like", Toast.LENGTH_SHORT).show();
                 // cambiar el boton
                 ivToolbarLike.setVisibility(View.GONE);
                 ivToolbarLiked.setVisibility(View.VISIBLE);
@@ -108,7 +107,6 @@ public class BNToolbar {
             @Override
             public void onClick(View v) {
                 listener.onUnlike();
-//                Toast.makeText(context, "Unlike", Toast.LENGTH_SHORT).show();
                 // cambiar el boton
                 ivToolbarLiked.setVisibility(View.GONE);
                 ivToolbarLike.setVisibility(View.VISIBLE);
@@ -121,8 +119,6 @@ public class BNToolbar {
                 @Override
                 public void onClick(View v) {
                     listener.onShare();
-                    //TODO abrir ventana de compartir
-                    Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -133,8 +129,6 @@ public class BNToolbar {
                 @Override
                 public void onClick(View v) {
                     listener.onLocation();
-                    //TODO mostrar la ventana de geoposicion
-                    Toast.makeText(context, "Geoposition", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -145,8 +139,6 @@ public class BNToolbar {
                 @Override
                 public void onClick(View v) {
                     listener.onCall();
-                    //TODO realizar llamada telefonica o marcar numero
-                    Toast.makeText(context, "Call", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -157,8 +149,6 @@ public class BNToolbar {
                 @Override
                 public void onClick(View v) {
                     listener.onMail();
-                    //TODO abrir aplicacion para enviar mail
-                    Toast.makeText(context, "Mail", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -172,8 +162,6 @@ public class BNToolbar {
                 @Override
                 public void onClick(View v) {
                     listener.onShowMore();
-                    //TODO abrir vista de site
-                    Toast.makeText(context, "Show more", Toast.LENGTH_SHORT).show();
                 }
             });
         }

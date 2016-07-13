@@ -61,7 +61,7 @@ public class TermsActivity extends AppCompatActivity {
                 findViewById(R.id.pbTermsLoading).setVisibility(View.GONE);
             }
         });
-        wvTerms.loadUrl(BNAppManager.getNetworkManagerInstance().getTermsOfUse(lang));
+        wvTerms.loadUrl(BNAppManager.getInstance().getNetworkManagerInstance().getTermsOfUse(lang));
     }
 
     @Override

@@ -16,16 +16,13 @@ import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.biin.biin.Components.BNProgressViewHolder;
 import com.biin.biin.Components.Listeners.IBNLoadMoreElementsListener;
 import com.biin.biin.ElementsActivity;
 import com.biin.biin.Utils.BNUtils;
-import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -56,7 +53,7 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         super();
         this.context = context;
         this.elements = elements;
-        imageLoader = BiinApp.getInstance().getImageLoader();
+        imageLoader = ImageLoader.getInstance();
     }
 
     public void setShowMore(boolean showMore) {
@@ -102,9 +99,7 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             final BNElement item = elements.get(position);
             TableRow.LayoutParams params = new TableRow.LayoutParams((elements.size() == 1) ? BNUtils.getWidth() : (BNUtils.getWidth() / 2), (BNUtils.getWidth() / 2) + (int) (48 * BNUtils.getDensity()));
 
-//        loadShowcaseElementImage(item.getMedia().get(0).getUrl(), holder);
-            imageLoader.get(item.getMedia().get(0).getUrl(), ImageLoader.getImageListener(holder.ivShowcaseElement, R.drawable.bg_feedback, R.drawable.biin));
-            holder.ivShowcaseElement.setImageUrl(item.getMedia().get(0).getUrl(), imageLoader);
+            imageLoader.displayImage(item.getMedia().get(0).getUrl(), holder.ivShowcaseElement);
             holder.ivShowcaseElement.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
 
             holder.rlShowcaseLabel.setBackgroundColor(item.getShowcase().getSite().getOrganization().getPrimaryColor());
@@ -191,25 +186,12 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return elements.get(position);
     }
 
-    private void loadShowcaseElementImage(String imageURL, final BNShowcaseViewHolder holder) {
-        imageLoader.get(imageURL, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                holder.ivShowcaseElement.setImageBitmap(response.getBitmap());
-            }
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-    }
-
     public static class BNShowcaseViewHolder extends RecyclerView.ViewHolder{
 
         protected CardView cvShowcase;
         protected RelativeLayout rlShowcaseLabel;
         protected FrameLayout flShowcaseOffer;
-        protected ImageView ivShowcaseOffer;
-        protected NetworkImageView ivShowcaseElement;
+        protected ImageView ivShowcaseOffer, ivShowcaseElement;
         protected TextView tvShowcaseTitle, tvShowcaseSubtitle, tvShowcaseOffer;
 
         public BNShowcaseViewHolder(View itemView) {
@@ -219,7 +201,7 @@ public class BNShowcaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             rlShowcaseLabel = (RelativeLayout)itemView.findViewById(R.id.rlShowcaseLabel);
             flShowcaseOffer = (FrameLayout)itemView.findViewById(R.id.flShowcaseOffer);
 
-            ivShowcaseElement = (NetworkImageView)itemView.findViewById(R.id.ivShowcaseElement);
+            ivShowcaseElement = (ImageView)itemView.findViewById(R.id.ivShowcaseElement);
             ivShowcaseOffer = (ImageView)itemView.findViewById(R.id.ivShowcaseOffer);
 
             tvShowcaseTitle = (TextView)itemView.findViewById(R.id.tvShowcaseTitle);

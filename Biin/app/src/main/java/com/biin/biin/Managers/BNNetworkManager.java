@@ -21,6 +21,7 @@ public class BNNetworkManager {
     private static String URL_SITES = "/requestSites/0";
     private static String URL_CATEGORIES = "/requestElementsForCategory";
     private static String URL_SHOWCASES = "/requestElementsForShowcase";
+    private static String URL_ORGANIZATIONS = "/organizations";
 
     private static String URL_BIINIE = "/mobile/biinies";
     private static String URL_INITIALDATA = "/mobile/initialData";
@@ -33,6 +34,9 @@ public class BNNetworkManager {
 
     private static String URL_LIKE = "/like";
     private static String URL_UNLIKE = "/unlike";
+
+    private static String URL_ACTIONS = "/history";
+    private static String URL_NPS = "/loyalty/points";
 
     protected static BNNetworkManager getInstance() {
         return ourInstance;
@@ -110,6 +114,21 @@ public class BNNetworkManager {
         return url;
     }
 
+    public String getActonsUrl(String identifier){
+        String url = getUrlBiinie(identifier) + URL_ACTIONS;
+        return url;
+    }
+
+    public String getOrganizationsUrl(String identifier, String organization){
+        String url = getUrlBiinie(identifier) + URL_ORGANIZATIONS + "/" + organization;
+        return url;
+    }
+
+    public String getNpsUrl(String identifier, String organization){
+        String url = getOrganizationsUrl(identifier, organization) + URL_NPS;
+        return url;
+    }
+
 
 
 
@@ -134,4 +153,7 @@ public class BNNetworkManager {
     public static boolean isProduction() {
         return production;
     }
+
+    /*   temporal test data   */
+
 }

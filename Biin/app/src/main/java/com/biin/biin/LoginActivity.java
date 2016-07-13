@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                BNAppManager.getNetworkManagerInstance().getAuthUrl(etEmail.getText().toString(), etPassword.getText().toString()),
+                BNAppManager.getInstance().getNetworkManagerInstance().getAuthUrl(etEmail.getText().toString(), etPassword.getText().toString()),
                 null,
                 loginListener,
                 new Response.ErrorListener() {
@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                BNAppManager.getNetworkManagerInstance().getUrlBiinie(identifier),
+                BNAppManager.getInstance().getNetworkManagerInstance().getUrlBiinie(identifier),
                 null,
                 biiniesListener,
                 new Response.ErrorListener() {
@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
     public void onBiiniesLoaded() {
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(BNUtils.BNStringExtras.BNBiinie, BNAppManager.getDataManagerInstance().getBiinie().getIdentifier());
+        editor.putString(BNUtils.BNStringExtras.BNBiinie, BNAppManager.getInstance().getDataManagerInstance().getBiinie().getIdentifier());
         editor.commit();
 
         Log.e(TAG, "Biinie cargado correctamente");

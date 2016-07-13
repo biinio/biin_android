@@ -60,7 +60,7 @@ public class ElementsListActivity extends AppCompatActivity implements BNElement
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_elements_list);
 
-        dataManager = BNAppManager.getDataManagerInstance();
+        dataManager = BNAppManager.getInstance().getDataManagerInstance();
 
         setUpScreen();
 
@@ -132,7 +132,7 @@ public class ElementsListActivity extends AppCompatActivity implements BNElement
                     elementsListener = new BNElementsListener(currentCategory.getElements(), false);
                     elementsListener.setListener(ElementsListActivity.this);
 
-                    String url = BNAppManager.getNetworkManagerInstance().getMoreCategoryElementsUrl(biinie.getIdentifier(), categoryIdentifier);
+                    String url = BNAppManager.getInstance().getNetworkManagerInstance().getMoreCategoryElementsUrl(biinie.getIdentifier(), categoryIdentifier);
                     Log.d(TAG, url);
 
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -229,7 +229,7 @@ public class ElementsListActivity extends AppCompatActivity implements BNElement
             dataManager.removeFavouriteBNElement(identifier);
         }
 
-        String url = BNAppManager.getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
+        String url = BNAppManager.getInstance().getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
         Log.d(TAG, url);
 
         JSONObject request = new JSONObject();

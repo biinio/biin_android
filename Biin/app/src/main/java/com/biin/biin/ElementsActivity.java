@@ -24,6 +24,8 @@ import com.biin.biin.Components.Listeners.IBNToolbarListener;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
+import com.biin.biin.Entities.BiinieAction;
+import com.biin.biin.Managers.BNAnalyticsManager;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNToolbar;
@@ -41,11 +43,11 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
 
     private BNElement currentElement;
     private String elementIdentifier;
-    private ImageLoader imageLoader;
     private boolean showMore = false;
 
     private Biinie biinie;
     private BNDataManager dataManager;
+    private BNAnalyticsManager analyticsManager;
     private BNLikesListener likesListener;
 
     @Override
@@ -53,7 +55,8 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_elements);
 
-        dataManager = BNAppManager.getDataManagerInstance();
+        dataManager = BNAppManager.getInstance().getDataManagerInstance();
+        analyticsManager = BNAppManager.getInstance().getAnalyticsManagerInstance();
         biinie = dataManager.getBiinie();
 
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
@@ -68,10 +71,12 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
 
         likesListener = new BNLikesListener();
         likesListener.setListener(this);
+
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.ENTER_ELEMENT_VIEW, currentElement.getIdentifier()));
     }
 
     private void loadElement() {
-        imageLoader = BiinApp.getInstance().getImageLoader();
+//        imageLoader = BiinApp.getInstance().getImageLoader();
         currentElement = dataManager.getBNElement(elementIdentifier);
         if (currentElement != null) {
             // llenar el layout con la informacion
@@ -113,16 +118,17 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
             wvDetails.loadData(getHtmlBody(), "text/html;charset=UTF-8", null);
             wvDetails.setVisibility(View.VISIBLE);
 
-            imageLoader.get(currentElement.getMedia().get(0).getUrl(), new ImageLoader.ImageListener() {
-                @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                    ivElementsImage.setImageBitmap(response.getBitmap());
-//                    pbElement.setVisibility(View.GONE);
-                }
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
+            com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(currentElement.getMedia().get(0).getUrl(), ivElementsImage);
+//            imageLoader.get(currentElement.getMedia().get(0).getUrl(), new ImageLoader.ImageListener() {
+//                @Override
+//                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+//                    ivElementsImage.setImageBitmap(response.getBitmap());
+////                    pbElement.setVisibility(View.GONE);
+//                }
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                }
+//            });
 
             if(currentElement.isHasDiscount() && !currentElement.getDiscount().isEmpty()) {
                 tvOffer.setText("-" + currentElement.getDiscount() + "%");
@@ -237,17 +243,21 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
 
     @Override
     public void onBack() {
-
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.EXIT_ELEMENT_VIEW, currentElement.getIdentifier()));
     }
 
     @Override
     public void onLike() {
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.LIKE_ELEMENT, currentElement.getIdentifier()));
+
         currentElement.setUserLiked(true);
         likeElement(currentElement.getIdentifier(), true);
     }
 
     @Override
     public void onUnlike() {
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.UNLIKE_ELEMENT, currentElement.getIdentifier()));
+
         currentElement.setUserLiked(false);
         likeElement(currentElement.getIdentifier(), false);
     }
@@ -262,7 +272,7 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
             dataManager.removeFavouriteBNElement(identifier);
         }
 
-        String url = BNAppManager.getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
+        String url = BNAppManager.getInstance().getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
         Log.d(TAG, url);
 
         JSONObject request = new JSONObject();
@@ -298,7 +308,9 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
 
     @Override
     public void onShare() {
-        String text = BNAppManager.getNetworkManagerInstance().getUrlBase() + "/elements/" + currentElement.getIdentifier();
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.SHARE_ELEMENT, currentElement.getIdentifier()));
+
+        String text = BNAppManager.getInstance().getNetworkManagerInstance().getUrlBase() + "/elements/" + currentElement.getIdentifier();
         Intent i = new Intent();
         i.setAction(Intent.ACTION_SEND);
         i.putExtra(Intent.EXTRA_TEXT, text);
@@ -324,5 +336,11 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
     @Override
     public void onShowMore() {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.EXIT_ELEMENT_VIEW, currentElement.getIdentifier()));
     }
 }

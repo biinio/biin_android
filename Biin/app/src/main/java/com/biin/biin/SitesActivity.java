@@ -1,21 +1,24 @@
 package com.biin.biin;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,12 +26,14 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Components.Listeners.IBNLoadMoreSitesListener;
 import com.biin.biin.Components.Listeners.IBNSitesLikeListener;
 import com.biin.biin.Components.Listeners.IBNToolbarListener;
 import com.biin.biin.Entities.Biinie;
+import com.biin.biin.Entities.BiinieAction;
+import com.biin.biin.Managers.BNAnalyticsManager;
+import com.biin.biin.Utils.BNSiteNps;
 import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Utils.BNUtils.BNStringExtras;
@@ -42,6 +47,13 @@ import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Volley.Listeners.BNLikesListener;
 import com.biin.biin.Volley.Listeners.BNSitesListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +62,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class SitesActivity extends AppCompatActivity implements IBNSitesLikeListener, BNSitesListener.IBNSitesListener, IBNToolbarListener, BNLikesListener.IBNLikesListener {
+public class SitesActivity extends AppCompatActivity implements IBNSitesLikeListener, BNSitesListener.IBNSitesListener, IBNToolbarListener, BNLikesListener.IBNLikesListener, OnMapReadyCallback {
 
     private static final String TAG = "SitesActivity";
 
@@ -61,16 +73,24 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
 
     private Biinie biinie;
     private BNDataManager dataManager;
+    private BNAnalyticsManager analyticsManager;
     private BNSitesListener sitesListener;
     private BNLikesListener likesListener;
     private BNSiteAdapter adapter;
+
+    private GoogleMap mMap;
+    private Animation inAlpha;
+    private Animation inAnimation;
+    private Animation outAlpha;
+    private Animation outAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sites);
 
-        dataManager = BNAppManager.getDataManagerInstance();
+        dataManager = BNAppManager.getInstance().getDataManagerInstance();
+        analyticsManager = BNAppManager.getInstance().getAnalyticsManagerInstance();
         biinie = dataManager.getBiinie();
 
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
@@ -81,7 +101,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             showOthers = i.getBooleanExtra(BNUtils.BNStringExtras.BNShowOthers, false);
         }
 
-        loadSite();
+        setUpScreen();
         loadShowcases();
         if(showOthers) {
             loadNearPlaces();
@@ -89,15 +109,21 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
 
         likesListener = new BNLikesListener();
         likesListener.setListener(this);
+
+        loadMap();
+        loadAnimations();
+        setUpButtons();
+
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.ENTER_SITE_VIEW, currentSite.getIdentifier()));
     }
 
-    private void loadSite(){
-        imageLoader = BiinApp.getInstance().getImageLoader();
+    private void setUpScreen(){
+        imageLoader = ImageLoader.getInstance();
         currentSite = dataManager.getBNSite(siteIdentifier);
         if(currentSite != null) {
             RelativeLayout rlSiteLabel;
             TextView tvTitle, tvSubtitle, tvLocation;
-            final ProgressBar pbSite, pbOrganization;
+            TextView tvMapOrg, tvMapLoc, tvMapDet, tvMapCity, tvMapPhone, tvMapEmail, tvMapWaze, tvMapUber, tvMapClose;
             final ImageView ivSite, ivSiteOrganization;
 
             rlSiteLabel = (RelativeLayout)findViewById(R.id.rlSiteLabel);
@@ -109,8 +135,15 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             tvSubtitle = (TextView)findViewById(R.id.tvSiteSubtitle);
             tvLocation = (TextView)findViewById(R.id.tvSiteLocation);
 
-            pbSite = (ProgressBar)findViewById(R.id.pbSite);
-            pbOrganization = (ProgressBar)findViewById(R.id.pbSiteOrganization);
+            tvMapOrg = (TextView)findViewById(R.id.tvMapOrganization);
+            tvMapLoc = (TextView)findViewById(R.id.tvMapLocation);
+            tvMapDet = (TextView)findViewById(R.id.tvMapDetails);
+            tvMapCity = (TextView)findViewById(R.id.tvMapCity);
+            tvMapPhone = (TextView)findViewById(R.id.tvMapPhone);
+            tvMapEmail = (TextView)findViewById(R.id.tvMapEmail);
+            tvMapWaze = (TextView)findViewById(R.id.tvMapWaze);
+            tvMapUber = (TextView)findViewById(R.id.tvMapUber);
+            tvMapClose = (TextView)findViewById(R.id.tvMapClose);
 
             Typeface lato_light = BNUtils.getLato_light();
             Typeface lato_regular = BNUtils.getLato_regular();
@@ -120,27 +153,18 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             tvLocation.setTypeface(lato_regular);
             tvSubtitle.setTypeface(lato_light);
 
-            imageLoader.get(currentSite.getMedia().get(0).getUrl(), new ImageLoader.ImageListener() {
-                @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                    ivSite.setImageBitmap(response.getBitmap());
-                    pbSite.setVisibility(View.GONE);
-                }
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
+            tvMapOrg.setTypeface(lato_black);
+            tvMapLoc.setTypeface(lato_regular);
+            tvMapDet.setTypeface(lato_light);
+            tvMapCity.setTypeface(lato_light);
+            tvMapPhone.setTypeface(lato_light);
+            tvMapEmail.setTypeface(lato_light);
+            tvMapWaze.setTypeface(lato_black);
+            tvMapUber.setTypeface(lato_black);
+            tvMapClose.setTypeface(lato_black);
 
-            imageLoader.get(currentSite.getOrganization().getMedia().get(0).getUrl(), new ImageLoader.ImageListener() {
-                @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                    ivSiteOrganization.setImageBitmap(response.getBitmap());
-                    pbOrganization.setVisibility(View.GONE);
-                }
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
+            imageLoader.displayImage(currentSite.getMedia().get(0).getUrl(), ivSite);
+            imageLoader.displayImage(currentSite.getOrganization().getMedia().get(0).getUrl(), ivSiteOrganization);
 
             rlSiteLabel.setBackgroundColor(currentSite.getOrganization().getPrimaryColor());
             tvTitle.setText(currentSite.getTitle());
@@ -149,9 +173,21 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             tvLocation.setTextColor(currentSite.getOrganization().getSecondaryColor());
             tvSubtitle.setText(currentSite.getNutshell());
             tvSubtitle.setTextColor(currentSite.getOrganization().getSecondaryColor());
+            tvMapOrg.setText(currentSite.getTitle() + " - " + currentSite.getSubTitle());
+            tvMapLoc.setText(currentSite.getStreetAddress1());
+            tvMapDet.setText(currentSite.getStreetAddress2());
+            tvMapCity.setText(currentSite.getCountry() + ", " + currentSite.getState());
+            tvMapPhone.setText(getResources().getString(R.string.Phone) + ": " + currentSite.getPhoneNumber());
+            tvMapEmail.setText(getResources().getString(R.string.Email) + ": " + currentSite.getEmail());
 
             BNToolbar toolbar = new BNToolbar(this, currentSite.getOrganization().getPrimaryColor(), currentSite.getOrganization().getSecondaryColor(), currentSite.isUserLiked(), true, true, true, true, false);
             toolbar.setListener(this);
+
+            if(currentSite.getOrganization() != null && currentSite.getOrganization().isHasNPS()){
+                FrameLayout npsLayout = (FrameLayout)findViewById(R.id.flNpsInclude);
+                npsLayout.setVisibility(View.VISIBLE);
+                new BNSiteNps(this, currentSite, dataManager.isNpsAvailable(currentSite.getIdentifier()));
+            }
         }else{
             Log.e(TAG, "No se encontró el site con el identifier " + siteIdentifier);
             finish();
@@ -243,7 +279,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
                     sitesListener.setIdentifier(currentSite.getOrganizationIdentifier());
                     sitesListener.setListener(SitesActivity.this);
 
-                    String url = BNAppManager.getNetworkManagerInstance().getMoreSitesUrl(biinie.getIdentifier());
+                    String url = BNAppManager.getInstance().getNetworkManagerInstance().getMoreSitesUrl(biinie.getIdentifier());
                     Log.d(TAG, url);
 
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -265,6 +301,155 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             rvSites.setAdapter(adapter);
             rvSites.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void loadMap(){
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(this);
+
+        RelativeLayout layout = (RelativeLayout)findViewById(R.id.rlMapFragment);
+        layout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+    }
+
+    private void loadAnimations(){
+        inAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_in);
+        outAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_out);
+        inAlpha = AnimationUtils.loadAnimation(this, R.anim.alpha_in);
+        outAlpha = AnimationUtils.loadAnimation(this, R.anim.alpha_out);
+
+        inAnimation.setAnimationListener(new Animation.AnimationListener() {
+            LinearLayout layout = (LinearLayout)findViewById(R.id.vlMapSitesInclude);
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                layout.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                layout.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        outAnimation.setAnimationListener(new Animation.AnimationListener() {
+            LinearLayout layout = (LinearLayout)findViewById(R.id.vlMapSitesInclude);
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                layout.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                layout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        inAlpha.setAnimationListener(new Animation.AnimationListener() {
+            LinearLayout layout = (LinearLayout)findViewById(R.id.vlMapSitesScreen);
+            LinearLayout include = (LinearLayout)findViewById(R.id.vlMapSitesInclude);
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                layout.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                layout.setVisibility(View.VISIBLE);
+                layout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        layout.startAnimation(outAlpha);
+                        include.startAnimation(outAnimation);
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        outAlpha.setAnimationListener(new Animation.AnimationListener() {
+            LinearLayout layout = (LinearLayout)findViewById(R.id.vlMapSitesScreen);
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                layout.setVisibility(View.VISIBLE);
+                layout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                layout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    private void setUpButtons(){
+        TextView tvMapWaze, tvMapUber, tvMapClose;
+        tvMapWaze = (TextView)findViewById(R.id.tvMapWaze);
+        tvMapUber = (TextView)findViewById(R.id.tvMapUber);
+        tvMapClose = (TextView)findViewById(R.id.tvMapClose);
+
+        tvMapWaze.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String url = "waze://?ll=" + currentSite.getLatitude() + "," + currentSite.getLongitude() + "&navigate=yes";
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.waze"));
+                    startActivity(intent);
+                }
+            }
+        });
+
+        tvMapUber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getBaseContext(), "Uber", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        tvMapClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout layout = (LinearLayout)findViewById(R.id.vlMapSitesScreen);
+                LinearLayout include = (LinearLayout)findViewById(R.id.vlMapSitesInclude);
+                layout.startAnimation(outAlpha);
+                include.startAnimation(outAnimation);
+            }
+        });
     }
 
     @Override
@@ -291,7 +476,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             dataManager.removeFavouriteBNSite(identifier);
         }
 
-        String url = BNAppManager.getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
+        String url = BNAppManager.getInstance().getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
         Log.d(TAG, url);
 
         JSONObject request = new JSONObject();
@@ -357,24 +542,30 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
 
     @Override
     public void onBack() {
-
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.EXIT_SITE_VIEW, currentSite.getIdentifier()));
     }
 
     @Override
     public void onLike() {
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.LIKE_SITE, currentSite.getIdentifier()));
+
         currentSite.setUserLiked(true);
         likeSite(currentSite.getIdentifier(), true);
     }
 
     @Override
     public void onUnlike() {
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.UNLIKE_SITE, currentSite.getIdentifier()));
+
         currentSite.setUserLiked(false);
         likeSite(currentSite.getIdentifier(), false);
     }
 
     @Override
     public void onShare() {
-        String text = BNAppManager.getNetworkManagerInstance().getUrlBase() + "/sites/" + currentSite.getIdentifier();
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.SHARE_SITE, currentSite.getIdentifier()));
+
+        String text = BNAppManager.getInstance().getNetworkManagerInstance().getUrlBase() + "/sites/" + currentSite.getIdentifier();
         Intent i = new Intent();
         i.setAction(Intent.ACTION_SEND);
         i.putExtra(Intent.EXTRA_TEXT, text);
@@ -384,7 +575,10 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
 
     @Override
     public void onLocation() {
-
+        LinearLayout layout = (LinearLayout)findViewById(R.id.vlMapSitesScreen);
+        LinearLayout include = (LinearLayout)findViewById(R.id.vlMapSitesInclude);
+        layout.startAnimation(inAlpha);
+        include.startAnimation(inAnimation);
     }
 
     @Override
@@ -402,8 +596,6 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
     public void onMail() {
         if(currentSite.getEmail() != null && !currentSite.getEmail().isEmpty()){
             Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", currentSite.getEmail(), null));
-//            intent.setType("text/plain");
-//            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { currentSite.getEmail() });
             intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.EmailMsj));
             intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.EmailBody));
 
@@ -416,5 +608,19 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
     @Override
     public void onShowMore() {
 
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng location = new LatLng(currentSite.getLatitude(), currentSite.getLongitude());
+        mMap = googleMap;
+        mMap.addMarker(new MarkerOptions().position(location));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        analyticsManager.addAction(new BiinieAction(TAG, BiinieAction.EXIT_SITE_VIEW, currentSite.getIdentifier()));
     }
 }

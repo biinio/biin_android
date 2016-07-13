@@ -350,7 +350,7 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     private void likeSite(final String identifier, final boolean liked) {
         BNSite site = getBNSite(identifier);
 
-        String url = BNAppManager.getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
+        String url = BNAppManager.getInstance().getNetworkManagerInstance().getLikeUrl(biinie.getIdentifier(), liked);
         Log.d(TAG, url);
 
         JSONObject request = new JSONObject();
@@ -766,6 +766,26 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     }
 
     /****************** Categories end ******************/
+
+
+    /****************** NPS start ******************/
+
+    public void setNpsDateTime(String identifier){
+        //TODO salvar en sqlite
+    }
+
+    public void removeNpsDateTime(String identifier){
+        //TODO salvar en sqlite
+    }
+
+    public boolean isNpsAvailable(String identifier){
+        //TODO obtener de sqlite
+        return true;
+    }
+
+    /****************** NPS end ******************/
+
+
 
     @Override
     public void onLikeResponseOk() {

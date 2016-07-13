@@ -167,7 +167,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     private void getInitialData(String location){
-        Biinie biinie = BNAppManager.getDataManagerInstance().getBiinie();
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
 
         initialDataListener = new BNInitialDataListener();
         initialDataListener.setListener(this);
@@ -176,7 +176,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         pbLoading.setVisibility(View.VISIBLE);
         tvReload.setVisibility(View.GONE);
 
-        String url = BNAppManager.getNetworkManagerInstance().getUrlInitialData(biinie.getIdentifier(), location);
+        String url = BNAppManager.getInstance().getNetworkManagerInstance().getUrlInitialData(biinie.getIdentifier(), location);
         Log.d(TAG, url);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(

@@ -1,8 +1,8 @@
 package com.biin.biin;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,6 +12,13 @@ import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.LruBitmapCache;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.StorageUtils;
+
+import java.io.File;
 
 /**
  * Created by ramirezallan on 5/2/16.
@@ -29,6 +36,27 @@ public class BiinApp extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        File cacheDir = StorageUtils.getCacheDirectory(this);
+
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .defaultDisplayImageOptions(defaultOptions)
+                .memoryCache(new LruMemoryCache(50 * 1024 * 1024))
+                .memoryCacheSize(50 * 1024 * 1024)
+                .memoryCacheSizePercentage(20)
+                .diskCache(new UnlimitedDiskCache(cacheDir))
+                .diskCacheSize(300 * 1024 * 1024)
+                .diskCacheFileCount(500)
+                .build();
+
+        com.nostra13.universalimageloader.core.ImageLoader.getInstance().init(config);
 
         BNUtils.setTypefaces(getBaseContext());
 

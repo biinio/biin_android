@@ -53,7 +53,7 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                BNAppManager.getNetworkManagerInstance().getUrlBiinie(identifier),
+                BNAppManager.getInstance().getNetworkManagerInstance().getUrlBiinie(identifier),
                 null,
                 biiniesListener,
                 new Response.ErrorListener() {
@@ -147,8 +147,8 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
         swEnvironment.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                BNAppManager.getNetworkManagerInstance().setProduction(isChecked);
-                if(BNAppManager.getNetworkManagerInstance().isProduction()){
+                BNAppManager.getInstance().getNetworkManagerInstance().setProduction(isChecked);
+                if(BNAppManager.getInstance().getNetworkManagerInstance().isProduction()){
                     swEnvironment.setText(biinio);
                 }else{
                     swEnvironment.setText(heroku);
@@ -156,7 +156,7 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
             }
         });
 
-        if(BNAppManager.getNetworkManagerInstance().isProduction()){
+        if(BNAppManager.getInstance().getNetworkManagerInstance().isProduction()){
             swEnvironment.setText(biinio);
             swEnvironment.setChecked(true);
         }else{

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +12,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
-import com.biin.biin.BiinApp;
 import com.biin.biin.ElementsActivity;
 import com.biin.biin.Entities.BNElement;
-import com.biin.biin.MainActivity;
 import com.biin.biin.R;
 import com.biin.biin.Utils.BNUtils;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +36,7 @@ public class BNHighlightAdapter extends LoopPagerAdapter {
     public BNHighlightAdapter(RollPagerView viewPager, Context context) {
         super(viewPager);
         this.context = context;
-        imageLoader = BiinApp.getInstance().getImageLoader();
+        imageLoader = ImageLoader.getInstance();
     }
 
     public void setHighlights(List<BNElement> elements){
@@ -59,13 +54,13 @@ public class BNHighlightAdapter extends LoopPagerAdapter {
         FrameLayout flOffer;
         TextView tvTitle, tvSubtitle, tvSubtitleLocation, tvPrice, tvDiscount, tvOffer;
         ImageView ivOffer;
-        final NetworkImageView ivElement, ivOrganization;
+        final ImageView ivElement, ivOrganization;
 
         rlElementLabel = (RelativeLayout)view.findViewById(R.id.rlElementLabel);
         flOffer = (FrameLayout)view.findViewById(R.id.flElementOffer);
 
-        ivElement = (NetworkImageView)view.findViewById(R.id.ivElement);
-        ivOrganization = (NetworkImageView)view.findViewById(R.id.ivOrganization);
+        ivElement = (ImageView)view.findViewById(R.id.ivElement);
+        ivOrganization = (ImageView)view.findViewById(R.id.ivOrganization);
         ivOffer = (ImageView)view.findViewById(R.id.ivElementOffer);
 
         tvTitle = (TextView)view.findViewById(R.id.tvTitle);
@@ -85,12 +80,10 @@ public class BNHighlightAdapter extends LoopPagerAdapter {
         tvDiscount.setTypeface(lato_regular);
         tvOffer.setTypeface(lato_black);
 
-        imageLoader.get(element.getMedia().get(0).getUrl(), ImageLoader.getImageListener(ivElement, R.drawable.bg_feedback, R.drawable.biin));
-        ivElement.setImageUrl(element.getMedia().get(0).getUrl(), imageLoader);
+        imageLoader.displayImage(element.getMedia().get(0).getUrl(), ivElement);
         ivElement.setBackgroundColor(element.getShowcase().getSite().getOrganization().getPrimaryColor());
 
-        imageLoader.get(element.getShowcase().getSite().getMedia().get(0).getUrl(), ImageLoader.getImageListener(ivOrganization, R.drawable.bg_feedback, R.drawable.biin));
-        ivOrganization.setImageUrl(element.getShowcase().getSite().getMedia().get(0).getUrl(), imageLoader);
+        imageLoader.displayImage(element.getShowcase().getSite().getMedia().get(0).getUrl(), ivOrganization);
         ivOrganization.setBackgroundColor(element.getShowcase().getSite().getOrganization().getPrimaryColor());
 
         rlElementLabel.setBackgroundColor(element.getShowcase().getSite().getOrganization().getPrimaryColor());

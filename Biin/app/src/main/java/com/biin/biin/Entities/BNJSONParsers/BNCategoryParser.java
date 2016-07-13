@@ -47,7 +47,7 @@ public class BNCategoryParser {
     }
 
     public LinkedHashMap<String, BNElement> getBNElements(JSONArray arrayElements){
-        LinkedHashMap<String, BNElement> elements = BNAppManager.getDataManagerInstance().getBNElements();
+        LinkedHashMap<String, BNElement> elements = BNAppManager.getInstance().getDataManagerInstance().getBNElements();
         LinkedHashMap<String, BNElement> result = new LinkedHashMap<>();
         try{
             for(int i = 0; i < arrayElements.length(); i++){
@@ -55,8 +55,8 @@ public class BNCategoryParser {
                 BNElement element = elements.get(objectElement.getString("identifier"));
 
                 if(element != null) {
-                    element.setShowcase(BNAppManager.getDataManagerInstance().getBNShowcase(objectElement.getString("showcaseIdentifier")));
-                    element.getShowcase().setSite(BNAppManager.getDataManagerInstance().getBNSite(objectElement.getString("siteIdentifier")));
+                    element.setShowcase(BNAppManager.getInstance().getDataManagerInstance().getBNShowcase(objectElement.getString("showcaseIdentifier")));
+                    element.getShowcase().setSite(BNAppManager.getInstance().getDataManagerInstance().getBNSite(objectElement.getString("siteIdentifier")));
                     result.put(element.getIdentifier(), element);
                 }
             }

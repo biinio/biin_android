@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp"
+    android:background="@color/colorWhite"
+    android:id="@+id/rlMapFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMapOrganization"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:layout_marginTop="1dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMapLocation"
+        android:layout_below="@+id/tvMapOrganization"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/tvMapOrganization"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginTop="1dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMapDetails"
+        android:textSize="12sp"
+        android:layout_below="@+id/tvMapLocation"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/tvMapLocation"
+        android:layout_marginTop="1dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMapCity"
+        android:textSize="12sp"
+        android:layout_below="@+id/tvMapDetails"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/tvMapLocation"
+        android:layout_marginTop="1dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMapPhone"
+        android:textSize="12sp"
+        android:layout_below="@+id/tvMapCity"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/tvMapLocation"
+        android:layout_marginTop="1dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMapEmail"
+        android:textSize="12sp"
+        android:layout_below="@+id/tvMapPhone"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/tvMapLocation"
+        android:layout_marginTop="1dp" />
+
+    <fragment
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:id="@+id/mapFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_alignStart="@+id/tvMapEmail"
+        android:layout_below="@+id/tvMapEmail"
+        android:layout_alignEnd="@+id/tvMapEmail"
+        android:layout_marginTop="6dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Waze"
+        android:id="@+id/tvMapWaze"
+        android:gravity="center"
+        android:padding="12dp"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorWaze"
+        android:textStyle="bold"
+        android:layout_below="@+id/mapFragment"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="6dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/UBER"
+        android:id="@+id/tvMapUber"
+        android:gravity="center"
+        android:padding="12dp"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorUber"
+        android:textStyle="bold"
+        android:layout_below="@+id/tvMapWaze"
+        android:layout_alignStart="@+id/tvMapWaze"
+        android:layout_marginTop="6dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Close"
+        android:id="@+id/tvMapClose"
+        android:gravity="center"
+        android:padding="12dp"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorPrimary"
+        android:textStyle="bold"
+        android:layout_below="@+id/tvMapUber"
+        android:layout_alignStart="@+id/tvMapUber"
+        android:layout_marginTop="6dp" />
+
+</RelativeLayout>

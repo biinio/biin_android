@@ -21,10 +21,11 @@ public class BNBiiniesListener implements Response.Listener<JSONObject> {
 
     private IBNBiiniesListener listener;
 
-    private BNDataManager dataManager = BNAppManager.getDataManagerInstance();
+    private BNDataManager dataManager;
 
     public void setListener(IBNBiiniesListener listener) {
         this.listener = listener;
+        dataManager = BNAppManager.getInstance().getDataManagerInstance();
     }
 
     @Override
@@ -55,6 +56,7 @@ public class BNBiiniesListener implements Response.Listener<JSONObject> {
         Biinie result = biinieParser.parseBiinie(objectBiinie);
         // guardar el resultado del biinie en el data manager
         dataManager.setBiinie(result);
+        BNAppManager.getInstance().getAnalyticsManagerInstance().setBiinie(dataManager.getBiinie());
     }
 
     public interface IBNBiiniesListener {

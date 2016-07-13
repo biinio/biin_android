@@ -142,7 +142,7 @@ public class BNShowcase {
 
     public void setElementsShowcase(){
         for (String identifier : this.elements) {
-            BNElement element = BNAppManager.getDataManagerInstance().getBNElement(identifier);
+            BNElement element = BNAppManager.getInstance().getDataManagerInstance().getBNElement(identifier);
             if(element != null){
                 element.setShowcase(this);
             }
