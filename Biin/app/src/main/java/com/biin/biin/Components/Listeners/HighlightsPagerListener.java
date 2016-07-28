@@ -9,7 +9,7 @@ import android.util.Log;
 public class HighlightsPagerListener implements ViewPager.OnPageChangeListener {
 
     private static String TAG = "HighlightsPagerListener";
-    private int lenght = 1;
+    private int length = 1;
 
     private IBNHighlightsListener listener;
 
@@ -17,8 +17,8 @@ public class HighlightsPagerListener implements ViewPager.OnPageChangeListener {
         this.listener = listener;
     }
 
-    public void setLenght(int lenght){
-        this.lenght = lenght;
+    public void setLength(int length){
+        this.length = length;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class HighlightsPagerListener implements ViewPager.OnPageChangeListener {
     @Override
     public void onPageSelected(int position) {
         if(listener != null){
-            listener.onPageSelected(position % lenght);
+            listener.onPageSelected(position % length);
         }else{
             Log.e(TAG, "El listener es nulo o no ha sido seteado.");
         }

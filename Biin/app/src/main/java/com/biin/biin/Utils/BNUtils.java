@@ -162,6 +162,7 @@ public class BNUtils {
     }
 
     public class BNStringExtras {
+        public static final String Environment = "BNEnvironment";
         public static final String BNBiinie = "BNBiinieIdentifier";
         public static final String BNCategory = "BNCategoryIdentifier";
         public static final String BNElement = "BNElementIdentifier";

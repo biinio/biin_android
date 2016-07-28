@@ -43,7 +43,6 @@ public class BNSiteNps implements Response.Listener<JSONObject> {
     private TextView tvTitle, tvLikely, tvNotLikely, tvQ1, tvQ2, tvQ3, tvContinue, tvSend;
     private EditText etComments;
 
-    private BNOrganization organization;
     private BNSite site;
     private int likely;
 
@@ -51,7 +50,6 @@ public class BNSiteNps implements Response.Listener<JSONObject> {
         this.context = context;
         this.activity = context;
         this.site = site;
-        this.organization = site.getOrganization();
         dataManager = BNAppManager.getInstance().getDataManagerInstance();
         likely = 0;
 
@@ -143,13 +141,16 @@ public class BNSiteNps implements Response.Listener<JSONObject> {
                     tvSend.setOnClickListener(null);
                     tvQ3.setVisibility(View.VISIBLE);
 
-                    String url = BNAppManager.getInstance().getNetworkManagerInstance().getNpsUrl(BNAppManager.getInstance().getDataManagerInstance().getBiinie().getIdentifier(), organization.getIdentifier());
+                    String url = BNAppManager.getInstance().getNetworkManagerInstance().getNpsUrl();
                     Log.d(TAG, url);
 
                     JSONObject request = new JSONObject();
                     try {
                         JSONObject model = new JSONObject();
-                        model.put("points", likely);
+                        model.put("siteId", site.getIdentifier());
+                        model.put("userId", BNAppManager.getInstance().getDataManagerInstance().getBiinie().getIdentifier());
+                        model.put("rating", likely);
+                        model.put("comment", etComments.getText().toString().trim());
                         request.put("model", model);
                     } catch (JSONException e) {
                         Log.e(TAG, "Error:" + e.getMessage());
@@ -339,6 +340,7 @@ public class BNSiteNps implements Response.Listener<JSONObject> {
 
     @Override
     public void onResponse(JSONObject response) {
+        int i = 0;
         //TODO si da error, marcar el NPS para volver a aparecer, sino no
     }
 }

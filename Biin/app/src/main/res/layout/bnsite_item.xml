@@ -53,27 +53,27 @@
         </RelativeLayout>
 
         <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/colorGreen"
-        android:layout_below="@+id/ivSite"
-        android:layout_alignParentStart="true"
-        android:id="@+id/rlSiteLabel"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/ivSite"
-        android:layout_alignRight="@+id/ivSite">
-
-        <ImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:id="@+id/ivSiteOrganization"
-            android:scaleType="fitXY"
-            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorGreen"
+            android:layout_below="@+id/ivSite"
             android:layout_alignParentStart="true"
-            android:layout_margin="6dp"
-            android:background="@color/colorWhite"
-            android:src="@drawable/biin_xs" />
+            android:id="@+id/rlSiteLabel"
+            android:layout_alignParentEnd="true"
+            android:layout_alignLeft="@+id/ivSite"
+            android:layout_alignRight="@+id/ivSite">
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:id="@+id/ivSiteOrganization"
+                android:scaleType="fitXY"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_margin="6dp"
+                android:background="@color/colorWhite"
+                android:src="@drawable/biin_xs" />
 
             <ProgressBar
                 android:layout_width="56dp"
@@ -87,14 +87,14 @@
                 android:progressTint="@color/colorGreen" />
 
             <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toEndOf="@+id/ivSiteOrganization"
-            android:layout_alignBottom="@+id/ivSiteOrganization"
-            android:layout_alignTop="@+id/ivSiteOrganization"
-            android:layout_marginRight="6dp"
-            android:weightSum="3">
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/ivSiteOrganization"
+                android:layout_alignBottom="@+id/ivSiteOrganization"
+                android:layout_alignTop="@+id/ivSiteOrganization"
+                android:layout_marginRight="6dp"
+                android:weightSum="3">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -107,12 +107,12 @@
                     android:textSize="16dp" />
 
                 <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Location"
-                android:id="@+id/tvSiteLocation"
-                android:gravity="center_vertical"
-                android:textColor="#ffffff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:id="@+id/tvSiteLocation"
+                    android:gravity="center_vertical"
+                    android:textColor="#ffffff"
                     android:textSize="12dp"
                     android:layout_weight="1" />
 

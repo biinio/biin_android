@@ -36,7 +36,7 @@ public class BNNetworkManager {
     private static String URL_UNLIKE = "/unlike";
 
     private static String URL_ACTIONS = "/history";
-    private static String URL_NPS = "/loyalty/points";
+    private static String URL_NPS = "/mobile/rating/site";
 
     protected static BNNetworkManager getInstance() {
         return ourInstance;
@@ -124,8 +124,8 @@ public class BNNetworkManager {
         return url;
     }
 
-    public String getNpsUrl(String identifier, String organization){
-        String url = getOrganizationsUrl(identifier, organization) + URL_NPS;
+    public String getNpsUrl(){
+        String url = getUrlBase() + URL_NPS;
         return url;
     }
 

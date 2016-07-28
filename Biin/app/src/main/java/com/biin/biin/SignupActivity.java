@@ -39,6 +39,9 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
     private void verifyBiinie(){
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         String identifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");
+        String environment = preferences.getString(BNUtils.BNStringExtras.Environment, "Dev");
+
+        BNAppManager.getInstance().getNetworkManagerInstance().setProduction(environment.equals("Prod"));
 
         if(identifier.isEmpty()){
             setUpScreen();
@@ -148,11 +151,16 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 BNAppManager.getInstance().getNetworkManagerInstance().setProduction(isChecked);
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
                 if(BNAppManager.getInstance().getNetworkManagerInstance().isProduction()){
                     swEnvironment.setText(biinio);
+                    editor.putString(BNUtils.BNStringExtras.Environment, "Prod");
                 }else{
                     swEnvironment.setText(heroku);
+                    editor.putString(BNUtils.BNStringExtras.Environment, "Dev");
                 }
+                editor.commit();
             }
         });
 

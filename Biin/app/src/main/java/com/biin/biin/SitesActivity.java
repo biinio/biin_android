@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,8 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,11 +57,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.uber.sdk.android.core.UberSdk;
+import com.uber.sdk.android.rides.RideParameters;
+import com.uber.sdk.android.rides.RideRequestButton;
+import com.uber.sdk.core.auth.Scope;
+import com.uber.sdk.rides.client.SessionConfiguration;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -115,6 +124,19 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
         setUpButtons();
 
         analyticsManager.addAction(new BiinieAction("", BiinieAction.ENTER_SITE_VIEW, currentSite.getIdentifier()));
+
+        setUpUber();
+    }
+
+    private void setUpUber(){
+        SessionConfiguration config = new SessionConfiguration.Builder()
+                .setClientId("2zDN6GkBgADY9FApz8dPsKK5hXPlmKvD") //This is necessary
+                //.setRedirectUri("YOUR_REDIRECT_URI") //This is necessary if you'll be using implicit grant
+                .setEnvironment(SessionConfiguration.Environment.SANDBOX) //Useful for testing your app in the sandbox environment
+                .setScopes(Arrays.asList(Scope.PROFILE, Scope.RIDE_WIDGETS)) //Your scopes for authentication here
+                .build();
+        //This is a convenience method and will set the default config to be used in other components without passing it directly.
+        UberSdk.initialize(config);
     }
 
     private void setUpScreen(){
@@ -123,7 +145,8 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
         if(currentSite != null) {
             RelativeLayout rlSiteLabel;
             TextView tvTitle, tvSubtitle, tvLocation;
-            TextView tvMapOrg, tvMapLoc, tvMapDet, tvMapCity, tvMapPhone, tvMapEmail, tvMapWaze, tvMapUber, tvMapClose;
+            TextView tvMapOrg, tvMapLoc, tvMapDet, tvMapCity, tvMapPhone, tvMapEmail, tvMapWaze, tvMapClose;
+            RideRequestButton tvMapUber;
             final ImageView ivSite, ivSiteOrganization;
 
             rlSiteLabel = (RelativeLayout)findViewById(R.id.rlSiteLabel);
@@ -142,7 +165,8 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             tvMapPhone = (TextView)findViewById(R.id.tvMapPhone);
             tvMapEmail = (TextView)findViewById(R.id.tvMapEmail);
             tvMapWaze = (TextView)findViewById(R.id.tvMapWaze);
-            tvMapUber = (TextView)findViewById(R.id.tvMapUber);
+            tvMapUber = (RideRequestButton)findViewById(R.id.tvMapUber);
+//            tvMapUber = (TextView)findViewById(R.id.tvMapUber);
             tvMapClose = (TextView)findViewById(R.id.tvMapClose);
 
             Typeface lato_light = BNUtils.getLato_light();
@@ -160,7 +184,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             tvMapPhone.setTypeface(lato_light);
             tvMapEmail.setTypeface(lato_light);
             tvMapWaze.setTypeface(lato_black);
-            tvMapUber.setTypeface(lato_black);
+//            tvMapUber.setTypeface(lato_black);
             tvMapClose.setTypeface(lato_black);
 
             imageLoader.displayImage(currentSite.getMedia().get(0).getUrl(), ivSite);
@@ -186,6 +210,17 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             if(currentSite.getOrganization() != null && currentSite.getOrganization().isHasNPS()){
                 FrameLayout npsLayout = (FrameLayout)findViewById(R.id.flNpsInclude);
                 npsLayout.setVisibility(View.VISIBLE);
+                findViewById(R.id.etNpsComments).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(hasFocus){
+
+                        }else{
+
+                        }
+                    }
+                });
+
                 new BNSiteNps(this, currentSite, dataManager.isNpsAvailable(currentSite.getIdentifier()));
             }
         }else{
@@ -415,9 +450,11 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
     }
 
     private void setUpButtons(){
-        TextView tvMapWaze, tvMapUber, tvMapClose;
+        TextView tvMapWaze, tvMapClose;
+        RideRequestButton tvMapUber;
         tvMapWaze = (TextView)findViewById(R.id.tvMapWaze);
-        tvMapUber = (TextView)findViewById(R.id.tvMapUber);
+//        tvMapUber = (TextView)findViewById(R.id.tvMapUber);
+        tvMapUber = (RideRequestButton)findViewById(R.id.tvMapUber);
         tvMapClose = (TextView)findViewById(R.id.tvMapClose);
 
         tvMapWaze.setOnClickListener(new View.OnClickListener() {
@@ -434,12 +471,20 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             }
         });
 
-        tvMapUber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Uber", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        tvMapUber.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getBaseContext(), "Uber", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        Location pickUpLocation = BNAppManager.getInstance().getPositionManagerInstance().getLastLocation();
+        double lat = (double)currentSite.getLatitude();
+        double lon = (double)currentSite.getLongitude();
+        RideParameters rideParams = new RideParameters.Builder()
+                .setPickupLocation(pickUpLocation.getLatitude(), pickUpLocation.getLongitude(), null, null)
+                .setDropoffLocation(lat, lon, currentSite.getTitle(), currentSite.getStreetAddress1())
+                .build();
+        tvMapUber.setRideParameters(rideParams);
 
         tvMapClose.setOnClickListener(new View.OnClickListener() {
             @Override

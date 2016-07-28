@@ -248,8 +248,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         profileListener.setListener(this);
 
         Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
-        biinie.setLastName(etName.getText().toString().trim());
-        biinie.setFirstName(etLastName.getText().toString().trim());
+        biinie.setLastName(etLastName.getText().toString().trim());
+        biinie.setFirstName(etName.getText().toString().trim());
         biinie.setGender(gender);
         biinie.setBirthDate(date);
 

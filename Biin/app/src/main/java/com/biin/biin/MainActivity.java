@@ -1,10 +1,14 @@
 package com.biin.biin;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -48,13 +52,14 @@ import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNElementsListener;
+import com.biin.biin.Volley.Listeners.BNInitialDataListener;
 import com.jude.rollviewpager.RollPagerView;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements HighlightsPagerListener.IBNHighlightsListener, IBNSitesLikeListener {
+public class MainActivity extends AppCompatActivity implements HighlightsPagerListener.IBNHighlightsListener, IBNSitesLikeListener, BNInitialDataListener.IBNInitialDataListener {
 
     private static final String TAG = "MainActivity";
 
@@ -68,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private Biinie biinie;
     private BNDataManager dataManager;
     private BNAnalyticsManager analyticsManager;
+    private BroadcastReceiver locationsReceiver;
+    private BNInitialDataListener initialDataListener;
 
     private List<BNSite> nearSites;
     private List<BNSite> favoriteSites;
@@ -78,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private int favouriteSitesVersion;
 
     private long animDuration = 300;
+    private boolean loaded = false;
 
     private int total = 0;
 
@@ -101,6 +109,16 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         loadData();
 
         analyticsManager.addAction(new BiinieAction("", BiinieAction.OPEN_APP, BiinieAction.AndroidApp));
+
+        Intent i = new Intent(this, LocationService.class);
+        startService(i);
+
+        locationsReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                getInitialData();
+            }
+        };
     }
 
     private void setUpScreen() {
@@ -283,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
         if (total > 0) {
             HighlightsPagerListener listener = new HighlightsPagerListener(this);
-            listener.setLenght(total);
+            listener.setLength(total);
 //            setPaggingDots(total);
 
             RollPagerView pvHighlights = (RollPagerView) findViewById(R.id.pvRecomended);
@@ -297,6 +315,20 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             params.addRule(RelativeLayout.BELOW, R.id.hlRecomended);
             pvHighlights.setLayoutParams(params);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter("LOCATION_SERVICE");
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(locationsReceiver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        loaded = false;
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(locationsReceiver);
+        super.onStop();
     }
 
     @Override
@@ -328,6 +360,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
                 showFavouritesEmpty(true);
             }
         }
+        loaded = true;
     }
 
     @Override
@@ -540,10 +573,12 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     @Override
     public void onBackPressed() {
-        if (rlCloseApp.getVisibility() == View.GONE) {
-            rlCloseApp.setVisibility(View.VISIBLE);
-        } else {
-            rlCloseApp.setVisibility(View.GONE);
+        if(loaded) {
+            if (rlCloseApp.getVisibility() == View.GONE) {
+                rlCloseApp.setVisibility(View.VISIBLE);
+            } else {
+                rlCloseApp.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -616,6 +651,95 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             showFavouritesEmpty(true);
         }
     }
+
+    private void getInitialData(){
+        String location = "0/0";
+        Location lastLocation = BNAppManager.getInstance().getPositionManagerInstance().getLastLocation();
+
+        if (lastLocation != null) {
+            double latitude = lastLocation.getLatitude();
+            double longitude = lastLocation.getLongitude();
+            location = latitude + "/" + longitude;
+        } else {
+            Log.e(TAG, "No se puede obtener la localizacion. Puede no estar activada en el dispositivo.");
+        }
+
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+
+        initialDataListener = new BNInitialDataListener();
+        initialDataListener.setListener(this);
+
+        String url = BNAppManager.getInstance().getNetworkManagerInstance().getUrlInitialData(biinie.getIdentifier(), location);
+        Log.d(TAG, url);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                initialDataListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onInitialDataError(error);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "InitialData");
+    }
+
+    @Override
+    public void onInitialDataLoaded() {
+        Log.e(TAG, "Initial data reloaded");
+//        reloadData();
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void onInitialDataError(VolleyError error){
+        Log.e(TAG, "Error:" + error.getMessage());
+    }
+
+    private void reloadData() {
+        nearBySitesVersion = dataManager.getNearBySitesVersion();
+        favouriteSitesVersion = dataManager.getFavouriteSitesVersion();
+
+//        reloadRecomendations();
+        loadFavourites();
+        loadNearPlaces();
+        loadCategories();
+    }
+
+    private void reloadRecomendations() {
+        LinkedHashMap<String, BNElement> allElements = dataManager.getBNElements();
+        List<BNHighlight> highlights = dataManager.getBNHighlights();
+        List<BNElement> elements = new ArrayList<>();
+
+        for (BNHighlight highlight : highlights) {
+            BNElement element = allElements.get(highlight.getIdentifier());
+            BNShowcase showcase = dataManager.getBNShowcase(highlight.getShowcaseIdentifier());
+            BNSite site = dataManager.getBNSite(highlight.getSiteIdentifier());
+
+            if (element != null && showcase != null && site != null) {
+                showcase.setSite(site);
+                element.setShowcase(showcase);
+                elements.add(element);
+            } else {
+                Log.e(TAG, "No se encontraron los datos completos del elemento (element, showcase y site)");
+            }
+        }
+        total = elements.size();
+
+        if (total > 0) {
+            HighlightsPagerListener listener = new HighlightsPagerListener(this);
+            listener.setLength(total);
+
+            RollPagerView pvHighlights = (RollPagerView) findViewById(R.id.pvRecomended);
+            BNHighlightAdapter adapter = new BNHighlightAdapter(pvHighlights, this);
+            adapter.setHighlights(elements);
+            pvHighlights.setAdapter(adapter);
+        }
+    }
+
 }
 
 

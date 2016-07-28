@@ -21,14 +21,43 @@ import com.google.android.gms.location.LocationServices;
 /**
  * Created by ramirezallan on 5/2/16.
  */
-public class BNLocationManager implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class BNLocationManager /*implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener*/ {
 
     private static final String TAG = "BNLocationManager";
 
     private static BNLocationManager ourInstance = new BNLocationManager();
 
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
+    private Location lastLocation;
+
+    protected static BNLocationManager getInstance() {
+        return ourInstance;
+    }
+
+    private BNLocationManager() {
+    }
+
+    public Location getLastLocation() {
+        return lastLocation;
+    }
+
+    public boolean setLastLocation(Location location) {
+        boolean changed = false;
+        if(lastLocation == null){
+            this.lastLocation = location;
+        }else{
+            float distance = location.distanceTo(lastLocation);
+            changed = distance > 5000f;
+//            changed = distance > 10f;
+            Log.e(TAG, "Distance: " + distance);
+        }
+        if(changed) {
+            this.lastLocation = location;
+        }
+        return changed;
+    }
+
+    /*private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private static final int LOCATION_PERMISSION_REQUEST = 1001;
 
     private Context context;
@@ -149,5 +178,5 @@ public class BNLocationManager implements GoogleApiClient.ConnectionCallbacks,
     @Override
     public void onLocationChanged(Location location) {
         lastLocation = location;
-    }
+    }*/
 }

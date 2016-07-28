@@ -6,6 +6,5 @@
     <string name="contact_mail" translatable="false">contact@biin.io</string>
     <string name="share_link" translatable="false">https://play.google.com/store/apps/details?id=com.biin.biin</string>
     <string name="google_maps_key" translatable="false">AIzaSyBz4poJIDxH7YkMnhN-wcjDs4tmd_SDvjg</string>
-    <string name="maps_title">Map</string>
 
 </resources>

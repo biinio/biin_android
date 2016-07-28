@@ -102,7 +102,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     private void getDataByLocation() {
         if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{ android.Manifest.permission.ACCESS_FINE_LOCATION }, LOCATION_PERMISSION_REQUEST);
-            Toast.makeText(this, "Don't have permissions", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "No se tienen permisos de localizacion.");
         }else{
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         }
@@ -111,15 +111,15 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     private String getLatLon(){
-        String loc = "0/0";
+        String location = "0/0";
         if (lastLocation != null) {
             double latitude = lastLocation.getLatitude();
             double longitude = lastLocation.getLongitude();
-            loc = latitude + "/" + longitude;
+            location = latitude + "/" + longitude;
         } else {
-            Toast.makeText(this, "Can't get the location. Make sure location is enabled on the device", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "No se puede obtener la localizacion. Puede no estar activada en el dispositivo.");
         }
-        return loc;
+        return location;
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -155,10 +155,9 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     protected void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{ android.Manifest.permission.ACCESS_FINE_LOCATION }, LOCATION_PERMISSION_REQUEST);
-            Toast.makeText(this, "Don't have permissions", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "No se tienen permisos de localizacion. No se puede iniciar la actualizacion de localizacion.");
         }else{
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-            Toast.makeText(this, "Location updates started", Toast.LENGTH_SHORT).show();
         }
     }
 

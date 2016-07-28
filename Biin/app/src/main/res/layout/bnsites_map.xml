@@ -93,7 +93,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="6dp" />
 
-    <TextView
+    <com.uber.sdk.android.rides.RideRequestButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/UBER"
