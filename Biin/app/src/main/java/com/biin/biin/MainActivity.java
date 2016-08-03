@@ -101,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private long animDuration = 300;
     private boolean loaded = false;
 
+    private int beaconMajor;
+    private double beaconDistance;
+
     private int total = 0;
 
     @Override
@@ -668,19 +671,29 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
             @Override
             public void onIBeaconsUpdated(List<IBeaconDevice> iBeacons, IBeaconRegion region) {
-                if(iBeacons.size() > 0) {
+                if (iBeacons.size() > 0) {
                     IBeaconDevice nearest = iBeacons.get(0);
+                    boolean found = false;
 
                     for (IBeaconDevice device : iBeacons) {
-                        if(device.getDistance() < nearest.getDistance()){
-                            if(dataManager.getBNSiteByMajor(device.getMajor()) != null) {
+                        if(device.getMajor() == beaconMajor){
+                            beaconDistance = device.getDistance();
+                            found = true;
+                        }
+
+                        if (device.getDistance() < nearest.getDistance()) {
+                            if (dataManager.getBNSiteByMajor(device.getMajor()) != null) {
                                 nearest = device;
+                                beaconDistance = nearest.getDistance();
+                                beaconMajor = nearest.getMajor();
                             }
                         }
                     }
 
-                    showBeaconAlert(nearest);
-                }else{
+                    if (!found || (nearest.getMajor() != beaconMajor && (nearest.getDistance() + 5d) <  beaconDistance)) {
+                        showBeaconAlert(nearest);
+                    }
+                } else {
                     hideBeaconAlert();
                 }
             }
@@ -729,6 +742,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             
         }else{
             Log.e(TAG, "El Site del beacon (major: " + device.getMajor() + ") es null");
+            hideBeaconAlert();
         }
     }
 

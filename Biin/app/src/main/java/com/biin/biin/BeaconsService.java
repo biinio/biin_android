@@ -123,29 +123,12 @@ public class BeaconsService extends Service {
 
         Collection<IBeaconRegion> beaconRegions = new ArrayList<>();
 
-//        BeaconRegion region1 = new BeaconRegion.Builder()
-//                .setIdentifier("Biin")
-//                .setProximity(UUID.fromString("aabbccdd-a101-b202-c303-aabbccddeeff"))
-//                .setMajor(58)
-//                .setMinor(1)
-//                .build();
-//
-//        BeaconRegion region2 = new BeaconRegion.Builder()
-//                .setIdentifier("Biin")
-//                .setProximity(UUID.fromString("aabbccdd-a101-b202-c303-aabbccddeeff"))
-//                .setMajor(58) //BeaconRegion.ANY_MAJOR, default value
-//                .setMinor(5)
-//                .build();
-//
-//        beaconRegions.add(region1);
-//        beaconRegions.add(region2);
-
         for (BNBeacon beacon : nearByBeacons) {
             BeaconRegion region = new BeaconRegion.Builder()
                 .setIdentifier(beacon.getIdentfier())
                 .setProximity(UUID.fromString("aabbccdd-a101-b202-c303-aabbccddeeff"))
                 .setMajor(beacon.getMajor())
-//                .setMinor(BeaconRegion.ANY_MINOR)
+                .setMinor(1)//BeaconRegion.ANY_MINOR
                 .build();
             beaconRegions.add(region);
         }
@@ -159,6 +142,7 @@ public class BeaconsService extends Service {
         Notification n  = new Notification.Builder(this)
                 .setContentTitle(title)
                 .setContentText(text)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true).build();
 
         notificationManager.notify(0, n);
