@@ -222,7 +222,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
                     }
                 });
 
-//                new BNSiteNps(this, currentSite, dataManager.isNpsAvailable(currentSite.getIdentifier()));
+                new BNSiteNps(this, currentSite, dataManager.isNpsAvailable(currentSite.getIdentifier()));
             }
         }else{
             Log.e(TAG, "No se encontró el site con el identifier " + siteIdentifier);
