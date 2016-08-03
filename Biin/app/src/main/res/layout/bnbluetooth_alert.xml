@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/rlBluetoothAlert"
+    android:layout_gravity="center_horizontal"
+    android:background="@color/colorDarkGrey"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentEnd="true"
+    android:visibility="gone">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rlBluetoothButtons"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorDarkGrey"
+        android:visibility="gone"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:weightSum="2"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Don&apos;t Show Again"
+                    android:id="@+id/tvBluetoothDontShow"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:id="@+id/ivBluetoothDontShow"
+                    android:scaleType="fitXY"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="false"
+                    android:background="@color/colorWhite"
+                    android:src="@android:drawable/presence_busy"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="6dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Close"
+                    android:id="@+id/tvBluetoothClose"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:id="@+id/ivBluetoothConfirm"
+                    android:scaleType="fitXY"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="false"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/places_ic_clear"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="6dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rlBluetoothMessage"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorDarkGrey"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
+
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:id="@+id/ivBluetoothIcon"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="6dp"
+            android:background="@color/colorWhite"
+            android:src="@drawable/bluetooth"
+            android:layout_alignParentEnd="false" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/ivBluetoothIcon"
+            android:layout_alignTop="@+id/ivBluetoothIcon"
+            android:weightSum="3"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/ivBluetoothIcon"
+            android:layout_marginRight="6dp"
+            android:id="@+id/hlBluetoothText">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bluetooth apagado"
+                android:id="@+id/tvBluetoothTitle"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textColor="#ffffff"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Se recomienda encender el bluetooth"
+                android:id="@+id/tvBluetoothMessage1"
+                android:gravity="center_vertical"
+                android:textColor="#ffffff"
+                android:textSize="12dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="para una mejor experiencia con Biin"
+                android:id="@+id/tvBluetoothMessage2"
+                android:gravity="center_vertical"
+                android:textColor="#ffffff"
+                android:textSize="12dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/ivBluetoothClose"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentEnd="false"
+            android:src="@drawable/close"
+            android:layout_alignTop="@+id/hlBluetoothText"
+            android:layout_alignRight="@+id/hlBluetoothText" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

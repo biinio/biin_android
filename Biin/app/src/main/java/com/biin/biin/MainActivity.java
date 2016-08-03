@@ -1,5 +1,6 @@
 package com.biin.biin;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,13 +52,25 @@ import com.biin.biin.Managers.BNAnalyticsManager;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
+import com.biin.biin.Utils.BeaconSort;
 import com.biin.biin.Volley.Listeners.BNElementsListener;
 import com.biin.biin.Volley.Listeners.BNInitialDataListener;
 import com.jude.rollviewpager.RollPagerView;
 
+import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
+import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
+import com.kontakt.sdk.android.ble.manager.ProximityManager;
+import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
+import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.IBeaconRegion;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements HighlightsPagerListener.IBNHighlightsListener, IBNSitesLikeListener, BNInitialDataListener.IBNInitialDataListener {
 
@@ -75,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private BNAnalyticsManager analyticsManager;
     private BroadcastReceiver locationsReceiver;
     private BNInitialDataListener initialDataListener;
+    private ProximityManagerContract proximityManager;
 
     private List<BNSite> nearSites;
     private List<BNSite> favoriteSites;
@@ -105,24 +119,14 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         biinie = dataManager.getBiinie();
 
         setUpScreen();
-
         loadData();
-
-        analyticsManager.addAction(new BiinieAction("", BiinieAction.OPEN_APP, BiinieAction.AndroidApp));
-
-        Intent i = new Intent(this, LocationService.class);
-        startService(i);
-
-        locationsReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                getInitialData();
-            }
-        };
+        startServices();
     }
 
     private void setUpScreen() {
         Typeface lato_regular = BNUtils.getLato_regular();
+        Typeface lato_black = BNUtils.getLato_black();
+        Typeface lato_light = BNUtils.getLato_light();
 
         TextView tvRecomended = (TextView) findViewById(R.id.tvRecomended);
         tvRecomended.setTypeface(lato_regular);
@@ -188,6 +192,21 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         favsSitesParams.height = height;
         rvNearSites.setLayoutParams(nearSitesParams);
         rvFavouritePlaces.setLayoutParams(favsSitesParams);
+
+        TextView tvTitle, tvSubtitle, tvLocation, tvBluetooth, tvMessage1, tvMessage2;
+        tvTitle = (TextView)findViewById(R.id.tvBeaconTitle);
+        tvSubtitle = (TextView)findViewById(R.id.tvBeaconSubtitle);
+        tvLocation = (TextView)findViewById(R.id.tvBeaconLocation);
+        tvBluetooth = (TextView)findViewById(R.id.tvBluetoothTitle);
+        tvMessage1 = (TextView)findViewById(R.id.tvBluetoothMessage1);
+        tvMessage2 = (TextView)findViewById(R.id.tvBluetoothMessage2);
+
+        tvTitle.setTypeface(lato_black);
+        tvLocation.setTypeface(lato_regular);
+        tvSubtitle.setTypeface(lato_light);
+        tvBluetooth.setTypeface(lato_black);
+        tvMessage1.setTypeface(lato_regular);
+        tvMessage2.setTypeface(lato_regular);
 
         setUpDrawer();
     }
@@ -279,6 +298,25 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         loadCategories();
     }
 
+    private void startServices(){
+        proximityManager = new ProximityManager(this);
+        proximityManager.configuration().scanMode(ScanMode.BALANCED);
+        proximityManager.configuration().deviceUpdateCallbackInterval(TimeUnit.SECONDS.toMillis(30));
+        proximityManager.setIBeaconListener(createIBeaconListener());
+
+        analyticsManager.addAction(new BiinieAction("", BiinieAction.OPEN_APP, BiinieAction.AndroidApp));
+
+        Intent i = new Intent(this, LocationService.class);
+        startService(i);
+
+        locationsReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                getInitialData();
+            }
+        };
+    }
+
     private void loadRecomendations() {
         LinkedHashMap<String, BNElement> allElements = dataManager.getBNElements();
         List<BNHighlight> highlights = dataManager.getBNHighlights();
@@ -322,13 +360,27 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         super.onStart();
         IntentFilter filter = new IntentFilter("LOCATION_SERVICE");
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(locationsReceiver, filter);
+
+        Intent i = new Intent(this, BeaconsService.class);
+        stopService(i);
+        startScanning();
     }
 
     @Override
     protected void onStop() {
         loaded = false;
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(locationsReceiver);
+        proximityManager.stopScanning();
+        Intent i = new Intent(this, BeaconsService.class);
+        startService(i);
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        proximityManager.disconnect();
+        proximityManager = null;
+        super.onDestroy();
     }
 
     @Override
@@ -571,6 +623,122 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         }
     }
 
+    private void startScanning() {
+        BluetoothAdapter bluetoothadapter = BluetoothAdapter.getDefaultAdapter();
+        if(bluetoothadapter.isEnabled()) { //bluetooth active
+            proximityManager.connect(new OnServiceReadyListener() {
+                @Override
+                public void onServiceReady() {
+                    proximityManager.startScanning();
+                    Log.e(TAG, "Start scanning");
+                }
+            });
+        }else{
+            Log.e(TAG, "Bluetooth apagado");
+//            mostrar alerta de que seria bueno encenderlo (?)
+            final RelativeLayout rlBluetoothAlert = (RelativeLayout) findViewById(R.id.rlBluetoothAlert);
+            ImageView ivBluetoothClose = (ImageView) findViewById(R.id.ivBluetoothClose);
+            rlBluetoothAlert.setVisibility(View.VISIBLE);
+
+            rlBluetoothAlert.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent();
+                    i.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                    startActivity(i);
+                    rlBluetoothAlert.setVisibility(View.GONE);
+                }
+            });
+
+            ivBluetoothClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rlBluetoothAlert.setVisibility(View.GONE);
+                }
+            });
+        }
+    }
+
+    private IBeaconListener createIBeaconListener() {
+        return new IBeaconListener() {
+            @Override
+            public void onIBeaconDiscovered(IBeaconDevice iBeacon, IBeaconRegion region) {
+                Log.e("IBeacon", "IBeacon discovered: " + iBeacon.getUniqueId());
+            }
+
+            @Override
+            public void onIBeaconsUpdated(List<IBeaconDevice> iBeacons, IBeaconRegion region) {
+                if(iBeacons.size() > 0) {
+                    IBeaconDevice nearest = iBeacons.get(0);
+
+                    for (IBeaconDevice device : iBeacons) {
+                        if(device.getDistance() < nearest.getDistance()){
+                            if(dataManager.getBNSiteByMajor(device.getMajor()) != null) {
+                                nearest = device;
+                            }
+                        }
+                    }
+
+                    showBeaconAlert(nearest);
+                }else{
+                    hideBeaconAlert();
+                }
+            }
+
+            @Override
+            public void onIBeaconLost(IBeaconDevice iBeacon, IBeaconRegion region) {
+                Log.e("IBeacon", "IBeacon lost: " + iBeacon.getUniqueId());
+            }
+        };
+    }
+
+    private void showBeaconAlert(IBeaconDevice device){
+        final BNSite beaconSite = dataManager.getBNSiteByMajor(device.getMajor());
+
+        if(beaconSite != null) {
+            RelativeLayout rlBeaconAlert = (RelativeLayout) findViewById(R.id.rlBeaconAlert);
+            ImageView ivBeaconOrganization = (ImageView) findViewById(R.id.ivBeaconOrganization);
+            TextView tvTitle, tvSubtitle, tvLocation;
+            tvTitle = (TextView) findViewById(R.id.tvBeaconTitle);
+            tvSubtitle = (TextView) findViewById(R.id.tvBeaconSubtitle);
+            tvLocation = (TextView) findViewById(R.id.tvBeaconLocation);
+
+            tvTitle.setText(beaconSite.getTitle());
+            tvTitle.setTextColor(beaconSite.getOrganization().getSecondaryColor());
+            tvLocation.setText(beaconSite.getSubTitle());
+            tvLocation.setTextColor(beaconSite.getOrganization().getSecondaryColor());
+            tvSubtitle.setText(beaconSite.getNutshell());
+            tvSubtitle.setTextColor(beaconSite.getOrganization().getSecondaryColor());
+
+            rlBeaconAlert.setBackgroundColor(beaconSite.getOrganization().getPrimaryColor());
+            ImageLoader.getInstance().displayImage(beaconSite.getOrganization().getMedia().get(0).getUrl(), ivBeaconOrganization);
+
+            rlBeaconAlert.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(MainActivity.this, SitesActivity.class);
+                    SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(BNUtils.BNStringExtras.BNSite, beaconSite.getIdentifier());
+                    editor.commit();
+                    i.putExtra(BNUtils.BNStringExtras.BNShowOthers, false);
+                    startActivity(i);
+                }
+            });
+            rlBeaconAlert.setVisibility(View.VISIBLE);
+            
+        }else{
+            Log.e(TAG, "El Site del beacon (major: " + device.getMajor() + ") es null");
+        }
+    }
+
+    private void hideBeaconAlert(){
+        findViewById(R.id.rlBeaconAlert).setVisibility(View.GONE);
+        ((TextView)findViewById(R.id.tvBeaconTitle)).setText("");
+        ((TextView)findViewById(R.id.tvBeaconLocation)).setText("");
+        ((TextView)findViewById(R.id.tvBeaconSubtitle)).setText("");
+    }
+
     @Override
     public void onBackPressed() {
         if(loaded) {
@@ -690,9 +858,9 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     public void onInitialDataLoaded() {
         Log.e(TAG, "Initial data reloaded");
 //        reloadData();
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
+        Intent i = getIntent();
         finish();
+        startActivity(i);
     }
 
     private void onInitialDataError(VolleyError error){

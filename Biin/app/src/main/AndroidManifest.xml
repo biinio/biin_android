@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.biin.biin">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -11,6 +13,10 @@
     <meta-data
         android:name="com.facebook.sdk.ApplicationId"
         android:value="@string/app_id" />
+
+    <meta-data
+        android:name="kontakt.io.API_KEY"
+        android:value="@string/kontakt_io_api_key" />
 
     <application
         android:name=".BiinApp"
@@ -78,10 +84,8 @@
         <activity android:name=".LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="biin.io"
                     android:scheme="https" />
@@ -99,9 +103,14 @@
         <service
             android:name=".LocationService"
             android:enabled="true"
-            android:exported="false">
-        </service>
-
+            android:exported="false" />
+        <service
+            android:name=".BeaconsService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name="com.kontakt.sdk.android.ble.service.ProximityService"
+            android:exported="false" />
     </application>
 
 </manifest>

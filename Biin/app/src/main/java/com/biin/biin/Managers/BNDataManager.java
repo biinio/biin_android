@@ -7,6 +7,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.BiinApp;
+import com.biin.biin.Entities.BNBeacon;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNHighlight;
@@ -44,6 +45,7 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     private List<BNElement> favouriteElements = new ArrayList<>();
     private List<BNSite> nearBySites = new ArrayList<>();
     private List<BNSite> favouriteSites = new ArrayList<>();
+    private List<BNBeacon> nearByBeacons = new ArrayList<>();
 
     private LinkedHashMap<String, BNSite> pendingLikeSites = new LinkedHashMap<>();
     private LinkedHashMap<String, BNSite> pendingUnlikeSites = new LinkedHashMap<>();
@@ -87,6 +89,7 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     public void setBNSites(LinkedHashMap<String, BNSite> sites) {
         // reemplazar la coleccion completa de sites
         this.sites = sites;
+        setNearByBeacons(getSitesBeacons(new ArrayList<>(sites.values())));
     }
 
     public int addBNSites(LinkedHashMap<String, BNSite> sites) {
@@ -785,6 +788,42 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
 
     /****************** NPS end ******************/
 
+
+    /****************** Beacons start ******************/
+
+    public List<BNBeacon> getNearByBeacons() {
+        return nearByBeacons;
+    }
+
+    public void setNearByBeacons(List<BNBeacon> nearByBeacons) {
+        this.nearByBeacons = nearByBeacons;
+    }
+
+    private List<BNBeacon> getSitesBeacons(List<BNSite> sites){
+        List<BNBeacon> list = new ArrayList<>();
+        for (BNSite site : sites) {
+            BNBeacon beacon = new BNBeacon();
+            beacon.setIdentfier(site.getOrganization().getName());
+            beacon.setUUID("aabbccdd-a101-b202-c303-aabbccddeeff");
+            beacon.setMajor(site.getMajor());
+            beacon.setMinor(0);
+            list.add(beacon);
+        }
+        return list;
+    }
+
+    public BNSite getBNSiteByMajor(int major) {
+        BNSite result = null;
+        // obtener un site por su major
+        for (BNSite site : this.sites.values()) {
+            if(site.getMajor() == major){
+                result = site;
+            }
+        }
+        return result;
+    }
+
+    /****************** Beacons end ******************/
 
 
     @Override

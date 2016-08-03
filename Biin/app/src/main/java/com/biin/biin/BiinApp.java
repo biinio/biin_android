@@ -12,6 +12,7 @@ import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.LruBitmapCache;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.kontakt.sdk.android.common.KontaktSDK;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -36,6 +37,8 @@ public class BiinApp extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        KontaktSDK.initialize(getResources().getString(R.string.kontakt_io_api_key));
 
         File cacheDir = StorageUtils.getCacheDirectory(this);
 

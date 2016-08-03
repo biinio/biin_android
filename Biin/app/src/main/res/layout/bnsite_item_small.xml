@@ -71,9 +71,6 @@
                     android:id="@+id/tvSiteSubtitle"
                     android:gravity="center_vertical"
                     android:textColor="#ffffff"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="false"
-                    android:layout_toEndOf="@id/tvSubtitle"
                     android:textSize="14sp" />
 
                 <ImageView

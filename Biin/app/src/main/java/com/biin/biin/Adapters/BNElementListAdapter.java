@@ -253,7 +253,7 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
             ivLiked = (ImageView)itemView.findViewById(R.id.ivElementLiked);
 
             tvTitle = (TextView)itemView.findViewById(R.id.tvTitle);
-            tvSubtitle = (TextView)itemView.findViewById(R.id.tvSubtitle);
+            tvSubtitle = (TextView)itemView.findViewById(R.id.tvOfferSubtitle);
             tvSubtitleLocation = (TextView)itemView.findViewById(R.id.tvSubtitleLocation);
             tvPrice = (TextView)itemView.findViewById(R.id.tvPrice);
             tvDiscount = (TextView)itemView.findViewById(R.id.tvDiscount);

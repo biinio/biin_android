@@ -146,7 +146,8 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             RelativeLayout rlSiteLabel;
             TextView tvTitle, tvSubtitle, tvLocation;
             TextView tvMapOrg, tvMapLoc, tvMapDet, tvMapCity, tvMapPhone, tvMapEmail, tvMapWaze, tvMapClose;
-            RideRequestButton tvMapUber;
+            TextView tvMapUber;
+//            RideRequestButton tvMapUber;
             final ImageView ivSite, ivSiteOrganization;
 
             rlSiteLabel = (RelativeLayout)findViewById(R.id.rlSiteLabel);
@@ -165,8 +166,8 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             tvMapPhone = (TextView)findViewById(R.id.tvMapPhone);
             tvMapEmail = (TextView)findViewById(R.id.tvMapEmail);
             tvMapWaze = (TextView)findViewById(R.id.tvMapWaze);
-            tvMapUber = (RideRequestButton)findViewById(R.id.tvMapUber);
-//            tvMapUber = (TextView)findViewById(R.id.tvMapUber);
+//            tvMapUber = (RideRequestButton)findViewById(R.id.tvMapUber);
+            tvMapUber = (TextView)findViewById(R.id.tvMapUber);
             tvMapClose = (TextView)findViewById(R.id.tvMapClose);
 
             Typeface lato_light = BNUtils.getLato_light();
@@ -221,7 +222,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
                     }
                 });
 
-                new BNSiteNps(this, currentSite, dataManager.isNpsAvailable(currentSite.getIdentifier()));
+//                new BNSiteNps(this, currentSite, dataManager.isNpsAvailable(currentSite.getIdentifier()));
             }
         }else{
             Log.e(TAG, "No se encontró el site con el identifier " + siteIdentifier);
@@ -451,10 +452,11 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
 
     private void setUpButtons(){
         TextView tvMapWaze, tvMapClose;
-        RideRequestButton tvMapUber;
+//        RideRequestButton tvMapUber;
+        TextView tvMapUber;
         tvMapWaze = (TextView)findViewById(R.id.tvMapWaze);
-//        tvMapUber = (TextView)findViewById(R.id.tvMapUber);
-        tvMapUber = (RideRequestButton)findViewById(R.id.tvMapUber);
+        tvMapUber = (TextView)findViewById(R.id.tvMapUber);
+//        tvMapUber = (RideRequestButton)findViewById(R.id.tvMapUber);
         tvMapClose = (TextView)findViewById(R.id.tvMapClose);
 
         tvMapWaze.setOnClickListener(new View.OnClickListener() {
@@ -484,7 +486,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
                 .setPickupLocation(pickUpLocation.getLatitude(), pickUpLocation.getLongitude(), null, null)
                 .setDropoffLocation(lat, lon, currentSite.getTitle(), currentSite.getStreetAddress1())
                 .build();
-        tvMapUber.setRideParameters(rideParams);
+//        tvMapUber.setRideParameters(rideParams);
 
         tvMapClose.setOnClickListener(new View.OnClickListener() {
             @Override

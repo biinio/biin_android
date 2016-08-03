@@ -27,6 +27,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vlBeaconAlert"
+                        android:background="@color/colorDarkGrey">
+
+                        <include
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            layout="@layout/bnbeacon_alert" />
+
+                        <include
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            layout="@layout/bnbluetooth_alert" />
+
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/tvRecomended"
                         android:text="@string/Recomended"
@@ -35,9 +55,10 @@
                         android:textColor="@color/colorWhite"
                         android:background="@color/colorLightGrey"
                         android:textSize="12dp"
-                        android:layout_alignParentStart="true"
                         android:layout_height="@dimen/section_height"
-                        android:gravity="center_vertical" />
+                        android:gravity="center_vertical"
+                        android:layout_below="@+id/vlBeaconAlert"
+                        android:layout_alignParentStart="true" />
 
                     <LinearLayout
                         android:orientation="horizontal"
