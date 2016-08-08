@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+tools:context="com.biin.biin.GiftsListActivity">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivGiftsListBack"
+        android:src="@drawable/left_arrow"
+        android:background="@color/colorLightGrey"
+        android:scaleType="center" />
+    
+    <TextView
+        android:id="@+id/tvGiftsListTitle"
+        android:text="@string/Gifts"
+        android:textAllCaps="true"
+        android:textColor="@color/colorDarkGrey"
+        android:background="@color/colorAccentGray"
+        android:textSize="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/ivGiftsListBack"
+        android:layout_alignBottom="@+id/ivGiftsListBack"
+        android:layout_alignTop="@+id/ivGiftsListBack"
+        android:gravity="center"
+        android:layout_toLeftOf="@+id/ivGiftsListBack" />
+    
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rvGiftsList"
+        android:layout_alignStart="@+id/ivGiftsListBack"
+        tools:listitem="@layout/bnsite_item_small"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/ivGiftsListBack" />
+    
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_below="@+id/ivGiftsListBack"
+        android:id="@+id/vlEmptyGifts">
+    
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/ivEmptyGifts"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
+            android:src="@drawable/gift"
+            android:tint="@color/colorPrimaryDark" />
+    
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/NoGifts"
+            android:id="@+id/tvEmptyGifts"
+            android:textAllCaps="true"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center" />
+    
+    </LinearLayout>
+
+</RelativeLayout>

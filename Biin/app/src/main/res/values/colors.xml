@@ -21,7 +21,7 @@
     <color name="black_alpha_80">#cd000000</color>
     <color name="white_alpha_4">#12ffffff</color>
 
-    <color name="colorLikely1">#E91E17</color>
+    <color name="colorLikely1">#e91e17</color>
     <color name="colorLikely2">#E94118</color>
     <color name="colorLikely3">#E9691C</color>
     <color name="colorLikely4">#E99022</color>
@@ -31,5 +31,14 @@
     <color name="colorLikely8">#94E030</color>
     <color name="colorLikely9">#69E030</color>
     <color name="colorLikely10">#3FE030</color>
+    <color name="colorMenu">#f0505050</color>
+
+    <color name="colorRedButton">#e91e17</color>
+    <color name="colorRedPressed">#cb0000</color>
+    <color name="colorDarkGreyButton">#505050</color>
+    <color name="colorDarkGreyPressed">#323232</color>
+    <color name="colorGrayButton">#aaaaaa</color>
+    <color name="colorGrayPressed">#8c8c8c</color>
+
 
 </resources>

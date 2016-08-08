@@ -13,7 +13,6 @@
     <meta-data
         android:name="com.facebook.sdk.ApplicationId"
         android:value="@string/app_id" />
-
     <meta-data
         android:name="kontakt.io.API_KEY"
         android:value="@string/kontakt_io_api_key" />
@@ -84,8 +83,10 @@
         <activity android:name=".LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="biin.io"
                     android:scheme="https" />
@@ -100,6 +101,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".LocationService"
             android:enabled="true"
@@ -111,6 +113,8 @@
         <service
             android:name="com.kontakt.sdk.android.ble.service.ProximityService"
             android:exported="false" />
+
+        <activity android:name=".GiftsListActivity"></activity>
     </application>
 
 </manifest>

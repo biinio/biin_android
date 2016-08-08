@@ -274,16 +274,33 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             }
         });
 
-        ImageView ivMenu = (ImageView) findViewById(R.id.ivToolbarMenu);
-        ivMenu.setOnClickListener(new View.OnClickListener() {
+        LinearLayout vlMenu = (LinearLayout) findViewById(R.id.vlToolbarMenu);
+        vlMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drawer.openDrawer(GravityCompat.START);
             }
         });
 
+        LinearLayout vlGifts = (LinearLayout) findViewById(R.id.vlToolbarGifts);
+        vlGifts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, GiftsListActivity.class);
+                startActivity(i);
+            }
+        });
+
         RelativeLayout rlDrawer = (RelativeLayout) findViewById(R.id.bnNavView);
         rlDrawer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
+        RelativeLayout rlDrawerMenu = (RelativeLayout) findViewById(R.id.includeDrawerToolbar);
+        rlDrawerMenu.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;

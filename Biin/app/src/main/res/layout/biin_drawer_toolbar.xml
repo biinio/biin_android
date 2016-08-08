@@ -2,17 +2,94 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ddebebeb"
+    android:background="@color/colorMenu"
     android:id="@+id/rlDrawerMenu">
 
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:id="@+id/ivToolbarMenu"
-        android:src="@drawable/drawer_menu"
-        android:scaleType="fitXY"
-        android:layout_margin="4dp"
-        android:padding="4dp"
-        android:background="@android:color/transparent" />
+    <LinearLayout
+        android:id="@+id/vlToolbarMenu"
+        android:orientation="vertical"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:background="@drawable/bg_feedback">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/ivToolbarMenu"
+            android:src="@drawable/drawer_menu"
+            android:scaleType="fitXY"
+            android:background="@android:color/transparent"
+            android:tint="@color/colorWhite"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menu"
+            android:id="@+id/tvToolbarMenu"
+            android:textSize="8sp"
+            android:textColor="@color/colorWhite" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vlToolbarGifts"
+        android:orientation="vertical"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:layout_toEndOf="@+id/vlToolbarMenu"
+        android:gravity="center"
+        android:background="@drawable/bg_feedback">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/ivToolbarGifts"
+            android:src="@drawable/gift"
+            android:scaleType="center"
+            android:background="@android:color/transparent"
+            android:tint="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gifts"
+            android:id="@+id/tvToolbarGifts"
+            android:textSize="8sp"
+            android:textColor="@color/colorWhite" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vlToolbarNotifications"
+        android:orientation="vertical"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:layout_toEndOf="@+id/vlToolbarGifts"
+        android:gravity="center"
+        android:background="@drawable/bg_feedback">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/ivToolbarNotifications"
+            android:src="@drawable/notification"
+            android:scaleType="center"
+            android:background="@android:color/transparent"
+            android:tint="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notifications"
+            android:id="@+id/tvToolbarNotifications"
+            android:textSize="8sp"
+            android:textColor="@color/colorWhite" />
+
+    </LinearLayout>
 
 </RelativeLayout>

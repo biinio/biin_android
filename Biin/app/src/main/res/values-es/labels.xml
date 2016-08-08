@@ -38,11 +38,13 @@
     <string name="Value">VALOR</string>
     <string name="Calcel">Cancelar</string>
     <string name="More">más</string>
+    <string name="Gifts">Baul de regalos</string>
     <string name="NearYou">Lugares cercanos a vos</string>
     <string name="MoreFrom">Más de</string>
     <string name="Recomended">Recomendaciones</string>
     <string name="FavoritePlaces">Tus lugares Favoritos</string>
     <string name="AddFavoritePlaces">Agrega algunos lugares a tus favoritos</string>
+    <string name="NoGifts">No tienes regalos en este momento</string>
     <string name="NoFavoritePlaces">Usa el botón de like para agregar lugares a tus favoritos</string>
     <string name="NoFavoriteElements">Usa el botón de like para agregar productos a tus favoritos</string>
     <string name="NoMorePlaces">Parece que ya no hay más lugares cerca tuyo.</string>
