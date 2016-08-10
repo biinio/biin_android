@@ -52,7 +52,6 @@ import com.biin.biin.Managers.BNAnalyticsManager;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
-import com.biin.biin.Utils.BeaconSort;
 import com.biin.biin.Volley.Listeners.BNElementsListener;
 import com.biin.biin.Volley.Listeners.BNInitialDataListener;
 import com.jude.rollviewpager.RollPagerView;
@@ -67,7 +66,6 @@ import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
