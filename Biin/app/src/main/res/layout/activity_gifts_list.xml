@@ -34,6 +34,7 @@ tools:context="com.biin.biin.GiftsListActivity">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/rvGiftsList"
+        android:background="@color/colorWhite"
         android:layout_alignStart="@+id/ivGiftsListBack"
         tools:listitem="@layout/bnsite_item_small"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"

@@ -3,6 +3,8 @@ package com.biin.biin.Volley.Listeners;
 import android.util.Log;
 
 import com.android.volley.Response;
+import com.biin.biin.Entities.BNGift;
+import com.biin.biin.Entities.BNJSONParsers.BNGiftParser;
 import com.biin.biin.Entities.BNJSONParsers.BiinieParser;
 import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
@@ -10,6 +12,8 @@ import com.biin.biin.Managers.BNDataManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.LinkedHashMap;
 
 
 /**
@@ -34,6 +38,10 @@ public class BNBiiniesListener implements Response.Listener<JSONObject> {
             JSONObject data = response.getJSONObject("data");
             // parsear biinie
             parseBiinie(data);
+
+            BNGiftParser parser = new BNGiftParser();
+            LinkedHashMap<String, BNGift> gifts = parser.parseBNGifts(data.getJSONArray("gifts"));
+            dataManager.setBNGifts(gifts);
 
             if(this.listener != null) {
                 this.listener.onBiiniesLoaded();

@@ -3,10 +3,7 @@ package com.biin.biin.Entities.BNJSONParsers;
 import android.util.Log;
 
 import com.biin.biin.Entities.BNGift;
-import com.biin.biin.Entities.BNOrganization;
-import com.biin.biin.Entities.BNGift;
 import com.biin.biin.Managers.BNAppManager;
-import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
 
 import org.json.JSONArray;
@@ -26,15 +23,16 @@ public class BNGiftParser {
 
     private BNMediaParser mediaParser = new BNMediaParser();
 
-    private BNDataManager dataManager = BNAppManager.getInstance().getDataManagerInstance();
+//    private BNDataManager dataManager = BNAppManager.getInstance().getDataManagerInstance();
 
     public BNGift parseBNGift(JSONObject objectGift){
         BNGift gift = new BNGift();
         try{
             gift.setIdentifier(objectGift.getString("identifier"));
             gift.setElementIdentifier(objectGift.getString("productIdentifier"));
+//            gift.setElement(BNAppManager.getInstance().getDataManagerInstance().getBNElement(gift.getElementIdentifier()));
             gift.setOrganizationIdentifier(objectGift.getString("organizationIdentifier"));
-//            gift.setOrganization(BNAppManager.getInstance().getDataManagerInstance().getBNOrganization(gift.getOrganizationIdentifier()));
+            gift.setOrganization(BNAppManager.getInstance().getDataManagerInstance().getBNOrganization(gift.getOrganizationIdentifier()));
             gift.setName(objectGift.getString("name"));
             gift.setMessage(objectGift.getString("message"));
             String status = objectGift.getString("status");
@@ -73,14 +71,14 @@ public class BNGiftParser {
         return gift;
     }
 
-    public LinkedHashMap<String, BNGift> parseBNGifts(JSONArray arraySites){
+    public LinkedHashMap<String, BNGift> parseBNGifts(JSONArray arrayGifts){
         LinkedHashMap<String, BNGift> result = new LinkedHashMap<>();
         try{
-            for(int i = 0; i < arraySites.length(); i++){
-                JSONObject objectSite = (JSONObject) arraySites.get(i);
-                BNGift site = parseBNGift(objectSite);
+            for(int i = 0; i < arrayGifts.length(); i++){
+                JSONObject objectGift = (JSONObject) arrayGifts.get(i);
+                BNGift gift = parseBNGift(objectGift);
 
-                result.put(site.getIdentifier(), site);
+                result.put(gift.getIdentifier(), gift);
             }
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);

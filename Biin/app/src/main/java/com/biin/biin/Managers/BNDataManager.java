@@ -10,6 +10,7 @@ import com.biin.biin.BiinApp;
 import com.biin.biin.Entities.BNBeacon;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
+import com.biin.biin.Entities.BNGift;
 import com.biin.biin.Entities.BNHighlight;
 import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNShowcase;
@@ -40,6 +41,7 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     private LinkedHashMap<String, BNOrganization> organizations = new LinkedHashMap<>();
     private LinkedHashMap<String, BNElement> elements = new LinkedHashMap<>();
     private LinkedHashMap<String, BNCategory> categories = new LinkedHashMap<>();
+    private LinkedHashMap<String, BNGift> gifts = new LinkedHashMap<>();
 
     private List<BNHighlight> highlights = new ArrayList<>();
     private List<BNElement> favouriteElements = new ArrayList<>();
@@ -738,7 +740,7 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
 
     public boolean addBNCategory(BNCategory category) {
         boolean added = false;
-        // agregar un element a la coleccion
+        // agregar una category a la coleccion
         if(!this.categories.containsKey(category.getIdentifier())){
             this.categories.put(category.getIdentifier(), category);
             added = true;
@@ -824,6 +826,60 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     }
 
     /****************** Beacons end ******************/
+
+
+    /****************** Gifts start ******************/
+
+    public void setBNGifts(LinkedHashMap<String, BNGift> gifts) {
+        // reemplazar la coleccion completa de gifts
+        this.gifts = gifts;
+    }
+
+    public int addBNGifts(LinkedHashMap<String, BNGift> gifts) {
+        // agregar gifts a la coleccion (solo los que no existian previamente)
+        int added = 0;
+        for (BNGift gift : gifts.values()) {
+            if(addBNGift(gift)){
+                added++;
+            }
+        }
+        // retornar el numero de gifts agregados a la coleccion
+        return added;
+    }
+
+    public boolean addBNGift(BNGift gift) {
+        boolean added = false;
+        // agregar un gift a la coleccion
+        if(!this.gifts.containsKey(gift.getIdentifier())){
+            this.gifts.put(gift.getIdentifier(), gift);
+            added = true;
+        }
+        // retornar true si se agrego o false si no se agrego
+        return added;
+    }
+
+    public BNGift getBNGift(String identifier) {
+        // obtener un gift por su identificador
+        return this.gifts.get(identifier);
+    }
+
+    public boolean removeBNGift(String identifier) {
+        boolean removed = false;
+        // remover un gift de la coleccion
+        if(this.gifts.containsKey(identifier)){
+            this.gifts.remove(identifier);
+            removed = true;
+        }
+        // retornar true si se elimino o false si no se elimino
+        return removed;
+    }
+
+    public LinkedHashMap<String,BNGift> getBNGifts(){
+        // retornar la lista de gifts
+        return this.gifts;
+    }
+
+    /****************** Gifts end ******************/
 
 
     @Override

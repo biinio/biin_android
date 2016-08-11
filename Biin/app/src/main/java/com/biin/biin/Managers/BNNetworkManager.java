@@ -17,6 +17,7 @@ public class BNNetworkManager {
     private static String URL_BASE = "https://www.biin.io";
 
     private static String URL_AUTH_BIINIE = "/auth";
+    private static String URL_TOKEN = "/registerfornotifications";
 
     private static String URL_SITES = "/requestSites/0";
     private static String URL_CATEGORIES = "/requestElementsForCategory";
@@ -126,6 +127,11 @@ public class BNNetworkManager {
 
     public String getNpsUrl(){
         String url = getUrlBase() + URL_NPS;
+        return url;
+    }
+
+    public String getTokenRegisterUrl(String identifier){
+        String url = getUrlBiinie(identifier) + URL_TOKEN;
         return url;
     }
 
