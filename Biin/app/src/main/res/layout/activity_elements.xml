@@ -35,7 +35,6 @@
                 android:layout_alignParentEnd="true"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/biin"
                 android:visibility="visible" />
 
             <FrameLayout
