@@ -3,6 +3,7 @@ package com.biin.biin;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -55,18 +56,18 @@ public class BeaconsService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e(TAG, "Service started");
-        if (!isBluetoothEnabled()) {
+        if (isBluetoothEnabled()) {
+            startScanning();
+        } else {
             Log.e(TAG, "Bluetooth disabled, stop service");
             stopSelf();
-        } else {
-            startScanning();
         }
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }
 
     private boolean isBluetoothEnabled(){
-        return true;
+        return BluetoothAdapter.getDefaultAdapter().isEnabled();
     }
 
     private void startScanning() {
@@ -120,17 +121,20 @@ public class BeaconsService extends Service {
 
     private Collection<IBeaconRegion> createIBeaconRegions(){
         List<BNBeacon> nearByBeacons = BNAppManager.getInstance().getDataManagerInstance().getNearByBeacons();
-
         Collection<IBeaconRegion> beaconRegions = new ArrayList<>();
+        int i = 0;
 
         for (BNBeacon beacon : nearByBeacons) {
-            BeaconRegion region = new BeaconRegion.Builder()
-                .setIdentifier(beacon.getIdentfier())
-                .setProximity(UUID.fromString("aabbccdd-a101-b202-c303-aabbccddeeff"))
-                .setMajor(beacon.getMajor())
-                .setMinor(1)//BeaconRegion.ANY_MINOR
-                .build();
-            beaconRegions.add(region);
+            if(i < 20) {
+                BeaconRegion region = new BeaconRegion.Builder()
+                        .setIdentifier(beacon.getIdentfier())
+                        .setProximity(UUID.fromString("aabbccdd-a101-b202-c303-aabbccddeeff"))
+                        .setMajor(beacon.getMajor())
+                        .setMinor(1)//BeaconRegion.ANY_MINOR
+                        .build();
+                beaconRegions.add(region);
+                i++;
+            }
         }
 
         return beaconRegions;

@@ -642,8 +642,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     }
 
     private void startScanning() {
-        BluetoothAdapter bluetoothadapter = BluetoothAdapter.getDefaultAdapter();
-        if(bluetoothadapter.isEnabled()) { //bluetooth active
+        if(BluetoothAdapter.getDefaultAdapter().isEnabled()) { //bluetooth active
             proximityManager.connect(new OnServiceReadyListener() {
                 @Override
                 public void onServiceReady() {

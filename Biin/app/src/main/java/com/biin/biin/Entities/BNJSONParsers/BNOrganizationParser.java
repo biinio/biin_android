@@ -26,10 +26,10 @@ public class BNOrganizationParser {
             organization.setIdentifier(objectOrganization.getString("identifier"));
             // TODO _id
             organization.setMedia(mediaParser.parseBNMedia(objectOrganization.getJSONArray("media")));
-            organization.setExtraInfo(objectOrganization.getString("extraInfo"));
-            organization.setDescription(objectOrganization.getString("description"));
+//            organization.setExtraInfo(objectOrganization.getString("extraInfo"));
+//            organization.setDescription(objectOrganization.getString("description"));
             organization.setBrand(objectOrganization.getString("brand"));
-            organization.setName(objectOrganization.getString("name"));
+//            organization.setName(objectOrganization.getString("name"));
             organization.setLoyaltyEnabled(BNUtils.getBooleanFromString(objectOrganization.getString("isLoyaltyEnabled")));
             // TODO loyalty
             organization.setHasNPS(BNUtils.getBooleanFromString(objectOrganization.getString("hasNPS")));
