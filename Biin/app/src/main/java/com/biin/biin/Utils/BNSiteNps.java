@@ -340,7 +340,16 @@ public class BNSiteNps implements Response.Listener<JSONObject> {
 
     @Override
     public void onResponse(JSONObject response) {
-        int i = 0;
-        //TODO si da error, marcar el NPS para volver a aparecer, sino no
+        try {
+            String result = response.getString("result");
+            String status = response.getString("status");
+            if(status.equals("0") && result.equals("1")){
+                //TODO si da error, marcar el NPS para volver a aparecer, sino no
+            }else{
+                //TODO si da error, marcar el NPS para volver a aparecer, sino no
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error parseando el JSON.", e);
+        }
     }
 }

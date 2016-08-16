@@ -1,6 +1,8 @@
 package com.biin.biin;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
@@ -30,9 +32,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SplashActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, BNInitialDataListener.IBNInitialDataListener{
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, BNInitialDataListener.IBNInitialDataListener, Response.Listener<JSONObject> {
 
     private static final String TAG = "SplashActivity";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
@@ -47,6 +53,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     private GoogleApiClient googleApiClient;
     private boolean locationUpdates = false;
     private LocationRequest locationRequest;
+    private String token;
 
     private BNInitialDataListener initialDataListener;
 
@@ -248,6 +255,54 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onInitialDataLoaded() {
+        token = FirebaseInstanceId.getInstance().getToken();
+
+        String identifier = "";
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        String sent = preferences.getString(BNUtils.BNStringExtras.FCMToken, "");
+
+        if(biinie != null && !biinie.getIdentifier().isEmpty()){
+            identifier = biinie.getIdentifier();
+        }else {
+            identifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");
+        }
+
+        if(!token.equals(sent)) {
+            sendToken(token, identifier);
+        }
+
+        goToNextActivity();
+    }
+
+    private void sendToken(String token, String identifier){
+        Log.e(TAG, "Biin FCM Token: " + token);
+
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject model = new JSONObject();
+            model.put("tokenId", token);
+            model.put("platform", "android");
+            request.put("model", model);
+        }catch (JSONException e){
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                BNAppManager.getInstance().getNetworkManagerInstance().getTokenRegisterUrl(identifier),
+                request,
+                this,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onVolleyError(error);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void goToNextActivity(){
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
@@ -269,8 +324,30 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         });
     }
 
+    private void onVolleyError(VolleyError error){
+        Log.e(TAG, "Error:" + error.getMessage());
+    }
+
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        try {
+            String result = response.getString("result");
+            String status = response.getString("status");
+            if(status.equals("0") && result.equals("1")){
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(BNUtils.BNStringExtras.FCMToken, token);
+                editor.commit();
+            }else{
+                Log.e(TAG, "Error enviando el token.");
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error parseando el JSON.", e);
+        }
     }
 }

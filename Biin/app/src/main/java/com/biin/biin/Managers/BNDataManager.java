@@ -59,6 +59,9 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     private static int favouriteSitesVersion = 1;
     private static int favouriteElementsVersion = 1;
 
+    private static int giftsBadge = 0;
+    private static int notificationsBadge = 0;
+
     private BNLikesListener likesListener;
 
     protected static BNDataManager getInstance() {
@@ -76,6 +79,7 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     public void setBiinie(Biinie biinie) {
         // reemplazar el biinie
         this.biinie = biinie;
+        BNAppManager.getInstance().getAnalyticsManagerInstance().setBiinie(biinie);
     }
 
     public Biinie getBiinie() {
@@ -880,6 +884,39 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     }
 
     /****************** Gifts end ******************/
+
+
+    /****************** Badges start ******************/
+
+    public int getGiftsBadge(){
+        return giftsBadge;
+    }
+
+    public int incrementGiftsBadge() {
+        giftsBadge++;
+        return giftsBadge;
+    }
+
+    public void clearGiftsBadge() {
+        giftsBadge = 0;
+    }
+
+    public int getNotificationsBadge(){
+        return notificationsBadge;
+    }
+
+    public int incrementNotificationsBadge() {
+        notificationsBadge++;
+        return notificationsBadge;
+    }
+
+    public void clearNotificationsBadge() {
+        notificationsBadge = 0;
+    }
+
+
+    /****************** Badges end ******************/
+
 
 
     @Override

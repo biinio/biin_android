@@ -1,12 +1,16 @@
 package com.biin.biin;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Utils.BNUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -21,6 +25,7 @@ public class BiinInstanceIdService extends FirebaseInstanceIdService implements 
 
     private static final String TAG = "BiinInstanceIdService";
     private static final String TOPIC = "biin";
+    private String token = "";
 
     /**
      * The Application's current Instance ID token is no longer valid
@@ -38,6 +43,7 @@ public class BiinInstanceIdService extends FirebaseInstanceIdService implements 
     }
 
     private void sendRegistrationToServer(String token) {
+        this.token = token;
         Log.e(TAG, "Biin FCM Token: " + token);
 
         JSONObject request = new JSONObject();
@@ -49,18 +55,27 @@ public class BiinInstanceIdService extends FirebaseInstanceIdService implements 
         }catch (JSONException e){
             Log.e(TAG, "Error:" + e.getMessage());
         }
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+        String identifier = "";
+
+        if(biinie != null && !biinie.getIdentifier().isEmpty()){
+            identifier = biinie.getIdentifier();
+        }else {
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+            identifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");
+        }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.PUT,
-                BNAppManager.getInstance().getNetworkManagerInstance().getTokenRegisterUrl(BNAppManager.getInstance().getDataManagerInstance().getBiinie().getIdentifier()),
-                request,
-                this,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onVolleyError(error);
-                    }
-                });
+            Request.Method.PUT,
+            BNAppManager.getInstance().getNetworkManagerInstance().getTokenRegisterUrl(identifier),
+            request,
+            this,
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    onVolleyError(error);
+                }
+            });
         BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
     }
 
@@ -71,5 +86,19 @@ public class BiinInstanceIdService extends FirebaseInstanceIdService implements 
     @Override
     public void onResponse(JSONObject response) {
         Log.e(TAG, "Response:" + response.toString());
+        try {
+            String result = response.getString("result");
+            String status = response.getString("status");
+            if(status.equals("0") && result.equals("1")){
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(BNUtils.BNStringExtras.FCMToken, token);
+                editor.commit();
+            }else{
+                Log.e(TAG, "Error enviando el token.");
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error parseando el JSON.", e);
+        }
     }
 }

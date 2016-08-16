@@ -64,7 +64,6 @@ public class BNBiiniesListener implements Response.Listener<JSONObject> {
         Biinie result = biinieParser.parseBiinie(objectBiinie);
         // guardar el resultado del biinie en el data manager
         dataManager.setBiinie(result);
-        BNAppManager.getInstance().getAnalyticsManagerInstance().setBiinie(dataManager.getBiinie());
     }
 
     public interface IBNBiiniesListener {

@@ -171,6 +171,7 @@ public class BNUtils {
         public static final String BNFavorites = "BNFavorites";
         public static final String BNShowOthers = "BNShowOtherSites";
         public static final String BNShowMore = "BNShowMoreFromSite";
+        public static final String FCMToken = "FCMToken";
     }
 
 }

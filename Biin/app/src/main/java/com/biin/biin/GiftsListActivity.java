@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.biin.biin.Adapters.BNGiftAdapter;
 import com.biin.biin.Entities.BNGift;
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
 
 import java.util.ArrayList;
@@ -19,15 +20,19 @@ import java.util.List;
 
 public class GiftsListActivity extends AppCompatActivity {
 
+    BNDataManager dataManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gifts_list);
 
+        dataManager = BNAppManager.getInstance().getDataManagerInstance();
+
         setUpScreen();
 
         RecyclerView rvSlides = (RecyclerView) findViewById(R.id.rvGiftsList);
-        List<BNGift> gifts = new ArrayList<>(BNAppManager.getInstance().getDataManagerInstance().getBNGifts().values());
+        List<BNGift> gifts = new ArrayList<>(dataManager.getBNGifts().values());
         if (gifts.size() > 0) {
             BNGiftAdapter adapter = new BNGiftAdapter(this, gifts);
             rvSlides.setLayoutManager(new LinearLayoutManager(this));
@@ -55,5 +60,7 @@ public class GiftsListActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        dataManager.clearGiftsBadge();
     }
 }

@@ -54,6 +54,7 @@ import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNElementsListener;
 import com.biin.biin.Volley.Listeners.BNInitialDataListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.jude.rollviewpager.RollPagerView;
 
 import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
@@ -75,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private static final String TAG = "MainActivity";
 
     private TextView tvNearYou, tvFavouritePlaces;
-    private TextView tvProfile, tvFavourites, tvFriends, tvAbout;
     private CardRecyclerView rvNearSites, rvFavouritePlaces;
     private LinearLayout hlRecomended;
     private RelativeLayout rlCloseApp;
@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         BNUtils.setWidth(metrics.widthPixels);
         BNUtils.setDensity(metrics.density);
+
+        Log.e(TAG, FirebaseInstanceId.getInstance().getToken());
 
         dataManager = BNAppManager.getInstance().getDataManagerInstance();
         analyticsManager = BNAppManager.getInstance().getAnalyticsManagerInstance();
@@ -214,7 +216,11 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
     private void setUpDrawer() {
         Typeface lato_regular = BNUtils.getLato_regular();
+        Typeface lato_black = BNUtils.getLato_black();
+
         drawer = (DrawerLayout) findViewById(R.id.dlMain);
+
+        TextView tvProfile, tvFavourites, tvFriends, tvAbout, tvGifts, tvNotifications;
 
         tvProfile = (TextView) findViewById(R.id.tvMenuProfile);
         tvProfile.setTypeface(lato_regular);
@@ -271,6 +277,12 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
                 drawer.closeDrawer(GravityCompat.START);
             }
         });
+
+        tvGifts = (TextView) findViewById(R.id.tvBadgeGifts);
+        tvGifts.setTypeface(lato_black);
+
+        tvNotifications = (TextView) findViewById(R.id.tvBadgeNotifications);
+        tvNotifications.setTypeface(lato_black);
 
         LinearLayout vlMenu = (LinearLayout) findViewById(R.id.vlToolbarMenu);
         vlMenu.setOnClickListener(new View.OnClickListener() {

@@ -21,6 +21,10 @@ import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNBiiniesListener;
 import com.biin.biin.Volley.Listeners.BNLoginListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements BNLoginListener.IBNLoginListener, BNBiiniesListener.IBNBiiniesListener {
 
@@ -188,14 +192,20 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
 
     @Override
     public void onBiiniesLoaded() {
+        String identifier = BNAppManager.getInstance().getDataManagerInstance().getBiinie().getIdentifier();
+
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(BNUtils.BNStringExtras.BNBiinie, BNAppManager.getInstance().getDataManagerInstance().getBiinie().getIdentifier());
+        editor.putString(BNUtils.BNStringExtras.BNBiinie, identifier);
         editor.commit();
 
         Log.e(TAG, "Biinie cargado correctamente");
 
-        Intent i = new Intent(LoginActivity.this, PrivacyActivity.class);
+        goToNextActivity();
+    }
+
+    private void goToNextActivity(){
+        Intent i = new Intent(this, PrivacyActivity.class);
         startActivity(i);
         finish();
     }
