@@ -32,7 +32,7 @@ public class BNGiftParser {
             gift.setElementIdentifier(objectGift.getString("productIdentifier"));
 //            gift.setElement(BNAppManager.getInstance().getDataManagerInstance().getBNElement(gift.getElementIdentifier()));
             gift.setOrganizationIdentifier(objectGift.getString("organizationIdentifier"));
-            gift.setOrganization(BNAppManager.getInstance().getDataManagerInstance().getBNOrganization(gift.getOrganizationIdentifier()));
+//            gift.setOrganization(BNAppManager.getInstance().getDataManagerInstance().getBNOrganization(gift.getOrganizationIdentifier()));
             gift.setName(objectGift.getString("name"));
             gift.setMessage(objectGift.getString("message"));
             String status = objectGift.getString("status");

@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private long animDuration = 300;
     private boolean loaded = false;
 
-    private int beaconMajor;
+    private int beaconMajor = 0;
     private double beaconDistance;
 
     private int total = 0;
@@ -691,8 +691,13 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private IBeaconListener createIBeaconListener() {
         return new IBeaconListener() {
             @Override
-            public void onIBeaconDiscovered(IBeaconDevice iBeacon, IBeaconRegion region) {
-                Log.e("IBeacon", "IBeacon discovered: " + iBeacon.getUniqueId());
+            public void onIBeaconDiscovered(IBeaconDevice device, IBeaconRegion region) {
+                Log.e("IBeacon", "IBeacon discovered: " + device.getUniqueId());
+                if ((device.getDistance() + 5d) < beaconDistance) {
+                    if (dataManager.getBNSiteByMajor(device.getMajor()) != null) {
+                        showBeaconAlert(device);
+                    }
+                }
             }
 
             @Override
@@ -710,8 +715,6 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
                         if (device.getDistance() < nearest.getDistance()) {
                             if (dataManager.getBNSiteByMajor(device.getMajor()) != null) {
                                 nearest = device;
-                                beaconDistance = nearest.getDistance();
-                                beaconMajor = nearest.getMajor();
                             }
                         }
                     }
@@ -725,8 +728,11 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             }
 
             @Override
-            public void onIBeaconLost(IBeaconDevice iBeacon, IBeaconRegion region) {
-                Log.e("IBeacon", "IBeacon lost: " + iBeacon.getUniqueId());
+            public void onIBeaconLost(IBeaconDevice device, IBeaconRegion region) {
+                Log.e("IBeacon", "IBeacon lost: " + device.getUniqueId());
+                if(device.getMajor() == beaconMajor){
+                    hideBeaconAlert();
+                }
             }
         };
     }
@@ -765,6 +771,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
                 }
             });
             rlBeaconAlert.setVisibility(View.VISIBLE);
+            beaconDistance = device.getDistance();
+            beaconMajor = device.getMajor();
             
         }else{
             Log.e(TAG, "El Site del beacon (major: " + device.getMajor() + ") es null");
@@ -777,6 +785,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         ((TextView)findViewById(R.id.tvBeaconTitle)).setText("");
         ((TextView)findViewById(R.id.tvBeaconLocation)).setText("");
         ((TextView)findViewById(R.id.tvBeaconSubtitle)).setText("");
+        beaconMajor = 0;
+        beaconDistance = 0;
     }
 
     @Override

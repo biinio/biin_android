@@ -5,6 +5,7 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
+import com.biin.biin.Entities.BNGift;
 import com.biin.biin.Entities.BNHighlight;
 import com.biin.biin.Entities.BNJSONParsers.BNCategoryParser;
 import com.biin.biin.Entities.BNJSONParsers.BNElementParser;
@@ -73,6 +74,8 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
             // parsear favourite elements
             parseFavouriteElements(data.getJSONObject("favorites").getJSONArray("elements"));
 
+            // setear el organization a los gifts, ya que no existian al momento de parsearlos
+            setGiftOrganizations();
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }
@@ -147,6 +150,12 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
         LinkedHashMap<String, BNCategory> result = categoryParser.parseBNCategories(arrayCategories);
         // guardar el resultado de categories en el data manager
         dataManager.setBNCategories(result);
+    }
+
+    private void setGiftOrganizations(){
+        for (BNGift gift : dataManager.getBNGifts().values()) {
+            gift.setOrganization(dataManager.getBNOrganization(gift.getOrganizationIdentifier()));
+        }
     }
 
     public interface IBNInitialDataListener {

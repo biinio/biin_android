@@ -67,15 +67,27 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
 
         if(item.getOrganization() != null) {
             holder.ivGift.setBackgroundColor(item.getOrganization().getPrimaryColor());
-            holder.tvName.setTextColor(item.getOrganization().getPrimaryColor());
-            holder.tvRequest.setTextColor(item.getOrganization().getPrimaryColor());
+            if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorWhite), item.getOrganization().getPrimaryColor(), item.getOrganization().getSecondaryColor())) {
+                holder.tvName.setTextColor(item.getOrganization().getPrimaryColor());
+                holder.tvRequest.setTextColor(item.getOrganization().getSecondaryColor());
+                holder.tvRequest.setBackgroundColor(item.getOrganization().getPrimaryColor());
+            }else{
+                holder.tvName.setTextColor(item.getOrganization().getSecondaryColor());
+                holder.tvRequest.setTextColor(item.getOrganization().getPrimaryColor());
+                holder.tvRequest.setBackgroundColor(item.getOrganization().getSecondaryColor());
+            }
         }
 
         holder.ivDelete.setOnClickListener(
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "Delete (position: " + position + ")", Toast.LENGTH_SHORT).show();
+                    gifts.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, gifts.size());
+                    viewBinderHelper.closeLayout(String.valueOf(position));
+//                    Toast.makeText(context, "Delete (position: " + position + ")", Toast.LENGTH_SHORT).show();
+                    //TODO informar al server de la eliminacion
                 }
             }
         );
