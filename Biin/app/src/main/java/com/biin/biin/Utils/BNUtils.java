@@ -66,8 +66,13 @@ public class BNUtils {
 
     public static Date getDateFromString(String value){
         // obtener la fecha a partir del string recibido ej.: "2016-04-29 22:45:26"
-        Date fecha = new Date();
         String dateFotmat = "yyyy-MM-dd HH:mm:ss";
+        return getDateFromString(value, dateFotmat);
+    }
+
+    public static Date getDateFromString(String value, String dateFotmat){
+        // obtener la fecha a partir del string recibido y un formato especificado
+        Date fecha = new Date();
         SimpleDateFormat format = new SimpleDateFormat(dateFotmat);
         try {
             fecha = format.parse(value);
@@ -172,6 +177,8 @@ public class BNUtils {
         public static final String BNShowOthers = "BNShowOtherSites";
         public static final String BNShowMore = "BNShowMoreFromSite";
         public static final String FCMToken = "FCMToken";
+        public static final String BNGiftBadge = "BNGiftBadge";
+        public static final String BNNotificationBadge = "BNNotificationBadge";
     }
 
 }

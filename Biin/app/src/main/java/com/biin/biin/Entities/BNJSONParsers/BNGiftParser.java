@@ -53,8 +53,8 @@ public class BNGiftParser {
                 statusCode = BNGift.BNGiftStatus.DELIVERED;
             }
             gift.setStatus(statusCode);
-            gift.setReceivedDate(BNUtils.getDateFromString(objectGift.getString("receivedDate")));
-            gift.setExpirationDate(BNUtils.getDateFromString(objectGift.getString("expirationDate")));
+            gift.setReceivedDate(BNUtils.getDateFromString(objectGift.getString("receivedDate"), BNUtils.getActionDateFormat()));
+            gift.setExpirationDate(BNUtils.getDateFromString(objectGift.getString("expirationDate"), BNUtils.getActionDateFormat()));
             gift.setHasExpirationDate(BNUtils.getBooleanFromString(objectGift.getString("hasExpirationDate")));
             List<String> sites = new ArrayList<>();
             JSONArray arraySites = objectGift.getJSONArray("sites");

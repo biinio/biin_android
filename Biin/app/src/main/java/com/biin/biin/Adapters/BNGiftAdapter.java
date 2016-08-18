@@ -45,6 +45,10 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
         inflater = LayoutInflater.from(context);
     }
 
+    public void addItem(BNGift gift){
+        this.gifts.add(0, gift);
+    }
+
     @Override
     public BNGiftViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.bngift_item, parent, false);
@@ -65,17 +69,15 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
         holder.tvName.setText(item.getName());
         holder.tvDescription.setText(item.getMessage());
 
-        if(item.getOrganization() != null) {
-            holder.ivGift.setBackgroundColor(item.getOrganization().getPrimaryColor());
-            if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorWhite), item.getOrganization().getPrimaryColor(), item.getOrganization().getSecondaryColor())) {
-                holder.tvName.setTextColor(item.getOrganization().getPrimaryColor());
-                holder.tvRequest.setTextColor(item.getOrganization().getSecondaryColor());
-                holder.tvRequest.setBackgroundColor(item.getOrganization().getPrimaryColor());
-            }else{
-                holder.tvName.setTextColor(item.getOrganization().getSecondaryColor());
-                holder.tvRequest.setTextColor(item.getOrganization().getPrimaryColor());
-                holder.tvRequest.setBackgroundColor(item.getOrganization().getSecondaryColor());
-            }
+        holder.ivGift.setBackgroundColor(item.getPrimaryColor());
+        if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorWhite), item.getPrimaryColor(), item.getSecondaryColor())) {
+            holder.tvName.setTextColor(item.getPrimaryColor());
+            holder.tvRequest.setTextColor(item.getSecondaryColor());
+            holder.tvRequest.setBackgroundColor(item.getPrimaryColor());
+        }else{
+            holder.tvName.setTextColor(item.getSecondaryColor());
+            holder.tvRequest.setTextColor(item.getPrimaryColor());
+            holder.tvRequest.setBackgroundColor(item.getSecondaryColor());
         }
 
         holder.ivDelete.setOnClickListener(

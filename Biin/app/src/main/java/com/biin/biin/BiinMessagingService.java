@@ -18,6 +18,8 @@ public class BiinMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "BiinMessagingService";
     private static BNGiftParser giftParser = new BNGiftParser();
+    private BNDataManager dataManager;
+    private LocalBroadcastManager localBroadcastManager;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -29,13 +31,18 @@ public class BiinMessagingService extends FirebaseMessagingService {
         if(true) { //TODO determinar si es una notificacion o un gift (por el momento true porque solo son gifts)
             BNGift gift = parseGift(remoteMessage.getData().toString());
             if (gift != null) {
-                BNDataManager dataManager = BNAppManager.getInstance().getDataManagerInstance();
+                if(dataManager == null) {
+                    dataManager = BNAppManager.getInstance().getDataManagerInstance();
+                }
                 if (dataManager.addBNGift(gift)) {
-                    dataManager.incrementGiftsBadge();
+                    dataManager.incrementGiftsBadge(getApplicationContext());
                     // llamar al broadcast para avisar a la pantalla principal
-                    LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+                    if(localBroadcastManager == null) {
+                        localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+                    }
                     Intent intent = new Intent("MESSAGING_SERVICE");
                     intent.putExtra("TYPE", "GIFT");
+                    intent.putExtra("POSITION", dataManager.getBNGifts().size() - 1);
                     localBroadcastManager.sendBroadcast(intent);
                 }
             } else {
@@ -43,7 +50,9 @@ public class BiinMessagingService extends FirebaseMessagingService {
             }
         }else{
             //Notificacion solamente
-            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+            if(localBroadcastManager == null) {
+                localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+            }
             Intent intent = new Intent("MESSAGING_SERVICE");
             intent.putExtra("TYPE", "NOTIFICATION");
             localBroadcastManager.sendBroadcast(intent);
@@ -53,7 +62,9 @@ public class BiinMessagingService extends FirebaseMessagingService {
     private BNGift parseGift(String data){
         BNGift gift = null;
         try{
-            JSONObject objectGift = new JSONObject(data);
+            JSONObject objectNotification = new JSONObject(data);
+            JSONObject objectData = objectNotification.getJSONObject("data");
+            JSONObject objectGift = objectData.getJSONObject("gift");
             gift = giftParser.parseBNGift(objectGift);
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);

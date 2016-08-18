@@ -84,9 +84,11 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private Biinie biinie;
     private BNDataManager dataManager;
     private BNAnalyticsManager analyticsManager;
-    private BroadcastReceiver locationsReceiver;
     private BNInitialDataListener initialDataListener;
     private ProximityManagerContract proximityManager;
+    private LocalBroadcastManager localBroadcastManager;
+    private BroadcastReceiver locationsReceiver;
+    private BroadcastReceiver notificationsReceiver;
 
     private List<BNSite> nearSites;
     private List<BNSite> favoriteSites;
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
         dataManager = BNAppManager.getInstance().getDataManagerInstance();
         analyticsManager = BNAppManager.getInstance().getAnalyticsManagerInstance();
+        localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
 
         biinie = dataManager.getBiinie();
 
@@ -185,6 +188,9 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             }
         });
 
+        TextView tvBadgeGifts = (TextView) findViewById(R.id.tvBadgeGifts);
+        TextView tvBadgeNotifications = (TextView) findViewById(R.id.tvBadgeNotifications);
+
         int height = (BNUtils.getWidth() / 2) + (int) (56 * BNUtils.getDensity());
 
         rvNearSites = (CardRecyclerView) findViewById(R.id.rvOtherNearYou);
@@ -210,6 +216,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         tvBluetooth.setTypeface(lato_black);
         tvMessage1.setTypeface(lato_regular);
         tvMessage2.setTypeface(lato_regular);
+        tvBadgeGifts.setTypeface(lato_regular);
+        tvBadgeNotifications.setTypeface(lato_regular);
 
         setUpDrawer();
     }
@@ -345,6 +353,18 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
                 getInitialData();
             }
         };
+
+        notificationsReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String type = intent.getStringExtra("TYPE");
+                if(type.equals("GIFT")) {
+                    refershGiftsBadge();
+                }else{
+                    refershNotificationsBadge();
+                }
+            }
+        };
     }
 
     private void loadRecomendations() {
@@ -388,8 +408,11 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     @Override
     protected void onStart() {
         super.onStart();
-        IntentFilter filter = new IntentFilter("LOCATION_SERVICE");
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(locationsReceiver, filter);
+        IntentFilter locations_filter = new IntentFilter("LOCATION_SERVICE");
+        localBroadcastManager.registerReceiver(locationsReceiver, locations_filter);
+
+        IntentFilter notifications_filter = new IntentFilter("MESSAGING_SERVICE");
+        localBroadcastManager.registerReceiver(notificationsReceiver, notifications_filter);
 
         Intent i = new Intent(this, BeaconsService.class);
         stopService(i);
@@ -399,7 +422,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     @Override
     protected void onStop() {
         loaded = false;
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(locationsReceiver);
+        localBroadcastManager.unregisterReceiver(locationsReceiver);
+        localBroadcastManager.unregisterReceiver(notificationsReceiver);
         proximityManager.stopScanning();
         Intent i = new Intent(this, BeaconsService.class);
         startService(i);
@@ -416,6 +440,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     @Override
     protected void onResume() {
         super.onResume();
+        refershGiftsBadge();
+
         int nearVersion = dataManager.getNearBySitesVersion();
         int favsVersion = dataManager.getFavouriteSitesVersion();
 
@@ -443,6 +469,28 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             }
         }
         loaded = true;
+    }
+
+    private void refershGiftsBadge(){
+        int badge = dataManager.getGiftsBadge(getApplicationContext());
+        TextView tvBadgeGifts = (TextView) findViewById(R.id.tvBadgeGifts);
+        tvBadgeGifts.setText(String.valueOf(badge));
+        if(badge > 0) {
+            tvBadgeGifts.setVisibility(View.VISIBLE);
+        }else{
+            tvBadgeGifts.setVisibility(View.GONE);
+        }
+    }
+
+    private void refershNotificationsBadge(){
+        int badge = dataManager.getNotificationsBadge(getApplicationContext());
+        TextView tvBadgeNotifications = (TextView) findViewById(R.id.tvBadgeNotifications);
+        tvBadgeNotifications.setText(String.valueOf(badge));
+        if(badge > 0) {
+            tvBadgeNotifications.setVisibility(View.VISIBLE);
+        }else{
+            tvBadgeNotifications.setVisibility(View.GONE);
+        }
     }
 
     @Override

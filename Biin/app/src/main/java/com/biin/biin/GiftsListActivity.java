@@ -30,7 +30,7 @@ public class GiftsListActivity extends AppCompatActivity {
 
     private BNDataManager dataManager;
     private LocalBroadcastManager localBroadcastManager;
-    private BroadcastReceiver broadcastReceiver;
+    private BroadcastReceiver notificationsReceiver;
     private BNGiftAdapter adapter;
 
     @Override
@@ -41,16 +41,19 @@ public class GiftsListActivity extends AppCompatActivity {
         dataManager = BNAppManager.getInstance().getDataManagerInstance();
         localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
 
-        broadcastReceiver = new BroadcastReceiver() {
+        notificationsReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String type = intent.getStringExtra("TYPE");
                 if(type.equals("GIFT")) {
                     Log.e(TAG, "Gift recibido por notificacion");
+                    int position = intent.getIntExtra("POSITION", 0);
                     if(adapter != null){
-                        if(adapter.getItemCount() > 0){
-                            adapter.notifyItemInserted(0);
-                        }
+                        List<BNGift> gifts = new ArrayList<>(dataManager.getBNGifts().values());
+                        adapter.addItem(gifts.get(position));
+                        adapter.notifyItemInserted(0);
+                        RecyclerView rvSlides = (RecyclerView) findViewById(R.id.rvGiftsList);
+                        rvSlides.scrollToPosition(0);
                     }else{
                         setUpList();
                     }
@@ -80,7 +83,7 @@ public class GiftsListActivity extends AppCompatActivity {
             }
         });
 
-        dataManager.clearGiftsBadge();
+        dataManager.clearGiftsBadge(getApplicationContext());
     }
 
     private void setUpList(){
@@ -100,12 +103,12 @@ public class GiftsListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         IntentFilter filter = new IntentFilter("MESSAGING_SERVICE");
-        localBroadcastManager.registerReceiver(broadcastReceiver, filter);
+        localBroadcastManager.registerReceiver(notificationsReceiver, filter);
     }
 
     @Override
     protected void onStop() {
-        localBroadcastManager.unregisterReceiver(broadcastReceiver);
+        localBroadcastManager.unregisterReceiver(notificationsReceiver);
         super.onStop();
     }
 

@@ -1,5 +1,7 @@
 package com.biin.biin.Managers;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -16,6 +18,8 @@ import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
+import com.biin.biin.R;
+import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNLikesListener;
 
 import org.json.JSONException;
@@ -58,9 +62,6 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     private static int nearBySitesVersion = 1;
     private static int favouriteSitesVersion = 1;
     private static int favouriteElementsVersion = 1;
-
-    private static int giftsBadge = 0;
-    private static int notificationsBadge = 0;
 
     private BNLikesListener likesListener;
 
@@ -888,30 +889,50 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
 
     /****************** Badges start ******************/
 
-    public int getGiftsBadge(){
+    public int getGiftsBadge(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        int giftsBadge = preferences.getInt(BNUtils.BNStringExtras.BNGiftBadge, 0);
         return giftsBadge;
     }
 
-    public int incrementGiftsBadge() {
+    public int incrementGiftsBadge(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        int giftsBadge = preferences.getInt(BNUtils.BNStringExtras.BNGiftBadge, 0);
         giftsBadge++;
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(BNUtils.BNStringExtras.BNGiftBadge, giftsBadge);
+        editor.commit();
         return giftsBadge;
     }
 
-    public void clearGiftsBadge() {
-        giftsBadge = 0;
+    public void clearGiftsBadge(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(BNUtils.BNStringExtras.BNGiftBadge, 0);
+        editor.commit();
     }
 
-    public int getNotificationsBadge(){
+    public int getNotificationsBadge(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        int notificationsBadge = preferences.getInt(BNUtils.BNStringExtras.BNNotificationBadge, 0);
         return notificationsBadge;
     }
 
-    public int incrementNotificationsBadge() {
+    public int incrementNotificationsBadge(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        int notificationsBadge = preferences.getInt(BNUtils.BNStringExtras.BNNotificationBadge, 0);
         notificationsBadge++;
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(BNUtils.BNStringExtras.BNNotificationBadge, notificationsBadge);
+        editor.commit();
         return notificationsBadge;
     }
 
-    public void clearNotificationsBadge() {
-        notificationsBadge = 0;
+    public void clearNotificationsBadge(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(BNUtils.BNStringExtras.BNNotificationBadge, 0);
+        editor.commit();
     }
 
 

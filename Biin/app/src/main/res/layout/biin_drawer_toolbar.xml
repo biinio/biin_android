@@ -71,7 +71,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2"
         android:id="@+id/tvBadgeGifts"
         android:layout_alignTop="@+id/vlToolbarGifts"
         android:layout_alignRight="@+id/vlToolbarGifts"
@@ -81,7 +80,8 @@
         android:layout_marginRight="12dp"
         android:textSize="10sp"
         android:textStyle="bold"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/colorWhite"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/vlToolbarNotifications"
@@ -116,7 +116,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="4"
         android:id="@+id/tvBadgeNotifications"
         android:layout_alignTop="@+id/vlToolbarNotifications"
         android:layout_alignRight="@+id/vlToolbarNotifications"
@@ -126,6 +125,7 @@
         android:layout_marginRight="12dp"
         android:textSize="10sp"
         android:textStyle="bold"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/colorWhite"
+        android:visibility="gone" />
 
 </RelativeLayout>
