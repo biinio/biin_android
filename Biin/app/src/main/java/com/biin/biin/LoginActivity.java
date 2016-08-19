@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 BNAppManager.getInstance().getNetworkManagerInstance().getAuthUrl(etEmail.getText().toString(), etPassword.getText().toString()),
-                null,
+                "",
                 loginListener,
                 new Response.ErrorListener() {
                     @Override
@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 BNAppManager.getInstance().getNetworkManagerInstance().getUrlBiinie(identifier),
-                null,
+                "",
                 biiniesListener,
                 new Response.ErrorListener() {
                     @Override

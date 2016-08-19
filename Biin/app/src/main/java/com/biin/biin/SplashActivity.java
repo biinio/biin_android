@@ -188,7 +188,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
-                null,
+                "",
                 initialDataListener,
                 new Response.ErrorListener() {
                     @Override

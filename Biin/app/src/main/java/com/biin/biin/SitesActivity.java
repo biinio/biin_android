@@ -321,7 +321,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                             Request.Method.GET,
                             url,
-                            null,
+                            "",
                             sitesListener,
                             new Response.ErrorListener() {
                                 @Override

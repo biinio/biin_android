@@ -118,7 +118,7 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                         Request.Method.GET,
                         url,
-                        null,
+                        "",
                         sitesListener,
                         new Response.ErrorListener() {
                             @Override

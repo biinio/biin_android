@@ -33,9 +33,6 @@ import com.biin.biin.Volley.Listeners.BNLikesListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ElementsListActivity extends AppCompatActivity implements BNElementsListener.IBNElementsListener, IBNElementsLikeListener, BNLikesListener.IBNLikesListener {
 
     private static final String TAG = "ElementsListActivity";
@@ -138,7 +135,7 @@ public class ElementsListActivity extends AppCompatActivity implements BNElement
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                             Request.Method.GET,
                             url,
-                            null,
+                            "",
                             elementsListener,
                             new Response.ErrorListener() {
                                 @Override

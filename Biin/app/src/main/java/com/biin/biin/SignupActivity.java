@@ -57,7 +57,7 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 BNAppManager.getInstance().getNetworkManagerInstance().getUrlBiinie(identifier),
-                null,
+                "",
                 biiniesListener,
                 new Response.ErrorListener() {
                     @Override

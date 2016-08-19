@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         BNUtils.setWidth(metrics.widthPixels);
         BNUtils.setDensity(metrics.density);
 
-        Log.e(TAG, FirebaseInstanceId.getInstance().getToken());
+        Log.e(TAG, "Token: " + FirebaseInstanceId.getInstance().getToken());
 
         dataManager = BNAppManager.getInstance().getDataManagerInstance();
         analyticsManager = BNAppManager.getInstance().getAnalyticsManagerInstance();
@@ -666,7 +666,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
                         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                                 Request.Method.GET,
                                 url,
-                                null,
+                                "",
                                 elementsListener,
                                 new Response.ErrorListener() {
                                     @Override
@@ -941,7 +941,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
-                null,
+                "",
                 initialDataListener,
                 new Response.ErrorListener() {
                     @Override

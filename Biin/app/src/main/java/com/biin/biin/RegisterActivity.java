@@ -210,7 +210,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 BNAppManager.getInstance().getNetworkManagerInstance().getRegisterUrl(etName.getText().toString(), etLastName.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString(), gender, date),
-                null,
+                "",
                 signupListener,
                 new Response.ErrorListener() {
                     @Override
@@ -243,7 +243,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 BNAppManager.getInstance().getNetworkManagerInstance().getUrlBiinie(identifier),
-                null,
+                "",
                 biiniesListener,
                 new Response.ErrorListener() {
                     @Override

@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.biin.biin.Components.Listeners.IBNGiftActionListener;
+import com.biin.biin.Components.Listeners.IBNSitesLikeListener;
 import com.biin.biin.Entities.BNGift;
 import com.biin.biin.R;
 import com.biin.biin.Utils.BNUtils;
@@ -32,14 +34,16 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
 
     private List<BNGift> gifts;
     private ImageLoader imageLoader;
+    private IBNGiftActionListener giftsListener;
 
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
     private LayoutInflater inflater;
 
-    public BNGiftAdapter(Context context, List<BNGift> gifts) {
+    public BNGiftAdapter(Context context, List<BNGift> gifts, IBNGiftActionListener giftsListener) {
         super();
         this.context = context;
         this.gifts = gifts;
+        this.giftsListener = giftsListener;
         imageLoader = ImageLoader.getInstance();
         viewBinderHelper.setOpenOnlyOne(true);
         inflater = LayoutInflater.from(context);
@@ -84,12 +88,14 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String identifier = gifts.get(position).getIdentifier();
                     gifts.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, gifts.size());
                     viewBinderHelper.closeLayout(String.valueOf(position));
 //                    Toast.makeText(context, "Delete (position: " + position + ")", Toast.LENGTH_SHORT).show();
-                    //TODO informar al server de la eliminacion
+                    // informar al server de la eliminacion
+                    giftsListener.onGiftDeleted(identifier, position);
                 }
             }
         );
