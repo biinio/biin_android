@@ -39,6 +39,7 @@ public class BNNetworkManager {
     private static String URL_ACTIONS = "/history";
     private static String URL_NPS = "/mobile/rating/site";
 
+    private static String URL_GIFT_CLAIM = "/gifts/claim";
     private static String URL_GIFT_REFUSE = "/gifts/refuse";
 
     protected static BNNetworkManager getInstance() {
@@ -134,6 +135,11 @@ public class BNNetworkManager {
 
     public String getTokenRegisterUrl(String identifier){
         String url = getUrlBiinie(identifier) + URL_TOKEN;
+        return url;
+    }
+
+    public String getGiftClaimUrl(String identifier){
+        String url = getUrlBiinie(identifier) + URL_GIFT_CLAIM;
         return url;
     }
 

@@ -63,6 +63,9 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gifts_list);
 
+        Intent i = new Intent(this, BeaconsService.class);
+        stopService(i);
+
         dataManager = BNAppManager.getInstance().getDataManagerInstance();
         localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
 
@@ -84,6 +87,16 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
                         setUpList();
                     }
                     dataManager.clearGiftsBadge(getApplicationContext());
+                }else{
+                    if(type.equals("DELIEVRED")) {
+                        String giftIdentifier = intent.getStringExtra("IDENTIFIER");
+                        if(adapter != null) {
+                            int position = adapter.delieverGift(giftIdentifier);
+                            if(position > -1) {
+                                adapter.notifyItemChanged(position);
+                            }
+                        }
+                    }
                 }
             }
         };
@@ -130,7 +143,7 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
     private void startScaning() {
         proximityManager = new ProximityManager(this);
         proximityManager.configuration().scanMode(ScanMode.BALANCED);
-        proximityManager.configuration().deviceUpdateCallbackInterval(TimeUnit.SECONDS.toMillis(5));
+        proximityManager.configuration().deviceUpdateCallbackInterval(TimeUnit.SECONDS.toMillis(15));
         proximityManager.setIBeaconListener(createIBeaconListener());
     }
 
@@ -242,6 +255,8 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
     protected void onStop() {
         localBroadcastManager.unregisterReceiver(notificationsReceiver);
         proximityManager.stopScanning();
+        Intent i = new Intent(this, BeaconsService.class);
+        startService(i);
         super.onStop();
     }
 

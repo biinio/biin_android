@@ -47,6 +47,7 @@ public class BeaconsService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.e(TAG, "Service stopped");
         proximityManager.stopScanning();
         proximityManager.disconnect();
         proximityManager = null;

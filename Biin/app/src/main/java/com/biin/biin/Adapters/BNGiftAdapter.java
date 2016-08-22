@@ -1,9 +1,11 @@
 package com.biin.biin.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +14,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.biin.biin.BiinApp;
 import com.biin.biin.Components.Listeners.IBNGiftActionListener;
 import com.biin.biin.Components.Listeners.IBNSitesLikeListener;
 import com.biin.biin.Entities.BNGift;
+import com.biin.biin.Entities.Biinie;
+import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.R;
 import com.biin.biin.Utils.BNUtils;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -27,7 +39,7 @@ import java.util.List;
 /**
  * Created by ramirezallan on 8/4/16.
  */
-public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftViewHolder> {
+public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftViewHolder> implements Response.Listener<JSONObject> {
 
     private static final String TAG = "BNGiftAdapter";
     private static Context context;
@@ -54,6 +66,17 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
         this.organizationIdentifier = organizationIdentifier;
     }
 
+    public int delieverGift(String giftIdentifier){
+        int position = -1;
+        for (int i = 0; i < gifts.size(); i++) {
+            if(gifts.get(i).getIdentifier().equals(giftIdentifier)){
+                gifts.get(i).setStatus(BNGift.BNGiftStatus.DELIVERED);
+                position = i;
+            }
+        }
+        return position;
+    }
+
     public void addItem(BNGift gift){
         this.gifts.add(0, gift);
     }
@@ -67,7 +90,7 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
     }
 
     @Override
-    public void onBindViewHolder(BNGiftViewHolder holder, final int position) {
+    public void onBindViewHolder(final BNGiftViewHolder holder, final int position) {
         viewBinderHelper.bind(holder.swipeGift, String.valueOf(position));
         final BNGift item = gifts.get(position);
 
@@ -90,13 +113,33 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
 //        }
 
         String text = context.getString(R.string.SENT);
-        // el beacon ha sido detectado? y es de la misma organization?
-        if(item.getOrganizationIdentifier().equals(organizationIdentifier)){
-            text = context.getString(R.string.READY_TO_CLAIM);
-        }else{
-            if(item.getStatus() == BNGift.BNGiftStatus.SENT){
+        if(item.getStatus() == BNGift.BNGiftStatus.SENT) {
+            if (item.getOrganizationIdentifier().equals(organizationIdentifier)) {
+                text = context.getString(R.string.READY_TO_CLAIM);
+                holder.tvRequest.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                claimGift(item.getIdentifier());
+                                String text = context.getString(R.string.CLAIMED);
+                                holder.tvRequest.setOnClickListener(null);
+                                holder.tvRequest.setText(text);
+                            }
+                        }
+                );
+            } else {
                 text = context.getString(R.string.SENT);
+                holder.tvRequest.setOnClickListener(null);
             }
+        }else{
+            if(item.getStatus() == BNGift.BNGiftStatus.CLAIMED) {
+                text = context.getString(R.string.CLAIMED);
+            }else {
+                if(item.getStatus() == BNGift.BNGiftStatus.DELIVERED) {
+                    text = context.getString(R.string.DELIVERED);
+                }
+            }
+            holder.tvRequest.setOnClickListener(null);
         }
         holder.tvRequest.setText(text);
 
@@ -128,14 +171,59 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
                 }
             }
         );
-        holder.tvRequest.setOnClickListener(
-            new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "Request (position: " + position + ")", Toast.LENGTH_SHORT).show();
-                }
+    }
+
+    private void claimGift(String gift){
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject model = new JSONObject();
+            model.put("giftIdentifier", gift);
+            request.put("model", model);
+        }catch (JSONException e){
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+        String identifier = "";
+
+        if(biinie != null && !biinie.getIdentifier().isEmpty()){
+            identifier = biinie.getIdentifier();
+        }else {
+            SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+            identifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                BNAppManager.getInstance().getNetworkManagerInstance().getGiftClaimUrl(identifier),
+                request,
+                this,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onVolleyError(error);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void onVolleyError(VolleyError error){
+        Log.e(TAG, "Error:" + error.getMessage());
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        Log.e(TAG, "Response:" + response.toString());
+        try {
+            String result = response.getString("result");
+            String status = response.getString("status");
+            if(status.equals("0") && result.equals("1")){
+                Log.e(TAG, "Gift reclamado correctamente.");
+            }else{
+                Log.e(TAG, "Error actualizando el gift en el server.");
             }
-        );
+        } catch (JSONException e) {
+            Log.e(TAG, "Error parseando el JSON.", e);
+        }
     }
 
     @Override
