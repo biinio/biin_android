@@ -38,7 +38,7 @@
     <string name="Value">VALOR</string>
     <string name="Calcel">Cancelar</string>
     <string name="More">más</string>
-    <string name="Gifts">Baul de regalos</string>
+    <string name="Chest">Baul de regalos</string>
     <string name="NearYou">Lugares cercanos a vos</string>
     <string name="MoreFrom">Más de</string>
     <string name="Recomended">Recomendaciones</string>
@@ -262,6 +262,18 @@
     <string name="Accept">Acepto</string>
 
     <string name="Waze">Manejar aquí con Waze</string>
+
+    <string name="Gifts">Regalos</string>
+    <string name="GiftShowSites">Ver locales participantes</string>
+    <string name="CLAIMED">Esperando aprovación</string>
+    <string name="SENT">Visita locales participantes y solicita este regalo!</string>
+    <string name="DELIVERED">Disfruta tu regalo</string>
+    <string name="READY_TO_CLAIM">Reclama ahora</string>
+    <string name="GiftsExpires">Expira:</string>
+
+    <string name="SeeGift">Ver regalo</string>
+    <string name="ReadQRCode">Leer Codigo</string>
+    <string name="SeeConditions">Ver condiciones</string>
 
     <string name="ExitApp">Salir de Biin?</string>
 

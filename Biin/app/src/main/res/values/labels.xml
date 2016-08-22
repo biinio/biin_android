@@ -38,7 +38,7 @@
     <string name="Value">VALUE</string>
     <string name="Calcel">Cancel</string>
     <string name="More">more</string>
-    <string name="Gifts">Treasure chest</string>
+    <string name="Chest">Treasure chest</string>
     <string name="NearYou">Places near you</string>
     <string name="MoreFrom">More from</string>
     <string name="Recomended">Our picks</string>
@@ -266,6 +266,18 @@
     <string name="Accept">Accept</string>
 
     <string name="Waze">Drive there with Waze</string>
+
+    <string name="Gifts">Gifts</string>
+    <string name="GiftShowSites">Show participant stores</string>
+    <string name="CLAIMED">Waiting to be aproved</string>
+    <string name="SENT">Visit our store and request this gift!</string>
+    <string name="DELIVERED">Enjoy this gift!</string>
+    <string name="READY_TO_CLAIM">Clain now</string>
+    <string name="GiftsExpires">Expires:</string>
+
+    <string name="SeeGift">See gift</string>
+    <string name="ReadQRCode">Read QR Code</string>
+    <string name="SeeConditions">See conditions</string>
 
     <string name="ExitApp">Quit Biin?</string>
 

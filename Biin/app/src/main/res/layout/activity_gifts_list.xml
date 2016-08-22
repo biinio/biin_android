@@ -16,7 +16,7 @@ tools:context="com.biin.biin.GiftsListActivity">
     
     <TextView
         android:id="@+id/tvGiftsListTitle"
-        android:text="@string/Gifts"
+        android:text="@string/Chest"
         android:textAllCaps="true"
         android:textColor="@color/colorDarkGrey"
         android:background="@color/colorAccentGray"

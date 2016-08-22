@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private boolean loaded = false;
 
     private int beaconMajor = 0;
-    private double beaconDistance;
+    private double beaconDistance = 100d;
 
     private int total = 0;
 
@@ -834,7 +834,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         ((TextView)findViewById(R.id.tvBeaconLocation)).setText("");
         ((TextView)findViewById(R.id.tvBeaconSubtitle)).setText("");
         beaconMajor = 0;
-        beaconDistance = 0;
+        beaconDistance = 100d;
     }
 
     @Override

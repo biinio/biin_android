@@ -35,6 +35,7 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
     private List<BNGift> gifts;
     private ImageLoader imageLoader;
     private IBNGiftActionListener giftsListener;
+    private String organizationIdentifier = "";
 
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
     private LayoutInflater inflater;
@@ -47,6 +48,10 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
         imageLoader = ImageLoader.getInstance();
         viewBinderHelper.setOpenOnlyOne(true);
         inflater = LayoutInflater.from(context);
+    }
+
+    public void setOrganizationIdentifier(String organizationIdentifier){
+        this.organizationIdentifier = organizationIdentifier;
     }
 
     public void addItem(BNGift gift){
@@ -74,28 +79,36 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
         holder.tvDescription.setText(item.getMessage());
 
         holder.ivGift.setBackgroundColor(item.getPrimaryColor());
-        if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorWhite), item.getPrimaryColor(), item.getSecondaryColor())) {
-            holder.tvName.setTextColor(item.getPrimaryColor());
-            holder.tvRequest.setTextColor(item.getSecondaryColor());
-            holder.tvRequest.setBackgroundColor(item.getPrimaryColor());
-        }else{
+//        if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorWhite), item.getPrimaryColor(), item.getSecondaryColor())) {
+//            holder.tvName.setTextColor(item.getPrimaryColor());
+//            holder.tvRequest.setTextColor(item.getSecondaryColor());
+//            holder.tvRequest.setBackgroundColor(item.getPrimaryColor());
+//        }else{
             holder.tvName.setTextColor(item.getSecondaryColor());
             holder.tvRequest.setTextColor(item.getPrimaryColor());
             holder.tvRequest.setBackgroundColor(item.getSecondaryColor());
+//        }
+
+        String text = context.getString(R.string.SENT);
+        // el beacon ha sido detectado? y es de la misma organization?
+        if(item.getOrganizationIdentifier().equals(organizationIdentifier)){
+            text = context.getString(R.string.READY_TO_CLAIM);
+        }else{
+            if(item.getStatus() == BNGift.BNGiftStatus.SENT){
+                text = context.getString(R.string.SENT);
+            }
         }
+        holder.tvRequest.setText(text);
 
         holder.ivDelete.setOnClickListener(
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String identifier = gifts.get(position).getIdentifier();
                     gifts.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, gifts.size());
                     viewBinderHelper.closeLayout(String.valueOf(position));
-//                    Toast.makeText(context, "Delete (position: " + position + ")", Toast.LENGTH_SHORT).show();
-                    // informar al server de la eliminacion
-                    giftsListener.onGiftDeleted(identifier, position);
+                    giftsListener.onGiftDeleted(item.getIdentifier(), position);
                 }
             }
         );

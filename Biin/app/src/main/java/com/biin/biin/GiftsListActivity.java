@@ -1,5 +1,6 @@
 package com.biin.biin;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,16 +24,25 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Adapters.BNGiftAdapter;
 import com.biin.biin.Components.Listeners.IBNGiftActionListener;
 import com.biin.biin.Entities.BNGift;
+import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNUtils;
+import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
+import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
+import com.kontakt.sdk.android.ble.manager.ProximityManager;
+import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
+import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GiftsListActivity extends AppCompatActivity implements IBNGiftActionListener, Response.Listener<JSONObject> {
 
@@ -41,7 +51,12 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
     private BNDataManager dataManager;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver notificationsReceiver;
+    private List<BNGift> gifts;
     private BNGiftAdapter adapter;
+    private ProximityManagerContract proximityManager;
+    private int beaconMajor = 0;
+    private double beaconDistance = 100d;
+    private String organizationIdentifier = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +74,23 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
                     Log.e(TAG, "Gift recibido por notificacion");
                     int position = intent.getIntExtra("POSITION", 0);
                     if(adapter != null){
-                        List<BNGift> gifts = new ArrayList<>(dataManager.getBNGifts().values());
+                        gifts = new ArrayList<>(dataManager.getBNGifts().values());
                         adapter.addItem(gifts.get(position));
                         adapter.notifyItemInserted(0);
+                        adapter.notifyItemRangeChanged(0, gifts.size());
                         RecyclerView rvSlides = (RecyclerView) findViewById(R.id.rvGiftsList);
                         rvSlides.scrollToPosition(0);
                     }else{
                         setUpList();
                     }
+                    dataManager.clearGiftsBadge(getApplicationContext());
                 }
             }
         };
 
         setUpScreen();
         setUpList();
+        startScaning();
     }
 
     private void setUpScreen() {
@@ -98,7 +116,7 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
 
     private void setUpList(){
         RecyclerView rvSlides = (RecyclerView) findViewById(R.id.rvGiftsList);
-        List<BNGift> gifts = new ArrayList<>(dataManager.getBNGifts().values());
+        gifts = new ArrayList<>(dataManager.getBNGifts().values());
         if (gifts.size() > 0) {
             adapter = new BNGiftAdapter(this, gifts, this);
             rvSlides.setLayoutManager(new LinearLayoutManager(this));
@@ -109,17 +127,129 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
         }
     }
 
+    private void startScaning() {
+        proximityManager = new ProximityManager(this);
+        proximityManager.configuration().scanMode(ScanMode.BALANCED);
+        proximityManager.configuration().deviceUpdateCallbackInterval(TimeUnit.SECONDS.toMillis(5));
+        proximityManager.setIBeaconListener(createIBeaconListener());
+    }
+
+    private IBeaconListener createIBeaconListener() {
+        return new IBeaconListener() {
+            @Override
+            public void onIBeaconDiscovered(IBeaconDevice device, IBeaconRegion region) {
+                Log.e("IBeacon", "IBeacon discovered: " + device.getUniqueId());
+                if ((device.getDistance() + 5d) < beaconDistance) {
+                    BNSite site = dataManager.getBNSiteByMajor(device.getMajor());
+                    if(site != null){
+                        setOrganization(device.getMajor(), device.getDistance(), site.getOrganizationIdentifier());
+                    }
+                }
+            }
+
+            @Override
+            public void onIBeaconsUpdated(List<IBeaconDevice> iBeacons, IBeaconRegion region) {
+                if (iBeacons.size() > 0) {
+                    IBeaconDevice nearest = iBeacons.get(0);
+                    boolean found = false;
+
+                    for (IBeaconDevice device : iBeacons) {
+                        if(device.getMajor() == beaconMajor){
+                            beaconDistance = device.getDistance();
+                            found = true;
+                        }
+
+                        if (device.getDistance() < nearest.getDistance()) {
+                            if (dataManager.getBNSiteByMajor(device.getMajor()) != null) {
+                                nearest = device;
+                            }
+                        }
+                    }
+
+                    if (!found || (nearest.getMajor() != beaconMajor && (nearest.getDistance() + 5d) <  beaconDistance)) {
+                        BNSite site = dataManager.getBNSiteByMajor(nearest.getMajor());
+                        if(site != null){
+                            setOrganization(nearest.getMajor(), nearest.getDistance(), site.getOrganizationIdentifier());
+                        }
+                    }
+                } else {
+                    unsetOrganization();
+                }
+            }
+
+            @Override
+            public void onIBeaconLost(IBeaconDevice device, IBeaconRegion region) {
+                Log.e("IBeacon", "IBeacon lost: " + device.getUniqueId());
+                if(device.getMajor() == beaconMajor){
+                    unsetOrganization();
+                }
+            }
+        };
+    }
+
+    private void setOrganization(int beaconMajor, double beaconDistance, String organizationIdentifier){
+        this.beaconMajor = beaconMajor;
+        this.beaconDistance = beaconDistance;
+        this.organizationIdentifier = organizationIdentifier;
+        Log.e(TAG, "Current organization identifier: " + organizationIdentifier);
+        if(adapter != null) {
+            adapter.setOrganizationIdentifier(this.organizationIdentifier);
+            adapter.notifyItemRangeChanged(0, gifts.size());
+        }
+//        if(gifts != null){
+//            for (int i = 0; i < gifts.size(); i++) {
+//                if(gifts.get(i).getOrganizationIdentifier().equals(organizationIdentifier)){
+//                    adapter.notifyItemChanged(i);
+//                }
+//            }
+//        }
+    }
+
+    private void unsetOrganization(){
+        beaconMajor = 0;
+        beaconDistance = 100d;
+        organizationIdentifier = "";
+        Log.e(TAG, "Current organization identifier: " + organizationIdentifier);
+        if(adapter != null) {
+            adapter.setOrganizationIdentifier(this.organizationIdentifier);
+            adapter.notifyItemRangeChanged(0, gifts.size());
+        }
+    }
+
+    private void startScanning() {
+        if (BluetoothAdapter.getDefaultAdapter().isEnabled()) { //bluetooth active
+            proximityManager.connect(new OnServiceReadyListener() {
+                @Override
+                public void onServiceReady() {
+                    proximityManager.startScanning();
+                    Log.e(TAG, "Start scanning");
+                }
+            });
+        } else {
+            Log.e(TAG, "Bluetooth apagado");
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         IntentFilter filter = new IntentFilter("MESSAGING_SERVICE");
         localBroadcastManager.registerReceiver(notificationsReceiver, filter);
+        startScanning();
     }
 
     @Override
     protected void onStop() {
         localBroadcastManager.unregisterReceiver(notificationsReceiver);
+        proximityManager.stopScanning();
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        proximityManager.disconnect();
+        proximityManager = null;
+        super.onDestroy();
     }
 
     @Override
@@ -128,7 +258,6 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
         try {
             JSONObject model = new JSONObject();
             model.put("giftIdentifier", gift);
-//            model.put("platform", "android");
             request.put("model", model);
         }catch (JSONException e){
             Log.e(TAG, "Error:" + e.getMessage());

@@ -112,13 +112,12 @@
                         android:layout_width="128dp"
                         android:layout_height="128dp"
                         android:id="@+id/ivGiftImage"
-                        android:src="@drawable/parfait"
                         android:layout_marginRight="6dp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Visit our site and request this gift!"
+                        android:text="@string/SENT"
                         android:id="@+id/tvRequestGift"
                         android:gravity="center"
                         android:padding="12dp"
@@ -132,7 +131,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Friday, Jul 22"
                         android:id="@+id/tvGiftDate"
                         android:layout_alignTop="@+id/ivGiftImage"
                         android:layout_toEndOf="@+id/ivGiftImage"
@@ -143,7 +141,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tacos"
                         android:id="@+id/tvGiftName"
                         android:layout_below="@+id/tvGiftDate"
                         android:layout_alignEnd="@+id/tvRequestGift"
@@ -155,7 +152,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Para aquellos amantes del sabor"
                         android:id="@+id/tvGiftDetails"
                         android:layout_below="@+id/tvGiftName"
                         android:layout_alignEnd="@+id/tvGiftName"
