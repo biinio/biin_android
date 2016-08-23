@@ -112,9 +112,23 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
             Log.e(TAG, "No se tienen permisos de localizacion.");
         }else{
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            getInitialData(getLatLon());
         }
+    }
 
-        getInitialData(getLatLon());
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == LOCATION_PERMISSION_REQUEST){
+            if(permissions[0].equals(android.Manifest.permission.ACCESS_FINE_LOCATION) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getInitialData(getLatLon());
+            }else{
+                Log.e(TAG, "No se tienen permisos de localizacion.");
+                tvLoading.setVisibility(View.GONE);
+                pbLoading.setVisibility(View.GONE);
+            }
+        }
     }
 
     private String getLatLon(){
@@ -262,7 +276,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         String sent = preferences.getString(BNUtils.BNStringExtras.FCMToken, "");
 
-        if(biinie != null && !biinie.getIdentifier().isEmpty()){
+        if(biinie != null && biinie.getIdentifier() != null && !biinie.getIdentifier().isEmpty()){
             identifier = biinie.getIdentifier();
         }else {
             identifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");

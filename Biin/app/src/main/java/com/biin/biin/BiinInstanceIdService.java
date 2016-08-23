@@ -58,7 +58,7 @@ public class BiinInstanceIdService extends FirebaseInstanceIdService implements 
         Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
         String identifier = "";
 
-        if(biinie != null && !biinie.getIdentifier().isEmpty()){
+        if(biinie != null && biinie.getIdentifier() != null && !biinie.getIdentifier().isEmpty()){
             identifier = biinie.getIdentifier();
         }else {
             SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);

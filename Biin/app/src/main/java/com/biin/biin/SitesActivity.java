@@ -57,11 +57,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.uber.sdk.android.core.UberSdk;
-import com.uber.sdk.android.rides.RideParameters;
-import com.uber.sdk.android.rides.RideRequestButton;
-import com.uber.sdk.core.auth.Scope;
-import com.uber.sdk.rides.client.SessionConfiguration;
+//import com.uber.sdk.android.core.UberSdk;
+//import com.uber.sdk.android.rides.RideParameters;
+//import com.uber.sdk.android.rides.RideRequestButton;
+//import com.uber.sdk.core.auth.Scope;
+//import com.uber.sdk.rides.client.SessionConfiguration;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -129,14 +129,14 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
     }
 
     private void setUpUber(){
-        SessionConfiguration config = new SessionConfiguration.Builder()
-                .setClientId("2zDN6GkBgADY9FApz8dPsKK5hXPlmKvD") //This is necessary
-                //.setRedirectUri("YOUR_REDIRECT_URI") //This is necessary if you'll be using implicit grant
-                .setEnvironment(SessionConfiguration.Environment.SANDBOX) //Useful for testing your app in the sandbox environment
-                .setScopes(Arrays.asList(Scope.PROFILE, Scope.RIDE_WIDGETS)) //Your scopes for authentication here
-                .build();
-        //This is a convenience method and will set the default config to be used in other components without passing it directly.
-        UberSdk.initialize(config);
+//        SessionConfiguration config = new SessionConfiguration.Builder()
+//                .setClientId("2zDN6GkBgADY9FApz8dPsKK5hXPlmKvD") //This is necessary
+//                //.setRedirectUri("YOUR_REDIRECT_URI") //This is necessary if you'll be using implicit grant
+//                .setEnvironment(SessionConfiguration.Environment.SANDBOX) //Useful for testing your app in the sandbox environment
+//                .setScopes(Arrays.asList(Scope.PROFILE, Scope.RIDE_WIDGETS)) //Your scopes for authentication here
+//                .build();
+//        //This is a convenience method and will set the default config to be used in other components without passing it directly.
+//        UberSdk.initialize(config);
     }
 
     private void setUpScreen(){
@@ -477,15 +477,16 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
 //            @Override
 //            public void onClick(View v) {
 //                Toast.makeText(getBaseContext(), "Uber", Toast.LENGTH_SHORT).show();
-//            }
+//            } //TODO arreglar uber
 //        });
         Location pickUpLocation = BNAppManager.getInstance().getPositionManagerInstance().getLastLocation();
         double lat = (double)currentSite.getLatitude();
         double lon = (double)currentSite.getLongitude();
-        RideParameters rideParams = new RideParameters.Builder()
-                .setPickupLocation(pickUpLocation.getLatitude(), pickUpLocation.getLongitude(), null, null)
-                .setDropoffLocation(lat, lon, currentSite.getTitle(), currentSite.getStreetAddress1())
-                .build();
+//        RideParameters rideParams = new RideParameters.Builder()
+//                .setPickupLocation(pickUpLocation.getLatitude(), pickUpLocation.getLongitude(), null, null)
+//                .setDropoffLocation(lat, lon, currentSite.getTitle(), currentSite.getStreetAddress1())
+//                .build();
+
 //        tvMapUber.setRideParameters(rideParams);
 
         tvMapClose.setOnClickListener(new View.OnClickListener() {

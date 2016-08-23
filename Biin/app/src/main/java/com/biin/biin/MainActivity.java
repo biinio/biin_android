@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -74,6 +75,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity implements HighlightsPagerListener.IBNHighlightsListener, IBNSitesLikeListener, BNInitialDataListener.IBNInitialDataListener {
 
     private static final String TAG = "MainActivity";
+    private static final int REQUEST_ENABLE_BT = 101;
 
     private TextView tvNearYou, tvFavouritePlaces;
     private CardRecyclerView rvNearSites, rvFavouritePlaces;
@@ -309,6 +311,15 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             }
         });
 
+        LinearLayout vlLoyalties = (LinearLayout) findViewById(R.id.vlToolbarLoyalty);
+        vlLoyalties.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent i = new Intent(MainActivity.this, LoyaltyListActivity.class);
+//                startActivity(i);
+            }
+        });
+
         RelativeLayout rlDrawer = (RelativeLayout) findViewById(R.id.bnNavView);
         rlDrawer.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -416,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
         Intent i = new Intent(this, BeaconsService.class);
         stopService(i);
-        startScanning();
+        checkBluetooth();
     }
 
     @Override
@@ -701,39 +712,60 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         }
     }
 
-    private void startScanning() {
-        if(BluetoothAdapter.getDefaultAdapter().isEnabled()) { //bluetooth active
-            proximityManager.connect(new OnServiceReadyListener() {
-                @Override
-                public void onServiceReady() {
-                    proximityManager.startScanning();
-                    Log.e(TAG, "Start scanning");
-                }
-            });
-        }else{
-            Log.e(TAG, "Bluetooth apagado");
-//            mostrar alerta de que seria bueno encenderlo (?)
-            final RelativeLayout rlBluetoothAlert = (RelativeLayout) findViewById(R.id.rlBluetoothAlert);
-            ImageView ivBluetoothClose = (ImageView) findViewById(R.id.ivBluetoothClose);
-            rlBluetoothAlert.setVisibility(View.VISIBLE);
+    private void checkBluetooth() {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            Log.e(TAG, "Bluetooth no disponible");
+            Toast.makeText(this, R.string.BluetoothErrorTitle, Toast.LENGTH_SHORT).show();
+        }else {
+            if (bluetoothAdapter.isEnabled()) { //bluetooth active
+                startScanning();
+            } else {
+                Log.e(TAG, "Bluetooth apagado");
 
-            rlBluetoothAlert.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent();
-                    i.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-                    startActivity(i);
-                    rlBluetoothAlert.setVisibility(View.GONE);
-                }
-            });
+                /*final RelativeLayout rlBluetoothAlert = (RelativeLayout) findViewById(R.id.rlBluetoothAlert);
+                ImageView ivBluetoothClose = (ImageView) findViewById(R.id.ivBluetoothClose);
+                rlBluetoothAlert.setVisibility(View.VISIBLE);
 
-            ivBluetoothClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    rlBluetoothAlert.setVisibility(View.GONE);
-                }
-            });
+                rlBluetoothAlert.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent();
+                        i.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                        startActivity(i);
+                        rlBluetoothAlert.setVisibility(View.GONE);
+                    }
+                });
+
+                ivBluetoothClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rlBluetoothAlert.setVisibility(View.GONE);
+                    }
+                });*/
+
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_ENABLE_BT && resultCode == RESULT_OK){
+            startScanning();
+        }
+    }
+
+    private void startScanning(){
+        proximityManager.connect(new OnServiceReadyListener() {
+            @Override
+            public void onServiceReady() {
+                proximityManager.startScanning();
+                Log.e(TAG, "Start scanning");
+            }
+        });
     }
 
     private IBeaconListener createIBeaconListener() {

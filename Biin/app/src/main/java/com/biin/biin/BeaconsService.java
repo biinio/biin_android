@@ -2,6 +2,7 @@ package com.biin.biin;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -87,14 +88,14 @@ public class BeaconsService extends Service {
             public void onRegionEntered(IBeaconRegion region) {
                 //IBeacon region has been entered
                 Log.e("IBeaconRegion", "IBeaconRegion entered " + region.getIdentifier() + " (" + region.getMinor() + ", " + region.getMajor() + ")");
-                sendNotification("IBeaconRegion entered", "Region entered " + region.getIdentifier() + " (" + region.getMinor() + ", " + region.getMajor() + ")");
+                sendNotification(region.getMajor(), "IBeaconRegion entered", "Region entered " + region.getIdentifier() + " (" + region.getMinor() + ", " + region.getMajor() + ")");
             }
 
             @Override
             public void onRegionAbandoned(IBeaconRegion region) {
                 //IBeacon region has been abandoned
                 Log.e("IBeaconRegion", "Region abandoned " + region.getIdentifier() + " (" + region.getMinor() + ", " + region.getMajor() + ")");
-                sendNotification("IBeaconRegion abandoned", "Region abandoned " + region.getIdentifier() + " (" + region.getMinor() + ", " + region.getMajor() + ")");
+                sendNotification(region.getMajor(), "IBeaconRegion abandoned", "Region abandoned " + region.getIdentifier() + " (" + region.getMinor() + ", " + region.getMajor() + ")");
             }
 
             @Override
@@ -115,7 +116,7 @@ public class BeaconsService extends Service {
             @Override
             public void onIBeaconDiscovered(IBeaconDevice ibeacon, IBeaconRegion region) {
                 //Beacon discovered
-                Log.e(TAG, "Beacon discovered");
+                Log.e(TAG, "Beacon discovered " + ibeacon.getMajor());
             }
         };
     }
@@ -131,7 +132,7 @@ public class BeaconsService extends Service {
                         .setIdentifier(beacon.getIdentfier())
                         .setProximity(UUID.fromString("aabbccdd-a101-b202-c303-aabbccddeeff"))
                         .setMajor(beacon.getMajor())
-                        .setMinor(1)//BeaconRegion.ANY_MINOR
+                        .setMinor(beacon.getMinor())
                         .build();
                 beaconRegions.add(region);
                 i++;
@@ -141,16 +142,22 @@ public class BeaconsService extends Service {
         return beaconRegions;
     }
 
-    private void sendNotification(String title, String text){
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    private void sendNotification(int id, String title, String text){
+        if(id > 1) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        Notification n  = new Notification.Builder(this)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setAutoCancel(true).build();
+            Intent resultIntent = new Intent(this, SignupActivity.class);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        notificationManager.notify(0, n);
+            Notification n = new Notification.Builder(this)
+                    .setContentTitle(title)
+                    .setContentText(text)
+                    .setContentIntent(resultPendingIntent)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setAutoCancel(true).build();
+
+            notificationManager.notify(id, n);
+        }
     }
 
     @Override

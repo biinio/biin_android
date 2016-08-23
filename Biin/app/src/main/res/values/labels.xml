@@ -194,6 +194,7 @@
     //BluetoothErrorText">Please turn on blutooth and enable Biin to use it.
     //BluetoothErrorButton">Go to settings.
 
+    <string name="BluetoothNotAvailable">Device does not support Bluetooth</string>
     <string name="BluetoothErrorText">Biin uses a low energy bluetooth to give you a better experience on the places you visit.</string>
     <string name="BluetoothErrorTitle">Biin works better with bluetooth enabled!</string>
     <string name="BluetoothErrorButton">Continue</string>

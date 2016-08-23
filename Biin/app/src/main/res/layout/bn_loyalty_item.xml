@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/cvLoyaltyItem">
+
+        <com.chauthai.swipereveallayout.SwipeRevealLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/swipeLoyalty"
+            app:mode="normal"
+            app:dragEdge="right">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <RelativeLayout
+                    android:layout_width="72dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+
+                    <ImageView
+                        android:layout_width="72dp"
+                        android:layout_height="108dp"
+                        android:id="@+id/ivLoyaltyDelete"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_feedback_red"
+                        android:tint="@color/colorWhite"
+                        android:src="@drawable/delete"
+                        android:scaleType="center"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true" />
+
+                </RelativeLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rlLoyaltyItem"
+                    android:padding="6dp"
+                    android:layout_alignParentStart="true"
+                    android:background="@color/colorWhite">
+
+                    <ImageView
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:id="@+id/ivLoyaltyImage"
+                        android:layout_marginRight="6dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvLoyaltyDate"
+                        android:layout_alignTop="@+id/ivLoyaltyImage"
+                        android:layout_toEndOf="@+id/ivLoyaltyImage"
+                        android:textAllCaps="true"
+                        android:textSize="10sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="right"
+                        android:text="TUESDAY AUG 23" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvLoyaltyName"
+                        android:layout_below="@+id/tvLoyaltyDate"
+                        android:textColor="@color/colorGreen"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_alignEnd="@+id/tvLoyaltyDate"
+                        android:layout_toEndOf="@+id/ivLoyaltyImage"
+                        android:text="Senora Candy"
+                        android:minLines="1"
+                        android:singleLine="false"
+                        android:ellipsize="marquee"
+                        android:layout_marginTop="-5dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvLoyaltyDetails"
+                        android:layout_below="@+id/tvLoyaltyName"
+                        android:layout_alignEnd="@+id/tvLoyaltyName"
+                        android:layout_toEndOf="@+id/ivLoyaltyImage"
+                        android:text="Nuestra tarjeta"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvLoyaltyText"
+                        android:text="Por la compra de 2500 reclama una estrella"
+                        android:layout_below="@+id/tvLoyaltyDetails"
+                        android:layout_alignEnd="@+id/tvLoyaltyDetails"
+                        android:layout_toEndOf="@+id/ivLoyaltyImage"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvLoyaltyEnroll"
+                        android:text="Enroll Now!"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:layout_alignBottom="@+id/ivLoyaltyImage"
+                        android:layout_alignEnd="@+id/tvLoyaltyText"
+                        android:layout_toEndOf="@+id/ivLoyaltyImage"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </FrameLayout>
+
+        </com.chauthai.swipereveallayout.SwipeRevealLayout>
+
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>

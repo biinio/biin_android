@@ -189,6 +189,7 @@
     <string name="HardwareErrorText">Lo sentimos mucho pero este dispositivo no soporta Biin, porfavor cierra esta applicación.</string>
     <string name="HardwareErrorButton">Continuar</string>
 
+    <string name="BluetoothNotAvailable">El dispositivo no soporta Bluetooth</string>
     <string name="BluetoothErrorTitle">Habilita el bluetooth para que biin funcione mejor.</string>
     <string name="BluetoothErrorText">Biin utiliza el bluetooth de baja energía para darte mejores recomendaciones de los lugares que visitas.</string>
     <string name="BluetoothErrorButton">Continuar</string>

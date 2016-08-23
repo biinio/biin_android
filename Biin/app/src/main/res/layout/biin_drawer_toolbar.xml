@@ -39,11 +39,41 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/vlToolbarGifts"
+        android:id="@+id/vlToolbarLoyalty"
         android:orientation="vertical"
         android:layout_width="64dp"
         android:layout_height="48dp"
         android:layout_toEndOf="@+id/vlToolbarMenu"
+        android:gravity="center"
+        android:background="@drawable/bg_feedback" >
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/ivToolbarLoyalty"
+            android:src="@drawable/wallet"
+            android:scaleType="fitXY"
+            android:background="@android:color/transparent"
+            android:tint="@color/colorWhite"
+            android:layout_marginTop="-8dp"
+            android:layout_marginBottom="-8dp"
+            android:padding="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loyalties"
+            android:id="@+id/tvToolbarLoyalty"
+            android:textSize="8sp"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vlToolbarGifts"
+        android:orientation="vertical"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:layout_toEndOf="@id/vlToolbarLoyalty"
         android:gravity="center"
         android:background="@drawable/bg_feedback">
 
