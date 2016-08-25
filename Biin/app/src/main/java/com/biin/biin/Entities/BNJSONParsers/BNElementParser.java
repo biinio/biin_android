@@ -69,7 +69,7 @@ public class BNElementParser {
                 element.setPrice(objectElement.getString("price"));
             }
             if (objectElement.has("hasPrice")) {
-                element.setHasDiscount(BNUtils.getBooleanFromString(objectElement.getString("hasPrice")));
+                element.setHasPrice(BNUtils.getBooleanFromString(objectElement.getString("hasPrice")));
             }
             if (objectElement.has("listPrice")) {
                 element.setListPrice(objectElement.getString("listPrice"));

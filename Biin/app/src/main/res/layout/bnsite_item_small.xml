@@ -74,25 +74,21 @@
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:id="@+id/ivLike"
                     android:tint="@color/colorWhite"
-                    android:src="@drawable/like_small"
+                    android:src="@drawable/like_empty"
                     android:visibility="visible"
-                    android:layout_marginTop="-8dp"
-                    android:layout_marginBottom="-8dp"
                     android:scaleType="fitXY" />
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:id="@+id/ivLiked"
                     android:tint="@color/colorWhite"
-                    android:src="@drawable/liked_small"
+                    android:src="@drawable/like_filled"
                     android:visibility="gone"
-                    android:layout_marginTop="-8dp"
-                    android:layout_marginBottom="-8dp"
                     android:scaleType="fitXY" />
 
             </LinearLayout>

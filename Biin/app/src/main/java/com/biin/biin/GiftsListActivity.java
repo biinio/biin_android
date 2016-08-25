@@ -28,6 +28,7 @@ import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
+import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
 import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
@@ -109,20 +110,11 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
     private void setUpScreen() {
         Typeface lato_regular = BNUtils.getLato_regular();
 
-        TextView tvTitle = (TextView) findViewById(R.id.tvGiftsListTitle);
-        tvTitle.setTypeface(lato_regular);
-        tvTitle.setLetterSpacing(0.3f);
-
         TextView tvGifts = (TextView) findViewById(R.id.tvEmptyGifts);
         tvGifts.setTypeface(lato_regular);
         tvGifts.setLetterSpacing(0.3f);
 
-        findViewById(R.id.ivGiftsListBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        BNToolbar toolbar = new BNToolbar(this, getResources().getString(R.string.Chest));
 
         dataManager.clearGiftsBadge(getApplicationContext());
     }

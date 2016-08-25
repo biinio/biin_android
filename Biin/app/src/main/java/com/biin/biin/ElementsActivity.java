@@ -18,11 +18,9 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Components.Listeners.IBNToolbarListener;
 import com.biin.biin.Entities.BNElement;
-import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Entities.BiinieAction;
 import com.biin.biin.Managers.BNAnalyticsManager;
@@ -34,8 +32,6 @@ import com.biin.biin.Volley.Listeners.BNLikesListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Calendar;
 
 public class ElementsActivity extends AppCompatActivity implements IBNToolbarListener, BNLikesListener.IBNLikesListener {
 
@@ -168,7 +164,7 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
                 tvAction.setVisibility(View.GONE);
             }
 
-            BNToolbar toolbar = new BNToolbar(this, currentElement.getShowcase().getSite().getOrganization().getPrimaryColor(), currentElement.getShowcase().getSite().getOrganization().getSecondaryColor(), currentElement.isUserLiked(), true, false, false, false, showMore, currentElement.getShowcase().getSite().getOrganization().getName());
+            BNToolbar toolbar = new BNToolbar(this, true, currentElement.isUserLiked(), true, showMore, currentElement.getShowcase().getSite().getOrganization().getBrand());
             toolbar.setListener(this);
 
             tvMore = (TextView)findViewById(R.id.tvToolbarMore);

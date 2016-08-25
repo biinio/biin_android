@@ -192,18 +192,20 @@
                     android:layout_height="56dp"
                     android:id="@+id/ivElementLike"
                     android:tint="@color/colorWhite"
-                    android:src="@drawable/like_small"
+                    android:src="@drawable/like_empty"
                     android:visibility="gone"
-                    android:scaleType="fitXY"/>
+                    android:scaleType="fitXY"
+                    android:padding="8dp" />
 
                 <ImageView
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:id="@+id/ivElementLiked"
                     android:tint="@color/colorWhite"
-                    android:src="@drawable/liked_small"
-                    android:visibility="gone"
-                    android:scaleType="fitXY" />
+                    android:src="@drawable/like_filled"
+                    android:scaleType="fitXY"
+                    android:padding="8dp"
+                    android:visibility="gone" />
 
             </FrameLayout>
 

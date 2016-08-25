@@ -13,6 +13,7 @@
     <meta-data
         android:name="com.facebook.sdk.ApplicationId"
         android:value="@string/app_id" />
+
     <meta-data
         android:name="kontakt.io.API_KEY"
         android:value="@string/kontakt_io_api_key" />
@@ -31,13 +32,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <activity
             android:name=".SignupActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -81,15 +80,23 @@
             android:name=".GiftsListActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".NotificationsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoyaltyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoyaltyListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".LoadActivity">
+        <activity
+            android:name=".LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="biin.io"
                     android:scheme="https" />
@@ -131,8 +138,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".LoyaltyActivity" />
-        <activity android:name=".LoyaltyListActivity"></activity>
     </application>
 
 </manifest>

@@ -84,7 +84,7 @@ public class BNUtils {
 
     public static Boolean getBooleanFromString(String value){
         // obtener un valor booleano a partir del string recibido ej.: "1" / "0"
-        return "1".equals(value);
+        return value.equals("1");
     }
 
     public static ColorMatrix getColorMatrixFromColor(int color){

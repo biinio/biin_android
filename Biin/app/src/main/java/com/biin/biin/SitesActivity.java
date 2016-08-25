@@ -15,10 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -67,7 +65,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -205,7 +202,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             tvMapPhone.setText(getResources().getString(R.string.Phone) + ": " + currentSite.getPhoneNumber());
             tvMapEmail.setText(getResources().getString(R.string.Email) + ": " + currentSite.getEmail());
 
-            BNToolbar toolbar = new BNToolbar(this, currentSite.getOrganization().getPrimaryColor(), currentSite.getOrganization().getSecondaryColor(), currentSite.isUserLiked(), true, true, true, true, false);
+            BNToolbar toolbar = new BNToolbar(this, true, currentSite.isUserLiked(), true, true, true, true);
             toolbar.setListener(this);
 
             if(currentSite.getOrganization() != null && currentSite.getOrganization().isHasNPS()){

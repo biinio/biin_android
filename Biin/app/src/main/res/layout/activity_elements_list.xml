@@ -6,41 +6,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.biin.biin.ElementsListActivity">
 
-    <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:id="@+id/ivElementsListBack"
-        android:src="@drawable/left_arrow"
-        android:background="@color/colorLightGrey"
-        android:scaleType="center" />
-
-    <TextView
-        android:id="@+id/tvElementsListTitle"
-        android:text="@string/Collections"
-        android:textAllCaps="true"
-        android:textColor="@color/colorDarkGrey"
-        android:background="@color/colorAccentGray"
-        android:textSize="12dp"
+    <include
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/ivElementsListBack"
-        android:layout_alignBottom="@+id/ivElementsListBack"
-        android:layout_alignTop="@+id/ivElementsListBack"
-        android:gravity="center"
-        android:layout_toLeftOf="@+id/ivElementsListBack" />
+        layout="@layout/biin_toolbar"
+        android:id="@+id/elements_list_toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/rvElementsList"
-        android:layout_alignStart="@+id/ivElementsListBack"
+        android:layout_alignStart="@+id/elements_list_toolbar"
         tools:listitem="@layout/bnelement_item"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/ivElementsListBack" />
+        android:layout_below="@+id/elements_list_toolbar" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -48,20 +33,18 @@
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
         android:gravity="center"
-        android:layout_below="@+id/ivElementsListBack"
+        android:layout_below="@+id/elements_list_toolbar"
         android:visibility="gone"
         android:id="@+id/vlAddFavouriteElements">
 
         <ImageView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/ivEmptyFavourites"
             android:layout_gravity="center_horizontal"
             android:scaleType="fitXY"
-            android:src="@drawable/liked_small"
-            android:tint="@color/colorPrimaryDark"
-            android:layout_marginBottom="-25dp"
-            android:layout_marginTop="-40dp" />
+            android:src="@drawable/like_filled"
+            android:tint="@color/colorPrimaryDark" />
 
         <TextView
             android:layout_width="wrap_content"

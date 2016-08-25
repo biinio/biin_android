@@ -14,15 +14,13 @@
         android:visibility="invisible">
 
         <ImageView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/ivEmptyFavourites"
             android:layout_gravity="center_horizontal"
             android:scaleType="fitXY"
-            android:src="@drawable/liked_small"
-            android:tint="@color/colorWhite"
-            android:layout_marginBottom="-25dp"
-            android:layout_marginTop="-40dp" />
+            android:src="@drawable/like_filled"
+            android:tint="@color/colorWhite" />
 
         <TextView
             android:layout_width="wrap_content"

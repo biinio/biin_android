@@ -26,6 +26,7 @@ import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
+import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNElementsListener;
 import com.biin.biin.Volley.Listeners.BNLikesListener;
@@ -51,6 +52,8 @@ public class ElementsListActivity extends AppCompatActivity implements BNElement
 
     private int favouriteElementsVersion;
     private long animDuration = 300;
+
+    private BNToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,33 +90,24 @@ public class ElementsListActivity extends AppCompatActivity implements BNElement
     private void setUpScreen(){
         Typeface lato_regular = BNUtils.getLato_regular();
 
-        tvTitle = (TextView)findViewById(R.id.tvElementsListTitle);
-        tvTitle.setTypeface(lato_regular);
-        tvTitle.setLetterSpacing(0.3f);
-
         TextView tvFavorites = (TextView)findViewById(R.id.tvEmptyFavourites);
         tvFavorites.setTypeface(lato_regular);
         tvFavorites.setLetterSpacing(0.3f);
-
-        findViewById(R.id.ivElementsListBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         biinie = dataManager.getBiinie();
         favouriteElementsVersion = dataManager.getFavouriteElementsVersion();
 
         likesListener = new BNLikesListener();
         likesListener.setListener(this);
+
+        toolbar = new BNToolbar(this, getResources().getString(R.string.Collections));
     }
 
     private void loadElements() {
         currentCategory = dataManager.getBNCategory(categoryIdentifier);
 
         if (currentCategory != null) {
-            tvTitle.setText(getResources().getIdentifier(currentCategory.getIdentifier(), "string", getPackageName()));
+            toolbar.setTitle(getResources().getString(getResources().getIdentifier(currentCategory.getIdentifier(), "string", getPackageName())));
 
             rvElementsList = (RecyclerView)findViewById(R.id.rvElementsList);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);

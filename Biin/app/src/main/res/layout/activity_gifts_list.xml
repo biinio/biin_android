@@ -6,42 +6,27 @@ android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 tools:context="com.biin.biin.GiftsListActivity">
 
-    <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:id="@+id/ivGiftsListBack"
-        android:src="@drawable/left_arrow"
-        android:background="@color/colorLightGrey"
-        android:scaleType="center" />
-    
-    <TextView
-        android:id="@+id/tvGiftsListTitle"
-        android:text="@string/Chest"
-        android:textAllCaps="true"
-        android:textColor="@color/colorDarkGrey"
-        android:background="@color/colorAccentGray"
-        android:textSize="12dp"
+    <include
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/ivGiftsListBack"
-        android:layout_alignBottom="@+id/ivGiftsListBack"
-        android:layout_alignTop="@+id/ivGiftsListBack"
-        android:gravity="center"
-        android:layout_toLeftOf="@+id/ivGiftsListBack" />
-    
+        layout="@layout/biin_toolbar"
+        android:id="@+id/gifts_list_toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/rvGiftsList"
         android:background="@color/colorWhite"
-        android:layout_alignStart="@+id/ivGiftsListBack"
+        android:layout_alignStart="@+id/gifts_list_toolbar"
         tools:listitem="@layout/bngift_item"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/ivGiftsListBack" />
+        android:layout_below="@+id/gifts_list_toolbar" />
     
     <LinearLayout
         android:orientation="vertical"
@@ -50,7 +35,7 @@ tools:context="com.biin.biin.GiftsListActivity">
         android:background="@color/colorWhite"
         android:gravity="center"
         android:visibility="gone"
-        android:layout_below="@+id/ivGiftsListBack"
+        android:layout_below="@+id/gifts_list_toolbar"
         android:id="@+id/vlEmptyGifts">
     
         <ImageView

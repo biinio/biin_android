@@ -46,17 +46,8 @@ public class BiinInstanceIdService extends FirebaseInstanceIdService implements 
         this.token = token;
         Log.e(TAG, "Biin FCM Token: " + token);
 
-        JSONObject request = new JSONObject();
-        try {
-            JSONObject model = new JSONObject();
-            model.put("tokenId", token);
-            model.put("platform", "android");
-            request.put("model", model);
-        }catch (JSONException e){
-            Log.e(TAG, "Error:" + e.getMessage());
-        }
         Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
-        String identifier = "";
+        String identifier;
 
         if(biinie != null && biinie.getIdentifier() != null && !biinie.getIdentifier().isEmpty()){
             identifier = biinie.getIdentifier();
@@ -65,18 +56,32 @@ public class BiinInstanceIdService extends FirebaseInstanceIdService implements 
             identifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-            Request.Method.PUT,
-            BNAppManager.getInstance().getNetworkManagerInstance().getTokenRegisterUrl(identifier),
-            request,
-            this,
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    onVolleyError(error);
-                }
-            });
-        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
+        if(!identifier.isEmpty()) {
+            JSONObject request = new JSONObject();
+            try {
+                JSONObject model = new JSONObject();
+                model.put("tokenId", token);
+                model.put("platform", "android");
+                request.put("model", model);
+            }catch (JSONException e){
+                Log.e(TAG, "Error:" + e.getMessage());
+            }
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.PUT,
+                    BNAppManager.getInstance().getNetworkManagerInstance().getTokenRegisterUrl(identifier),
+                    request,
+                    this,
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            onVolleyError(error);
+                        }
+                    });
+            BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
+        }else{
+            Log.e(TAG, "No se tiene el identifier del biinie");
+        }
     }
 
     private void onVolleyError(VolleyError error){

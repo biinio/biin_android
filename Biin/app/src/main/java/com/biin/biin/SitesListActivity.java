@@ -23,6 +23,7 @@ import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
+import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNLikesListener;
 import com.biin.biin.Volley.Listeners.BNSitesListener;
@@ -38,7 +39,6 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
     private static final String TAG = "SitesListActivity";
 
     private boolean isFavourites = false;
-    private TextView tvTitle;
     private RecyclerView rvSites;
 
     private BNDataManager dataManager;
@@ -48,6 +48,8 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
 
     private int sitesVersion;
     private long animDuration = 300;
+
+    private BNToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,22 +68,10 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
     }
 
     private void setUpScreen() {
-        Typeface lato_regular = BNUtils.getLato_regular();
-        tvTitle = (TextView) findViewById(R.id.tvSitesListTitle);
-        tvTitle.setTypeface(lato_regular);
-        tvTitle.setLetterSpacing(0.3f);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvSites = (RecyclerView) findViewById(R.id.rvSitesList);
         rvSites.setLayoutManager(layoutManager);
         rvSites.setHasFixedSize(true);
-
-        findViewById(R.id.ivSitesListBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         biinie = dataManager.getBiinie();
         if (isFavourites) {
@@ -89,13 +79,15 @@ public class SitesListActivity extends AppCompatActivity implements BNSitesListe
         } else {
             sitesVersion = dataManager.getNearBySitesVersion();
         }
+
+        toolbar = new BNToolbar(this, getResources().getString(R.string.NearYou));
     }
 
     private void loadData(){
         final List<BNSite> sites;
         if (isFavourites) {
             sites = dataManager.getFavouriteBNSites();
-            tvTitle.setText(getResources().getString(R.string.FavoritePlaces));
+            toolbar.setTitle(getResources().getString(R.string.FavoritePlaces));
         } else {
 //          //TODO true para incluir favorites, false para omitirlos
             sites = dataManager.getNearByBNSites();

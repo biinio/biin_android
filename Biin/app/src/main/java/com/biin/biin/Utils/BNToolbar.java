@@ -5,8 +5,8 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.biin.biin.Components.Listeners.IBNToolbarListener;
 import com.biin.biin.R;
@@ -21,10 +21,12 @@ public class BNToolbar {
     private IBNToolbarListener listener;
 
     private ImageView ivToolbarBack, ivToolbarLike, ivToolbarLiked, ivToolbarShare, ivToolbarPosition, ivToolbarCall, ivToolbarMail;
-    private TextView tvMoreFrom;
+    private TextView tvMoreFrom, tvTitle;
+    private LinearLayout hlLikes;
 
     private int primaryColor;
     private int secondaryColor;
+    private boolean showLike;
     private boolean liked;
     private boolean showShare;
     private boolean showPosition;
@@ -32,20 +34,27 @@ public class BNToolbar {
     private boolean showMail;
     private boolean showMore;
     private String stringMore;
+    private boolean showTitle;
+    private String stringTitle;
 
-    public BNToolbar(Activity context) {
-        this(context, context.getResources().getColor(R.color.colorGreen), context.getResources().getColor(R.color.colorWhite), false, true, false, false, false, false);
+    public BNToolbar(Activity context, String title) {
+        this(context, 0, 0, false, false, false, false, false, false, false, "", true, title);
     }
 
-    public BNToolbar(Activity context, int primaryColor, int secondaryColor, boolean liked, boolean showShare, boolean showPosition, boolean showCall, boolean showMail, boolean showMore) {
-        this(context, primaryColor, secondaryColor, liked, showShare, showPosition, showCall, showMail, showMore, "");
+    public BNToolbar(Activity context, boolean showLike, boolean liked, boolean showShare, boolean showMore, String stringMore) {
+        this(context, 0, 0, showLike, liked, showShare, false, false, false, showMore, stringMore, false, "");
     }
 
-    public BNToolbar(Activity context, int primaryColor, int secondaryColor, boolean liked, boolean showShare, boolean showPosition, boolean showCall, boolean showMail, boolean showMore, String stringMore) {
+    public BNToolbar(Activity context, boolean showLike, boolean liked, boolean showShare, boolean showPosition, boolean showCall, boolean showMail) {
+        this(context, 0, 0, showLike, liked, showShare, showPosition, showCall, showMail, false, "", false, "");
+    }
+
+    public BNToolbar(Activity context, int primaryColor, int secondaryColor, boolean showLike, boolean liked, boolean showShare, boolean showPosition, boolean showCall, boolean showMail, boolean showMore, String stringMore, boolean showTitle, String stringTitle) {
         this.context = context;
         this.activity = context;
         this.primaryColor = primaryColor;
         this.secondaryColor = secondaryColor;
+        this.showLike = showLike;
         this.liked = liked;
         this.showShare = showShare;
         this.showPosition = showPosition;
@@ -53,11 +62,20 @@ public class BNToolbar {
         this.showMail = showMail;
         this.showMore = showMore;
         this.stringMore = stringMore;
+        this.showTitle = showTitle;
+        this.stringTitle = stringTitle;
 
         setUpToolbar();
     }
 
+    public void setTitle(String stringTitle){
+        this.stringTitle = stringTitle;
+        tvTitle.setText(this.stringTitle);
+        tvTitle.setSelected(true);
+    }
+
     private void setUpToolbar(){
+        hlLikes = (LinearLayout)activity.findViewById(R.id.hlToolbarLikes);
         ivToolbarBack = (ImageView)activity.findViewById(R.id.ivToolbarBack);
         ivToolbarLike = (ImageView)activity.findViewById(R.id.ivToolbarLike);
         ivToolbarLiked = (ImageView)activity.findViewById(R.id.ivToolbarLiked);
@@ -66,59 +84,72 @@ public class BNToolbar {
         ivToolbarCall = (ImageView)activity.findViewById(R.id.ivToolbarCall);
         ivToolbarMail = (ImageView)activity.findViewById(R.id.ivToolbarMail);
         tvMoreFrom = (TextView)activity.findViewById(R.id.tvToolbarMore);
+        tvTitle = (TextView)activity.findViewById(R.id.tvToolbarTitle);
 
-        ivToolbarBack.setBackgroundColor(primaryColor);
-        ivToolbarBack.setColorFilter(secondaryColor);
+//        ivToolbarBack.setBackgroundColor(primaryColor);
+//        ivToolbarBack.setColorFilter(secondaryColor);
         ivToolbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onBack();
+                if(listener != null) {
+                    listener.onBack();
+                }
                 activity.finish();
             }
         });
 
-        if(liked){
-            ivToolbarLike.setVisibility(View.GONE);
-            ivToolbarLiked.setVisibility(View.VISIBLE);
-        }else {
-            ivToolbarLiked.setVisibility(View.GONE);
-            ivToolbarLike.setVisibility(View.VISIBLE);
-        }
-
-        if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorAccentGray), primaryColor, secondaryColor)){
-            ivToolbarLiked.setColorFilter(primaryColor);
-            ivToolbarLike.setColorFilter(primaryColor);
-        }else{
-            ivToolbarLiked.setColorFilter(secondaryColor);
-            ivToolbarLike.setColorFilter(secondaryColor);
-        }
-
-        ivToolbarLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onLike();
-                // cambiar el boton
+        if(showLike) {
+            hlLikes.setVisibility(View.VISIBLE);
+            if (liked) {
                 ivToolbarLike.setVisibility(View.GONE);
                 ivToolbarLiked.setVisibility(View.VISIBLE);
-            }
-        });
-
-        ivToolbarLiked.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onUnlike();
-                // cambiar el boton
+            } else {
                 ivToolbarLiked.setVisibility(View.GONE);
                 ivToolbarLike.setVisibility(View.VISIBLE);
             }
-        });
+            ivToolbarLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null) {
+                        listener.onLike();
+                    }
+                    // cambiar el boton
+                    ivToolbarLike.setVisibility(View.GONE);
+                    ivToolbarLiked.setVisibility(View.VISIBLE);
+                }
+            });
+
+            ivToolbarLiked.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null) {
+                        listener.onUnlike();
+                    }
+                    // cambiar el boton
+                    ivToolbarLiked.setVisibility(View.GONE);
+                    ivToolbarLike.setVisibility(View.VISIBLE);
+                }
+            });
+        }else{
+            hlLikes.setVisibility(View.GONE);
+        }
+
+//        if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorAccentGray), primaryColor, secondaryColor)){
+//            ivToolbarLiked.setColorFilter(primaryColor);
+//            ivToolbarLike.setColorFilter(primaryColor);
+//        }else{
+//            ivToolbarLiked.setColorFilter(secondaryColor);
+//            ivToolbarLike.setColorFilter(secondaryColor);
+//        }
 
         if(showShare){
             ivToolbarShare.setVisibility(View.VISIBLE);
             ivToolbarShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onShare();
+                    if(listener != null) {
+                        listener.onShare();
+                    }
                 }
             });
         }
@@ -128,7 +159,9 @@ public class BNToolbar {
             ivToolbarPosition.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onLocation();
+                    if(listener != null) {
+                        listener.onLocation();
+                    }
                 }
             });
         }
@@ -138,7 +171,9 @@ public class BNToolbar {
             ivToolbarCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onCall();
+                    if(listener != null) {
+                        listener.onCall();
+                    }
                 }
             });
         }
@@ -148,7 +183,9 @@ public class BNToolbar {
             ivToolbarMail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onMail();
+                    if(listener != null) {
+                        listener.onMail();
+                    }
                 }
             });
         }
@@ -161,9 +198,20 @@ public class BNToolbar {
             tvMoreFrom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onShowMore();
+                    if(listener != null) {
+                        listener.onShowMore();
+                    }
                 }
             });
+        }
+
+        if(showTitle) {
+            Typeface lato_black = BNUtils.getLato_black();
+            tvTitle.setTypeface(lato_black);
+            tvTitle.setLetterSpacing(0.3f);
+            tvTitle.setText(stringTitle);
+            tvTitle.setVisibility(View.VISIBLE);
+            tvTitle.setSelected(true);
         }
     }
 
@@ -187,75 +235,4 @@ public class BNToolbar {
         this.activity = activity;
     }
 
-    public int getPrimaryColor() {
-        return primaryColor;
-    }
-
-    public void setPrimaryColor(int primaryColor) {
-        this.primaryColor = primaryColor;
-    }
-
-    public int getSecondaryColor() {
-        return secondaryColor;
-    }
-
-    public void setSecondaryColor(int secondaryColor) {
-        this.secondaryColor = secondaryColor;
-    }
-
-    public boolean isLiked() {
-        return liked;
-    }
-
-    public void setLiked(boolean liked) {
-        this.liked = liked;
-    }
-
-    public boolean isShowShare() {
-        return showShare;
-    }
-
-    public void setShowShare(boolean showShare) {
-        this.showShare = showShare;
-    }
-
-    public boolean isShowPosition() {
-        return showPosition;
-    }
-
-    public void setShowPosition(boolean showPosition) {
-        this.showPosition = showPosition;
-    }
-
-    public boolean isShowCall() {
-        return showCall;
-    }
-
-    public void setShowCall(boolean showCall) {
-        this.showCall = showCall;
-    }
-
-    public boolean isShowMail() {
-        return showMail;
-    }
-
-    public void setShowMail(boolean showMail) {
-        this.showMail = showMail;
-    }
-
-    public boolean isShowMore() {
-        return showMore;
-    }
-
-    public void setShowMore(boolean showMore) {
-        this.showMore = showMore;
-    }
-
-    public String getStringMore() {
-        return stringMore;
-    }
-
-    public void setStringMore(String stringMore) {
-        this.stringMore = stringMore;
-    }
 }

@@ -320,6 +320,15 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             }
         });
 
+        LinearLayout vlNotifications = (LinearLayout) findViewById(R.id.vlToolbarNotifications);
+        vlNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent i = new Intent(MainActivity.this, NotificationsActivity.class);
+//                startActivity(i);
+            }
+        });
+
         RelativeLayout rlDrawer = (RelativeLayout) findViewById(R.id.bnNavView);
         rlDrawer.setOnTouchListener(new View.OnTouchListener() {
             @Override
