@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
         drawer = (DrawerLayout) findViewById(R.id.dlMain);
 
-        TextView tvProfile, tvFavourites, tvFriends, tvAbout, tvGifts, tvNotifications;
+        TextView tvProfile, tvFavourites, tvFriends, tvAbout, tvLoyalty, tvGifts, tvNotifications, tvBadgeGifts, tvBadgeNotifications;
 
         tvProfile = (TextView) findViewById(R.id.tvMenuProfile);
         tvProfile.setTypeface(lato_regular);
@@ -276,6 +276,42 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             }
         });
 
+        tvLoyalty = (TextView) findViewById(R.id.tvMenuLoyalty);
+        tvLoyalty.setTypeface(lato_regular);
+        tvLoyalty.setLetterSpacing(0.3f);
+        tvLoyalty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, LoyaltyActivity.class);
+                startActivity(i);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        tvGifts = (TextView) findViewById(R.id.tvMenuGifts);
+        tvGifts.setTypeface(lato_regular);
+        tvGifts.setLetterSpacing(0.3f);
+        tvGifts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, GiftsListActivity.class);
+                startActivity(i);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        tvNotifications = (TextView) findViewById(R.id.tvMenuNotifications);
+        tvNotifications.setTypeface(lato_regular);
+        tvNotifications.setLetterSpacing(0.3f);
+        tvNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, NotificationsActivity.class);
+                startActivity(i);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+
         tvAbout = (TextView) findViewById(R.id.tvMenuAbout);
         tvAbout.setTypeface(lato_regular);
         tvAbout.setLetterSpacing(0.3f);
@@ -288,11 +324,11 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             }
         });
 
-        tvGifts = (TextView) findViewById(R.id.tvBadgeGifts);
-        tvGifts.setTypeface(lato_black);
+        tvBadgeGifts = (TextView) findViewById(R.id.tvBadgeGifts);
+        tvBadgeGifts.setTypeface(lato_black);
 
-        tvNotifications = (TextView) findViewById(R.id.tvBadgeNotifications);
-        tvNotifications.setTypeface(lato_black);
+        tvBadgeNotifications = (TextView) findViewById(R.id.tvBadgeNotifications);
+        tvBadgeNotifications.setTypeface(lato_black);
 
         LinearLayout vlMenu = (LinearLayout) findViewById(R.id.vlToolbarMenu);
         vlMenu.setOnClickListener(new View.OnClickListener() {
@@ -315,8 +351,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         vlLoyalties.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(MainActivity.this, LoyaltyListActivity.class);
-//                startActivity(i);
+                Intent i = new Intent(MainActivity.this, LoyaltyListActivity.class);
+                startActivity(i);
             }
         });
 
@@ -324,8 +360,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         vlNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(MainActivity.this, NotificationsActivity.class);
-//                startActivity(i);
+                Intent i = new Intent(MainActivity.this, NotificationsActivity.class);
+                startActivity(i);
             }
         });
 

@@ -65,7 +65,7 @@
     <string name="Profile">Profile</string>
     <string name="Home">Home</string>
     <string name="Collections">My Favorites</string>
-    <string name="Loyalty">Loyalty</string>
+    <string name="LoyaltyWallet">Loyalty Wallet</string>
     <string name="Notifications">Notifications</string>
     <string name="InviteFriends">Invite Friends</string>
     <string name="Settings">Settings</string>
@@ -233,6 +233,7 @@
 
     <string name="Before">Before</string>
     <string name="Now">Now</string>
+    <string name="Taxes">i.i.</string>
 
     /*Validate Forms*/
     <string name="EmptyString">"Value can't be empty</string>

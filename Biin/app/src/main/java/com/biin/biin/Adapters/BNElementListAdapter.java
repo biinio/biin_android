@@ -110,9 +110,9 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
             holder.tvSubtitle.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
             holder.tvSubtitleLocation.setText(item.getShowcase().getSite().getSubTitle());
             holder.tvSubtitleLocation.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
-//        holder.tvPrice.setText(item.getListPrice());
+            holder.tvPrice.setText(item.getPriceTitle(context, false));
             holder.tvPrice.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
-            holder.tvDiscount.setText("Ȼ" + item.getPrice());
+            holder.tvDiscount.setText(item.getPriceSubtitle(context, false));
             holder.tvDiscount.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
 
             if (item.isHasDiscount() && !item.getDiscount().isEmpty()) {

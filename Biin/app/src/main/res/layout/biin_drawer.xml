@@ -59,6 +59,57 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/LoyaltyWallet"
+        android:id="@+id/tvMenuLoyalty"
+        android:layout_below="@+id/tvMenuFriends"
+        android:layout_alignParentStart="false"
+        android:layout_centerHorizontal="true"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentGray"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Gifts"
+        android:id="@+id/tvMenuGifts"
+        android:layout_below="@+id/tvMenuLoyalty"
+        android:layout_alignParentStart="false"
+        android:layout_centerHorizontal="true"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentGray"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Notifications"
+        android:id="@+id/tvMenuNotifications"
+        android:layout_below="@+id/tvMenuGifts"
+        android:layout_alignParentStart="false"
+        android:layout_centerHorizontal="true"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentGray"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/About"
         android:id="@+id/tvMenuAbout"
         android:layout_alignParentBottom="true"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.biin.biin.SplashActivity"
-    android:background="@color/colorWhite">
+    android:background="@color/colorRedBiin">
 
     <LinearLayout
         android:orientation="vertical"
@@ -31,7 +31,8 @@
             android:layout_height="wrap_content"
             android:text="@string/Version"
             android:id="@+id/tvSplashVersion"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:textColor="@color/colorWhite" />
     </LinearLayout>
 
     <ProgressBar
@@ -43,7 +44,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/vlSplash"
         android:indeterminate="true"
-        android:indeterminateTint="@color/colorOrange"
+        android:indeterminateTint="@color/colorAccent"
         android:indeterminateTintMode="src_in" />
 
     <TextView
@@ -53,7 +54,7 @@
         android:id="@+id/tvLoading"
         android:layout_above="@+id/pbLoading"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/colorPrimaryDark" />
+        android:textColor="@color/colorWhite" />
 
     <TextView
         android:layout_width="wrap_content"

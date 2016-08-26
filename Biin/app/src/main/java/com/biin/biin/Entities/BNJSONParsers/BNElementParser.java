@@ -83,7 +83,9 @@ public class BNElementParser {
             if (objectElement.has("isTaxIncludedInPrice")) {
                 element.setTaxIncludedInPrice(BNUtils.getBooleanFromString(objectElement.getString("isTaxIncludedInPrice")));
             }
-//            element.setCurrency(Integer.parseInt(objectElement.getString("currencyType")));
+            if (objectElement.has("currencyType")) {
+                element.setCurrency(Integer.parseInt(objectElement.getString("currencyType")));
+            }
             // TODO searchTags array
             if (objectElement.has("subTitle")) {
                 element.setSubTitle(objectElement.getString("subTitle"));

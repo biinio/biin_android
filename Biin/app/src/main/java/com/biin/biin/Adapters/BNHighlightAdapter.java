@@ -93,9 +93,9 @@ public class BNHighlightAdapter extends LoopPagerAdapter {
         tvSubtitle.setTextColor(element.getShowcase().getSite().getOrganization().getSecondaryColor());
         tvSubtitleLocation.setText(element.getShowcase().getSite().getSubTitle());
         tvSubtitleLocation.setTextColor(element.getShowcase().getSite().getOrganization().getSecondaryColor());
-//            tvPrice.setText(element.getListPrice());
+        tvPrice.setText(element.getPriceTitle(context, false));
         tvPrice.setTextColor(element.getShowcase().getSite().getOrganization().getSecondaryColor());
-        tvDiscount.setText("Ȼ" + element.getPrice());
+        tvDiscount.setText(element.getPriceSubtitle(context, false));
         tvDiscount.setTextColor(element.getShowcase().getSite().getOrganization().getSecondaryColor());
 
         if(element.isHasDiscount() && !element.getDiscount().isEmpty()) {

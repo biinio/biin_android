@@ -1,13 +1,15 @@
 package com.biin.biin.Entities;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.biin.biin.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -36,7 +38,7 @@ public class BNElement implements Cloneable {
     private String price; //after discount applied
     private boolean hasSaving;
     private String savings;
-    private String currency;
+    private int currency;
 
     private boolean hasTimming;
     private Date initialDate;
@@ -208,6 +210,58 @@ public class BNElement implements Cloneable {
         this.price = price;
     }
 
+    public String getPriceTitle(Context context, boolean extraText){
+        String priceTitle = subTitle;
+        if(hasFromPrice || hasPrice || hasListPrice || hasDiscount) {
+            priceTitle = context.getResources().getString(R.string.From);
+            if (!hasFromPrice) {
+                if (hasDiscount) {
+                    priceTitle = (extraText ? context.getResources().getString(R.string.Before) + " " : "") + getCurrencyChar() + getPrice();
+                } else {
+                    priceTitle = context.getResources().getString(R.string.Price);
+                }
+            }
+        }
+        return priceTitle;
+    }
+
+    public String getPriceSubtitle(Context context, boolean extraText){
+        String priceSubtitle = "";
+        if(hasFromPrice || hasPrice || hasListPrice || hasDiscount) {
+            priceSubtitle = getCurrencyChar() + getPrice() + getTaxesAcronym(context);
+            if (!hasFromPrice && hasDiscount) {
+                priceSubtitle = (extraText ? context.getResources().getString(R.string.Now) + " " : "") + getCurrencyChar() + getListPrice();
+            }
+        }
+        return priceSubtitle;
+    }
+
+    private String getTaxesAcronym(Context context){
+        String taxes = "";
+        if(isTaxIncludedInPrice) {
+            taxes = " " + context.getResources().getString(R.string.Taxes);
+        }
+        return taxes;
+    }
+
+    private String getCurrencyChar(){
+        String result = "$";
+        if(currency == 2){
+            result = "￠";
+        }else if(currency == 3){
+            result = "€";
+        }
+        return result;
+    }
+
+    public boolean hasStrikeLine(){
+        return (!hasFromPrice && hasDiscount);
+    }
+
+    public boolean isPriceVisible(){
+        return (hasFromPrice || hasPrice || hasListPrice || hasDiscount || !subTitle.trim().isEmpty());
+    }
+
     public boolean isHasSaving() {
         return hasSaving;
     }
@@ -224,11 +278,11 @@ public class BNElement implements Cloneable {
         this.savings = savings;
     }
 
-    public String getCurrency() {
+    public int getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(int currency) {
         this.currency = currency;
     }
 

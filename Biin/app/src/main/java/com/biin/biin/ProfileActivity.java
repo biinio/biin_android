@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNBiiniesListener;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
@@ -63,18 +64,6 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     private void setUpScreen(){
         Typeface lato_regular = BNUtils.getLato_regular();
         Typeface lato_black = BNUtils.getLato_black();
-
-        ImageView ivBack = (ImageView)findViewById(R.id.ivProfileBack);
-        ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        TextView tvTitle = (TextView)findViewById(R.id.tvProfileTitle);
-        tvTitle.setTypeface(lato_regular);
-        tvTitle.setLetterSpacing(0.3f);
 
         TextView tvName = (TextView) findViewById(R.id.tvProfileName);
         TextView tvLastname = (TextView) findViewById(R.id.tvProfileLastName);
@@ -126,6 +115,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         colorNormal = getResources().getColor(R.color.colorPrimary);
         colorSelected = getResources().getColor(R.color.colorOrange);
 
+        BNToolbar toolbar = new BNToolbar(this, getResources().getString(R.string.Profile));
+
         setUpFields();
 
         tvSave.setOnClickListener(saveClick);
@@ -149,7 +140,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
 
         if(biinie.isEmailVerified()) {
             etVerified.setText(getString(R.string.Yes));
-            etVerified.setTextColor(getResources().getColor(R.color.colorLightGrey));
+            etVerified.setTextColor(getResources().getColor(R.color.colorAccentGray));
         }else{
             etVerified.setText(getString(R.string.No));
         }

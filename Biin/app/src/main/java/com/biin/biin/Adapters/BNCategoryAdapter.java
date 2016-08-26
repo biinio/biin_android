@@ -3,6 +3,7 @@ package com.biin.biin.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -103,11 +104,18 @@ public class BNCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.tvCategorySubtitle.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
             holder.tvCategoryLocation.setText(item.getShowcase().getSite().getSubTitle());
             holder.tvCategoryLocation.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
-//        holder.tvCategoryPrice.setText(item.getListPrice());
-            holder.tvCategoryPrice.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
-            holder.tvCategoryDiscount.setText("Ȼ" + item.getPrice());
-            holder.tvCategoryDiscount.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
-
+            if(item.isPriceVisible()) {
+                holder.tvCategoryPrice.setText(item.getPriceTitle(context, false));
+                holder.tvCategoryPrice.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+                holder.tvCategoryDiscount.setText(item.getPriceSubtitle(context, false));
+                holder.tvCategoryDiscount.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());
+                if (item.hasStrikeLine()) {
+                    holder.tvCategoryDiscount.setPaintFlags(holder.tvCategoryDiscount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+            }else{
+                holder.tvCategoryPrice.setVisibility(View.INVISIBLE);
+                holder.tvCategoryDiscount.setVisibility(View.INVISIBLE);
+            }
             if (item.isHasDiscount() && !item.getDiscount().isEmpty()) {
                 holder.tvCategoryOffer.setText("-" + item.getDiscount() + "%");
                 holder.tvCategoryOffer.setTextColor(item.getShowcase().getSite().getOrganization().getSecondaryColor());

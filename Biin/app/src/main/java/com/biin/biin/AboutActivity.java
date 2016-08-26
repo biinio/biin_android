@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
 
 public class AboutActivity extends AppCompatActivity {
@@ -24,18 +25,6 @@ public class AboutActivity extends AppCompatActivity {
     private void setUpScreen(){
         Typeface lato_regular = BNUtils.getLato_regular();
         Typeface lato_black = BNUtils.getLato_black();
-
-        ImageView ivBack = (ImageView)findViewById(R.id.ivAboutBack);
-        ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        TextView tvTitle = (TextView)findViewById(R.id.tvAboutTitle);
-        tvTitle.setTypeface(lato_regular);
-        tvTitle.setLetterSpacing(0.3f);
 
         TextView tvHeader = (TextView)findViewById(R.id.tvAboutHeader);
         tvHeader.setTypeface(lato_black);
@@ -59,5 +48,7 @@ public class AboutActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        BNToolbar toolbar = new BNToolbar(this, getResources().getString(R.string.About));
     }
 }

@@ -4,37 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:validate="http://schemas.android.com/apk/res-auto"
-    tools:context="com.biin.biin.ProfileActivity">
+    tools:context="com.biin.biin.ProfileActivity"
+    android:background="@color/colorLightGrey">
 
-    <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:id="@+id/ivProfileBack"
-        android:src="@drawable/left_arrow"
-        android:background="@color/colorLightGrey"
-        android:scaleType="center" />
-
-    <TextView
-        android:id="@+id/tvProfileTitle"
-        android:text="@string/Profile"
-        android:textAllCaps="true"
-        android:textColor="@color/colorDarkGrey"
-        android:background="@color/colorAccentGray"
-        android:textSize="12sp"
+    <include
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/ivProfileBack"
-        android:layout_alignBottom="@+id/ivProfileBack"
-        android:layout_alignTop="@+id/ivProfileBack"
-        android:gravity="center"
-        android:layout_toLeftOf="@+id/ivProfileBack" />
+        layout="@layout/biin_toolbar"
+        android:id="@+id/profile_toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
     <Space
         android:id="@+id/spProfileName"
         android:layout_width="12dp"
         android:layout_height="28dp"
-        android:layout_below="@+id/tvProfileTitle"
+        android:layout_below="@+id/profile_toolbar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
 
@@ -50,7 +36,8 @@
         android:layout_toLeftOf="@+id/spProfileName"
         android:textStyle="bold"
         android:layout_alignBottom="@+id/spProfileName"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textColor="@color/colorAccentGray" />
 
     <com.andreabaccega.widget.FormEditText
         validate:testType="nocheck"
@@ -68,7 +55,7 @@
         android:textSize="12sp"
         android:singleLine="true"
         android:background="@null"
-        android:textColor="@color/colorLightGrey" />
+        android:textColor="@color/colorAccentGray" />
 
     <View
         android:id="@+id/vwProfileName"
@@ -98,7 +85,8 @@
         android:layout_toLeftOf="@+id/spProfileLastName"
         android:textStyle="bold"
         android:layout_alignBottom="@+id/spProfileLastName"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textColor="@color/colorAccentGray" />
 
     <com.andreabaccega.widget.FormEditText
         validate:testType="nocheck"
@@ -115,7 +103,7 @@
         android:layout_alignBottom="@+id/spProfileLastName"
         android:textSize="12sp"
         android:background="@null"
-        android:textColor="@color/colorLightGrey" />
+        android:textColor="@color/colorAccentGray" />
 
     <View
         android:id="@+id/vwProfileLastName"
@@ -145,7 +133,8 @@
         android:layout_toLeftOf="@+id/spProfileUserName"
         android:textStyle="bold"
         android:layout_alignBottom="@+id/spProfileUserName"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textColor="@color/colorAccentGray" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -158,7 +147,7 @@
         android:gravity="left|center_vertical"
         android:layout_alignBottom="@+id/spProfileUserName"
         android:textSize="12sp"
-        android:textColor="@color/colorLightGrey" />
+        android:textColor="@color/colorAccentGray" />
 
     <View
         android:id="@+id/vwProfileUserName"
@@ -188,7 +177,8 @@
         android:layout_toLeftOf="@+id/spProfileEmail"
         android:textStyle="bold"
         android:layout_alignBottom="@+id/spProfileEmail"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textColor="@color/colorAccentGray" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -202,7 +192,7 @@
         android:layout_alignBottom="@+id/spProfileEmail"
         android:textSize="12sp"
         android:background="@null"
-        android:textColor="@color/colorLightGrey" />
+        android:textColor="@color/colorAccentGray" />
 
     <View
         android:id="@+id/vwProfileEmail"
@@ -232,7 +222,8 @@
         android:layout_toLeftOf="@+id/spProfileVerified"
         android:textStyle="bold"
         android:layout_alignBottom="@+id/spProfileVerified"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textColor="@color/colorAccentGray" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -275,7 +266,8 @@
         android:layout_toLeftOf="@+id/spProfileBirthDate"
         android:textStyle="bold"
         android:layout_alignBottom="@+id/spProfileBirthDate"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textColor="@color/colorAccentGray" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -288,7 +280,7 @@
         android:gravity="left|center_vertical"
         android:layout_alignBottom="@+id/spProfileBirthDate"
         android:textSize="12sp"
-        android:textColor="@color/colorLightGrey" />
+        android:textColor="@color/colorAccentGray" />
 
     <View
         android:id="@+id/vwProfileBirthDate"
@@ -318,7 +310,8 @@
         android:layout_toLeftOf="@+id/spProfileGender"
         android:textStyle="bold"
         android:layout_alignBottom="@+id/spProfileGender"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textColor="@color/colorAccentGray" />
 
     <ImageView
         android:layout_width="30dp"
@@ -327,7 +320,7 @@
         android:src="@drawable/male"
         android:layout_marginRight="12dp"
         android:background="@drawable/bg_feedback"
-        android:tint="@color/colorPrimary"
+        android:tint="@color/colorAccentGray"
         android:scaleType="center"
         android:layout_alignTop="@+id/spProfileGender"
         android:layout_alignBottom="@+id/spProfileGender"
@@ -340,7 +333,7 @@
         android:layout_marginRight="6dp"
         android:src="@drawable/female"
         android:background="@drawable/bg_feedback"
-        android:tint="@color/colorPrimary"
+        android:tint="@color/colorAccentGray"
         android:scaleType="center"
         android:layout_alignTop="@+id/spProfileGender"
         android:layout_alignBottom="@+id/spProfileGender"

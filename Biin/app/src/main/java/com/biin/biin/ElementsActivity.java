@@ -76,7 +76,7 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
         currentElement = dataManager.getBNElement(elementIdentifier);
         if (currentElement != null) {
             // llenar el layout con la informacion
-            TextView tvBefore, tvNow, tvOffer, tvTitle, tvSubtitle, tvAction, tvMore;
+            TextView tvPriceTitle, tvPriceSubtitle, tvOffer, tvTitle, tvSubtitle, tvAction, tvMore;
             final ImageView ivElementsImage, ivOffer;
             FrameLayout flOffer;
             WebView wvDetails;
@@ -86,8 +86,8 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
             flOffer = (FrameLayout)findViewById(R.id.flElementsOffer);
             wvDetails = (WebView)findViewById(R.id.wvElementDetails);
 
-            tvBefore = (TextView)findViewById(R.id.tvElementsBefore);
-            tvNow = (TextView)findViewById(R.id.tvElementsNow);
+            tvPriceTitle = (TextView)findViewById(R.id.tvElementsPriceTitle);
+            tvPriceSubtitle = (TextView)findViewById(R.id.tvElementsPriceSubtitle);
             tvOffer = (TextView)findViewById(R.id.tvElementsOffer);
             tvTitle = (TextView)findViewById(R.id.tvElementsTitle);
             tvSubtitle = (TextView)findViewById(R.id.tvElementsSubtitle);
@@ -97,8 +97,8 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
             Typeface lato_regular = BNUtils.getLato_regular();
             Typeface lato_black = BNUtils.getLato_black();
 
-            tvBefore.setTypeface(lato_light);
-            tvNow.setTypeface(lato_black);
+            tvPriceTitle.setTypeface(lato_light);
+            tvPriceSubtitle.setTypeface(lato_black);
             tvOffer.setTypeface(lato_black);
             tvTitle.setTypeface(lato_black);
             tvSubtitle.setTypeface(lato_regular);
@@ -135,16 +135,19 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
                 flOffer.setVisibility(View.GONE);
             }
 
-            if(currentElement.isHasListPrice()) {
-                tvBefore.setText(getResources().getString(R.string.Before) + " " + currentElement.getPrice());
-                tvBefore.setPaintFlags(tvBefore.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            if(currentElement.isPriceVisible()) {
+                tvPriceTitle.setText(currentElement.getPriceTitle(this, true));
+                tvPriceSubtitle.setText(currentElement.getPriceSubtitle(this, true));
+                tvPriceTitle.setTextColor(darkColor);
+                tvPriceSubtitle.setTextColor(darkColor);
+                if (currentElement.hasStrikeLine()) {
+                    tvPriceTitle.setPaintFlags(tvPriceTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
             }else{
-                tvBefore.setText(getResources().getString(R.string.Price));
+                tvPriceTitle.setVisibility(View.INVISIBLE);
+                tvPriceSubtitle.setVisibility(View.INVISIBLE);
             }
 
-            tvBefore.setTextColor(darkColor);
-            tvNow.setText(getResources().getString(R.string.Now) + " " + currentElement.getListPrice());
-            tvNow.setTextColor(darkColor);
             tvTitle.setText(currentElement.getTitle());
             tvSubtitle.setText(currentElement.getSubTitle());
 

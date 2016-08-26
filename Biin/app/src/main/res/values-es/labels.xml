@@ -65,7 +65,7 @@
     <string name="Profile">Perfil</string>
     <string name="Home">Inicio</string>
     <string name="Collections">Mis Favoritos</string>
-    <string name="Loyalty">Puntos</string>
+    <string name="LoyaltyWallet">Mis Tarjetas</string>
     <string name="Notifications">Notificaciones</string>
     <string name="InviteFriends">Invitar Amigos</string>
     <string name="Settings">Ajustes</string>
@@ -229,6 +229,7 @@
 
     <string name="Before">Antes</string>
     <string name="Now">Ahora</string>
+    <string name="Taxes">i.i.</string>
 
     /*Validate Forms*/
     <string name="EmptyString">El campo no puede estar vacío</string>
