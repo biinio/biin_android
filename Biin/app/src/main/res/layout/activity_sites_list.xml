@@ -26,7 +26,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/sites_list_toolbar" />
+        android:layout_below="@+id/sites_list_toolbar"
+        android:background="@color/colorDarkGrey" />
 
     <LinearLayout
         android:orientation="vertical"
