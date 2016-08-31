@@ -126,6 +126,9 @@
     <string name="EnterYourBirthDate">Enter your birthdate</string>
     <string name="Optionales">If you share with us your birth day and age we will improve the recomendations we show you.</string>
     <string name="SaveSuccess">Information updated successfully</string>
+    <string name="login_facebook_ok">Facebook login ok</string>
+    <string name="login_facebook_canceled">Facebook login canceled</string>
+    <string name="login_facebook_error">Facebook login error</string>
 
     /* Showcase - Game View*/
     <string name="JoinUs">Join us!</string>
@@ -189,11 +192,6 @@
     <string name="HardwareErrorText">We are sorry but your device does not support Biin due to harware requirements, please close this app.</string>
     <string name="HardwareErrorButton">Continue</string>
 
-
-    //BluetoothErrorTitle">Oops, Biin needs bluetooth
-    //BluetoothErrorText">Please turn on blutooth and enable Biin to use it.
-    //BluetoothErrorButton">Go to settings.
-
     <string name="BluetoothNotAvailable">Device does not support Bluetooth</string>
     <string name="BluetoothErrorText">Biin uses a low energy bluetooth to give you a better experience on the places you visit.</string>
     <string name="BluetoothErrorTitle">Biin works better with bluetooth enabled!</string>
@@ -211,6 +209,7 @@
     <string name="ServerErrorText">Something went worng, please try again later on. Thank you</string>
     <string name="ServerErrorButton">Try again</string>
 
+    /*Onboarding*/
     <string name="OnboardingTitle1">Discover!</string>
     <string name="OnboardingText1">The best deals and rewards just steps away from you.</string>
 

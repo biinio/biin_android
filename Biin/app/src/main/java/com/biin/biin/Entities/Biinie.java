@@ -274,7 +274,7 @@ public class Biinie {
         JSONObject model = new JSONObject();
         try {
             model.put("gender", gender);
-//            model.put("facebook_id", facebook_id);
+            model.put("facebook_id", facebook_id);
             model.put("lastName", lastName);
 //            model.put("password", password);
             model.put("firstName", firstName);

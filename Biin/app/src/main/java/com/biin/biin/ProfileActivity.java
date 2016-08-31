@@ -1,5 +1,6 @@
 package com.biin.biin;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,12 +21,22 @@ import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNBiiniesListener;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,9 +45,11 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     private static final String TAG = "ProfileActivity";
 
     private BNBiiniesListener profileListener;
+    private CallbackManager callbackManager;
 
+    private LoginButton btnFacebook;
     private FormEditText etName, etLastName;
-    private TextView etUsername, etVerified, etBirthdate, tvGender, etEmail, tvLoginFb, tvSave;
+    private TextView etUsername, etVerified, etBirthdate, tvGender, etEmail, tvSave;
     private ImageView ivMale, ivFemale;
 
     private Date date;
@@ -57,6 +70,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        callbackManager = CallbackManager.Factory.create();
 
         setUpScreen();
     }
@@ -82,7 +97,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         etVerified = (TextView) findViewById(R.id.etProfileVerified);
         etBirthdate = (TextView) findViewById(R.id.etProfileBirthDate);
 
-        tvLoginFb = (TextView)findViewById(R.id.tvProfileFb);
+        btnFacebook = (LoginButton) findViewById(R.id.btnProfileFb);
         tvSave = (TextView)findViewById(R.id.tvProfileSave);
 
         tvName.setTypeface(lato_black);
@@ -101,6 +116,28 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         etVerified.setTypeface(lato_regular);
         etBirthdate.setTypeface(lato_regular);
 
+        btnFacebook.setTypeface(lato_black);
+        tvSave.setTypeface(lato_black);
+
+        btnFacebook.setReadPermissions(Arrays.asList("user_birthday", "public_profile", "email"));
+        btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Toast.makeText(ProfileActivity.this, R.string.login_facebook_ok, Toast.LENGTH_SHORT).show();
+                graphRequest(loginResult);
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(ProfileActivity.this, R.string.login_facebook_canceled, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(ProfileActivity.this, R.string.login_facebook_error, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         ivMale = (ImageView) findViewById(R.id.ivProfileMale);
         ivFemale = (ImageView) findViewById(R.id.ivProfileFemale);
 
@@ -117,26 +154,82 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
 
         BNToolbar toolbar = new BNToolbar(this, getResources().getString(R.string.Profile));
 
-        setUpFields();
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+        setUpFields(biinie);
 
         tvSave.setOnClickListener(saveClick);
-
-        tvLoginFb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "Pronto! Login con FB", Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
-    private void setUpFields(){
-        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+    private void graphRequest(final LoginResult loginResult){
+        GraphRequest request = GraphRequest.newMeRequest(
+                loginResult.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.e(TAG, response.toString());
+                        try {
+                            String id = "", name = "", gender = "", birthday = "", email = "";
+                            if (object.has("id")) {
+                                id = object.getString("id");
+                            }
+                            if (object.has("name")) {
+                                name = object.getString("name");
+                            }
+                            if (object.has("gender")) {
+                                gender = object.getString("gender");
+                            }
+                            if (object.has("birthday")) {
+                                birthday = object.getString("birthday");
+                            }
+                            if (object.has("email")) {
+                                email = object.getString("email");
+                            }
+                            setUpFields(setUpBiinie(name, email, gender, birthday, id));
+                            saveRequest();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,gender,birthday");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
 
+    private Biinie setUpBiinie(String name, String email, String gender, String birthDate, String facebookId){
+        String firstName, lastName;
+        if(name.contains(" ")){
+            firstName = name.substring(0, name.indexOf(" "));
+            lastName = name.substring(name.indexOf(" ") + 1);
+        }else{
+            firstName = name;
+            lastName = "";
+        }
+
+        Biinie biinie = new Biinie();
+        biinie.setFirstName(firstName);
+        biinie.setLastName(lastName);
+        biinie.setBiinName(email);
+        biinie.setEmail(email);
+        biinie.setEmailVerified(true);
+        biinie.setGender(gender);
+        biinie.setBirthDate(BNUtils.getDateFromString(birthDate, BNUtils.getFacebookDateFormat()));
+        biinie.setFacebook_id(facebookId);
+
+        return biinie;
+    }
+
+    private void setUpFields(Biinie biinie){
+        String encoding = "US-ASCII";
         etName.setText(biinie.getFirstName());
         etLastName.setText(biinie.getLastName());
-        etUsername.setText(biinie.getBiinName());
-        etEmail.setText(biinie.getEmail());
+        try {
+            etUsername.setText(URLDecoder.decode(biinie.getBiinName(), encoding));
+            etEmail.setText(URLDecoder.decode(biinie.getEmail(), encoding));
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
 
         if(biinie.isEmailVerified()) {
             etVerified.setText(getString(R.string.Yes));
@@ -148,7 +241,6 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         SimpleDateFormat formatter = new SimpleDateFormat(BNUtils.getUserDateFormat());
         etBirthdate.setText(formatter.format(biinie.getBirthDate()));
 
-        SimpleDateFormat apiFormatter = new SimpleDateFormat(BNUtils.getActionDateFormat());
         date = biinie.getBirthDate();
 
         gender = biinie.getGender();
@@ -173,23 +265,23 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         if(gender.equals("male")){
             tvGender.setText(male);
             this.gender = "male";
-            ivMale.setImageDrawable(getDrawable(R.drawable.male_sel));
+            ivMale.setImageDrawable(getDrawable(R.drawable.male_filled));
             ivMale.setColorFilter(colorSelected);
-            ivFemale.setImageDrawable(getDrawable(R.drawable.female));
+            ivFemale.setImageDrawable(getDrawable(R.drawable.female_empty));
             ivFemale.setColorFilter(colorNormal);
         }else if(gender.equals("female")){
             tvGender.setText(female);
             this.gender = "female";
-            ivMale.setImageDrawable(getDrawable(R.drawable.male));
+            ivMale.setImageDrawable(getDrawable(R.drawable.male_empty));
             ivMale.setColorFilter(colorNormal);
-            ivFemale.setImageDrawable(getDrawable(R.drawable.female_sel));
+            ivFemale.setImageDrawable(getDrawable(R.drawable.female_filled));
             ivFemale.setColorFilter(colorSelected);
         }else{
             tvGender.setText(none);
             this.gender = "none";
-            ivMale.setImageDrawable(getDrawable(R.drawable.male));
+            ivMale.setImageDrawable(getDrawable(R.drawable.male_empty));
             ivMale.setColorFilter(colorNormal);
-            ivFemale.setImageDrawable(getDrawable(R.drawable.female));
+            ivFemale.setImageDrawable(getDrawable(R.drawable.female_empty));
             ivFemale.setColorFilter(colorNormal);
         }
     }
@@ -239,8 +331,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         profileListener.setListener(this);
 
         Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
-        biinie.setLastName(etLastName.getText().toString().trim());
         biinie.setFirstName(etName.getText().toString().trim());
+        biinie.setLastName(etLastName.getText().toString().trim());
         biinie.setGender(gender);
         biinie.setBirthDate(date);
 
@@ -287,4 +379,11 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         pbSave.setVisibility(View.GONE);
         Toast.makeText(this, getString(R.string.RequestFailed), Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
 }

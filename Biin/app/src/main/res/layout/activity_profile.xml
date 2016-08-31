@@ -317,27 +317,29 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:id="@+id/ivProfileMale"
-        android:src="@drawable/male"
+        android:src="@drawable/male_empty"
         android:layout_marginRight="12dp"
-        android:background="@drawable/bg_feedback"
+        android:background="@drawable/bg_feedback_button"
         android:tint="@color/colorAccentGray"
         android:scaleType="center"
         android:layout_alignTop="@+id/spProfileGender"
         android:layout_alignBottom="@+id/spProfileGender"
-        android:layout_toRightOf="@+id/ivProfileFemale" />
+        android:layout_toRightOf="@+id/ivProfileFemale"
+        android:layout_margin="1dp" />
 
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:id="@+id/ivProfileFemale"
         android:layout_marginRight="6dp"
-        android:src="@drawable/female"
-        android:background="@drawable/bg_feedback"
+        android:src="@drawable/female_empty"
+        android:background="@drawable/bg_feedback_button"
         android:tint="@color/colorAccentGray"
         android:scaleType="center"
         android:layout_alignTop="@+id/spProfileGender"
         android:layout_alignBottom="@+id/spProfileGender"
-        android:layout_toRightOf="@+id/spProfileGender" />
+        android:layout_toRightOf="@+id/spProfileGender"
+        android:layout_margin="1dp" />
 
     <View
         android:id="@+id/vwProfileGender"
@@ -348,36 +350,23 @@
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp" />
 
-    <RelativeLayout
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
+    <com.facebook.login.widget.LoginButton
+        android:layout_above="@+id/tvProfileSave"
+        android:id="@+id/btnProfileFb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rlProfileFb"
-        android:layout_above="@+id/tvProfileSave">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/com_facebook_loginview_log_in_button_long"
-            android:id="@+id/tvProfileFb"
-            android:gravity="center"
-            android:padding="12dp"
-            android:textColor="@color/colorWhite"
-            android:background="@color/com_facebook_button_background_color"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:id="@+id/ivProfileFb"
-            android:src="@drawable/com_facebook_button_icon_white"
-            android:layout_alignTop="@+id/tvProfileFb"
-            android:layout_alignStart="@+id/tvProfileFb"
-            android:layout_alignBottom="@+id/tvProfileFb"
-            android:layout_marginLeft="8dp" />
-
-    </RelativeLayout>
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:textSize="14sp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -391,7 +380,8 @@
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="6dp" />
+        android:layout_margin="6dp"
+        android:textSize="14sp" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleSmall"

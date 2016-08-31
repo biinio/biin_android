@@ -125,6 +125,9 @@
     <string name="EnterYourBirthDate">Fecha de nacimiento</string>
     <string name="Optionales">Si gustas compartir tu edad y genero podremos mejorar el contenido que te recomendamos.</string>
     <string name="SaveSuccess">Información actualizada correctamente</string>
+    <string name="login_facebook_ok">Login con Facebook</string>
+    <string name="login_facebook_canceled">Login cancelado</string>
+    <string name="login_facebook_error">Login error</string>
 
     /* Showcase - Game View*/
     <string name="JoinUs">Uníte!</string>

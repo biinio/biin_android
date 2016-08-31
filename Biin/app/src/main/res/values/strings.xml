@@ -1,11 +1,11 @@
 <resources>
 
-    <string name="app_id" translatable="false">8934976303740374563876</string>
     <string name="app_name" translatable="false">Biin</string>
     <string name="preferences_key" translatable="false">com.biin.biin.BIIN_PREFERENCES</string>
     <string name="contact_mail" translatable="false">contact@biin.io</string>
     <string name="share_link" translatable="false">https://play.google.com/store/apps/details?id=com.biin.biin</string>
     <string name="google_maps_key" translatable="false">AIzaSyBz4poJIDxH7YkMnhN-wcjDs4tmd_SDvjg</string>
     <string name="kontakt_io_api_key" translatable="false">HIMVKoKndBpLfFsOqRXCrsizRqsJcGDU</string>
+    <string name="facebook_app_id" translatable="false">832430170216826</string>
 
 </resources>

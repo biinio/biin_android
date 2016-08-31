@@ -761,36 +761,18 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Log.e(TAG, "Bluetooth no disponible");
-            Toast.makeText(this, R.string.BluetoothErrorTitle, Toast.LENGTH_SHORT).show();
-        }else {
-            if (bluetoothAdapter.isEnabled()) { //bluetooth active
+        } else {
+            if (bluetoothAdapter.isEnabled()) {
                 startScanning();
             } else {
-                Log.e(TAG, "Bluetooth apagado");
+                if (!dataManager.isBluetoothPermissionAsked()) {
+                    Log.e(TAG, "Bluetooth apagado");
+                    Toast.makeText(this, R.string.BluetoothErrorTitle, Toast.LENGTH_LONG).show();
+                    dataManager.setBluetoothPermissionAsked();
 
-                /*final RelativeLayout rlBluetoothAlert = (RelativeLayout) findViewById(R.id.rlBluetoothAlert);
-                ImageView ivBluetoothClose = (ImageView) findViewById(R.id.ivBluetoothClose);
-                rlBluetoothAlert.setVisibility(View.VISIBLE);
-
-                rlBluetoothAlert.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent();
-                        i.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-                        startActivity(i);
-                        rlBluetoothAlert.setVisibility(View.GONE);
-                    }
-                });
-
-                ivBluetoothClose.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        rlBluetoothAlert.setVisibility(View.GONE);
-                    }
-                });*/
-
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                }
             }
         }
     }

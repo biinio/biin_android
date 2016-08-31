@@ -38,6 +38,8 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     private static final String TAG = "BNDataManager";
     private static BNDataManager ourInstance = new BNDataManager();
 
+    private static boolean bluetoothPermissionAsked = false;
+
     private Biinie biinie = new Biinie();
 
     private LinkedHashMap<String, BNSite> sites = new LinkedHashMap<>();
@@ -73,6 +75,17 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
         likesListener = new BNLikesListener();
         likesListener.setListener(this);
     }
+
+
+    /****************** Permissions start ******************/
+    public static boolean isBluetoothPermissionAsked() {
+        return bluetoothPermissionAsked;
+    }
+
+    public static void setBluetoothPermissionAsked() {
+        bluetoothPermissionAsked = true;
+    }
+    /****************** Permissions end ******************/
 
 
     /****************** Biinie start ******************/

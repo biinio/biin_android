@@ -1,6 +1,7 @@
 package com.biin.biin.Managers;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 /**
@@ -26,6 +27,7 @@ public class BNNetworkManager {
 
     private static String URL_BIINIE = "/mobile/biinies";
     private static String URL_INITIALDATA = "/mobile/initialData";
+    private static String URL_FACEBOOK = "/facebook";
 
     private static String URL_PRIVACY_POLICY = "/privacy.html";
     private static String URL_TERMS_OF_USE = "/termsofuse.html";
@@ -91,10 +93,24 @@ public class BNNetworkManager {
             lastName = URLEncoder.encode(lastName.trim(), encoding);
             email = URLEncoder.encode(email.trim(), encoding);
             pass = URLEncoder.encode(pass.trim(), encoding);
-//            date = URLEncoder.encode(date, encoding);
         }catch (UnsupportedEncodingException e){ }
 
         String url = getUrlBase() + URL_BIINIE + "/" + name + "/" + lastName + "/" + email + "/" + pass + "/" + gender + "/" + date;
+        return url;
+    }
+
+    public String getFacebookRegisterUrl(String name, String lastName, String email, String pass, String gender, String date, String facebookId){
+        try{
+            name = URLEncoder.encode(name.trim(), encoding);
+            lastName = URLEncoder.encode(lastName.trim(), encoding);
+            email = URLEncoder.encode(email.trim(), encoding);
+            pass = URLEncoder.encode(pass.trim(), encoding);
+            gender = URLEncoder.encode(gender.trim(), encoding);
+            date = URLEncoder.encode(date, encoding);
+            facebookId = URLEncoder.encode(facebookId, encoding);
+        }catch (UnsupportedEncodingException e){ }
+
+        String url = getUrlBase() + URL_BIINIE + URL_FACEBOOK + "/" + name + "/" + lastName + "/" + email + "/" + pass + "/" + gender + "/" + date + "/" + facebookId;
         return url;
     }
 

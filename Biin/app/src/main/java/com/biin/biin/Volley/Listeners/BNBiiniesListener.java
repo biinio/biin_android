@@ -39,9 +39,11 @@ public class BNBiiniesListener implements Response.Listener<JSONObject> {
             // parsear biinie
             parseBiinie(data);
 
-            BNGiftParser parser = new BNGiftParser();
-            LinkedHashMap<String, BNGift> gifts = parser.parseBNGifts(data.getJSONArray("gifts"));
-            dataManager.setBNGifts(gifts);
+            if(data.has("gifts")) {
+                BNGiftParser parser = new BNGiftParser();
+                LinkedHashMap<String, BNGift> gifts = parser.parseBNGifts(data.getJSONArray("gifts"));
+                dataManager.setBNGifts(gifts);
+            }
 
             if(this.listener != null) {
                 this.listener.onBiiniesLoaded();

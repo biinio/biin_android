@@ -141,9 +141,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         public void onClick(View v) {
             tvGender.setText(male);
             gender = "male";
-            ivMale.setImageDrawable(getDrawable(R.drawable.male_sel));
+            ivMale.setImageDrawable(getDrawable(R.drawable.male_filled));
             ivMale.setColorFilter(colorSelected);
-            ivFemale.setImageDrawable(getDrawable(R.drawable.female));
+            ivFemale.setImageDrawable(getDrawable(R.drawable.female_empty));
             ivFemale.setColorFilter(colorNormal);
         }
     };
@@ -153,9 +153,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         public void onClick(View v) {
             tvGender.setText(female);
             gender = "female";
-            ivMale.setImageDrawable(getDrawable(R.drawable.male));
+            ivMale.setImageDrawable(getDrawable(R.drawable.male_empty));
             ivMale.setColorFilter(colorNormal);
-            ivFemale.setImageDrawable(getDrawable(R.drawable.female_sel));
+            ivFemale.setImageDrawable(getDrawable(R.drawable.female_filled));
             ivFemale.setColorFilter(colorSelected);
         }
     };

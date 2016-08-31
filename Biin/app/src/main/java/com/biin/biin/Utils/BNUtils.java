@@ -67,6 +67,9 @@ public class BNUtils {
     public static Date getDateFromString(String value){
         // obtener la fecha a partir del string recibido ej.: "2016-04-29 22:45:26"
         String dateFotmat = "yyyy-MM-dd HH:mm:ss";
+        if(value.trim().length() == 10){
+            dateFotmat = getFacebookDateFormat();
+        }
         return getDateFromString(value, dateFotmat);
     }
 
@@ -164,6 +167,10 @@ public class BNUtils {
 
     public static String getUserDateFormat(){
         return Locale.getDefault().getLanguage().equals("es") ? "dd MMM yyyy" : "MMM dd yyyy";
+    }
+
+    public static String getFacebookDateFormat(){
+        return "MM/dd/yyyy";
     }
 
     public class BNStringExtras {
