@@ -32,10 +32,10 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite"
+        android:background="@color/colorDarkGrey"
         android:gravity="center"
         android:layout_below="@+id/elements_list_toolbar"
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/vlAddFavouriteElements">
 
         <ImageView
@@ -45,7 +45,8 @@
             android:layout_gravity="center_horizontal"
             android:scaleType="fitXY"
             android:src="@drawable/like_filled"
-            android:tint="@color/colorPrimaryDark" />
+            android:tint="@color/colorWhite"
+            android:padding="6dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,7 +55,7 @@
             android:id="@+id/tvEmptyFavourites"
             android:textAllCaps="true"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorWhite"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:gravity="center" />

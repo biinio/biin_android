@@ -77,6 +77,7 @@
     <string name="ContinueBtn">Continue</string>
     <string name="WelcomeDesc">We are glad to see you here, if you are new, you can sign up with your email or login with Facebook.</string>
     <string name="StartDesc">Excelent, now is time to discover and enjoy special rewards with Biin.</string>
+    <string name="NotificationsEmpty">"You don't have notifications right now"</string>
 
     /* Categories */
     <string name="category1">Books, Audio and Movies</string>

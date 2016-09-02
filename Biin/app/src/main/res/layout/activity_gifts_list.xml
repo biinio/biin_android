@@ -32,11 +32,11 @@ tools:context="com.biin.biin.GiftsListActivity">
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite"
+        android:background="@color/colorDarkGrey"
         android:gravity="center"
-        android:visibility="gone"
         android:layout_below="@+id/gifts_list_toolbar"
-        android:id="@+id/vlEmptyGifts">
+        android:id="@+id/vlEmptyGifts"
+        android:visibility="gone">
     
         <ImageView
             android:layout_width="100dp"
@@ -45,7 +45,7 @@ tools:context="com.biin.biin.GiftsListActivity">
             android:layout_gravity="center_horizontal"
             android:scaleType="fitXY"
             android:src="@drawable/gift"
-            android:tint="@color/colorPrimaryDark" />
+            android:tint="@color/colorWhite" />
     
         <TextView
             android:layout_width="wrap_content"
@@ -54,7 +54,7 @@ tools:context="com.biin.biin.GiftsListActivity">
             android:id="@+id/tvEmptyGifts"
             android:textAllCaps="true"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorWhite"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:gravity="center" />

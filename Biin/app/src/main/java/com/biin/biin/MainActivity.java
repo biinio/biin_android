@@ -415,9 +415,9 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             public void onReceive(Context context, Intent intent) {
                 String type = intent.getStringExtra("TYPE");
                 if(type.equals("GIFT")) {
-                    refershGiftsBadge();
+                    refreshGiftsBadge();
                 }else{
-                    refershNotificationsBadge();
+                    refreshNotificationsBadge();
                 }
             }
         };
@@ -496,7 +496,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     @Override
     protected void onResume() {
         super.onResume();
-        refershGiftsBadge();
+        refreshGiftsBadge();
+        refreshNotificationsBadge();
 
         int nearVersion = dataManager.getNearBySitesVersion();
         int favsVersion = dataManager.getFavouriteSitesVersion();
@@ -527,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         loaded = true;
     }
 
-    private void refershGiftsBadge(){
+    private void refreshGiftsBadge(){
         int badge = dataManager.getGiftsBadge(getApplicationContext());
         TextView tvBadgeGifts = (TextView) findViewById(R.id.tvBadgeGifts);
         tvBadgeGifts.setText(String.valueOf(badge));
@@ -538,7 +539,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         }
     }
 
-    private void refershNotificationsBadge(){
+    private void refreshNotificationsBadge(){
         int badge = dataManager.getNotificationsBadge(getApplicationContext());
         TextView tvBadgeNotifications = (TextView) findViewById(R.id.tvBadgeNotifications);
         tvBadgeNotifications.setText(String.valueOf(badge));

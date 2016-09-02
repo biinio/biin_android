@@ -79,6 +79,8 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
 
     public void addItem(BNGift gift){
         this.gifts.add(0, gift);
+        notifyItemInserted(0);
+        notifyItemRangeChanged(0, gifts.size());
     }
 
     @Override
@@ -236,7 +238,6 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
         protected String id;
         protected SwipeRevealLayout swipeGift;
         protected CardView cvGift;
-        protected RelativeLayout rlGiftLabel;
         protected ImageView ivGift, ivDelete, ivShare, ivStores;
         protected TextView tvDate, tvName, tvDescription, tvRequest, tvDummy;
 
@@ -244,7 +245,6 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
             super(itemView);
 
             cvGift = (CardView)itemView.findViewById(R.id.cvGiftItem);
-            rlGiftLabel = (RelativeLayout)itemView.findViewById(R.id.rlElementLabel);
             swipeGift = (SwipeRevealLayout) itemView.findViewById(R.id.swipeGift);
 
             ivGift = (ImageView) itemView.findViewById(R.id.ivGiftImage);
@@ -269,37 +269,3 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

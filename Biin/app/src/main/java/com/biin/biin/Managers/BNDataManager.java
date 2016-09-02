@@ -14,6 +14,7 @@ import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNGift;
 import com.biin.biin.Entities.BNHighlight;
+import com.biin.biin.Entities.BNNotification;
 import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
@@ -54,6 +55,7 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     private List<BNSite> nearBySites = new ArrayList<>();
     private List<BNSite> favouriteSites = new ArrayList<>();
     private List<BNBeacon> nearByBeacons = new ArrayList<>();
+    private List<BNNotification> notifications = new ArrayList<>();
 
     private LinkedHashMap<String, BNSite> pendingLikeSites = new LinkedHashMap<>();
     private LinkedHashMap<String, BNSite> pendingUnlikeSites = new LinkedHashMap<>();
@@ -866,10 +868,21 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     }
 
     public boolean addBNGift(BNGift gift) {
+        return addBNGift(gift, false);
+    }
+
+    public boolean addBNGift(BNGift gift, boolean start) {
         boolean added = false;
         // agregar un gift a la coleccion
         if(!this.gifts.containsKey(gift.getIdentifier())){
-            this.gifts.put(gift.getIdentifier(), gift);
+            if(start) {
+                LinkedHashMap<String, BNGift> resp = (LinkedHashMap<String, BNGift>) this.gifts.clone();
+                this.gifts.clear();
+                this.gifts.put(gift.getIdentifier(), gift);
+                this.gifts.putAll(resp);
+            }else {
+                this.gifts.put(gift.getIdentifier(), gift);
+            }
             added = true;
         }
         // retornar true si se agrego o false si no se agrego
@@ -895,6 +908,63 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     public LinkedHashMap<String,BNGift> getBNGifts(){
         // retornar la lista de gifts
         return this.gifts;
+    }
+
+    /****************** Gifts end ******************/
+
+
+    /****************** Notifications start ******************/
+
+    public void setBNNotifications(List<BNNotification> notifications) {
+        // reemplazar la coleccion completa de notifications
+        this.notifications = notifications;
+    }
+
+    public int addBNNotifications(List<BNNotification> notifications) {
+        // agregar notifications a la coleccion (solo las que no existian previamente)
+        int added = 0;
+        for (BNNotification notification : notifications) {
+            if(addBNNotification(notification)){
+                added++;
+            }
+        }
+        // retornar el numero de notifications agregadas a la coleccion
+        return added;
+    }
+
+    public boolean addBNNotification(BNNotification notification) {
+        return addBNNotification(notification, false);
+    }
+
+    public boolean addBNNotification(BNNotification notification, boolean start) {
+        // agregar una notification a la coleccion
+        if(start) {
+            this.notifications.add(0, notification);
+        }else {
+            this.notifications.add(notification);
+        }
+        return true;
+    }
+
+    public BNNotification getBNNotification(int position) {
+        // obtener una notification por su posicion
+        return this.notifications.get(position);
+    }
+
+    public boolean removeBNNotification(int position) {
+        boolean removed = false;
+        // remover una notification de la coleccion
+        if(this.notifications.size() > position){
+            this.notifications.remove(position);
+            removed = true;
+        }
+        // retornar true si se elimino o false si no se elimino
+        return removed;
+    }
+
+    public List<BNNotification> getBNNotifications(){
+        // retornar la lista de notifications
+        return this.notifications;
     }
 
     /****************** Gifts end ******************/
@@ -947,7 +1017,6 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
         editor.putInt(BNUtils.BNStringExtras.BNNotificationBadge, 0);
         editor.commit();
     }
-
 
     /****************** Badges end ******************/
 

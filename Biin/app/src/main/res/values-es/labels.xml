@@ -77,6 +77,7 @@
     <string name="ContinueBtn">Continuar</string>
     <string name="WelcomeDesc">Estamos felices que estés aqui, si es tu primera vez puedes crear una cuenta nueva o inicia sesión con Facebook.</string>
     <string name="StartDesc">Excelente, ahora es tiempo de empezar a descubrir y beneficiarte con Biin.</string>
+    <string name="NotificationsEmpty">No tienes notificaciones en este momento</string>
 
     /* Categories */
     <string name="category1">Libros, Audio y peliculas</string>

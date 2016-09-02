@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.biin.biin.Entities.BNGift;
 import com.biin.biin.Entities.BNJSONParsers.BNGiftParser;
+import com.biin.biin.Entities.BNJSONParsers.BNNotificationParser;
+import com.biin.biin.Entities.BNNotification;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -18,6 +20,7 @@ public class BiinMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "BiinMessagingService";
     private static BNGiftParser giftParser = new BNGiftParser();
+    private static BNNotificationParser notificationParser = new BNNotificationParser();
     private BNDataManager dataManager;
     private LocalBroadcastManager localBroadcastManager;
 
@@ -35,7 +38,7 @@ public class BiinMessagingService extends FirebaseMessagingService {
                 if(dataManager == null) {
                     dataManager = BNAppManager.getInstance().getDataManagerInstance();
                 }
-                if (dataManager.addBNGift(gift)) {
+                if (dataManager.addBNGift(gift, true)) {
                     dataManager.incrementGiftsBadge(getApplicationContext());
                     // llamar al broadcast para avisar a la pantalla principal
                     if(localBroadcastManager == null) {
@@ -43,11 +46,12 @@ public class BiinMessagingService extends FirebaseMessagingService {
                     }
                     Intent intent = new Intent("MESSAGING_SERVICE");
                     intent.putExtra("TYPE", "GIFT");
-                    intent.putExtra("POSITION", dataManager.getBNGifts().size() - 1);
+                    intent.putExtra("POSITION", 0);
+//                    intent.putExtra("POSITION", dataManager.getBNGifts().size() - 1);
                     localBroadcastManager.sendBroadcast(intent);
                 }
             } else {
-                Log.e(TAG, "Error: no Ne pudo parsear el gift (" + remoteMessage.getData() + ")");
+                Log.e(TAG, "Error: no se pudo parsear el gift (" + remoteMessage.getData() + ")");
             }
         }else{
             if(type.equals("giftdelivered")){ // determinar si es una notificacion de entrega de gift
@@ -67,13 +71,28 @@ public class BiinMessagingService extends FirebaseMessagingService {
                 intent.putExtra("IDENTIFIER", giftIdentifier);
                 localBroadcastManager.sendBroadcast(intent);
             }else {
-                // sino, es una notificacion solamente
-                if (localBroadcastManager == null) {
-                    localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+                if(type.equals("notice")) {
+                    // es un mensaje de notificacion
+                    BNNotification notification = parseNotification(remoteMessage.getData().toString());
+                    if (notification != null) {
+                        if(dataManager == null) {
+                            dataManager = BNAppManager.getInstance().getDataManagerInstance();
+                        }
+                        if (dataManager.addBNNotification(notification, true)) {
+                            dataManager.incrementNotificationsBadge(getApplicationContext());
+                            // llamar al broadcast para avisar a la pantalla principal
+                            if(localBroadcastManager == null) {
+                                localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+                            }
+                            Intent intent = new Intent("MESSAGING_SERVICE");
+                            intent.putExtra("TYPE", "NOTIFICATION");
+                            intent.putExtra("POSITION", 0);
+                            localBroadcastManager.sendBroadcast(intent);
+                        }
+                    } else {
+                        Log.e(TAG, "Error: no se pudo parsear la notificacion (" + remoteMessage.getData() + ")");
+                    }
                 }
-                Intent intent = new Intent("MESSAGING_SERVICE");
-                intent.putExtra("TYPE", "NOTIFICATION");
-                localBroadcastManager.sendBroadcast(intent);
             }
         }
     }
@@ -103,7 +122,15 @@ public class BiinMessagingService extends FirebaseMessagingService {
         return gift;
     }
 
-    private void parseNotification(String data){
-        //TODO parsear notifications
+    private BNNotification parseNotification(String data){
+        BNNotification notification = null;
+        try{
+            JSONObject objectNotification = new JSONObject(data);
+            JSONObject objectData = objectNotification.getJSONObject("data");
+            notification = notificationParser.parseBNNotification(objectData);
+        }catch (JSONException e){
+            Log.e(TAG, "Error parseando el JSON.", e);
+        }
+        return notification;
     }
 }

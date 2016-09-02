@@ -78,10 +78,8 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
                     Log.e(TAG, "Gift recibido por notificacion");
                     int position = intent.getIntExtra("POSITION", 0);
                     if(adapter != null){
-                        gifts = new ArrayList<>(dataManager.getBNGifts().values());
+                        List<BNGift> gifts = new ArrayList<>(dataManager.getBNGifts().values());
                         adapter.addItem(gifts.get(position));
-                        adapter.notifyItemInserted(0);
-                        adapter.notifyItemRangeChanged(0, gifts.size());
                         RecyclerView rvSlides = (RecyclerView) findViewById(R.id.rvGiftsList);
                         rvSlides.scrollToPosition(0);
                     }else{
@@ -121,13 +119,14 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
 
     private void setUpList(){
         RecyclerView rvSlides = (RecyclerView) findViewById(R.id.rvGiftsList);
+        LinearLayout vlEmptyGifts = (LinearLayout) findViewById(R.id.vlEmptyGifts);
         gifts = new ArrayList<>(dataManager.getBNGifts().values());
         if (gifts.size() > 0) {
             adapter = new BNGiftAdapter(this, gifts, this);
             rvSlides.setLayoutManager(new LinearLayoutManager(this));
             rvSlides.setAdapter(adapter);
+            vlEmptyGifts.setVisibility(View.GONE);
         } else {
-            LinearLayout vlEmptyGifts = (LinearLayout) findViewById(R.id.vlEmptyGifts);
             vlEmptyGifts.setVisibility(View.VISIBLE);
         }
     }
@@ -261,6 +260,13 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
 
     @Override
     public void onGiftDeleted(String gift, int position) {
+        dataManager.removeBNGift(gift);
+
+        if (adapter.getItemCount() == 0) {
+            LinearLayout vlEmptyGifts = (LinearLayout) findViewById(R.id.vlEmptyGifts);
+            vlEmptyGifts.setVisibility(View.VISIBLE);
+        }
+
         JSONObject request = new JSONObject();
         try {
             JSONObject model = new JSONObject();
@@ -269,8 +275,9 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
         }catch (JSONException e){
             Log.e(TAG, "Error:" + e.getMessage());
         }
+
         Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
-        String identifier = "";
+        String identifier;
 
         if(biinie != null && biinie.getIdentifier() != null && !biinie.getIdentifier().isEmpty()){
             identifier = biinie.getIdentifier();
