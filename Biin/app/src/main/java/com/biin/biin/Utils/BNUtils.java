@@ -12,12 +12,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by ramirezallan on 5/3/16.
@@ -159,6 +162,18 @@ public class BNUtils {
 
     public static String getActionDateFormat(){
         return "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    }
+
+    public static String getBeaconDateFormat(){
+        return "yyyy-MM-dd'T'HH:mm:ss";
+    }
+
+    public static String getTimeZone(){
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
+        Date currentLocalTime = calendar.getTime();
+        DateFormat date = new SimpleDateFormat("Z");
+        String localTime = date.format(currentLocalTime);
+        return localTime;
     }
 
     public static String getDisplayDateFormat(){

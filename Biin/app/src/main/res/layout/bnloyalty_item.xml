@@ -24,12 +24,12 @@
                 android:layout_height="wrap_content" >
 
                 <RelativeLayout
-                    android:layout_width="72dp"
+                    android:layout_width="96dp"
                     android:layout_height="wrap_content"
                     android:gravity="right">
 
                     <ImageView
-                        android:layout_width="72dp"
+                        android:layout_width="96dp"
                         android:layout_height="108dp"
                         android:id="@+id/ivLoyaltyDelete"
                         android:layout_weight="1"

@@ -16,6 +16,9 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class BiinMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "BiinMessagingService";
@@ -73,7 +76,7 @@ public class BiinMessagingService extends FirebaseMessagingService {
             }else {
                 if(type.equals("notice")) {
                     // es un mensaje de notificacion
-                    BNNotification notification = parseNotification(remoteMessage.getData().toString());
+                    BNNotification notification = parseNotification(remoteMessage.getNotification());
                     if (notification != null) {
                         if(dataManager == null) {
                             dataManager = BNAppManager.getInstance().getDataManagerInstance();
@@ -122,15 +125,13 @@ public class BiinMessagingService extends FirebaseMessagingService {
         return gift;
     }
 
-    private BNNotification parseNotification(String data){
-        BNNotification notification = null;
-        try{
-            JSONObject objectNotification = new JSONObject(data);
-            JSONObject objectData = objectNotification.getJSONObject("data");
-            notification = notificationParser.parseBNNotification(objectData);
-        }catch (JSONException e){
-            Log.e(TAG, "Error parseando el JSON.", e);
-        }
+    private BNNotification parseNotification(RemoteMessage.Notification data){
+        BNNotification notification = new BNNotification();
+        notification.setTitle(data.getTitle());
+        notification.setMessage(data.getBody());
+        Date received = new Date();
+        received.setTime(Calendar.getInstance().getTimeInMillis());
+        notification.setReceivedDate(received);
         return notification;
     }
 }

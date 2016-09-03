@@ -67,7 +67,14 @@ import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -176,6 +183,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             @Override
             public void onClick(View v) {
                 analyticsManager.addAction(new BiinieAction("", BiinieAction.CLOSE_APP, BiinieAction.AndroidApp));
+                Intent i = new Intent(MainActivity.this, BeaconsService.class);
+                stopService(i);
                 MainActivity.super.onBackPressed();
             }
         });
@@ -231,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         drawer = (DrawerLayout) findViewById(R.id.dlMain);
 
         TextView tvProfile, tvFavourites, tvFriends, tvAbout, tvLoyalty, tvGifts, tvNotifications, tvBadgeGifts, tvBadgeNotifications;
+        TextView tvToken; //TODO remove
 
         tvProfile = (TextView) findViewById(R.id.tvMenuProfile);
         tvProfile.setTypeface(lato_regular);
@@ -308,6 +318,21 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, NotificationsActivity.class);
                 startActivity(i);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        tvToken = (TextView) findViewById(R.id.tvMenuDevelopment);
+        tvToken.setTypeface(lato_regular);
+        tvToken.setLetterSpacing(0.3f);
+        tvToken.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.setAction(Intent.ACTION_SEND);
+                i.putExtra(Intent.EXTRA_TEXT, FirebaseInstanceId.getInstance().getToken());
+                i.setType("text/plain");
+                startActivity(Intent.createChooser(i, "Token"));
                 drawer.closeDrawer(GravityCompat.START);
             }
         });
@@ -801,6 +826,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             @Override
             public void onIBeaconDiscovered(IBeaconDevice device, IBeaconRegion region) {
                 Log.e("IBeacon", "IBeacon discovered: " + device.getUniqueId());
+                sendBeaconAlert(device.getMajor());
                 if ((device.getDistance() + 5d) < beaconDistance) {
                     if (dataManager.getBNSiteByMajor(device.getMajor()) != null) {
                         showBeaconAlert(device);
@@ -843,6 +869,43 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
                 }
             }
         };
+    }
+
+    private void sendBeaconAlert(int major){
+        BNSite site = dataManager.getBNSiteByMajor(major);
+        if (site != null && site.getIdentifier() != null) {
+            String timezone = BNUtils.getTimeZone();
+            DateFormat date = new SimpleDateFormat(BNUtils.getBeaconDateFormat());
+            String localTime = date.format(Calendar.getInstance().getTime()) + " " + timezone;
+
+            JSONObject request = new JSONObject();
+            try {
+                JSONObject model = new JSONObject();
+                model.put("timeClient", localTime);
+                request.put("model", model);
+            }catch (JSONException e){
+                Log.e(TAG, "Error:" + e.getMessage());
+            }
+
+            String url = BNAppManager.getInstance().getNetworkManagerInstance().getBeaconDetectedUrl(biinie.getIdentifier(), site.getIdentifier());
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    request,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.e(TAG, "Enviada la accion de deteccion del beacon de un site");
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            beaconNotificationError(error);
+                        }
+                    });
+            BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "BeaconFound");
+        }
     }
 
     private void showBeaconAlert(IBeaconDevice device){
@@ -1022,7 +1085,11 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     }
 
     private void onInitialDataError(VolleyError error){
-        Log.e(TAG, "Error:" + error.getMessage());
+        Log.e(TAG, "Initial Data Error:" + error.getMessage());
+    }
+
+    private void beaconNotificationError(VolleyError error){
+        Log.e(TAG, "Notification Error:" + error.getMessage());
     }
 
     private void reloadData() {

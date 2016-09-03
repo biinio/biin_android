@@ -5,12 +5,20 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Entities.BNBeacon;
+import com.biin.biin.Entities.BNSite;
 import com.biin.biin.Managers.BNAppManager;
+import com.biin.biin.Utils.BNUtils;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
@@ -24,7 +32,13 @@ import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -116,9 +130,52 @@ public class BeaconsService extends Service {
             @Override
             public void onIBeaconDiscovered(IBeaconDevice ibeacon, IBeaconRegion region) {
                 //Beacon discovered
+                sendBeaconAlert(ibeacon.getMajor());
                 Log.e(TAG, "Beacon discovered " + ibeacon.getMajor());
             }
         };
+    }
+
+    private void sendBeaconAlert(int major){
+        BNSite site = BNAppManager.getInstance().getDataManagerInstance().getBNSiteByMajor(major);
+        if (site != null && site.getIdentifier() != null) {
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+            String biinieIdentifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");
+
+            if(!biinieIdentifier.isEmpty()) {
+                String timezone = BNUtils.getTimeZone();
+                DateFormat date = new SimpleDateFormat(BNUtils.getBeaconDateFormat());
+                String localTime = date.format(Calendar.getInstance().getTime()) + " " + timezone;
+
+                JSONObject request = new JSONObject();
+                try {
+                    JSONObject model = new JSONObject();
+                    model.put("timeClient", localTime);
+                    request.put("model", model);
+                } catch (JSONException e) {
+                    Log.e(TAG, "Error:" + e.getMessage());
+                }
+
+                String url = BNAppManager.getInstance().getNetworkManagerInstance().getBeaconDetectedUrl(biinieIdentifier, site.getIdentifier());
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                        Request.Method.POST,
+                        url,
+                        request,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.e(TAG, "Enviada la accion de deteccion del beacon de un site");
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e(TAG, "Notification Error:" + error.getMessage());
+                            }
+                        });
+                BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "BeaconFound");
+            }
+        }
     }
 
     private Collection<IBeaconRegion> createIBeaconRegions(){

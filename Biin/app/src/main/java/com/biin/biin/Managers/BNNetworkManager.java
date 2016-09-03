@@ -28,6 +28,7 @@ public class BNNetworkManager {
     private static String URL_BIINIE = "/mobile/biinies";
     private static String URL_INITIALDATA = "/mobile/initialData";
     private static String URL_FACEBOOK = "/facebook";
+    private static String URL_BEACON_SITE = "/onentersite";
 
     private static String URL_PRIVACY_POLICY = "/privacy.html";
     private static String URL_TERMS_OF_USE = "/termsofuse.html";
@@ -137,6 +138,10 @@ public class BNNetworkManager {
     public String getActonsUrl(String identifier){
         String url = getUrlBiinie(identifier) + URL_ACTIONS;
         return url;
+    }
+
+    public String getBeaconDetectedUrl(String identifier, String site) {
+        return getUrlBiinie(identifier) + URL_BEACON_SITE + "/" + site;
     }
 
     public String getOrganizationsUrl(String identifier, String organization){

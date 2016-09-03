@@ -45,6 +45,7 @@
     <string name="FavoritePlaces">Tus lugares Favoritos</string>
     <string name="AddFavoritePlaces">Agrega algunos lugares a tus favoritos</string>
     <string name="NoGifts">No tienes regalos en este momento</string>
+    <string name="NoLoyalties">No tienes tarjetas en este momento</string>
     <string name="NoFavoritePlaces">Usa el botón de like para agregar lugares a tus favoritos</string>
     <string name="NoFavoriteElements">Usa el botón de like para agregar productos a tus favoritos</string>
     <string name="NoMorePlaces">Parece que ya no hay más lugares cerca tuyo.</string>
