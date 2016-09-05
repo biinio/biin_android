@@ -247,7 +247,7 @@ public class BNElementListAdapter extends RecyclerView.Adapter<RecyclerView.View
             flOffer = (FrameLayout)itemView.findViewById(R.id.flElementOffer);
 
             ivElement = (ImageView)itemView.findViewById(R.id.ivElement);
-            ivOrganization = (ImageView)itemView.findViewById(R.id.ivOrganization);
+            ivOrganization = (ImageView)itemView.findViewById(R.id.ivFriendAvatar);
             ivOffer = (ImageView)itemView.findViewById(R.id.ivElementOffer);
             ivLike = (ImageView)itemView.findViewById(R.id.ivElementLike);
             ivLiked = (ImageView)itemView.findViewById(R.id.ivElementLiked);

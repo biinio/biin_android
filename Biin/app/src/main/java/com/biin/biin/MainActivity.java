@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
 
         biinie = dataManager.getBiinie();
+        Log.e(TAG, "Identifier: " + biinie.getIdentifier());
 
         setUpScreen();
         loadData();

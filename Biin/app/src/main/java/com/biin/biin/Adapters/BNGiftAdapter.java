@@ -1,6 +1,7 @@
 package com.biin.biin.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
@@ -23,11 +24,13 @@ import com.biin.biin.Components.Listeners.IBNGiftActionListener;
 import com.biin.biin.Components.Listeners.IBNSitesLikeListener;
 import com.biin.biin.Entities.BNGift;
 import com.biin.biin.Entities.Biinie;
+import com.biin.biin.FriendsActivity;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.R;
 import com.biin.biin.Utils.BNUtils;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.facebook.AccessToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
@@ -161,7 +164,11 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "Share (position: " + position + ")", Toast.LENGTH_SHORT).show();
+                    if(AccessToken.getCurrentAccessToken() != null) {
+                        giftsListener.onGiftShared(item.getIdentifier(), position);
+                    }else{
+                        Toast.makeText(context, R.string.login_facebook_alert, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         );

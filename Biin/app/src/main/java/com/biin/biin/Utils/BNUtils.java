@@ -195,12 +195,14 @@ public class BNUtils {
         public static final String BNElement = "BNElementIdentifier";
         public static final String BNShowcase = "BNShowcaseIdentifier";
         public static final String BNSite = "BNSiteIdentifier";
+        public static final String BNGift = "BNGiftIdentifier";
         public static final String BNFavorites = "BNFavorites";
         public static final String BNShowOthers = "BNShowOtherSites";
         public static final String BNShowMore = "BNShowMoreFromSite";
         public static final String FCMToken = "FCMToken";
         public static final String BNGiftBadge = "BNGiftBadge";
         public static final String BNNotificationBadge = "BNNotificationBadge";
+        public static final String BNFacebook = "Facebook_ID";
     }
 
 }

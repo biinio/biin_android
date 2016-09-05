@@ -49,6 +49,7 @@
     <string name="NoFavoritePlaces">Use the like button to add places to your favorites</string>
     <string name="NoFavoriteElements">Use the like button to add products to your favourites</string>
     <string name="NoMorePlaces">It seems there are no more places near by you.</string>
+    <string name="NoFriends">Invite some friends to use Biin</string>
     <string name="OtherPlaces1">"More "</string>
     <string name="OtherPlaces2">" near you"</string>
 
@@ -69,6 +70,7 @@
     <string name="LoyaltyWallet">Loyalty Wallet</string>
     <string name="Notifications">Notifications</string>
     <string name="InviteFriends">Invite Friends</string>
+    <string name="MyFriends">My Friends</string>
     <string name="Settings">Settings</string>
     <string name="Search">Search</string>
     <string name="About">About</string>
@@ -128,6 +130,7 @@
     <string name="EnterYourBirthDate">Enter your birthdate</string>
     <string name="Optionales">If you share with us your birth day and age we will improve the recomendations we show you.</string>
     <string name="SaveSuccess">Information updated successfully</string>
+    <string name="login_facebook_alert">To share gifts you should log in with Facebook</string>
     <string name="login_facebook_ok">Facebook login ok</string>
     <string name="login_facebook_canceled">Facebook login canceled</string>
     <string name="login_facebook_error">Facebook login error</string>

@@ -5,4 +5,5 @@ package com.biin.biin.Components.Listeners;
  */
 public interface IBNGiftActionListener {
     void onGiftDeleted(String identifier, int position);
+    void onGiftShared(String identifier, int position);
 }

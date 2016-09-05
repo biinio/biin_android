@@ -2,6 +2,7 @@ package com.biin.biin.Entities.BNJSONParsers;
 
 import android.util.Log;
 
+import com.biin.biin.Entities.BNFriend;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Entities.Biinie;
 
@@ -9,7 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by ramirezallan on 5/4/16.
@@ -29,7 +32,8 @@ public class BiinieParser {
             biinie.setBiinName(objectBiinie.getString("biinName"));
             biinie.setGender(objectBiinie.getString("gender"));
             biinie.setFacebookAvatarUrl(objectBiinie.getString("facebookAvatarUrl"));
-            //TODO facebook friends array
+            // facebook friends array
+            biinie.setFacebookFriends(parseFacebookFriends(objectBiinie.getJSONArray("facebookFriends")));
             //TODO categories array
             //TODO friends array
 //            biinie.setFollowers(Integer.parseInt(objectBiinie.getString("followers")));
@@ -56,6 +60,23 @@ public class BiinieParser {
                 Biinie biinie = parseBiinie(objectBiinie);
 
                 result.put(biinie.getIdentifier(), biinie);
+            }
+        }catch (JSONException e){
+            Log.e(TAG, "Error parseando el JSON.", e);
+        }
+        return result;
+    }
+
+    private List<BNFriend> parseFacebookFriends(JSONArray arrayFriends){
+        List<BNFriend> result = new ArrayList<>();
+        try{
+            for(int i = 0; i < arrayFriends.length(); i++){
+                JSONObject objectFriend = (JSONObject) arrayFriends.get(i);
+                BNFriend friend = new BNFriend();
+                friend.setFacebook_id(objectFriend.getString("facebookId"));
+                friend.setFacebookAvatarUrl(objectFriend.getString("url"));
+                friend.setFacebookName(objectFriend.getString("name"));
+                result.add(friend);
             }
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);

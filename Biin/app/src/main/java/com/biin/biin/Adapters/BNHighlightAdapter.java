@@ -60,7 +60,7 @@ public class BNHighlightAdapter extends LoopPagerAdapter {
         flOffer = (FrameLayout)view.findViewById(R.id.flElementOffer);
 
         ivElement = (ImageView)view.findViewById(R.id.ivElement);
-        ivOrganization = (ImageView)view.findViewById(R.id.ivOrganization);
+        ivOrganization = (ImageView)view.findViewById(R.id.ivFriendAvatar);
         ivOffer = (ImageView)view.findViewById(R.id.ivElementOffer);
 
         tvTitle = (TextView)view.findViewById(R.id.tvTitle);

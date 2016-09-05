@@ -16,7 +16,6 @@ import com.biin.biin.R;
 import com.biin.biin.Utils.BNUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

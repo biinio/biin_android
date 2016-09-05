@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by ramirezallan on 5/2/16.
@@ -51,6 +52,15 @@ public class Biinie {
     private LinkedHashMap<String, String> elementsViewed;
 
     private String facebookAvatarUrl;
+    private List<BNFriend> facebookFriends;
+
+    public List<BNFriend> getFacebookFriends() {
+        return facebookFriends;
+    }
+
+    public void setFacebookFriends(List<BNFriend> facebookFriends) {
+        this.facebookFriends = facebookFriends;
+    }
 
     public Biinie(String identifier, String firstName, String lastName, String email) {
         this.identifier = identifier;

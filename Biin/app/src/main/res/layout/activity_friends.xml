@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.biin.biin.ElementsListActivity">
+    tools:context="com.biin.biin.FriendsActivity">
 
     <include
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         layout="@layout/biin_toolbar"
-        android:id="@+id/elements_list_toolbar"
+        android:id="@+id/friends_toolbar"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
@@ -18,14 +18,14 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rvElementsList"
-        android:layout_alignStart="@+id/elements_list_toolbar"
-        tools:listitem="@layout/bnelement_item"
+        android:id="@+id/rvFriendsList"
+        android:layout_alignStart="@+id/friends_toolbar"
+        tools:listitem="@layout/bnfriend_item"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/elements_list_toolbar"
+        android:layout_below="@+id/friends_toolbar"
         android:background="@color/colorDarkGrey" />
 
     <LinearLayout
@@ -34,25 +34,25 @@
         android:layout_height="match_parent"
         android:background="@color/colorDarkGrey"
         android:gravity="center"
-        android:layout_below="@+id/elements_list_toolbar"
+        android:layout_below="@+id/friends_toolbar"
         android:visibility="gone"
-        android:id="@+id/vlAddFavouriteElements">
+        android:id="@+id/vlAddFriends">
 
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/ivEmptyFavourites"
+            android:id="@+id/ivEmptyFriends"
             android:layout_gravity="center_horizontal"
             android:scaleType="fitXY"
-            android:src="@drawable/like_filled"
+            android:src="@drawable/gift_share"
             android:tint="@color/colorWhite"
             android:padding="6dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/NoFavoriteElements"
-            android:id="@+id/tvEmptyFavourites"
+            android:text="@string/NoFriends"
+            android:id="@+id/tvEmptyFriends"
             android:textAllCaps="true"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/colorWhite"

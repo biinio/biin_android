@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -48,6 +49,8 @@ import java.util.concurrent.TimeUnit;
 public class GiftsListActivity extends AppCompatActivity implements IBNGiftActionListener, Response.Listener<JSONObject> {
 
     private static final String TAG = "GiftsListActivity";
+    private static final int REQUEST = 1003;
+    private static final int RESULT = 1004;
 
     private BNDataManager dataManager;
     private LocalBroadcastManager localBroadcastManager;
@@ -298,6 +301,25 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
                     }
                 });
         BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    @Override
+    public void onGiftShared(String identifier, int position) {
+        Toast.makeText(this, "Gift id: " + identifier + " pos(" + position + ")", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, FriendsActivity.class);
+        i.putExtra(BNUtils.BNStringExtras.BNGift, identifier);
+        startActivityForResult(i, REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST && resultCode == RESULT) {
+            String facebookId = data.getStringExtra(BNUtils.BNStringExtras.BNFacebook);
+            String giftIdentifier = data.getStringExtra(BNUtils.BNStringExtras.BNGift);
+            Toast.makeText(this, "Facebook id: " + facebookId + " Gift id: " + giftIdentifier, Toast.LENGTH_SHORT).show();
+            //TODO request share
+        }
     }
 
     private void onVolleyError(VolleyError error){

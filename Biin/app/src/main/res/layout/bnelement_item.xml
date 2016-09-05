@@ -77,31 +77,31 @@
             <ImageView
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:id="@+id/ivOrganization"
+                android:id="@+id/ivFriendAvatar"
                 android:scaleType="fitXY"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
                 android:layout_margin="6dp" />
 
             <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-                android:layout_alignBottom="@+id/ivOrganization"
-            android:layout_alignTop="@+id/ivOrganization"
-            android:layout_marginRight="6dp"
-            android:weightSum="3"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/ivFriendAvatar"
+                android:layout_alignTop="@+id/ivFriendAvatar"
+                android:layout_marginRight="6dp"
+                android:weightSum="3"
                 android:id="@+id/linearLayout2"
                 android:layout_toStartOf="@+id/flElementLikes"
-                android:layout_toEndOf="@+id/ivOrganization">
+                android:layout_toEndOf="@+id/ivFriendAvatar">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
                 android:id="@+id/tvTitle"
-                android:layout_alignTop="@+id/ivOrganization"
-                android:layout_toEndOf="@+id/ivOrganization"
+                android:layout_alignTop="@+id/ivFriendAvatar"
+                android:layout_toEndOf="@+id/ivFriendAvatar"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:textColor="#ffffff"
