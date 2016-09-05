@@ -23,7 +23,7 @@ import java.util.List;
 public class FriendsActivity extends AppCompatActivity implements IBNFriendsListener {
 
     private static final String TAG = "FriendsActivity";
-    private static final int RESULT = 1003;
+    private static final int RESULT = 1004;
 
     private List<BNFriend> friends;
     private BNFriendsAdapter adapter;
