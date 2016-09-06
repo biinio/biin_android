@@ -184,8 +184,8 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
             @Override
             public void onClick(View v) {
                 analyticsManager.addAction(new BiinieAction("", BiinieAction.CLOSE_APP, BiinieAction.AndroidApp));
-                Intent i = new Intent(MainActivity.this, BeaconsService.class);
-                stopService(i);
+                stopService(new Intent(MainActivity.this, BeaconsService.class));
+                stopService(new Intent(MainActivity.this, LocationService.class));
                 MainActivity.super.onBackPressed();
             }
         });
@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
         tvLoyalty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, LoyaltyActivity.class);
+                Intent i = new Intent(MainActivity.this, LoyaltyListActivity.class);
                 startActivity(i);
                 drawer.closeDrawer(GravityCompat.START);
             }
