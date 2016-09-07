@@ -28,13 +28,16 @@ public class FriendsActivity extends AppCompatActivity implements IBNFriendsList
     private List<BNFriend> friends;
     private BNFriendsAdapter adapter;
     private String giftIdentifier;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
 
-        giftIdentifier = getIntent().getStringExtra(BNUtils.BNStringExtras.BNGift);
+        Intent data = getIntent();
+        giftIdentifier = data.getStringExtra(BNUtils.BNStringExtras.BNGift);
+        position = data.getIntExtra(BNUtils.BNStringExtras.Position, 0);
 
         setUpScreen();
         setUpList();
@@ -69,6 +72,7 @@ public class FriendsActivity extends AppCompatActivity implements IBNFriendsList
         Intent intent = new Intent();
         intent.putExtra(BNUtils.BNStringExtras.BNFacebook, facebookId);
         intent.putExtra(BNUtils.BNStringExtras.BNGift, giftIdentifier);
+        intent.putExtra(BNUtils.BNStringExtras.Position, position);
         setResult(RESULT, intent);
         finish();
     }

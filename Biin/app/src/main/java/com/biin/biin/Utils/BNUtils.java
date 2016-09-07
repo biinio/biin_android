@@ -203,6 +203,7 @@ public class BNUtils {
         public static final String BNGiftBadge = "BNGiftBadge";
         public static final String BNNotificationBadge = "BNNotificationBadge";
         public static final String BNFacebook = "Facebook_ID";
+        public static final String Position = "Position";
     }
 
 }

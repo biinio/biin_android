@@ -112,12 +112,13 @@
                         android:layout_alignEnd="@+id/tvLoyaltyDetails"
                         android:layout_toEndOf="@+id/ivLoyaltyImage"
                         android:maxLines="2"
+                        android:lines="2"
                         android:ellipsize="end"
                         android:textSize="10sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="20dp"
                         android:id="@+id/tvLoyaltyEnroll"
                         android:text="Enroll Now!"
                         android:ellipsize="end"
@@ -125,7 +126,18 @@
                         android:layout_alignBottom="@+id/ivLoyaltyImage"
                         android:layout_alignEnd="@+id/tvLoyaltyText"
                         android:layout_toEndOf="@+id/ivLoyaltyImage"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:gravity="left"
+                        android:id="@+id/hlLoyaltyEnrolled"
+                        android:layout_alignBottom="@+id/ivLoyaltyImage"
+                        android:layout_alignEnd="@+id/tvLoyaltyText"
+                        android:layout_toEndOf="@+id/ivLoyaltyImage" />
 
                 </RelativeLayout>
 

@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class GiftsListActivity extends AppCompatActivity implements IBNGiftActionListener, Response.Listener<JSONObject> {
+public class GiftsListActivity extends AppCompatActivity implements IBNGiftActionListener {
 
     private static final String TAG = "GiftsListActivity";
     private static final int REQUEST = 1003;
@@ -293,7 +293,23 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
                 Request.Method.POST,
                 BNAppManager.getInstance().getNetworkManagerInstance().getGiftRefuseUrl(identifier),
                 request,
-                this,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e(TAG, "Response:" + response.toString());
+                        try {
+                            String result = response.getString("result");
+                            String status = response.getString("status");
+                            if(status.equals("0") && result.equals("1")){
+                                Log.e(TAG, "Gift eliminado en el server.");
+                            }else{
+                                Log.e(TAG, "Error actualizando el gift en el server.");
+                            }
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Error parseando el JSON.", e);
+                        }
+                    }
+                },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -305,9 +321,10 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
 
     @Override
     public void onGiftShared(String identifier, int position) {
-        Toast.makeText(this, "Gift id: " + identifier + " pos(" + position + ")", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Gift id: " + identifier + " pos(" + position + ")", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(this, FriendsActivity.class);
         i.putExtra(BNUtils.BNStringExtras.BNGift, identifier);
+        i.putExtra(BNUtils.BNStringExtras.Position, position);
         startActivityForResult(i, REQUEST);
     }
 
@@ -317,28 +334,82 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
         if(requestCode == REQUEST && resultCode == RESULT) {
             String facebookId = data.getStringExtra(BNUtils.BNStringExtras.BNFacebook);
             String giftIdentifier = data.getStringExtra(BNUtils.BNStringExtras.BNGift);
-            Toast.makeText(this, "Facebook id: " + facebookId + " Gift id: " + giftIdentifier, Toast.LENGTH_SHORT).show();
-            //TODO request share
+            int position = data.getIntExtra(BNUtils.BNStringExtras.Position, 0);
+//            Toast.makeText(this, "Facebook id: " + facebookId + " Gift id: " + giftIdentifier, Toast.LENGTH_SHORT).show();
+            // request share
+            shareGift(facebookId, giftIdentifier, position);
         }
+    }
+
+    private void shareGift(String facebookId, final String giftIdentifier, final int position){
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject model = new JSONObject();
+            model.put("biinieReciever", facebookId);
+            model.put("giftIdentifier", giftIdentifier);
+            request.put("model", model);
+        }catch (JSONException e){
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
+
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+        String identifier;
+
+        if(biinie != null && biinie.getIdentifier() != null && !biinie.getIdentifier().isEmpty()){
+            identifier = biinie.getIdentifier();
+        }else {
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+            identifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                BNAppManager.getInstance().getNetworkManagerInstance().getGiftShareUrl(identifier),
+                request,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e(TAG, "Response:" + response.toString());
+                        try {
+                            String result = response.getString("result");
+                            String status = response.getString("status");
+                            if(status.equals("0") && result.equals("1")){
+                                if(dataManager.removeBNGift(giftIdentifier)) {
+                                    Log.e(TAG, "Gift compartido correctamente.");
+                                    gifts.remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                    adapter.notifyItemRangeChanged(position, gifts.size());
+                                    if (adapter.getItemCount() == 0) {
+                                        LinearLayout vlEmptyGifts = (LinearLayout) findViewById(R.id.vlEmptyGifts);
+                                        vlEmptyGifts.setVisibility(View.VISIBLE);
+                                    }
+                                    Toast.makeText(GiftsListActivity.this, R.string.ShareOk, Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+                                Log.e(TAG, "Error actualizando el gift en el server.");
+                                giftShareError();
+                            }
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Error parseando el JSON.", e);
+                            giftShareError();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onVolleyError(error);
+                        giftShareError();
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
     }
 
     private void onVolleyError(VolleyError error){
         Log.e(TAG, "Error:" + error.getMessage());
     }
 
-    @Override
-    public void onResponse(JSONObject response) {
-        Log.e(TAG, "Response:" + response.toString());
-        try {
-            String result = response.getString("result");
-            String status = response.getString("status");
-            if(status.equals("0") && result.equals("1")){
-                Log.e(TAG, "Gift eliminado en el server.");
-            }else{
-                Log.e(TAG, "Error actualizando el gift en el server.");
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, "Error parseando el JSON.", e);
-        }
+    private void giftShareError(){
+        Toast.makeText(this, R.string.ShareError, Toast.LENGTH_SHORT).show();
     }
 }

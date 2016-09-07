@@ -1,7 +1,6 @@
 package com.biin.biin.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,10 +19,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.BiinApp;
 import com.biin.biin.Components.Listeners.IBNGiftActionListener;
-import com.biin.biin.Components.Listeners.IBNSitesLikeListener;
 import com.biin.biin.Entities.BNGift;
 import com.biin.biin.Entities.Biinie;
-import com.biin.biin.FriendsActivity;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.R;
 import com.biin.biin.Utils.BNUtils;
@@ -84,6 +80,10 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
         this.gifts.add(0, gift);
         notifyItemInserted(0);
         notifyItemRangeChanged(0, gifts.size());
+    }
+
+    public void closeViewBinder(int position){
+        viewBinderHelper.closeLayout(String.valueOf(position));
     }
 
     @Override

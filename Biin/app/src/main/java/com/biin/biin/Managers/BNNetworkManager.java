@@ -44,6 +44,7 @@ public class BNNetworkManager {
 
     private static String URL_GIFT_CLAIM = "/gifts/claim";
     private static String URL_GIFT_REFUSE = "/gifts/refuse";
+    private static String URL_GIFT_SHARE = "/gifts/share";
 
     protected static BNNetworkManager getInstance() {
         return ourInstance;
@@ -166,6 +167,11 @@ public class BNNetworkManager {
 
     public String getGiftRefuseUrl(String identifier){
         String url = getUrlBiinie(identifier) + URL_GIFT_REFUSE;
+        return url;
+    }
+
+    public String getGiftShareUrl(String identifier){
+        String url = getUrlBiinie(identifier) + URL_GIFT_SHARE;
         return url;
     }
 

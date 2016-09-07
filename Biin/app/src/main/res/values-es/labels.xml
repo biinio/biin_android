@@ -175,6 +175,8 @@
     <string name="ShareBody1">Hola, encontré esto en Biin.</string>
     <string name="ShareBody2">de </string>
     <string name="ShareBody3">Las mejores ofertas y lugares en tu smartphone están en Biin. Descarga biin en </string>
+    <string name="ShareError">Error compartiendo regalo</string>
+    <string name="ShareOk">Regalo compartido correctamente!</string>
 
 
     /*Alert messages*/
