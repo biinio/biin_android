@@ -221,15 +221,10 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void setUpFields(Biinie biinie){
-        String encoding = "US-ASCII";
         etName.setText(biinie.getFirstName());
         etLastName.setText(biinie.getLastName());
-        try {
-            etUsername.setText(URLDecoder.decode(biinie.getBiinName(), encoding));
-            etEmail.setText(URLDecoder.decode(biinie.getEmail(), encoding));
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG, "Error:" + e.getMessage());
-        }
+        etUsername.setText(biinie.getBiinName());
+        etEmail.setText(biinie.getEmail());
 
         if(biinie.isEmailVerified()) {
             etVerified.setText(getString(R.string.Yes));

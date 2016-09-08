@@ -17,6 +17,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNBiiniesListener;
@@ -41,11 +42,11 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class SignupActivity extends AppCompatActivity implements BNSignupListener.IBNSignupListener, BNBiiniesListener.IBNBiiniesListener {
+public class SignupActivity extends AppCompatActivity implements BNBiiniesListener.IBNBiiniesListener {
 
     private static final String TAG = "SignupActivity";
 
-    private BNSignupListener signupListener;
+    private BNBiiniesListener signupListener;
     private BNBiiniesListener biiniesListener;
     private CallbackManager callbackManager;
 
@@ -228,6 +229,7 @@ public class SignupActivity extends AppCompatActivity implements BNSignupListene
     }
 
     private void signupRequest(String name, String email, String pass, String gender, String date, String facebookId){
+        Date birthdate = BNUtils.getDateFromString(date, BNUtils.getFacebookDateFormat());
         String firstName, lastName;
         if(name.contains(" ")){
             firstName = name.substring(0, name.indexOf(" "));
@@ -236,13 +238,30 @@ public class SignupActivity extends AppCompatActivity implements BNSignupListene
             firstName = name;
             lastName = "";
         }
-        signupListener = new BNSignupListener();
+
+        signupListener = new BNBiiniesListener();
         signupListener.setListener(this);
 
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+        biinie.setFirstName(firstName);
+        biinie.setLastName(lastName);
+        biinie.setEmail(email);
+        biinie.setGender(gender);
+        biinie.setBirthDate(birthdate);
+        biinie.setFacebook_id(facebookId);
+
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject model = biinie.getModel();
+            request.put("model", model);
+        }catch (JSONException e){
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                BNAppManager.getInstance().getNetworkManagerInstance().getFacebookRegisterUrl(firstName, lastName, email, pass, gender, date, facebookId),
-                "",
+                Request.Method.POST,
+                BNAppManager.getInstance().getNetworkManagerInstance().getUrlBiinie("none"),
+                request,
                 signupListener,
                 new Response.ErrorListener() {
                     @Override
@@ -252,17 +271,6 @@ public class SignupActivity extends AppCompatActivity implements BNSignupListene
                 });
         BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "SignupFb");
     }
-
-    @Override
-    public void onSignupResponse(String identifier) {
-        if(!identifier.isEmpty()){
-            getBiinie(identifier);
-        }else{
-            Log.e(TAG, "Error: no se obtuvieron datos");
-            Toast.makeText(this, getString(R.string.ServerErrorText), Toast.LENGTH_LONG).show();
-        }
-    }
-
 
 
 

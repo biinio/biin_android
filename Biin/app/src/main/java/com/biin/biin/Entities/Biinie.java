@@ -54,20 +54,13 @@ public class Biinie {
     private String facebookAvatarUrl;
     private List<BNFriend> facebookFriends;
 
-    public List<BNFriend> getFacebookFriends() {
-        return facebookFriends;
-    }
-
-    public void setFacebookFriends(List<BNFriend> facebookFriends) {
-        this.facebookFriends = facebookFriends;
-    }
-
     public Biinie(String identifier, String firstName, String lastName, String email) {
         this.identifier = identifier;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.facebookAvatarUrl = "";
+        this.facebook_id = "none";
     }
 
     public Biinie(String identifier, String firstName, String lastName, String email, String gender) {
@@ -76,6 +69,8 @@ public class Biinie {
     }
 
     public Biinie() {
+        this.facebookAvatarUrl = "";
+        this.facebook_id = "none";
     }
 
     public String getFacebook_id() {
@@ -276,6 +271,14 @@ public class Biinie {
 
     public void setFacebookAvatarUrl(String facebookAvatarUrl) {
         this.facebookAvatarUrl = facebookAvatarUrl;
+    }
+
+    public List<BNFriend> getFacebookFriends() {
+        return facebookFriends;
+    }
+
+    public void setFacebookFriends(List<BNFriend> facebookFriends) {
+        this.facebookFriends = facebookFriends;
     }
 
     public JSONObject getModel(){

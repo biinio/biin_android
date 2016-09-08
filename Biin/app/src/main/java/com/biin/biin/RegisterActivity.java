@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Utils.BNUtils;
 import com.biin.biin.Volley.Listeners.BNBiiniesListener;
@@ -25,22 +26,26 @@ import com.biin.biin.Volley.Listeners.BNLoginListener;
 import com.biin.biin.Volley.Listeners.BNSignupListener;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
-public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, BNSignupListener.IBNSignupListener, BNBiiniesListener.IBNBiiniesListener {
+public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, BNBiiniesListener.IBNBiiniesListener {
 
     private static final String TAG = "RegisterActivity";
 
-    private BNSignupListener signupListener;
-    private BNBiiniesListener biiniesListener;
+    private BNBiiniesListener signupListener;
 
     private TextView tvGender, tvBirthdate, tvRegister;
     private FormEditText etName, etLastName, etEmail, etPassword;
     private ImageView ivMale, ivFemale;
     private ProgressBar pbRegister;
 
+    private Date birthdate;
     private String date, gender, male, female;
     private int colorNormal, colorSelected;
 
@@ -175,6 +180,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
         SimpleDateFormat apiFormatter = new SimpleDateFormat(BNUtils.getActionDateFormat());
+        birthdate = calendar.getTime();
         date = apiFormatter.format(calendar.getTime());
         SimpleDateFormat showFormatter = new SimpleDateFormat(BNUtils.getDisplayDateFormat());
         tvBirthdate.setText(showFormatter.format(calendar.getTime()));
@@ -204,13 +210,28 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     }
 
     private void signupRequest(){
-        signupListener = new BNSignupListener();
+        signupListener = new BNBiiniesListener();
         signupListener.setListener(this);
 
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+        biinie.setFirstName(etName.getText().toString().trim());
+        biinie.setLastName(etLastName.getText().toString().trim());
+        biinie.setEmail(etEmail.getText().toString().trim());
+        biinie.setGender(gender);
+        biinie.setBirthDate(birthdate);
+
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject model = biinie.getModel();
+            request.put("model", model);
+        }catch (JSONException e){
+            Log.e(TAG, "Error:" + e.getMessage());
+        }
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                BNAppManager.getInstance().getNetworkManagerInstance().getRegisterUrl(etName.getText().toString(), etLastName.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString(), gender, date),
-                "",
+                Request.Method.POST,
+                BNAppManager.getInstance().getNetworkManagerInstance().getUrlBiinie("none"),
+                request,
                 signupListener,
                 new Response.ErrorListener() {
                     @Override
@@ -219,39 +240,6 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                     }
                 });
         BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "Signup");
-    }
-
-    @Override
-    public void onSignupResponse(String identifier) {
-        if(!identifier.isEmpty()){
-            getBiinie(identifier);
-        }else{
-            Log.e(TAG, "Error: no se obtuvieron datos");
-            Toast.makeText(this, getString(R.string.ServerErrorText), Toast.LENGTH_LONG).show();
-            ivMale.setOnClickListener(maleClick);
-            ivFemale.setOnClickListener(femaleClick);
-            tvBirthdate.setOnClickListener(dateClick);
-            tvRegister.setOnClickListener(signupClick);
-            pbRegister.setVisibility(View.GONE);
-        }
-    }
-
-    private void getBiinie(final String identifier){
-        biiniesListener = new BNBiiniesListener();
-        biiniesListener.setListener(this);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                BNAppManager.getInstance().getNetworkManagerInstance().getUrlBiinie(identifier),
-                "",
-                biiniesListener,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onVolleyError(error);
-                    }
-                });
-        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "Biinie");
     }
 
     private void onVolleyError(VolleyError error){
