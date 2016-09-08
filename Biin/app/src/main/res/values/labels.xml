@@ -176,6 +176,8 @@
     <string name="ShareBody1">Hi, I found this on Biin. </string>
     <string name="ShareBody2">from </string>
     <string name="ShareBody3">The best offers and places in your hand. Download Biin at </string>
+    <string name="ShareGiftTitle">Sharing your gift!</string>
+    <string name="ShareGiftMessage">Are you sure to share your gift with </string>
     <string name="ShareError">Error sharing gift</string>
     <string name="ShareOk">Gift successfully shared!</string>
 

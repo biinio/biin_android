@@ -10,6 +10,8 @@
         android:text="@string/Profile"
         android:id="@+id/tvMenuProfile"
         android:layout_alignParentTop="true"
+        android:layout_alignParentStart="false"
+        android:layout_centerHorizontal="true"
         android:textAllCaps="true"
         android:textColor="@color/colorAccentGray"
         android:layout_marginTop="15dp"
@@ -18,8 +20,6 @@
         android:paddingBottom="15dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:layout_alignStart="@+id/tvMenuFavourites"
-        android:layout_alignEnd="@+id/tvMenuFavourites"
         android:gravity="center" />
 
     <TextView
