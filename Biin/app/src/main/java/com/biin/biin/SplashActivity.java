@@ -54,6 +54,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     private boolean locationUpdates = false;
     private LocationRequest locationRequest;
     private String token;
+    private String identifier;
 
     private BNInitialDataListener initialDataListener;
 
@@ -271,7 +272,6 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     public void onInitialDataLoaded() {
         token = FirebaseInstanceId.getInstance().getToken();
 
-        String identifier = "";
         Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
         SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         String sent = preferences.getString(BNUtils.BNStringExtras.FCMToken, "");
@@ -282,7 +282,9 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
             identifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");
         }
 
-        if(!token.equals(sent)) {
+        sent = sent + identifier;
+
+        if(!sent.equals(token + identifier)) {
             sendToken(token, identifier);
         }
 
@@ -290,30 +292,34 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     private void sendToken(String token, String identifier){
-        Log.e(TAG, "Biin FCM Token: " + token);
+        if(identifier != null && !identifier.isEmpty()) {
+            Log.e(TAG, "Biin FCM Token: " + token);
 
-        JSONObject request = new JSONObject();
-        try {
-            JSONObject model = new JSONObject();
-            model.put("tokenId", token);
-            model.put("platform", "android");
-            request.put("model", model);
-        }catch (JSONException e){
-            Log.e(TAG, "Error:" + e.getMessage());
+            JSONObject request = new JSONObject();
+            try {
+                JSONObject model = new JSONObject();
+                model.put("tokenId", token);
+                model.put("platform", "android");
+                request.put("model", model);
+            } catch (JSONException e) {
+                Log.e(TAG, "Error:" + e.getMessage());
+            }
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.PUT,
+                    BNAppManager.getInstance().getNetworkManagerInstance().getTokenRegisterUrl(identifier),
+                    request,
+                    this,
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            onVolleyError(error);
+                        }
+                    });
+            BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
+        }else{
+            Log.e(TAG, "Error: no se puede enviar token, el identifier es null");
         }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.PUT,
-                BNAppManager.getInstance().getNetworkManagerInstance().getTokenRegisterUrl(identifier),
-                request,
-                this,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onVolleyError(error);
-                    }
-                });
-        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
     }
 
     private void goToNextActivity(){
@@ -355,7 +361,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
             if(status.equals("0") && result.equals("1")){
                 SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(BNUtils.BNStringExtras.FCMToken, token);
+                editor.putString(BNUtils.BNStringExtras.FCMToken, token + identifier);
                 editor.commit();
             }else{
                 Log.e(TAG, "Error enviando el token.");
