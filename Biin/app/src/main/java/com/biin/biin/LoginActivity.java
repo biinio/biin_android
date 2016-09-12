@@ -205,7 +205,7 @@ public class LoginActivity extends AppCompatActivity implements BNLoginListener.
     }
 
     private void goToNextActivity(){
-        Intent i = new Intent(this, PrivacyActivity.class);
+        Intent i = new Intent(this, SplashActivity.class);
         startActivity(i);
         finish();
     }

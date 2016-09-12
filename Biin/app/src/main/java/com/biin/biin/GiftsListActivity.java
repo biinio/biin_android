@@ -8,11 +8,13 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -333,12 +335,36 @@ public class GiftsListActivity extends AppCompatActivity implements IBNGiftActio
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST && resultCode == RESULT) {
             String facebookId = data.getStringExtra(BNUtils.BNStringExtras.BNFacebook);
+            String facebookName = data.getStringExtra(BNUtils.BNStringExtras.BNFbName);
             String giftIdentifier = data.getStringExtra(BNUtils.BNStringExtras.BNGift);
             int position = data.getIntExtra(BNUtils.BNStringExtras.Position, 0);
-//            Toast.makeText(this, "Facebook id: " + facebookId + " Gift id: " + giftIdentifier, Toast.LENGTH_SHORT).show();
-            // request share
-            shareGift(facebookId, giftIdentifier, position);
+            // confirm share
+            confirmShareGift(facebookId, facebookName, giftIdentifier, position);
         }
+    }
+
+    private void confirmShareGift(final String facebookId, final String facebookName, final String giftIdentifier, final int position){
+        LayoutInflater inflater = this.getLayoutInflater();
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        View dialogView = inflater.inflate(R.layout.dialog_popup, null);
+        ((TextView)dialogView.findViewById(R.id.tvPopUpMessage)).setText(getString(R.string.ShareGiftMessage) + facebookName);
+        dialogView.findViewById(R.id.tvPopupConfirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // request share
+                shareGift(facebookId, giftIdentifier, position);
+            }
+        });
+        dialogBuilder.setView(dialogView);
+        final AlertDialog alertDialog = dialogBuilder.create();
+        dialogView.findViewById(R.id.ivPopupClose).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+        adapter.closeViewBinders();
     }
 
     private void shareGift(String facebookId, final String giftIdentifier, final int position){

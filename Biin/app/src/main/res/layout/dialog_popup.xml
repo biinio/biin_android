@@ -40,10 +40,10 @@
         <FrameLayout
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignTop="@+id/ivClosePopup"
-            android:layout_alignEnd="@+id/ivClosePopup"
-            android:layout_alignBottom="@+id/ivClosePopup"
-            android:layout_alignStart="@+id/ivClosePopup"
+            android:layout_alignTop="@+id/ivPopupClose"
+            android:layout_alignEnd="@+id/ivPopupClose"
+            android:layout_alignBottom="@+id/ivPopupClose"
+            android:layout_alignStart="@+id/ivPopupClose"
             android:background="#ff0000"
             android:id="@+id/flClosePopup1">
     
@@ -52,9 +52,9 @@
         <FrameLayout
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignTop="@+id/ivClosePopup"
-            android:layout_alignEnd="@+id/ivClosePopup"
-            android:layout_alignBottom="@+id/ivClosePopup"
+            android:layout_alignTop="@+id/ivPopupClose"
+            android:layout_alignEnd="@+id/ivPopupClose"
+            android:layout_alignBottom="@+id/ivPopupClose"
             android:layout_alignParentStart="true"
             android:layout_margin="10dp"
             android:background="@color/colorWhite" />
@@ -62,7 +62,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/ivClosePopup"
+            android:id="@+id/ivPopupClose"
             android:layout_below="@+id/tvPopUpMessage"
             android:layout_alignParentStart="true"
             android:src="@drawable/close"
@@ -72,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="OK"
-            android:id="@+id/textView3"
+            android:id="@+id/tvPopupConfirm"
             android:layout_alignTop="@+id/flClosePopup1"
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/flClosePopup1"

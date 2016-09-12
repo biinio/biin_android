@@ -68,9 +68,10 @@ public class FriendsActivity extends AppCompatActivity implements IBNFriendsList
     }
 
     @Override
-    public void onFriendSelected(String facebookId) {
+    public void onFriendSelected(String facebookId, String facebookName) {
         Intent intent = new Intent();
         intent.putExtra(BNUtils.BNStringExtras.BNFacebook, facebookId);
+        intent.putExtra(BNUtils.BNStringExtras.BNFbName, facebookName);
         intent.putExtra(BNUtils.BNStringExtras.BNGift, giftIdentifier);
         intent.putExtra(BNUtils.BNStringExtras.Position, position);
         setResult(RESULT, intent);

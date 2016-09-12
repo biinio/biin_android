@@ -53,7 +53,7 @@ public class BNFriendsAdapter extends RecyclerView.Adapter<BNFriendsAdapter.BNFr
         holder.rlFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                friendsListener.onFriendSelected(item.getFacebook_id());
+                friendsListener.onFriendSelected(item.getFacebook_id(), item.getFacebookName());
             }
         });
     }

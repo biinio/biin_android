@@ -202,7 +202,8 @@ public class BNUtils {
         public static final String FCMToken = "FCMToken";
         public static final String BNGiftBadge = "BNGiftBadge";
         public static final String BNNotificationBadge = "BNNotificationBadge";
-        public static final String BNFacebook = "Facebook_ID";
+        public static final String BNFacebook = "FacebookID";
+        public static final String BNFbName = "FacebookName";
         public static final String Position = "Position";
     }
 

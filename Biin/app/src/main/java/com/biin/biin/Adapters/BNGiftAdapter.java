@@ -82,6 +82,16 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
         notifyItemRangeChanged(0, gifts.size());
     }
 
+    public void closeViewBinders(){
+        for (int i = 0; i < gifts.size(); i++) {
+            try {
+                viewBinderHelper.closeLayout(String.valueOf(i));
+            }catch (Exception e){
+
+            }
+        }
+    }
+
     public void closeViewBinder(int position){
         viewBinderHelper.closeLayout(String.valueOf(position));
     }

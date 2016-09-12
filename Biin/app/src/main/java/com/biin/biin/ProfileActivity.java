@@ -1,6 +1,8 @@
 package com.biin.biin;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
@@ -158,6 +161,19 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         setUpFields(biinie);
 
         tvSave.setOnClickListener(saveClick);
+        findViewById(R.id.tvProfileLogout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginManager.getInstance().logOut();
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(BNUtils.BNStringExtras.BNBiinie, "");
+                editor.commit();
+                Intent i = new Intent(ProfileActivity.this, SignupActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
     private void graphRequest(final LoginResult loginResult){

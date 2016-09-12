@@ -351,14 +351,12 @@
         android:layout_marginRight="6dp" />
 
     <com.facebook.login.widget.LoginButton
-        android:layout_above="@+id/tvProfileSave"
-        android:id="@+id/btnProfileFb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/btnProfileFb"
+        android:layout_above="@+id/tvProfileSave"
         android:layout_marginLeft="6dp"
-        android:layout_marginTop="12dp"
         android:layout_marginRight="6dp"
-        android:layout_marginBottom="6dp"
         android:layout_gravity="center_horizontal"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
@@ -373,15 +371,32 @@
         android:layout_height="wrap_content"
         android:text="@string/Save"
         android:id="@+id/tvProfileSave"
+        android:layout_above="@+id/tvProfileLogout"
         android:gravity="center"
         android:padding="12dp"
         android:textColor="@color/colorWhite"
         android:background="@color/colorOrange"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
         android:layout_margin="6dp"
         android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Logout"
+        android:id="@+id/tvProfileLogout"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:padding="12dp"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorDarkGrey"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="6dp" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleSmall"
