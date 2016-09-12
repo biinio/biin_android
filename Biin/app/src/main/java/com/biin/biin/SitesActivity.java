@@ -11,16 +11,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -208,17 +211,6 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
             if(currentSite.getOrganization() != null && currentSite.getOrganization().isHasNPS()){
                 FrameLayout npsLayout = (FrameLayout)findViewById(R.id.flNpsInclude);
                 npsLayout.setVisibility(View.VISIBLE);
-                findViewById(R.id.etNpsComments).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if(hasFocus){
-
-                        }else{
-
-                        }
-                    }
-                });
-
                 new BNSiteNps(this, currentSite, dataManager.isNpsAvailable(currentSite.getIdentifier()));
             }
         }else{
@@ -394,7 +386,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
         });
 
         inAlpha.setAnimationListener(new Animation.AnimationListener() {
-            LinearLayout layout = (LinearLayout)findViewById(R.id.vlMapSitesScreen);
+            FrameLayout layout = (FrameLayout)findViewById(R.id.flMapSitesScreen);
             LinearLayout include = (LinearLayout)findViewById(R.id.vlMapSitesInclude);
 
             @Override
@@ -408,8 +400,8 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
                 layout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        layout.startAnimation(outAlpha);
-                        include.startAnimation(outAnimation);
+//                        layout.startAnimation(outAlpha);
+//                        include.startAnimation(outAnimation);
                         return true;
                     }
                 });
@@ -422,7 +414,7 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
         });
 
         outAlpha.setAnimationListener(new Animation.AnimationListener() {
-            LinearLayout layout = (LinearLayout)findViewById(R.id.vlMapSitesScreen);
+            FrameLayout layout = (FrameLayout)findViewById(R.id.flMapSitesScreen);
 
             @Override
             public void onAnimationStart(Animation animation) {
@@ -489,10 +481,11 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
         tvMapClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinearLayout layout = (LinearLayout)findViewById(R.id.vlMapSitesScreen);
+                FrameLayout layout = (FrameLayout)findViewById(R.id.flMapSitesScreen);
                 LinearLayout include = (LinearLayout)findViewById(R.id.vlMapSitesInclude);
                 layout.startAnimation(outAlpha);
                 include.startAnimation(outAnimation);
+                findViewById(R.id.svSites).setOnTouchListener(null);
             }
         });
     }
@@ -620,9 +613,25 @@ public class SitesActivity extends AppCompatActivity implements IBNSitesLikeList
 
     @Override
     public void onLocation() {
-        LinearLayout layout = (LinearLayout)findViewById(R.id.vlMapSitesScreen);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int height = metrics.heightPixels;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            height = metrics.heightPixels - getResources().getDimensionPixelSize(resourceId);
+        }
+        findViewById(R.id.svSites).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
+        RelativeLayout relative = (RelativeLayout)findViewById(R.id.rlSiteLayout);
+        FrameLayout frame = (FrameLayout)findViewById(R.id.flMapSitesScreen);
         LinearLayout include = (LinearLayout)findViewById(R.id.vlMapSitesInclude);
-        layout.startAnimation(inAlpha);
+        relative.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+        frame.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+        frame.startAnimation(inAlpha);
         include.startAnimation(inAnimation);
     }
 

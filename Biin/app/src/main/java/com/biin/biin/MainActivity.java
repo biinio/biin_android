@@ -74,7 +74,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
     private Biinie biinie;
     private BNDataManager dataManager;
     private BNAnalyticsManager analyticsManager;
-    private BNInitialDataListener initialDataListener;
     private ProximityManagerContract proximityManager;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver locationsReceiver;
@@ -1056,7 +1054,7 @@ public class MainActivity extends AppCompatActivity implements HighlightsPagerLi
 
         Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
 
-        initialDataListener = new BNInitialDataListener();
+        BNInitialDataListener initialDataListener = new BNInitialDataListener();
         initialDataListener.setListener(this);
 
         String url = BNAppManager.getInstance().getNetworkManagerInstance().getUrlInitialData(biinie.getIdentifier(), location);

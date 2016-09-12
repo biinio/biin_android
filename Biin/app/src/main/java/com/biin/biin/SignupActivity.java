@@ -68,6 +68,7 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
         BNAppManager.getInstance().getNetworkManagerInstance().setProduction(environment.equals("Prod"));
 
         if(identifier.isEmpty()){
+            LoginManager.getInstance().logOut();
             setUpScreen();
         }else{
             getBiinie(identifier);
@@ -87,6 +88,7 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         onVolleyError(error);
+                        LoginManager.getInstance().logOut();
                     }
                 });
         BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, "Biinie");
@@ -109,6 +111,7 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
     @Override
     public void onBiinieError() {
         Log.e(TAG, "Error cargando biinie");
+        LoginManager.getInstance().logOut();
         setUpScreen();
     }
 
@@ -169,7 +172,7 @@ public class SignupActivity extends AppCompatActivity implements BNBiiniesListen
         btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(SignupActivity.this, "Login ok", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SignupActivity.this, "Login ok", Toast.LENGTH_SHORT).show();
                 graphRequest(loginResult);
             }
 
