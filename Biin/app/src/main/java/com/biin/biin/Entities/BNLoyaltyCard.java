@@ -22,6 +22,7 @@ public class BNLoyaltyCard {
     private boolean isUnavailable = false;
     private Date startDate;
     private Date endDate;
+    private Date enrolledDate;
 
     private List<BNLoyaltyCard_Slot> slots;
 
@@ -45,14 +46,6 @@ public class BNLoyaltyCard {
 
     public void setElementIdentifier(String elementIdentifier) {
         this.elementIdentifier = elementIdentifier;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     public String getGoal() {
@@ -115,12 +108,38 @@ public class BNLoyaltyCard {
         return slots;
     }
 
-    public void setSlots(List<BNLoyaltyCard_Slot> slots) {
-        this.slots = slots;
+    public void setSlots(int slots) {
+        for (int i = 0; i < slots; i++) {
+            this.slots.add(new BNLoyaltyCard_Slot(false));
+        }
+    }
+
+    public void setSlotsFilled(int slots) {
+        if(slots > 0) {
+            for (int i = 0; i < slots; i++) {
+                this.slots.get(i).setFilled(true);
+            }
+        }
     }
 
     public Date getStartDate() {
         return startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getEnrolledDate() {
+        return enrolledDate;
+    }
+
+    public void setEnrolledDate(Date enrolledDate) {
+        this.enrolledDate = enrolledDate;
     }
 
     public void setStartDate(Date startDate) {
@@ -140,6 +159,19 @@ public class BNLoyaltyCard {
     }
 
     private class BNLoyaltyCard_Slot {
+
         private boolean isFilled = false;
+
+        public BNLoyaltyCard_Slot(boolean isFilled) {
+            this.isFilled = isFilled;
+        }
+
+        public boolean isFilled() {
+            return isFilled;
+        }
+
+        public void setFilled(boolean filled) {
+            isFilled = filled;
+        }
     }
 }

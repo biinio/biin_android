@@ -13,6 +13,7 @@ import com.biin.biin.Entities.BNJSONParsers.BNHighlightParser;
 import com.biin.biin.Entities.BNJSONParsers.BNOrganizationParser;
 import com.biin.biin.Entities.BNJSONParsers.BNShowcaseParser;
 import com.biin.biin.Entities.BNJSONParsers.BNSiteParser;
+import com.biin.biin.Entities.BNLoyalty;
 import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNShowcase;
 import com.biin.biin.Entities.BNSite;
@@ -76,6 +77,9 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
 
             // setear el organization a los gifts, ya que no existian al momento de parsearlos
             setGiftOrganizations();
+
+            // obtener los loyalties de los organizations y setearlos en el dataManager
+            setOrganizationsLoyalties();
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }
@@ -156,6 +160,16 @@ public class BNInitialDataListener implements Response.Listener<JSONObject> {
         for (BNGift gift : dataManager.getBNGifts().values()) {
             gift.setOrganization(dataManager.getBNOrganization(gift.getOrganizationIdentifier()));
         }
+    }
+
+    private void setOrganizationsLoyalties(){
+        List<BNLoyalty> loyalties = new ArrayList<>();
+        for (BNOrganization organization : dataManager.getBNOrganizations().values()) {
+            if(organization.isLoyaltyEnabled()){
+                loyalties.add(organization.getLoyalty());
+            }
+        }
+        dataManager.setBNLoyalties(loyalties);
     }
 
     public interface IBNInitialDataListener {

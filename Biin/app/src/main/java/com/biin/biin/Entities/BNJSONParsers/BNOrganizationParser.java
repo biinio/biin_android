@@ -19,6 +19,7 @@ public class BNOrganizationParser {
     private static final String TAG = "BNOrganizationParser";
 
     private BNMediaParser mediaParser = new BNMediaParser();
+    private BNLoyaltyParser loyaltyParser = new BNLoyaltyParser();
 
     public BNOrganization parseBNOrganization(JSONObject objectOrganization){
         BNOrganization organization = new BNOrganization();
@@ -28,7 +29,10 @@ public class BNOrganizationParser {
             organization.setMedia(mediaParser.parseBNMedia(objectOrganization.getJSONArray("media")));
             organization.setBrand(objectOrganization.getString("brand"));
             organization.setLoyaltyEnabled(BNUtils.getBooleanFromString(objectOrganization.getString("isLoyaltyEnabled")));
-            // TODO loyalty
+            // loyalty
+            if(organization.isLoyaltyEnabled()){
+                organization.setLoyalty(loyaltyParser.parseBNLoyalty(objectOrganization.getJSONObject("loyalty"), organization.getIdentifier()));
+            }
             organization.setHasNPS(BNUtils.getBooleanFromString(objectOrganization.getString("hasNPS")));
             organization.setUsingBrandColors(BNUtils.getBooleanFromString(objectOrganization.getString("isUsingBrandColors")));
             organization.setPrimaryColor(BNUtils.getColorFromString(objectOrganization.getString("primaryColor")));

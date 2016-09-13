@@ -21,7 +21,7 @@ public class BNOrganization {
 
     private boolean isLoyaltyEnabled;
     private boolean isUsingBrandColors;
-    //private BNLoyalty loyalty;
+    private BNLoyalty loyalty;
 
     private int primaryColor;
     private int secondaryColor;
@@ -100,6 +100,14 @@ public class BNOrganization {
 
     public void setLoyaltyEnabled(boolean loyaltyEnabled) {
         isLoyaltyEnabled = loyaltyEnabled;
+    }
+
+    public BNLoyalty getLoyalty() {
+        return loyalty;
+    }
+
+    public void setLoyalty(BNLoyalty loyalty) {
+        this.loyalty = loyalty;
     }
 
     public boolean isUsingBrandColors() {

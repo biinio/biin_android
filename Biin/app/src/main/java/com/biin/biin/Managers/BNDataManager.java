@@ -14,6 +14,7 @@ import com.biin.biin.Entities.BNCategory;
 import com.biin.biin.Entities.BNElement;
 import com.biin.biin.Entities.BNGift;
 import com.biin.biin.Entities.BNHighlight;
+import com.biin.biin.Entities.BNLoyalty;
 import com.biin.biin.Entities.BNNotification;
 import com.biin.biin.Entities.BNOrganization;
 import com.biin.biin.Entities.BNShowcase;
@@ -56,6 +57,7 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     private List<BNSite> favouriteSites = new ArrayList<>();
     private List<BNBeacon> nearByBeacons = new ArrayList<>();
     private List<BNNotification> notifications = new ArrayList<>();
+    private List<BNLoyalty> loyalties = new ArrayList<>();
 
     private LinkedHashMap<String, BNSite> pendingLikeSites = new LinkedHashMap<>();
     private LinkedHashMap<String, BNSite> pendingUnlikeSites = new LinkedHashMap<>();
@@ -968,6 +970,21 @@ public class BNDataManager implements BNLikesListener.IBNLikesListener {
     }
 
     /****************** Gifts end ******************/
+
+
+    /****************** Loyalties start ******************/
+
+    public void setBNLoyalties(List<BNLoyalty> loyalties) {
+        // reemplazar la coleccion completa de loyalties
+        this.loyalties = loyalties;
+    }
+
+    public List<BNLoyalty> getBNLoyalties(){
+        // retornar la lista de loyalties
+        return this.loyalties;
+    }
+
+    /****************** Loyalties end ******************/
 
 
     /****************** Badges start ******************/

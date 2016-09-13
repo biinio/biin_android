@@ -3,10 +3,402 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.biin.biin.LoyaltyActivity">
+    tools:context="com.biin.biin.LoyaltyActivity"
+    android:background="@color/colorGrayButton">
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/biin_toolbar"
+        android:id="@+id/loyalty_card_toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rlLoyaltyCard"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/loyalty_card_toolbar"
+        android:background="@color/colorWhite"
+        android:padding="6dp">
+
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:id="@+id/ivLoyaltyCardImage"
+            android:layout_marginRight="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvLoyaltyCardDate"
+            android:layout_alignTop="@+id/ivLoyaltyCardImage"
+            android:layout_toEndOf="@+id/ivLoyaltyCardImage"
+            android:textAllCaps="true"
+            android:textSize="10sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_alignParentEnd="true"
+            android:gravity="right" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvLoyaltyCardName"
+            android:layout_below="@+id/tvLoyaltyCardDate"
+            android:textColor="@color/colorGreen"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_alignEnd="@+id/tvLoyaltyCardDate"
+            android:layout_toEndOf="@+id/ivLoyaltyCardImage"
+            android:minLines="1"
+            android:singleLine="false"
+            android:ellipsize="marquee"
+            android:layout_marginTop="-5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvLoyaltyCardDetails"
+            android:layout_below="@+id/tvLoyaltyCardName"
+            android:layout_alignEnd="@+id/tvLoyaltyCardName"
+            android:layout_toEndOf="@+id/ivLoyaltyCardImage"
+            android:ellipsize="end"
+            android:layout_alignBottom="@+id/ivLoyaltyCardImage"
+            android:lines="4"
+            android:maxLines="4" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/svLoyaltyCard"
+        android:layout_below="@+id/rlLoyaltyCard"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:padding="6dp"
+        android:background="@color/colorWhite"
+        android:layout_marginTop="1dp"
+        android:scrollIndicators="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                card_view:cardElevation="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:id="@+id/linearLayout4"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginRight="40dp">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:weightSum="4">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar1"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar2"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar3"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar4"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:weightSum="4">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar5"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar6"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar7"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar8"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/loyaltyLineOpt4"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:weightSum="4">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar9"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar10"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar11"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar12"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/loyaltyLineOpt2"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:weightSum="4" >
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStarDummy1"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray"
+                                android:visibility="invisible" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar13"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStar14"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ivLoyaltyStarDummy2"
+                                android:src="@drawable/temp_star_circle"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:layout_margin="4dp"
+                                android:tint="@color/colorAccentGray"
+                                android:visibility="invisible" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView"
+                        android:ellipsize="end"
+                        android:lines="2"
+                        android:maxLines="4"
+                        android:layout_below="@+id/linearLayout4"
+                        android:gravity="center_horizontal"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginRight="40dp"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView2"
+                        android:textAllCaps="false"
+                        android:textSize="10sp"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/SeeConditions"
+                        android:gravity="right"
+                        android:layout_below="@+id/textView3"
+                        android:layout_alignParentEnd="true"
+                        android:padding="6dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView3"
+                        android:text="@string/SeeGift"
+                        android:ellipsize="end"
+                        android:gravity="center_horizontal"
+                        android:layout_below="@+id/textView"
+                        android:layout_marginTop="6dp"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentEnd="true"
+                        android:padding="6dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/vlLoyaltyQrCode"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:id="@+id/ivLoyaltyCardQrCode"
+                        android:src="@drawable/temp_qrcode" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvLoyaltyCardQrCode"
+                        android:text="@string/ReadQRCode"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>
