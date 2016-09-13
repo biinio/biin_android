@@ -46,7 +46,7 @@ public class BNLoyaltyParser {
         }catch (JSONException e){
             Log.e(TAG, "Error parseando el JSON.", e);
         }
-        return null;
+        return loyaltyCard;
     }
 
 }

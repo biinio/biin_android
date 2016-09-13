@@ -43,12 +43,12 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
     private static final String TAG = "BNGiftAdapter";
     private static Context context;
 
+    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+
     private List<BNGift> gifts;
     private ImageLoader imageLoader;
     private IBNGiftActionListener giftsListener;
     private String organizationIdentifier = "";
-
-    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
     private LayoutInflater inflater;
 
     public BNGiftAdapter(Context context, List<BNGift> gifts, IBNGiftActionListener giftsListener) {
