@@ -54,7 +54,8 @@
                     android:layout_below="@+id/rlLoyaltyItem"
                     android:background="@color/colorWhite"
                     android:padding="6dp"
-                    android:layout_alignParentStart="true">
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/rlLoyaltyItem">
 
                     <ImageView
                         android:layout_width="96dp"
@@ -133,7 +134,8 @@
                         android:layout_alignBottom="@+id/ivLoyaltyImage"
                         android:layout_alignEnd="@+id/tvLoyaltyText"
                         android:layout_toEndOf="@+id/ivLoyaltyImage"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="16dp"
@@ -232,7 +234,8 @@
                             android:src="@drawable/temp_star"
                             android:adjustViewBounds="true"
                             android:padding="1dp"
-                            android:tint="@color/colorAccentGray" />
+                            android:tint="@color/colorAccentGray"
+                            android:visibility="gone" />
 
                         <ImageView
                             android:layout_width="16dp"
@@ -241,7 +244,8 @@
                             android:src="@drawable/temp_star"
                             android:adjustViewBounds="true"
                             android:padding="1dp"
-                            android:tint="@color/colorAccentGray" />
+                            android:tint="@color/colorAccentGray"
+                            android:visibility="gone" />
 
                         <ImageView
                             android:layout_width="16dp"
@@ -250,7 +254,8 @@
                             android:src="@drawable/temp_star"
                             android:adjustViewBounds="true"
                             android:padding="1dp"
-                            android:tint="@color/colorAccentGray" />
+                            android:tint="@color/colorAccentGray"
+                            android:visibility="gone" />
 
                         <ImageView
                             android:layout_width="16dp"
@@ -259,7 +264,8 @@
                             android:src="@drawable/temp_star"
                             android:adjustViewBounds="true"
                             android:padding="1dp"
-                            android:tint="@color/colorAccentGray" />
+                            android:tint="@color/colorAccentGray"
+                            android:visibility="gone" />
 
                     </LinearLayout>
 

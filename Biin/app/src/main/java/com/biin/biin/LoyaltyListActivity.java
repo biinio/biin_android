@@ -1,5 +1,6 @@
 package com.biin.biin;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.biin.biin.Adapters.BNLoyaltyAdapter;
 import com.biin.biin.Components.Listeners.IBNLoyaltyCardActionListener;
@@ -64,4 +66,22 @@ public class LoyaltyListActivity extends AppCompatActivity implements IBNLoyalty
         }
     }
 
+    @Override
+    public void onCardClick(String identifier, int position) {
+        Toast.makeText(this, "Go to details activity", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, LoyaltyActivity.class);
+        i.putExtra(BNUtils.BNStringExtras.BNLoyalty, identifier);
+        i.putExtra(BNUtils.BNStringExtras.Position, position);
+        startActivity(i);
+    }
+
+    @Override
+    public void onCardEnrolled(String identifier, int position) {
+        Toast.makeText(this, "Enroll, show popup", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCardDeleted(String identifier, int position) {
+        Toast.makeText(this, "Delete card, show popup", Toast.LENGTH_SHORT).show();
+    }
 }

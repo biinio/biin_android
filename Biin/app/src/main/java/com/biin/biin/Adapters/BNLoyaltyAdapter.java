@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.biin.biin.Components.Listeners.IBNLoyaltyCardActionListener;
 import com.biin.biin.Entities.BNElement;
@@ -61,20 +63,113 @@ public class BNLoyaltyAdapter extends RecyclerView.Adapter<BNLoyaltyAdapter.BNLo
     }
 
     @Override
-    public void onBindViewHolder(BNLoyaltyAdapter.BNLoyaltyViewHolder holder, int position) {
+    public void onBindViewHolder(BNLoyaltyAdapter.BNLoyaltyViewHolder holder, final int position) {
         viewBinderHelper.bind(holder.swipeLoyalty, String.valueOf(position));
         final BNLoyalty item = loyalties.get(position);
         final BNLoyaltyCard card = item.getLoyaltyCard();
         if(card != null) {
             final BNOrganization organization = dataManager.getBNOrganization(item.getOrganizationIdentifier());
-            final BNElement element = dataManager.getBNElement(card.getElementIdentifier());
             imageLoader.displayImage(organization.getMedia().get(0).getUrl(), holder.ivLoyalty);
             SimpleDateFormat showFormatter = new SimpleDateFormat(BNUtils.getDisplayDateFormat());
             holder.tvDate.setText(showFormatter.format(card.getStartDate()));
-            holder.tvName.setText(card.getTitle());
-            holder.tvDetails.setText(card.getRule());
-            holder.tvDescription.setText(card.getGoal());
+            holder.tvName.setText(organization.getBrand());
+            holder.tvName.setTextColor(organization.getPrimaryColor());
+            holder.tvDetails.setText(card.getTitle());
+            holder.tvDescription.setText(card.getRule());
             holder.ivLoyalty.setBackgroundColor(organization.getPrimaryColor());
+            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    loyaltyListener.onCardDeleted(card.getIdentifier(), position);
+                }
+            });
+            if(card.isBiinieEnrolled()) {
+                holder.hlEnrolled.setVisibility(View.VISIBLE);
+                holder.tvEnroll.setVisibility(View.GONE);
+                List<BNLoyaltyCard.BNLoyaltyCard_Slot> slots = card.getSlots();
+                switch (slots.size()) {
+                    case 12:
+                        holder.ivStar11.setVisibility(View.VISIBLE);
+                        holder.ivStar12.setVisibility(View.VISIBLE);
+                        break;
+                    case 14:
+                        holder.ivStar11.setVisibility(View.VISIBLE);
+                        holder.ivStar12.setVisibility(View.VISIBLE);
+                        holder.ivStar13.setVisibility(View.VISIBLE);
+                        holder.ivStar14.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        break;
+                }
+                boolean filled = true;
+                for (int i = 0; i < slots.size() && filled; i++) {
+                    if(slots.get(i).isFilled()){
+                        switch (i + 1){
+                            case 1:
+                                holder.ivStar1.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 2:
+                                holder.ivStar2.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 3:
+                                holder.ivStar3.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 4:
+                                holder.ivStar4.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 5:
+                                holder.ivStar5.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 6:
+                                holder.ivStar6.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 7:
+                                holder.ivStar7.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 8:
+                                holder.ivStar8.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 9:
+                                holder.ivStar9.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 10:
+                                holder.ivStar10.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 11:
+                                holder.ivStar11.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 12:
+                                holder.ivStar12.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 13:
+                                holder.ivStar13.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            case 14:
+                                holder.ivStar14.setColorFilter(context.getResources().getColor(R.color.colorStarGold));
+                                break;
+                            default:
+                                break;
+                        }
+                    }else{
+                        filled = false;
+                    }
+                }
+                holder.rlLoyaltyItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        loyaltyListener.onCardClick(card.getIdentifier(), position);
+                    }
+                });
+            }else{
+                holder.hlEnrolled.setVisibility(View.GONE);
+                holder.tvEnroll.setVisibility(View.VISIBLE);
+                holder.rlLoyaltyItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        loyaltyListener.onCardEnrolled(card.getIdentifier(), position);
+                    }
+                });
+            }
         }
     }
 
@@ -86,7 +181,7 @@ public class BNLoyaltyAdapter extends RecyclerView.Adapter<BNLoyaltyAdapter.BNLo
     public static class BNLoyaltyViewHolder extends RecyclerView.ViewHolder {
 
         protected String id;
-        protected CardView cvLoyalty;
+        protected RelativeLayout rlLoyaltyItem;
         protected SwipeRevealLayout swipeLoyalty;
         protected ImageView ivLoyalty, ivDelete, ivStar1, ivStar2, ivStar3, ivStar4, ivStar5, ivStar6, ivStar7, ivStar8, ivStar9, ivStar10, ivStar11, ivStar12, ivStar13, ivStar14;
         protected TextView tvDate, tvName, tvDetails, tvDescription, tvEnroll;
@@ -95,7 +190,7 @@ public class BNLoyaltyAdapter extends RecyclerView.Adapter<BNLoyaltyAdapter.BNLo
         public BNLoyaltyViewHolder(View itemView) {
             super(itemView);
 
-            cvLoyalty = (CardView)itemView.findViewById(R.id.cvLoyaltyItem);
+            rlLoyaltyItem = (RelativeLayout)itemView.findViewById(R.id.rlLoyaltyItem);
             swipeLoyalty = (SwipeRevealLayout) itemView.findViewById(R.id.swipeLoyalty);
 
             ivLoyalty = (ImageView) itemView.findViewById(R.id.ivLoyaltyImage);
@@ -120,6 +215,7 @@ public class BNLoyaltyAdapter extends RecyclerView.Adapter<BNLoyaltyAdapter.BNLo
             tvDetails = (TextView)itemView.findViewById(R.id.tvLoyaltyDetails);
             tvDescription = (TextView)itemView.findViewById(R.id.tvLoyaltyText);
             tvEnroll = (TextView)itemView.findViewById(R.id.tvLoyaltyEnroll);
+            hlEnrolled = (LinearLayout)itemView.findViewById(R.id.hlLoyaltyEnrolled);
 
             Typeface lato_regular = BNUtils.getLato_regular();
             Typeface lato_black = BNUtils.getLato_black();

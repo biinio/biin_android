@@ -158,7 +158,7 @@ public class BNLoyaltyCard {
 
     }
 
-    private class BNLoyaltyCard_Slot {
+    public class BNLoyaltyCard_Slot {
 
         private boolean isFilled = false;
 

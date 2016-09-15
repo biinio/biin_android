@@ -41,6 +41,6 @@
     <color name="colorDarkGreyPressed">#323232</color>
     <color name="colorGrayButton">#aaaaaa</color>
     <color name="colorGrayPressed">#8c8c8c</color>
-
+    <color name="colorStarGold">#ffe100</color>
 
 </resources>
