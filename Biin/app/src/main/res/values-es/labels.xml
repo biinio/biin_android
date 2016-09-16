@@ -244,6 +244,9 @@
     <string name="Now">Ahora</string>
     <string name="Taxes">i.i.</string>
 
+    /*Loyalty Cards*/
+    <string name="LoyaltyCardConditions">"Al hacer tap en OK aceptas las condiciones de uso de la tarjeta de clientes frecuente de "</string>
+
     /*Validate Forms*/
     <string name="EmptyString">El campo no puede estar vacío</string>
     <string name="EmailFormat">Debe ingresar un correo válido</string>

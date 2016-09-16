@@ -66,7 +66,6 @@ public class LoyaltyActivity extends AppCompatActivity {
         TextView tvTitle = (TextView) findViewById(R.id.tvLoyaltyCardName);
         tvTitle.setTypeface(lato_black);
         tvTitle.setText(card.getTitle());
-        tvTitle.setTextColor(organization.getPrimaryColor());
 
         TextView tvDetails = (TextView) findViewById(R.id.tvLoyaltyCardDetails);
         tvDetails.setTypeface(lato_regular);
@@ -78,7 +77,6 @@ public class LoyaltyActivity extends AppCompatActivity {
 
         TextView tvGift = (TextView) findViewById(R.id.tvLoyaltyCardGift);
         tvGift.setTypeface(lato_black);
-        tvGift.setTextColor(organization.getPrimaryColor());
         tvGift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +94,6 @@ public class LoyaltyActivity extends AppCompatActivity {
         });
 
         ImageView ivQrCode = (ImageView) findViewById(R.id.ivLoyaltyCardQrCode);
-        ivQrCode.setColorFilter(organization.getPrimaryColor());
 
         findViewById(R.id.vlLoyaltyQrCode).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +104,19 @@ public class LoyaltyActivity extends AppCompatActivity {
 
         TextView tvCode = (TextView) findViewById(R.id.tvLoyaltyCardQrCode);
         tvCode.setTypeface(lato_black);
-        tvCode.setTextColor(organization.getPrimaryColor());
+
+        if(BNUtils.calculateContrast(getResources().getColor(R.color.colorWhite), organization.getPrimaryColor(), organization.getSecondaryColor())) {
+            tvCode.setTextColor(organization.getPrimaryColor());
+            ivQrCode.setColorFilter(organization.getPrimaryColor());
+            tvGift.setTextColor(organization.getPrimaryColor());
+            tvTitle.setTextColor(organization.getPrimaryColor());
+        }else{
+            tvCode.setTextColor(organization.getSecondaryColor());
+            ivQrCode.setColorFilter(organization.getSecondaryColor());
+            tvGift.setTextColor(organization.getSecondaryColor());
+            tvTitle.setTextColor(organization.getSecondaryColor());
+        }
+
 
         BNToolbar toolbar = new BNToolbar(this, organization.getBrand());
     }

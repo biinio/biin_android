@@ -15,9 +15,7 @@
         <com.chauthai.swipereveallayout.SwipeRevealLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/swipeLoyalty"
-            app:mode="normal"
-            app:dragEdge="right">
+            android:id="@+id/swipeLoyalty">
 
             <FrameLayout
                 android:layout_width="wrap_content"

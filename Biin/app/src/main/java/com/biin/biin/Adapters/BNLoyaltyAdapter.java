@@ -73,10 +73,17 @@ public class BNLoyaltyAdapter extends RecyclerView.Adapter<BNLoyaltyAdapter.BNLo
             SimpleDateFormat showFormatter = new SimpleDateFormat(BNUtils.getDisplayDateFormat());
             holder.tvDate.setText(showFormatter.format(card.getStartDate()));
             holder.tvName.setText(organization.getBrand());
-            holder.tvName.setTextColor(organization.getPrimaryColor());
             holder.tvDetails.setText(card.getTitle());
             holder.tvDescription.setText(card.getRule());
-            holder.ivLoyalty.setBackgroundColor(organization.getPrimaryColor());
+
+            if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorWhite), organization.getPrimaryColor(), organization.getSecondaryColor())) {
+                holder.ivLoyalty.setBackgroundColor(organization.getPrimaryColor());
+                holder.tvName.setTextColor(organization.getPrimaryColor());
+            }else{
+                holder.ivLoyalty.setBackgroundColor(organization.getSecondaryColor());
+                holder.tvName.setTextColor(organization.getSecondaryColor());
+            }
+
             holder.ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -166,7 +173,7 @@ public class BNLoyaltyAdapter extends RecyclerView.Adapter<BNLoyaltyAdapter.BNLo
                 holder.rlLoyaltyItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        loyaltyListener.onCardEnrolled(card.getIdentifier(), position);
+                        loyaltyListener.onCardEnrolled(card.getIdentifier(), position, organization.getBrand());
                     }
                 });
             }

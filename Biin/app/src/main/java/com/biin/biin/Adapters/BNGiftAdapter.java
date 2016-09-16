@@ -117,15 +117,15 @@ public class BNGiftAdapter extends RecyclerView.Adapter<BNGiftAdapter.BNGiftView
         holder.tvDescription.setText(item.getMessage());
 
         holder.ivGift.setBackgroundColor(item.getPrimaryColor());
-//        if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorWhite), item.getPrimaryColor(), item.getSecondaryColor())) {
-//            holder.tvName.setTextColor(item.getPrimaryColor());
-//            holder.tvRequest.setTextColor(item.getSecondaryColor());
-//            holder.tvRequest.setBackgroundColor(item.getPrimaryColor());
-//        }else{
+        if(BNUtils.calculateContrast(context.getResources().getColor(R.color.colorWhite), item.getPrimaryColor(), item.getSecondaryColor())) {
+            holder.tvName.setTextColor(item.getPrimaryColor());
+            holder.tvRequest.setTextColor(item.getSecondaryColor());
+            holder.tvRequest.setBackgroundColor(item.getPrimaryColor());
+        }else{
             holder.tvName.setTextColor(item.getSecondaryColor());
             holder.tvRequest.setTextColor(item.getPrimaryColor());
             holder.tvRequest.setBackgroundColor(item.getSecondaryColor());
-//        }
+        }
 
         String text = context.getString(R.string.SENT);
         if(item.getStatus() == BNGift.BNGiftStatus.SENT) {

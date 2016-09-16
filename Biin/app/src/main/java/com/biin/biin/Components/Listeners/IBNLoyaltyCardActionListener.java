@@ -5,6 +5,6 @@ package com.biin.biin.Components.Listeners;
  */
 public interface IBNLoyaltyCardActionListener {
     void onCardClick(String identifier, int position);
-    void onCardEnrolled(String identifier, int position);
+    void onCardEnrolled(String identifier, int position, String name);
     void onCardDeleted(String identifier, int position);
 }

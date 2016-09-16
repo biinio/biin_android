@@ -46,6 +46,10 @@ public class BNNetworkManager {
     private static String URL_GIFT_REFUSE = "/gifts/refuse";
     private static String URL_GIFT_SHARE = "/gifts/share";
 
+    private static String URL_LOYALTY_ENROLL = "/cards/enroll";
+    private static String URL_LOYALTY_STAR = "/cards/setStar";
+    private static String URL_LOYALTY_COMPLETED = "/cards/setCompleted";
+
     protected static BNNetworkManager getInstance() {
         return ourInstance;
     }
@@ -172,6 +176,21 @@ public class BNNetworkManager {
 
     public String getGiftShareUrl(String identifier){
         String url = getUrlBiinie(identifier) + URL_GIFT_SHARE;
+        return url;
+    }
+
+    public String getLoyaltyEnrollUrl(String identifier, String card){
+        String url = getUrlBiinie(identifier) + URL_LOYALTY_ENROLL + "/" + card;
+        return url;
+    }
+
+    public String getAddStarUrl(String identifier, String card, String qrcode){
+        String url = getUrlBiinie(identifier) + URL_LOYALTY_STAR + "/" + card + "/" + qrcode;
+        return url;
+    }
+
+    public String getLoyaltyCompletedUrl(String identifier, String card){
+        String url = getUrlBiinie(identifier) + URL_LOYALTY_COMPLETED + "/" + card;
         return url;
     }
 
