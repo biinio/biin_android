@@ -104,11 +104,17 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
             tvSubtitle.setTypeface(lato_regular);
             tvAction.setTypeface(lato_black);
 
-            int darkColor = currentElement.getShowcase().getSite().getOrganization().getPrimaryColor();
-            int lightColor = currentElement.getShowcase().getSite().getOrganization().getSecondaryColor();
-            if(BNUtils.calculateContrast(getResources().getColor(R.color.colorWhite), currentElement.getShowcase().getSite().getOrganization().getSecondaryColor(), darkColor)){
-                darkColor = currentElement.getShowcase().getSite().getOrganization().getSecondaryColor();
-                lightColor = currentElement.getShowcase().getSite().getOrganization().getPrimaryColor();
+            if(currentElement.getShowcase() != null && currentElement.getShowcase().getSite() != null && currentElement.getShowcase().getSite().getOrganization() != null) {
+                int darkColor = currentElement.getShowcase().getSite().getOrganization().getPrimaryColor();
+                int lightColor = currentElement.getShowcase().getSite().getOrganization().getSecondaryColor();
+                if (BNUtils.calculateContrast(getResources().getColor(R.color.colorWhite), currentElement.getShowcase().getSite().getOrganization().getSecondaryColor(), darkColor)) {
+                    darkColor = currentElement.getShowcase().getSite().getOrganization().getSecondaryColor();
+                    lightColor = currentElement.getShowcase().getSite().getOrganization().getPrimaryColor();
+                }
+                tvPriceTitle.setTextColor(darkColor);
+                tvPriceSubtitle.setTextColor(darkColor);
+                tvAction.setBackgroundColor(darkColor);
+                tvAction.setTextColor(lightColor);
             }
 
             wvDetails.loadData(getHtmlBody(), "text/html;charset=UTF-8", null);
@@ -138,8 +144,6 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
             if(currentElement.isPriceVisible()) {
                 tvPriceTitle.setText(currentElement.getPriceTitle(this, true));
                 tvPriceSubtitle.setText(currentElement.getPriceSubtitle(this, true));
-                tvPriceTitle.setTextColor(darkColor);
-                tvPriceSubtitle.setTextColor(darkColor);
                 if (currentElement.hasStrikeLine()) {
                     tvPriceTitle.setPaintFlags(tvPriceTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
@@ -153,8 +157,6 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
 
             if(!currentElement.getCallToActionTitle().isEmpty()) {
                 tvAction.setText(currentElement.getCallToActionTitle());
-                tvAction.setBackgroundColor(darkColor);
-                tvAction.setTextColor(lightColor);
                 tvAction.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -167,21 +169,26 @@ public class ElementsActivity extends AppCompatActivity implements IBNToolbarLis
                 tvAction.setVisibility(View.GONE);
             }
 
-            BNToolbar toolbar = new BNToolbar(this, true, currentElement.isUserLiked(), true, showMore, currentElement.getShowcase().getSite().getOrganization().getBrand());
-            toolbar.setListener(this);
+            String more = "";
 
-            tvMore = (TextView)findViewById(R.id.tvToolbarMore);
-            tvMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(ElementsActivity.this, SitesActivity.class);
-                    SharedPreferences preferences = ElementsActivity.this.getSharedPreferences(ElementsActivity.this.getString(R.string.preferences_key), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(BNUtils.BNStringExtras.BNSite, currentElement.getShowcase().getSite().getIdentifier());
-                    editor.commit();
-                    ElementsActivity.this.startActivity(i);
-                }
-            });
+            if(showMore) {
+                tvMore = (TextView) findViewById(R.id.tvToolbarMore);
+                tvMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(ElementsActivity.this, SitesActivity.class);
+                        SharedPreferences preferences = ElementsActivity.this.getSharedPreferences(ElementsActivity.this.getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString(BNUtils.BNStringExtras.BNSite, currentElement.getShowcase().getSite().getIdentifier());
+                        editor.commit();
+                        ElementsActivity.this.startActivity(i);
+                    }
+                });
+                more = currentElement.getShowcase().getSite().getOrganization().getBrand();
+            }
+
+            BNToolbar toolbar = new BNToolbar(this, true, currentElement.isUserLiked(), true, showMore, more);
+            toolbar.setListener(this);
 
         }else{
             Log.e(TAG, "No se encontró el elemento con el identifier " + elementIdentifier);

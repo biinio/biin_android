@@ -1,9 +1,13 @@
 package com.biin.biin;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -80,7 +84,13 @@ public class LoyaltyActivity extends AppCompatActivity {
         tvGift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoyaltyActivity.this, "Elements activity", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(LoyaltyActivity.this, ElementsActivity.class);
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(BNUtils.BNStringExtras.BNElement, card.getElementIdentifier());
+                editor.commit();
+                i.putExtra(BNUtils.BNStringExtras.BNShowMore, false);
+                startActivity(i);
             }
         });
 
@@ -89,7 +99,26 @@ public class LoyaltyActivity extends AppCompatActivity {
         tvToS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoyaltyActivity.this, "ToS, show popup", Toast.LENGTH_SHORT).show();
+                LayoutInflater inflater = getLayoutInflater();
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoyaltyActivity.this);
+                View dialogView = inflater.inflate(R.layout.dialog_popup, null);
+                ((TextView)dialogView.findViewById(R.id.tvPopUpTitle)).setText(getString(R.string.TermOfUser));
+                ((TextView)dialogView.findViewById(R.id.tvPopUpMessage)).setText(getString(R.string.LoyaltyCardConditions) + organization.getBrand());
+                dialogBuilder.setView(dialogView);
+                final AlertDialog alertDialog = dialogBuilder.create();
+                dialogView.findViewById(R.id.ivPopupClose).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+                dialogView.findViewById(R.id.tvPopupConfirm).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.show();
             }
         });
 
