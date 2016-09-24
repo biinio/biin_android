@@ -155,7 +155,21 @@ public class BNLoyaltyCard {
     }
 
     public void addStar(){
-
+        boolean isCompleted = false;
+        if(slots.size() > 0) {
+            boolean filled = false;
+            int i = 0;
+            while (i < slots.size() && !filled) {
+                if(!this.slots.get(i).isFilled()){
+                    this.slots.get(i).setFilled(true);
+                    filled = true;
+                }
+                i++;
+            }
+            if(!filled || i == slots.size()){
+                isCompleted = true;
+            }
+        }
     }
 
     public class BNLoyaltyCard_Slot {

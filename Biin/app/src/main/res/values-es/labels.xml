@@ -291,6 +291,7 @@
 
     <string name="SeeGift">Ver regalo</string>
     <string name="ReadQRCode">Leer Codigo</string>
+    <string name="reading">Leyendo...</string>
     <string name="SeeConditions">Ver condiciones</string>
 
     <string name="ExitApp">Salir de Biin?</string>

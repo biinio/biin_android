@@ -3,39 +3,66 @@ package com.biin.biin;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.biin.biin.Entities.BNLoyalty;
 import com.biin.biin.Entities.BNLoyaltyCard;
 import com.biin.biin.Entities.BNOrganization;
+import com.biin.biin.Entities.Biinie;
 import com.biin.biin.Managers.BNAppManager;
 import com.biin.biin.Managers.BNDataManager;
 import com.biin.biin.Utils.BNToolbar;
 import com.biin.biin.Utils.BNUtils;
 import com.google.android.gms.ads.internal.overlay.zzo;
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.android.gms.vision.text.Line;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class LoyaltyActivity extends AppCompatActivity {
 
     private static final String TAG = "LoyaltyActivity";
+    private final int CAMERA_REQUEST = 101;
 
     private String cardIdentifier;
     private int position;
 
     private BNLoyaltyCard card;
     private BNOrganization organization;
+
+    private CameraSource cameraSource;
+    private SurfaceView cameraView;
+    private TextView barcodeInfo;
+    private String value = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +154,24 @@ public class LoyaltyActivity extends AppCompatActivity {
         findViewById(R.id.vlLoyaltyQrCode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoyaltyActivity.this, "Read QR Code, show popup", Toast.LENGTH_SHORT).show();
+                LayoutInflater inflater = getLayoutInflater();
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoyaltyActivity.this);
+                View dialogView = inflater.inflate(R.layout.dialog_qr_reader, null);
+                dialogBuilder.setView(dialogView);
+                final AlertDialog alertDialog = dialogBuilder.create();
+                setUpReaderDialog(dialogView, alertDialog);
+                barcodeInfo = (TextView) dialogView.findViewById(R.id.tvPopupAccept);
+                dialogView.findViewById(R.id.ivPopupQrClose).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        barcodeInfo.setText(getString(R.string.reading));
+                        barcodeInfo.setBackgroundColor(getResources().getColor(R.color.colorGrayButton));
+                        barcodeInfo.setOnClickListener(null);
+                        alertDialog.dismiss();
+                        cameraSource.stop();
+                    }
+                });
+                alertDialog.show();
             }
         });
 
@@ -145,7 +189,6 @@ public class LoyaltyActivity extends AppCompatActivity {
             tvGift.setTextColor(organization.getSecondaryColor());
             tvTitle.setTextColor(organization.getSecondaryColor());
         }
-
 
         BNToolbar toolbar = new BNToolbar(this, organization.getBrand());
     }
@@ -231,5 +274,143 @@ public class LoyaltyActivity extends AppCompatActivity {
                 filled = false;
             }
         }
+    }
+
+    private void setUpReaderDialog(View view, final AlertDialog dialog) {
+        cameraView = (SurfaceView) view.findViewById(R.id.svPopupCamera);
+
+        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(this)
+                .setBarcodeFormats(Barcode.QR_CODE)
+                .build();
+
+        cameraSource = new CameraSource
+                .Builder(this, barcodeDetector)
+                .build();
+
+        cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                if (ContextCompat.checkSelfPermission(LoyaltyActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(LoyaltyActivity.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_REQUEST);
+                } else {
+                    startCameraView();
+                }
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                cameraSource.stop();
+            }
+        });
+
+        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+            @Override
+            public void release() {
+            }
+
+            @Override
+            public void receiveDetections(Detector.Detections<Barcode> detections) {
+                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+                if (barcodes.size() != 0) {
+                    barcodeInfo.post(new Runnable() {    // Use the post method of the TextView
+                        public void run() {
+                            barcodeInfo.setText("OK");
+                            barcodeInfo.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                            barcodeInfo.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    requestAddStar();
+                                    barcodeInfo.setText(getString(R.string.reading));
+                                    barcodeInfo.setBackgroundColor(getResources().getColor(R.color.colorGrayButton));
+                                    barcodeInfo.setOnClickListener(null);
+                                    value = "";
+                                    dialog.dismiss();
+                                }
+                            });
+                            value = barcodes.valueAt(0).displayValue;
+                            Log.e("ReadQR", value);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_REQUEST) {
+            if (permissions[0].equals(android.Manifest.permission.CAMERA) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCameraView();
+            } else {
+                Log.e("ReadQR Error", "No se tienen permisos de camara.");
+            }
+        }
+    }
+
+    private void startCameraView(){
+        try {
+            cameraSource.start(cameraView.getHolder());
+        } catch (IOException ie) {
+            Log.e("CAMERA SOURCE", ie.getMessage());
+        } catch (SecurityException se) {
+            Log.e("CAMERA PERMISSION", se.getMessage());
+        }
+    }
+
+    private void requestAddStar(){
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+        String identifier;
+
+        if(biinie != null && biinie.getIdentifier() != null && !biinie.getIdentifier().isEmpty()){
+            identifier = biinie.getIdentifier();
+        }else {
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+            identifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                BNAppManager.getInstance().getNetworkManagerInstance().getAddStarUrl(identifier, cardIdentifier, value),
+                "",
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e(TAG, "Response:" + response.toString());
+                        try {
+                            String result = response.getString("result");
+                            String status = response.getString("status");
+                            if(status.equals("0") && result.equals("1")){
+                                addNewStar();
+                            }else{
+                                Log.e(TAG, "Error agregando estrella a la tarjeta.");
+                                Toast.makeText(LoyaltyActivity.this, R.string.RequestFailed, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoyaltyActivity.this, "Result: " + result + " / Status: " + status, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Error parseando el JSON.", e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onVolleyError(error);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void onVolleyError(VolleyError error){
+        Log.e(TAG, "Error:" + error.getMessage());
+    }
+
+    private void addNewStar(){
+        card.addStar();
+        setUpStars();
     }
 }

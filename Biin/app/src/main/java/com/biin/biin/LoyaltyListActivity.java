@@ -55,6 +55,12 @@ public class LoyaltyListActivity extends AppCompatActivity implements IBNLoyalty
         setUpList();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyItemRangeChanged(0, loyalties.size());
+    }
+
     private void setUpScreen() {
         Typeface lato_regular = BNUtils.getLato_regular();
 
