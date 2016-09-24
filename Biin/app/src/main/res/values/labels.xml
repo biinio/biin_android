@@ -246,6 +246,9 @@
 
     /*Loyalty Cards*/
     <string name="LoyaltyCardConditions">"By doing tap OK you accept the terms of use of the loyalty customers program of "</string>
+    <string name="Congratulations">Congratulations!</string>
+    <string name="CompletedCard">You have obtained all the stars of our card.</string>
+    <string name="GiftInTreasureChest">Soon you will receive your gift in your treasure chest.</string>
 
     /*Validate Forms*/
     <string name="EmptyString">"Value can't be empty</string>

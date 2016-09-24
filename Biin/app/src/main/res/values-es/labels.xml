@@ -246,6 +246,9 @@
 
     /*Loyalty Cards*/
     <string name="LoyaltyCardConditions">"Al hacer tap en OK aceptas las condiciones de uso de la tarjeta de clientes frecuente de "</string>
+    <string name="Congratulations">Felicidades!</string>
+    <string name="CompletedCard">Has obtenido todas las estrellas de nuestra tarjeta.</string>
+    <string name="GiftInTreasureChest">Pronto recibiras tu regalo en tu Baul de Tesoros.</string>
 
     /*Validate Forms*/
     <string name="EmptyString">El campo no puede estar vacío</string>

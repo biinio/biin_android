@@ -251,6 +251,7 @@ public class LoyaltyActivity extends AppCompatActivity {
                     case 10:
                         if(size == 10) {
                             ((ImageView) findViewById(R.id.ivLoyaltyStar14)).setColorFilter(getResources().getColor(R.color.colorStarGold));
+                            setCompleted();
                         }else {
                             ((ImageView) findViewById(R.id.ivLoyaltyStar10)).setColorFilter(getResources().getColor(R.color.colorStarGold));
                         }
@@ -260,12 +261,16 @@ public class LoyaltyActivity extends AppCompatActivity {
                         break;
                     case 12:
                         ((ImageView)findViewById(R.id.ivLoyaltyStar12)).setColorFilter(getResources().getColor(R.color.colorStarGold));
+                        if(size == 12){
+                            setCompleted();
+                        }
                         break;
                     case 13:
                         ((ImageView)findViewById(R.id.ivLoyaltyStar13)).setColorFilter(getResources().getColor(R.color.colorStarGold));
                         break;
                     case 14:
                         ((ImageView)findViewById(R.id.ivLoyaltyStar14)).setColorFilter(getResources().getColor(R.color.colorStarGold));
+                        setCompleted();
                         break;
                     default:
                         break;
@@ -412,5 +417,53 @@ public class LoyaltyActivity extends AppCompatActivity {
     private void addNewStar(){
         card.addStar();
         setUpStars();
+    }
+
+    private void setCompleted(){
+        Biinie biinie = BNAppManager.getInstance().getDataManagerInstance().getBiinie();
+        String identifier;
+
+        if(biinie != null && biinie.getIdentifier() != null && !biinie.getIdentifier().isEmpty()){
+            identifier = biinie.getIdentifier();
+        }else {
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+            identifier = preferences.getString(BNUtils.BNStringExtras.BNBiinie, "");
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                BNAppManager.getInstance().getNetworkManagerInstance().getLoyaltyCompletedUrl(identifier, cardIdentifier),
+                "",
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e(TAG, "Response:" + response.toString());
+                        try {
+                            String result = response.getString("result");
+                            String status = response.getString("status");
+                            if(status.equals("0") && result.equals("1")){
+                                completedOk();
+                            }else{
+                                Log.e(TAG, "Error en el request del llenado de la tarjeta.");
+                                Toast.makeText(LoyaltyActivity.this, R.string.RequestFailed, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoyaltyActivity.this, "Result: " + result + " / Status: " + status, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Error parseando el JSON.", e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onVolleyError(error);
+                    }
+                });
+        BiinApp.getInstance().addToRequestQueue(jsonObjectRequest, TAG);
+    }
+
+    private void completedOk(){
+        Toast.makeText(LoyaltyActivity.this, R.string.Congratulations, Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoyaltyActivity.this, "Implementar mostrar pantalla y remover tarjeta", Toast.LENGTH_SHORT).show();
     }
 }
